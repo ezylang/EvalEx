@@ -37,7 +37,7 @@ Key Features:
  
  result = new Expression("random() > 0.5").eval();
 
- result = new Expression("not(x<7 | sqrt(max(x,9)) <= 3))").with("x","22.9").eval();
+ result = new Expression("not(x<7 || sqrt(max(x,9)) <= 3))").with("x","22.9").eval();
 ````
 
 ### Supported Operators

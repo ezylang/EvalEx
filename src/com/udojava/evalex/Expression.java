@@ -76,7 +76,7 @@ import java.util.Stack;
 *  
 *  result = new Expression("random() > 0.5").eval();
 * 
-*  result = new Expression("not(x<7 | sqrt(max(x,9)) <= 3))").with("x","22.9").eval();
+*  result = new Expression("not(x<7 || sqrt(max(x,9)) <= 3))").with("x","22.9").eval();
 * </pre>
 * <br>
 * <h2>Supported Operators</h2>
