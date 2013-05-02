@@ -701,8 +701,7 @@ public class Expression {
 			public BigDecimal eval(List<BigDecimal> parameters) {
 				BigDecimal toRound = parameters.get(1);
 				int precision = parameters.get(0).intValue();
-				return toRound.round(new MathContext(precision, mc
-						.getRoundingMode()));
+				return toRound.setScale(precision, mc.getRoundingMode());
 			}
 		});
 		addFunction(new Function("SQRT", 1) {

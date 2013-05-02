@@ -85,11 +85,12 @@ public class TestEval {
 	
 	@Test
 	public void testRounding() {
-		assertEquals("4", new Expression("round(3.78787,1)").eval().toString());
-		assertEquals("3.79", new Expression("round(3.78787,3)").eval().toString());
-		assertEquals("3.73", new Expression("round(3.7345,3)").eval().toString());
-		assertEquals("-3.73", new Expression("round(-3.7345,3)").eval().toString());
-		assertEquals("-3.79", new Expression("round(-3.78787,3)").eval().toString());
+		assertEquals("3.8", new Expression("round(3.78787,1)").eval().toString());
+		assertEquals("3.788", new Expression("round(3.78787,3)").eval().toString());
+		assertEquals("3.734", new Expression("round(3.7345,3)").eval().toString());
+		assertEquals("-3.734", new Expression("round(-3.7345,3)").eval().toString());
+		assertEquals("-3.79", new Expression("round(-3.78787,2)").eval().toString());
+		assertEquals("123.79", new Expression("round(123.78787,2)").eval().toString());
 	}
 	
 	@Test
