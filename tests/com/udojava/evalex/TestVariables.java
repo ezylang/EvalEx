@@ -52,4 +52,15 @@ public class TestVariables {
 						.with("b", "4").eval()
 						.toPlainString());
 	}
+	
+	@Test
+	public void testNames() {
+		assertEquals("21",
+				new Expression("3*longname").with("longname", new BigDecimal("7"))
+						.eval().toString());
+		
+		assertEquals("21",
+				new Expression("3*longname1").with("longname1", new BigDecimal("7"))
+						.eval().toString());		
+	}
 }
