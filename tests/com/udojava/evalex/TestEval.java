@@ -47,7 +47,8 @@ public class TestEval {
 		assertEquals("1.41421356237309504880168872420969807856967187537694807317667973799073247846210703885038753432764157273501384623091229702492483605", new Expression("SQRT(2)").setPrecision(128).eval().toPlainString());
 		assertEquals("2.2360679", new Expression("SQRT(5)").eval().toPlainString());
 		assertEquals("99.3730345", new Expression("SQRT(9875)").eval().toPlainString());
-		assertEquals("2.3558437", new Expression("SQRT(5.55)").eval().toPlainString());		
+		assertEquals("2.3558437", new Expression("SQRT(5.55)").eval().toPlainString());	
+		assertEquals("0", new Expression("SQRT(0)").eval().toPlainString());
 	}
 	
 	@Test

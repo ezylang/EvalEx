@@ -712,6 +712,9 @@ public class Expression {
 				 * (Ronald Mak, 2003)
 				 */
 				BigDecimal x = parameters.get(0);
+				if (x.compareTo(BigDecimal.ZERO) == 0) {
+					return new BigDecimal(0);
+				}
 				if (x.signum() < 0) {
 					throw new ExpressionException(
 							"Argument to SQRT() function must not be negative");
