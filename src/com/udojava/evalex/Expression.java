@@ -780,7 +780,7 @@ public class Expression {
 			if (isNumber(token)) {
 				outputQueue.add(token);
 			} else if (variables.containsKey(token)) {
-				outputQueue.add(variables.get(token).toPlainString());
+				outputQueue.add(token);
 			} else if (functions.containsKey(token.toUpperCase())) {
 				stack.push(token);
 				lastFunction = token;
@@ -850,6 +850,8 @@ public class Expression {
 				BigDecimal v1 = stack.pop();
 				BigDecimal v2 = stack.pop();
 				stack.push(operators.get(token).eval(v2, v1));
+			} else if (variables.containsKey(token)) {
+				stack.push(variables.get(token).round(mc));
 			} else if (functions.containsKey(token.toUpperCase())) {
 				Function f = functions.get(token.toUpperCase());
 				ArrayList<BigDecimal> p = new ArrayList<BigDecimal>(

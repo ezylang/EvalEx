@@ -35,6 +35,15 @@ public class TestVariables {
 	}
 	
 	@Test
+	public void testSubstitution() {
+		Expression e = new Expression("x+y");
+
+		assertEquals("2", e.with("x", "1").and("y", "1").eval().toPlainString());
+		assertEquals("1", e.with("y", "0").eval().toPlainString());
+		assertEquals("0", e.with("x", "0").eval().toPlainString());
+	}
+	
+	@Test
 	public void testWith() {
 		assertEquals("21",
 				new Expression("3*x").with("x", new BigDecimal("7"))
