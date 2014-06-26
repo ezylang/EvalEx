@@ -92,6 +92,10 @@ public class TestEval {
 		assertEquals("-3.734", new Expression("round(-3.7345,3)").eval().toString());
 		assertEquals("-3.79", new Expression("round(-3.78787,2)").eval().toString());
 		assertEquals("123.79", new Expression("round(123.78787,2)").eval().toString());
+		assertEquals("3", new Expression("floor(3.78787)").eval().toString());
+		assertEquals("4", new Expression("ceiling(3.78787)").eval().toString());
+		assertEquals("-3", new Expression("floor(-2.1)").eval().toString());
+		assertEquals("-2", new Expression("ceiling(-2.1)").eval().toString());
 	}
 	
 	@Test

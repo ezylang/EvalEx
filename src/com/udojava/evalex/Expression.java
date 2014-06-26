@@ -116,6 +116,8 @@ import java.util.Stack;
 *   <tr><td>MAX(<i>e1</i>,<i>e2</i>)</td><td>Returns the bigger of both expressions</td></tr>
 *   <tr><td>ABS(<i>expression</i>)</td><td>Returns the absolute (non-negative) value of the expression</td></tr>
 *   <tr><td>ROUND(<i>expression</i>,precision)</td><td>Rounds a value to a certain number of digits, uses the current rounding mode</td></tr>
+*   <tr><td>FLOOR(<i>expression</i>)</td><td>Rounds the value down to the nearest integer</td></tr>
+*   <tr><td>CEILING(<i>expression</i>)</td><td>Rounds the value up to the nearest integer</td></tr>
 *   <tr><td>LOG(<i>expression</i>)</td><td>Returns the natural logarithm (base e) of an expression</td></tr>
 *   <tr><td>SQRT(<i>expression</i>)</td><td>Returns the square root of an expression</td></tr>
 *   <tr><td>SIN(<i>expression</i>)</td><td>Returns the trigonometric sine of an angle (in degrees)</td></tr>
@@ -702,6 +704,20 @@ public class Expression {
 				BigDecimal toRound = parameters.get(1);
 				int precision = parameters.get(0).intValue();
 				return toRound.setScale(precision, mc.getRoundingMode());
+			}
+		});
+		addFunction(new Function("FLOOR", 1) {
+			@Override
+			public BigDecimal eval(List<BigDecimal> parameters) {
+				BigDecimal toRound = parameters.get(0);
+				return toRound.setScale(0, RoundingMode.FLOOR);
+			}
+		});
+		addFunction(new Function("CEILING", 1) {
+			@Override
+			public BigDecimal eval(List<BigDecimal> parameters) {
+				BigDecimal toRound = parameters.get(0);
+				return toRound.setScale(0, RoundingMode.CEILING);
 			}
 		});
 		addFunction(new Function("SQRT", 1) {
