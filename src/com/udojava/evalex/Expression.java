@@ -701,8 +701,8 @@ public class Expression {
 		addFunction(new Function("ROUND", 2) {
 			@Override
 			public BigDecimal eval(List<BigDecimal> parameters) {
-				BigDecimal toRound = parameters.get(1);
-				int precision = parameters.get(0).intValue();
+				BigDecimal toRound = parameters.get(0);
+				int precision = parameters.get(1).intValue();
 				return toRound.setScale(precision, mc.getRoundingMode());
 			}
 		});
@@ -873,7 +873,7 @@ public class Expression {
 				ArrayList<BigDecimal> p = new ArrayList<BigDecimal>(
 						f.getNumParams());
 				for (int i = 0; i < f.numParams; i++) {
-					p.add(stack.pop());
+					p.add(0,stack.pop());
 				}
 				BigDecimal fResult = f.eval(p);
 				stack.push(fResult);
