@@ -96,6 +96,8 @@ Key Features:
 <table>
   <tr><th>Constant</th><th>Description</th></tr>
   <tr><td>PI</td><td>The value of <i>PI</i>, exact to 100 digits</td></tr>
+  <tr><td>TRUE</td><td>The value one</td></tr>
+  <tr><td>FALSE</td><td>The value zero</td></tr>
 </table>
 
 ### Add Custom Operators
