@@ -111,6 +111,7 @@ import java.util.Stack;
 * <table>
 *   <tr><th>Function<sup>*</sup></th><th>Description</th></tr>
 *   <tr><td>NOT(<i>expression</i>)</td><td>Boolean negation, 1 (means true) if the expression is not zero</td></tr>
+*   <tr><td>IF(<i>condition</i>,<i>value_if_true</i>,<i>value_if_false</i>)</td><td>Returns one value if the condition evaluates to true or the other if it evaluates to false</td></tr>
 *   <tr><td>RANDOM()</td><td>Produces a random number between 0 and 1</td></tr>
 *   <tr><td>MIN(<i>e1</i>,<i>e2</i>)</td><td>Returns the smaller of both expressions</td></tr>
 *   <tr><td>MAX(<i>e1</i>,<i>e2</i>)</td><td>Returns the bigger of both expressions</td></tr>
@@ -602,6 +603,14 @@ public class Expression {
 			public BigDecimal eval(List<BigDecimal> parameters) {
 				boolean zero = parameters.get(0).compareTo(BigDecimal.ZERO) == 0;
 				return zero ? BigDecimal.ONE : BigDecimal.ZERO;
+			}
+		});
+
+		addFunction(new Function("IF", 3) {
+			@Override
+			public BigDecimal eval(List<BigDecimal> parameters) {
+				boolean isTrue = !parameters.get(0).equals(BigDecimal.ZERO);
+				return isTrue ? parameters.get(1) : parameters.get(2);
 			}
 		});
 

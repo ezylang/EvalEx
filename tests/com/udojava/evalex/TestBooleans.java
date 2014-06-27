@@ -90,4 +90,11 @@ public class TestBooleans {
 		assertEquals("0", new Expression("TRUE && FALSE").eval().toString());
 		assertEquals("1", new Expression("TRUE || FALSE").eval().toString());
 	}
+
+	@Test
+	public void testIf() {
+		assertEquals("5", new Expression("if(TRUE, 5, 3)").eval().toString());
+		assertEquals("3", new Expression("IF(FALSE, 5, 3)").eval().toString());
+		assertEquals("5.35", new Expression("If(2, 5.35, 3)").eval().toString());
+	}
 }
