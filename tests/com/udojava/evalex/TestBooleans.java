@@ -80,4 +80,21 @@ public class TestBooleans {
 		assertEquals("1", new Expression("not(1.5 * 7 = 3)").eval().toString());
 		assertEquals("0", new Expression("not(1.5 * 7 = 10.5)").eval().toString());
 	}
+
+	@Test
+	public void testConstants() {
+		assertEquals("1", new Expression("TRUE!=FALSE").eval().toString());
+		assertEquals("0", new Expression("TRUE==2").eval().toString());
+		assertEquals("1", new Expression("NOT(TRUE)==FALSE").eval().toString());
+		assertEquals("1", new Expression("NOT(FALSE)==TRUE").eval().toString());
+		assertEquals("0", new Expression("TRUE && FALSE").eval().toString());
+		assertEquals("1", new Expression("TRUE || FALSE").eval().toString());
+	}
+
+	@Test
+	public void testIf() {
+		assertEquals("5", new Expression("if(TRUE, 5, 3)").eval().toString());
+		assertEquals("3", new Expression("IF(FALSE, 5, 3)").eval().toString());
+		assertEquals("5.35", new Expression("If(2, 5.35, 3)").eval().toString());
+	}
 }

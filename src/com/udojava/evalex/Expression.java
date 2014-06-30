@@ -111,6 +111,7 @@ import java.util.Stack;
 * <table>
 *   <tr><th>Function<sup>*</sup></th><th>Description</th></tr>
 *   <tr><td>NOT(<i>expression</i>)</td><td>Boolean negation, 1 (means true) if the expression is not zero</td></tr>
+*   <tr><td>IF(<i>condition</i>,<i>value_if_true</i>,<i>value_if_false</i>)</td><td>Returns one value if the condition evaluates to true or the other if it evaluates to false</td></tr>
 *   <tr><td>RANDOM()</td><td>Produces a random number between 0 and 1</td></tr>
 *   <tr><td>MIN(<i>e1</i>,<i>e2</i>)</td><td>Returns the smaller of both expressions</td></tr>
 *   <tr><td>MAX(<i>e1</i>,<i>e2</i>)</td><td>Returns the bigger of both expressions</td></tr>
@@ -135,6 +136,8 @@ import java.util.Stack;
 * <table>
 *   <tr><th>Constant</th><th>Description</th></tr>
 *   <tr><td>PI</td><td>The value of <i>PI</i>, exact to 100 digits</td></tr>
+*   <tr><td>TRUE</td><td>The value one</td></tr>
+*   <tr><td>FALSE</td><td>The value zero</td></tr>
 * </table>
 * 
 * <h2>Add Custom Operators</h2>
@@ -603,6 +606,14 @@ public class Expression {
 			}
 		});
 
+		addFunction(new Function("IF", 3) {
+			@Override
+			public BigDecimal eval(List<BigDecimal> parameters) {
+				boolean isTrue = !parameters.get(0).equals(BigDecimal.ZERO);
+				return isTrue ? parameters.get(1) : parameters.get(2);
+			}
+		});
+
 		addFunction(new Function("RANDOM", 0) {
 			@Override
 			public BigDecimal eval(List<BigDecimal> parameters) {
@@ -701,8 +712,8 @@ public class Expression {
 		addFunction(new Function("ROUND", 2) {
 			@Override
 			public BigDecimal eval(List<BigDecimal> parameters) {
-				BigDecimal toRound = parameters.get(1);
-				int precision = parameters.get(0).intValue();
+				BigDecimal toRound = parameters.get(0);
+				int precision = parameters.get(1).intValue();
 				return toRound.setScale(precision, mc.getRoundingMode());
 			}
 		});
@@ -754,6 +765,8 @@ public class Expression {
 		});
 
 		variables.put("PI", PI);
+		variables.put("TRUE", BigDecimal.ONE);
+		variables.put("FALSE", BigDecimal.ZERO);
 
 	}
 
@@ -873,7 +886,7 @@ public class Expression {
 				ArrayList<BigDecimal> p = new ArrayList<BigDecimal>(
 						f.getNumParams());
 				for (int i = 0; i < f.numParams; i++) {
-					p.add(stack.pop());
+					p.add(0,stack.pop());
 				}
 				BigDecimal fResult = f.eval(p);
 				stack.push(fResult);
