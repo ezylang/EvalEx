@@ -501,30 +501,39 @@ public class Expression {
 				return v1.remainder(v2, mc);
 			}
 		});
-		addOperator(new Operator("^", 40, false) {
-			@Override
-			public BigDecimal eval(BigDecimal v1, BigDecimal v2) {
-				/*- 
-				 * Thanks to Gene Marin:
-				 * http://stackoverflow.com/questions/3579779/how-to-do-a-fractional-power-on-bigdecimal-in-java
-				 */
-				int signOf2 = v2.signum();
-				double dn1 = v1.doubleValue();
-				v2 = v2.multiply(new BigDecimal(signOf2)); // n2 is now positive
-				BigDecimal remainderOf2 = v2.remainder(BigDecimal.ONE);
-				BigDecimal n2IntPart = v2.subtract(remainderOf2);
-				BigDecimal intPow = v1.pow(n2IntPart.intValueExact(), mc);
-				BigDecimal doublePow = new BigDecimal(Math.pow(dn1,
-						remainderOf2.doubleValue()));
-
-				BigDecimal result = intPow.multiply(doublePow, mc);
-				if (signOf2 == -1) {
-					result = BigDecimal.ONE.divide(result, mc.getPrecision(),
-							RoundingMode.HALF_UP);
-				}
-				return result;
-			}
-		});
+		@Override
+ +            		public BigDecimal eval(BigDecimal v1, BigDecimal v2) {
+ +                		BigDecimal result = null;
+ +                		if(v2.compareTo(BigDecimal.ZERO) == 0){ //If x^0
+ +                    		result = BigDecimal.valueOf(1);
+ +                		}
+ +                		else if(v2.compareTo(BigDecimal.ONE) == 0){ //If X^1
+ +                    			result = v1;
+ +                		}
+ +                		else{
+ +                    			BigDecimal v2up = v2.setScale(0, RoundingMode.CEILING);
+ +                    			BigDecimal v2down = v2.setScale(0, RoundingMode.FLOOR);
+ +                    		if(v2up.compareTo(v2down) == 0) { //If exponent is natural number(faster algorithm)
+ +                			result = v1.pow(v2.intValueExact());
+ +                        	}
+ +                    		else
+ +                    		{
+ +                      	  	int signOf2 = v2.signum();
+ +                        		double dn1 = v1.doubleValue();
+ +                        		Double d = Math.ceil(((Math.log10(v1.doubleValue())) * v2.doubleValue())) + mc.getPrecision();
+ +                        		int d2 = d.intValue();
+ +                        		MathContext mc = new MathContext(d2);
+ +                        		v2 = v2.multiply(new BigDecimal(signOf2));
+ +                        		BigDecimal remainderOf2 = v2.remainder(BigDecimal.ONE);
+ +                        		BigDecimal n2IntPart = v2.subtract(remainderOf2);
+ +                        		BigDecimal intPow = v1.pow(n2IntPart.intValueExact(), mc);
+ +                        		BigDecimal doublePow = new BigDecimal(Math.pow(dn1, remainderOf2.doubleValue()));
+ +                        		result = intPow.multiply(doublePow, mc);
+ +                    		}
+ +                	}
+ +                	return result;
+ +            	}
+ +        	});
 		addOperator(new Operator("&&", 4, false) {
 			@Override
 			public BigDecimal eval(BigDecimal v1, BigDecimal v2) {
