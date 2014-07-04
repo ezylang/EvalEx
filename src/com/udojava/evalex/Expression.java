@@ -624,24 +624,24 @@ public class Expression {
 		addFunction(new Function("SIN", 1) {
 			@Override
 			public BigDecimal eval(List<BigDecimal> parameters) {
-				double d = Math.sin(Math.toRadians(parameters.get(0)
-						.doubleValue()));
+				double d = Math.sin(parameters.get(0)
+						.doubleValue());
 				return new BigDecimal(d, mc);
 			}
 		});
 		addFunction(new Function("COS", 1) {
 			@Override
 			public BigDecimal eval(List<BigDecimal> parameters) {
-				double d = Math.cos(Math.toRadians(parameters.get(0)
-						.doubleValue()));
+				double d = Math.cos(parameters.get(0)
+						.doubleValue());
 				return new BigDecimal(d, mc);
 			}
 		});
 		addFunction(new Function("TAN", 1) {
 			@Override
 			public BigDecimal eval(List<BigDecimal> parameters) {
-				double d = Math.tan(Math.toRadians(parameters.get(0)
-						.doubleValue()));
+				double d = Math.tan(parameters.get(0)
+						.doubleValue());
 				return new BigDecimal(d, mc);
 			}
 		});
