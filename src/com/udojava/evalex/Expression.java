@@ -191,7 +191,7 @@ import java.util.Stack;
 * 
 *@author Udo Klimaschewski (http://about.me/udo.klimaschewski)
 */
-public class Expression {
+public class Expression implements Cloneable{
 
 	/**
 	 * Definition of PI as a constant, can be used in expressions as variable.
@@ -227,7 +227,7 @@ public class Expression {
 	/**
 	 * All defined variables with name and value.
 	 */
-	private Map<String, BigDecimal> variables = new HashMap<String, BigDecimal>();
+	private Map<String, Object> variables = new HashMap<String, Object>();
 
 	/**
 	 * What character to use for decimal separators.
@@ -789,6 +789,38 @@ public class Expression {
 	}
 
 	/**
+	 * Parses the expression and generates a list of all the variables that have not been declared
+	 * @param expression
+	 * @return
+	 */
+	public List<String> getUndeclaredVariables(){
+	    List<String> undeclaredVars = new ArrayList<>();
+        Tokenizer tokenizer = new Tokenizer(expression);
+	    
+        while (tokenizer.hasNext()) {
+            String token = tokenizer.next();
+            if (isNumber(token)) {
+                continue;
+            } else if (functions.containsKey(token.toUpperCase())) {
+                continue;
+            } else if (",".equals(token)) {
+                continue;
+            } else if (operators.containsKey(token)) {
+                continue;
+            } else if ("(".equals(token)) {
+                continue;
+            } else if (")".equals(token)) {
+                continue;
+            } else if( variables.containsKey(token)){
+                continue;
+            } else
+                undeclaredVars.add(token);
+        }
+        
+        return undeclaredVars;
+	}
+	
+	/**
 	 * Implementation of the <i>Shunting Yard</i> algorithm to transform an
 	 * infix expression to a RPN expression.
 	 * 
@@ -865,7 +897,32 @@ public class Expression {
 		return outputQueue;
 	}
 
+	
+	
 	/**
+	 * Internal clone() method used for nested function calls.
+	 * Not a true, full clone, since only a shallow-clone is made; none of the mutable objects are fully cloned/copied
+	 * since they are only used as reference objects for the nested function call.
+	 * 
+	 * Method intentionally left as protected as should not be used by anything else.
+	 */
+    @Override
+    protected Expression clone() {
+        try {
+            Expression e = (Expression)super.clone();
+            
+            // reset the RPN list, but leave all other mutable objects as a shallow copy intentionally since the cloned
+            // expression should be using the same values as the parent.
+            e.rpn = null;
+            return e;
+            
+        } catch (CloneNotSupportedException e) {
+            // rethrow as a runtime expression
+            throw new RuntimeException(e);
+        }
+    }
+
+    /**
 	 * Evaluates the expression.
 	 * 
 	 * @return The result of the expression.
@@ -880,7 +937,20 @@ public class Expression {
 				BigDecimal v2 = stack.pop();
 				stack.push(operators.get(token).eval(v2, v1));
 			} else if (variables.containsKey(token)) {
-				stack.push(variables.get(token).round(mc));
+			    // check if the variable is a BigDecimal or another expression
+			    if( variables.get(token) instanceof BigDecimal )
+			        stack.push(((BigDecimal)variables.get(token)).round(mc));
+			    else if( variables.get(token) instanceof String ){
+			        String nested = (String)variables.get(token);
+			        Expression e = this.clone();
+			        e.expression = nested;
+                    stack.push(e.eval());
+                }
+			    else{
+			        // unknown type of variable - not a String or BigDecimal.  This condition should never occur
+			        throw new RuntimeException( "Unknown variable type");
+			    }
+			        
 			} else if (functions.containsKey(token.toUpperCase())) {
 				Function f = functions.get(token.toUpperCase());
 				ArrayList<BigDecimal> p = new ArrayList<BigDecimal>(
@@ -970,7 +1040,10 @@ public class Expression {
 	 * @return The expression, allows to chain methods.
 	 */
 	public Expression setVariable(String variable, String value) {
-		variables.put(variable, new BigDecimal(value));
+	    if( isNumber(value))
+            variables.put(variable, new BigDecimal(value));
+	    else
+            variables.put(variable, value);
 		return this;
 	}
 
