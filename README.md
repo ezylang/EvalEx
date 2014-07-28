@@ -110,14 +110,15 @@ All existing operators can also be overridden.
 For example, add an operator `x >> n`, that moves the decimal point of _x_ _n_ digits to the right:
 
 ````java
-Expression e = new Expression("2.1234 >> 2");
-
-e.addOperator(e.new Operator(">>", 30, true) {
+EvaluationContext customContext = new EvaluationContext(
+	StandardEvaluationContext.INSTANCE);
+customContext.addOperator(new Operator(">>", 30, true) {
     @Override
-    public BigDecimal eval(BigDecimal v1, BigDecimal v2) {
-        return v1.movePointRight(v2.toBigInteger().intValue());
+    public BigDecimal eval(BigDecimal v1, BigDecimal v2, MathContext mc) {
+	return v1.movePointRight(v2.toBigInteger().intValue());
     }
 });
+Expression e = new Expression("2.1234 >> 2", customContext);
 
 e.eval(); // returns 212.34
 ````
@@ -131,15 +132,18 @@ All existing functions can also be overridden.
 For example, add a function `average(a,b,c)`, that will calculate the average value of a, b and c:
 
 ````java
-Expression e = new Expression("2 * average(12,4,8)");
-
-e.addFunction(e.new Function("average", 3) {
+	
+EvaluationContext customContext = new EvaluationContext(
+	StandardEvaluationContext.INSTANCE);
+customContext.addFunction(new Function("average", 3) {
     @Override
-    public BigDecimal eval(List<BigDecimal> parameters) {
-        BigDecimal sum = parameters.get(0).add(parameters.get(1)).add(parameters.get(2));
-        return sum.divide(new BigDecimal(3));
+    public BigDecimal eval(List<BigDecimal> parameters, MathContext mc) {
+	BigDecimal sum = parameters.get(0).add(parameters.get(1))
+		.add(parameters.get(2));
+	return sum.divide(new BigDecimal(3));
     }
 });
+Expression e = new Expression("2 * average(12,4,8)", customContext);
 
 e.eval(); // returns 16
 ````
