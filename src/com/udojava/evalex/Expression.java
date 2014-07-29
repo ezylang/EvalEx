@@ -61,23 +61,22 @@ import java.util.TreeSet;
  *  BigDecimal result = null;
  *  
  *  Expression expression = new Expression("1+1/3");
- *  result = expression.eval():
- *  expression.setPrecision(2);
- *  result = expression.eval():
+ *  result = expression.instance().eval();
+ *  result = expression.instance().setPrecision(2).eval():
  *  
- *  result = new Expression("(3.4 + -4.1)/2").eval();
+ *  result = new Expression("(3.4 + -4.1)/2").instance().eval();
  *  
- *  result = new Expression("SQRT(a^2 + b^2").with("a","2.4").and("b","9.253").eval();
+ *  result = new Expression("SQRT(a^2 + b^2").instance().with("a","2.4").and("b","9.253").eval();
  *  
  *  BigDecimal a = new BigDecimal("2.4");
  *  BigDecimal b = new BigDecimal("9.235");
- *  result = new Expression("SQRT(a^2 + b^2").with("a",a).and("b",b).eval();
+ *  result = new Expression("SQRT(a^2 + b^2").instance().with("a",a).and("b",b).eval();
  *  
- *  result = new Expression("2.4/PI").setPrecision(128).setRoundingMode(RoundingMode.UP).eval();
+ *  result = new Expression("2.4/PI").instance().setPrecision(128).setRoundingMode(RoundingMode.UP).eval();
  *  
- *  result = new Expression("random() > 0.5").eval();
+ *  result = new Expression("random() > 0.5").instance().eval();
  * 
- *  result = new Expression("not(x<7 || sqrt(max(x,9)) <= 3))").with("x","22.9").eval();
+ *  result = new Expression("not(x<7 || sqrt(max(x,9)) <= 3))").instance().with("x","22.9").eval();
  * </pre>
  * 
  * <h2>Supported Constants</h2>
@@ -126,11 +125,6 @@ public class Expression {
 			"3.1415926535897932384626433832795028841971693993751058209749445923078164062862089986280348253421170679");
 
 	/**
-	 * The {@link MathContext} to use for calculations.
-	 */
-	private MathContext mc = MathContext.DECIMAL32;
-
-	/**
 	 * The original infix expression.
 	 */
 	private String expression = null;
@@ -139,11 +133,6 @@ public class Expression {
 	 * The cached RPN (Reverse Polish Notation) of the expression.
 	 */
 	private List<String> rpn = null;
-
-	/**
-	 * All defined variables with name and value.
-	 */
-	private Map<String, BigDecimal> variables = new HashMap<String, BigDecimal>();
 
 	/**
 	 * What character to use for decimal separators.
@@ -283,6 +272,182 @@ public class Expression {
 
 	}
 
+	public class ExpressionInstance {
+		/**
+		 * The {@link MathContext} to use for calculations.
+		 */
+		private MathContext mc = MathContext.DECIMAL32;
+
+		/**
+		 * All defined variables with name and value.
+		 */
+		private Map<String, BigDecimal> variables = new HashMap<String, BigDecimal>();
+
+		private ExpressionInstance() {
+			variables.put("PI", PI);
+			variables.put("TRUE", BigDecimal.ONE);
+			variables.put("FALSE", BigDecimal.ZERO);
+		}
+
+		/**
+		 * Expression is evaluated with the given variables. This will
+		 * be useful in a multi-threaded environment where a single
+		 * expression object can be used to evaluate a expression with
+		 * different set of variables.
+		 * 
+		 * @param variables
+		 *                a key-value pairs of variables to use to
+		 *                evaluate a expression.
+		 * @return
+		 */
+		public BigDecimal eval() {
+			Stack<BigDecimal> stack = new Stack<BigDecimal>();
+			for (String token : getRPN()) {
+				if (evaluationContext.hasOperator(token)) {
+					Operator operator = evaluationContext
+							.getOperator(token);
+					BigDecimal v1 = stack.pop();
+					BigDecimal v2 = stack.pop();
+					stack.push(operator.eval(v2, v1,
+							this.mc));
+				} else if (variables.containsKey(token)) {
+					stack.push(variables.get(token).round(
+							this.mc));
+				} else if (evaluationContext.hasFunction(token)) {
+					Function f = evaluationContext
+							.getFunction(token);
+					ArrayList<BigDecimal> p = new ArrayList<BigDecimal>(
+							f.getNumParams());
+					for (int i = 0; i < f.getNumParams(); i++) {
+						p.add(0, stack.pop());
+					}
+					BigDecimal fResult = f.eval(p, this.mc);
+					stack.push(fResult);
+				} else {
+					try {
+						stack.push(new BigDecimal(
+								token, this.mc));
+					} catch (NumberFormatException nfe) {
+						throw new RuntimeException(
+								"Not able to resolve: "
+										+ token);
+					}
+				}
+			}
+			return stack.pop().stripTrailingZeros();
+		}
+
+		/**
+		 * Sets the precision for expression evaluation.
+		 * 
+		 * @param precision
+		 *                The new precision.
+		 * 
+		 * @return The expression, allows to chain methods.
+		 */
+		public ExpressionInstance setPrecision(int precision) {
+			this.mc = new MathContext(precision);
+			return this;
+		}
+
+		/**
+		 * Sets the rounding mode for expression evaluation.
+		 * 
+		 * @param roundingMode
+		 *                The new rounding mode.
+		 * @return The expression, allows to chain methods.
+		 */
+		public ExpressionInstance setRoundingMode(
+				RoundingMode roundingMode) {
+			this.mc = new MathContext(mc.getPrecision(),
+					roundingMode);
+			return this;
+		}
+
+		/**
+		 * Sets a variable value.
+		 * 
+		 * @param variable
+		 *                The variable name.
+		 * @param value
+		 *                The variable value.
+		 * @return The expression, allows to chain methods.
+		 */
+		public ExpressionInstance setVariable(String variable,
+				BigDecimal value) {
+			variables.put(variable, value);
+			return this;
+		}
+
+		/**
+		 * Sets a variable value.
+		 * 
+		 * @param variable
+		 *                The variable to set.
+		 * @param value
+		 *                The variable value.
+		 * @return The expression, allows to chain methods.
+		 */
+		public ExpressionInstance setVariable(String variable,
+				String value) {
+			variables.put(variable, new BigDecimal(value));
+			return this;
+		}
+
+		/**
+		 * Sets a variable value.
+		 * 
+		 * @param variable
+		 *                The variable to set.
+		 * @param value
+		 *                The variable value.
+		 * @return The expression, allows to chain methods.
+		 */
+		public ExpressionInstance with(String variable, BigDecimal value) {
+			return setVariable(variable, value);
+		}
+
+		/**
+		 * Sets a variable value.
+		 * 
+		 * @param variable
+		 *                The variable to set.
+		 * @param value
+		 *                The variable value.
+		 * @return The expression, allows to chain methods.
+		 */
+		public ExpressionInstance and(String variable, String value) {
+			return setVariable(variable, value);
+		}
+
+		/**
+		 * Sets a variable value.
+		 * 
+		 * @param variable
+		 *                The variable to set.
+		 * @param value
+		 *                The variable value.
+		 * @return The expression, allows to chain methods.
+		 */
+		public ExpressionInstance and(String variable, BigDecimal value) {
+			return setVariable(variable, value);
+		}
+
+		/**
+		 * Sets a variable value.
+		 * 
+		 * @param variable
+		 *                The variable to set.
+		 * @param value
+		 *                The variable value.
+		 * @return The expression, allows to chain methods.
+		 */
+		public ExpressionInstance with(String variable, String value) {
+			return setVariable(variable, value);
+		}
+
+	}
+
 	/**
 	 * Creates a new expression instance from an expression string.
 	 * Instances created with this constructor will use
@@ -307,9 +472,6 @@ public class Expression {
 	 */
 	public Expression(String expression, EvaluationContext evaluationContext) {
 		this.expression = expression;
-		variables.put("PI", PI);
-		variables.put("TRUE", BigDecimal.ONE);
-		variables.put("FALSE", BigDecimal.ZERO);
 		this.evaluationContext = evaluationContext;
 	}
 
@@ -351,24 +513,9 @@ public class Expression {
 			String token = tokenizer.next();
 			if (isNumber(token)) {
 				outputQueue.add(token);
-			} else if (variables.containsKey(token)) {
-				outputQueue.add(token);
 			} else if (evaluationContext.hasFunction(token)) {
 				stack.push(token);
 				lastFunction = token;
-			} else if (Character.isLetter(token.charAt(0))) {
-				stack.push(token);
-			} else if (",".equals(token)) {
-				while (!stack.isEmpty()
-						&& !"(".equals(stack.peek())) {
-					outputQueue.add(stack.pop());
-				}
-				if (stack.isEmpty()) {
-					throw new ExpressionException(
-							"Parse error for function '"
-									+ lastFunction
-									+ "'");
-				}
 			} else if (evaluationContext.hasOperator(token)) {
 				Operator o1 = evaluationContext
 						.getOperator(token);
@@ -389,6 +536,17 @@ public class Expression {
 							.getOperator(token2);
 				}
 				stack.push(token);
+			} else if (",".equals(token)) {
+				while (!stack.isEmpty()
+						&& !"(".equals(stack.peek())) {
+					outputQueue.add(stack.pop());
+				}
+				if (stack.isEmpty()) {
+					throw new ExpressionException(
+							"Parse error for function '"
+									+ lastFunction
+									+ "'");
+				}
 			} else if ("(".equals(token)) {
 				stack.push(token);
 			} else if (")".equals(token)) {
@@ -407,6 +565,8 @@ public class Expression {
 										.peek())) {
 					outputQueue.add(stack.pop());
 				}
+			} else {
+				outputQueue.add(token);
 			}
 		}
 		while (!stack.isEmpty()) {
@@ -425,159 +585,8 @@ public class Expression {
 	 * 
 	 * @return The result of the expression.
 	 */
-	public BigDecimal eval() {
-		return eval(this.variables);
-	}
-
-	/**
-	 * Expression is evaluated with the given variables. This will be useful
-	 * in a multi-threaded environment where a single expression object can
-	 * be used to evaluate a expression with different set of variables.
-	 * 
-	 * @param variables
-	 *                a key-value pairs of variables to use to evaluate a
-	 *                expression.
-	 * @return
-	 */
-	public BigDecimal eval(Map<String, BigDecimal> variables) {
-		Stack<BigDecimal> stack = new Stack<BigDecimal>();
-
-		for (String token : getRPN()) {
-			if (this.evaluationContext.hasOperator(token)) {
-				Operator operator = this.evaluationContext
-						.getOperator(token);
-				BigDecimal v1 = stack.pop();
-				BigDecimal v2 = stack.pop();
-				stack.push(operator.eval(v2, v1, this.mc));
-			} else if (variables.containsKey(token)) {
-				stack.push(variables.get(token).round(this.mc));
-			} else if (this.evaluationContext.hasFunction(token)) {
-				Function f = this.evaluationContext
-						.getFunction(token);
-				ArrayList<BigDecimal> p = new ArrayList<BigDecimal>(
-						f.getNumParams());
-				for (int i = 0; i < f.getNumParams(); i++) {
-					p.add(0, stack.pop());
-				}
-				BigDecimal fResult = f.eval(p, this.mc);
-				stack.push(fResult);
-			} else {
-				try {
-					stack.push(new BigDecimal(token,
-							this.mc));
-				} catch (NumberFormatException nfe) {
-					throw new RuntimeException(
-							"Not able to resolve: "
-									+ token);
-				}
-			}
-		}
-		return stack.pop().stripTrailingZeros();
-	}
-
-	/**
-	 * Sets the precision for expression evaluation.
-	 * 
-	 * @param precision
-	 *                The new precision.
-	 * 
-	 * @return The expression, allows to chain methods.
-	 */
-	public Expression setPrecision(int precision) {
-		this.mc = new MathContext(precision);
-		return this;
-	}
-
-	/**
-	 * Sets the rounding mode for expression evaluation.
-	 * 
-	 * @param roundingMode
-	 *                The new rounding mode.
-	 * @return The expression, allows to chain methods.
-	 */
-	public Expression setRoundingMode(RoundingMode roundingMode) {
-		this.mc = new MathContext(mc.getPrecision(), roundingMode);
-		return this;
-	}
-
-	/**
-	 * Sets a variable value.
-	 * 
-	 * @param variable
-	 *                The variable name.
-	 * @param value
-	 *                The variable value.
-	 * @return The expression, allows to chain methods.
-	 */
-	public Expression setVariable(String variable, BigDecimal value) {
-		variables.put(variable, value);
-		return this;
-	}
-
-	/**
-	 * Sets a variable value.
-	 * 
-	 * @param variable
-	 *                The variable to set.
-	 * @param value
-	 *                The variable value.
-	 * @return The expression, allows to chain methods.
-	 */
-	public Expression setVariable(String variable, String value) {
-		variables.put(variable, new BigDecimal(value));
-		return this;
-	}
-
-	/**
-	 * Sets a variable value.
-	 * 
-	 * @param variable
-	 *                The variable to set.
-	 * @param value
-	 *                The variable value.
-	 * @return The expression, allows to chain methods.
-	 */
-	public Expression with(String variable, BigDecimal value) {
-		return setVariable(variable, value);
-	}
-
-	/**
-	 * Sets a variable value.
-	 * 
-	 * @param variable
-	 *                The variable to set.
-	 * @param value
-	 *                The variable value.
-	 * @return The expression, allows to chain methods.
-	 */
-	public Expression and(String variable, String value) {
-		return setVariable(variable, value);
-	}
-
-	/**
-	 * Sets a variable value.
-	 * 
-	 * @param variable
-	 *                The variable to set.
-	 * @param value
-	 *                The variable value.
-	 * @return The expression, allows to chain methods.
-	 */
-	public Expression and(String variable, BigDecimal value) {
-		return setVariable(variable, value);
-	}
-
-	/**
-	 * Sets a variable value.
-	 * 
-	 * @param variable
-	 *                The variable to set.
-	 * @param value
-	 *                The variable value.
-	 * @return The expression, allows to chain methods.
-	 */
-	public Expression with(String variable, String value) {
-		return setVariable(variable, value);
+	public ExpressionInstance instance() {
+		return new ExpressionInstance();
 	}
 
 	/**

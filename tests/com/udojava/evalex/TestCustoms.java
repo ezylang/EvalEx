@@ -22,7 +22,7 @@ public class TestCustoms {
 	});
 	Expression e = new Expression("2.1234 >> 2", customContext);
 
-	assertEquals("212.34", e.eval().toPlainString());
+	assertEquals("212.34", e.instance().eval().toPlainString());
     }
 
     @Test
@@ -38,7 +38,7 @@ public class TestCustoms {
 	    }
 	});
 	Expression e = new Expression("2 * average(12,4,8)", customContext);
-	assertEquals("16", e.eval().toPlainString());
+	assertEquals("16", e.instance().eval().toPlainString());
     }
 
 }
