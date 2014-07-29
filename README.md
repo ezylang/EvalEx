@@ -21,23 +21,22 @@ Key Features:
  BigDecimal result = null;
  
  Expression expression = new Expression("1+1/3");
- result = expression.eval():
- expression.setPrecision(2);
- result = expression.eval():
+ result = expression.instance().eval();
+ result = expression.instance().setPrecision(2).eval():
  
- result = new Expression("(3.4 + -4.1)/2").eval();
+ result = new Expression("(3.4 + -4.1)/2").instance().eval();
  
- result = new Expression("SQRT(a^2 + b^2").with("a","2.4").and("b","9.253").eval();
+ result = new Expression("SQRT(a^2 + b^2").instance().with("a","2.4").and("b","9.253").eval();
  
  BigDecimal a = new BigDecimal("2.4");
  BigDecimal b = new BigDecimal("9.235");
- result = new Expression("SQRT(a^2 + b^2").with("a",a).and("b",b).eval();
+ result = new Expression("SQRT(a^2 + b^2").instance().with("a",a).and("b",b).eval();
  
- result = new Expression("2.4/PI").setPrecision(128).setRoundingMode(RoundingMode.UP).eval();
+ result = new Expression("2.4/PI").instance().setPrecision(128).setRoundingMode(RoundingMode.UP).eval();
  
- result = new Expression("random() > 0.5").eval();
+ result = new Expression("random() > 0.5").instance().eval();
 
- result = new Expression("not(x<7 || sqrt(max(x,9)) <= 3))").with("x","22.9").eval();
+ result = new Expression("not(x<7 || sqrt(max(x,9)) <= 3))").instance().with("x","22.9").eval();
 ````
 
 ### Supported Operators
@@ -110,16 +109,17 @@ All existing operators can also be overridden.
 For example, add an operator `x >> n`, that moves the decimal point of _x_ _n_ digits to the right:
 
 ````java
-Expression e = new Expression("2.1234 >> 2");
-
-e.addOperator(e.new Operator(">>", 30, true) {
+EvaluationContext customContext = new EvaluationContext(
+	StandardEvaluationContext.INSTANCE);
+customContext.addOperator(new Operator(">>", 30, true) {
     @Override
-    public BigDecimal eval(BigDecimal v1, BigDecimal v2) {
-        return v1.movePointRight(v2.toBigInteger().intValue());
+    public BigDecimal eval(BigDecimal v1, BigDecimal v2, MathContext mc) {
+	return v1.movePointRight(v2.toBigInteger().intValue());
     }
 });
+Expression e = new Expression("2.1234 >> 2", customContext);
 
-e.eval(); // returns 212.34
+e.instance().eval(); // returns 212.34
 ````
 
 ### Add Custom Functions
@@ -131,17 +131,20 @@ All existing functions can also be overridden.
 For example, add a function `average(a,b,c)`, that will calculate the average value of a, b and c:
 
 ````java
-Expression e = new Expression("2 * average(12,4,8)");
-
-e.addFunction(e.new Function("average", 3) {
+	
+EvaluationContext customContext = new EvaluationContext(
+	StandardEvaluationContext.INSTANCE);
+customContext.addFunction(new Function("average", 3) {
     @Override
-    public BigDecimal eval(List<BigDecimal> parameters) {
-        BigDecimal sum = parameters.get(0).add(parameters.get(1)).add(parameters.get(2));
-        return sum.divide(new BigDecimal(3));
+    public BigDecimal eval(List<BigDecimal> parameters, MathContext mc) {
+	BigDecimal sum = parameters.get(0).add(parameters.get(1))
+		.add(parameters.get(2));
+	return sum.divide(new BigDecimal(3));
     }
 });
+Expression e = new Expression("2 * average(12,4,8)", customContext);
 
-e.eval(); // returns 16
+e.instance().eval(); // returns 16
 ````
 
 ### Project Layout
