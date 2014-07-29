@@ -1,4 +1,27 @@
-/**
+/*
+ * Copyright 2012 Udo Klimaschewski
+ * 
+ * http://UdoJava.com/
+ * http://about.me/udo.klimaschewski
+ * 
+ * Permission is hereby granted, free of charge, to any person obtaining
+ * a copy of this software and associated documentation files (the
+ * "Software"), to deal in the Software without restriction, including
+ * without limitation the rights to use, copy, modify, merge, publish,
+ * distribute, sublicense, and/or sell copies of the Software, and to
+ * permit persons to whom the Software is furnished to do so, subject to
+ * the following conditions:
+ * 
+ * The above copyright notice and this permission notice shall be
+ * included in all copies or substantial portions of the Software.
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+ * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+ * MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+ * NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
+ * LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
+ * OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
+ * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  * 
  */
 package com.udojava.evalex;
@@ -7,7 +30,16 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * * <h2>Add Custom Operators</h2>
+ * <p>
+ * {@link EvaluationContext} is supposed to hold the operators and functions
+ * required to evaluate a expression.
+ * 
+ * For all general purposes, {@link StandardEvaluationContext.INSTANCE} can be
+ * used. But, if there are any usecases, where more or different operators and
+ * functions are required, then {@link StandardEvaluationContext} can be
+ * overridden as follows.
+ * </p>
+ * <h2>Add Custom Operators</h2>
  * 
  * Custom operators can be added easily, simply create an instance of
  * `Expression.Operator` and add it to the expression. Parameters are the
@@ -86,6 +118,14 @@ public class EvaluationContext {
 		}
 	}
 
+	/**
+	 * /** Returns true if there is a Operator in this context with given
+	 * name.
+	 * 
+	 * @param operatorName
+	 *                name of the operator to check
+	 * @return
+	 */
 	public boolean hasOperator(String operatorName) {
 		if (operatorName != null) {
 			return this.operators.containsKey(operatorName);
@@ -105,6 +145,13 @@ public class EvaluationContext {
 		return operators.put(operator.getOper(), operator);
 	}
 
+	/**
+	 * Returns the {@link Operator} that is registered with the given name.
+	 * 
+	 * @param operatorName
+	 *                name of the operator to check
+	 * @return
+	 */
 	public Operator getOperator(String operatorName) {
 		if (operatorName != null) {
 			return this.operators.get(operatorName.toLowerCase());
@@ -124,6 +171,13 @@ public class EvaluationContext {
 		return functions.put(function.getName(), function);
 	}
 
+	/**
+	 * Returns true if there is a function in this context with given name.
+	 * 
+	 * @param functionName
+	 *                Name of the function to check
+	 * @return
+	 */
 	public boolean hasFunction(String functionName) {
 		if (functionName != null) {
 			return this.functions.containsKey(functionName
@@ -132,6 +186,13 @@ public class EvaluationContext {
 		return false;
 	}
 
+	/**
+	 * Returns the function with the given name from the context.
+	 * 
+	 * @param functionName
+	 *                Name of the function to check
+	 * @return
+	 */
 	public Function getFunction(String functionName) {
 		if (functionName != null) {
 			return this.functions.get(functionName.toUpperCase());
