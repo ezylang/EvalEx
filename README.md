@@ -119,7 +119,7 @@ customContext.addOperator(new Operator(">>", 30, true) {
 });
 Expression e = new Expression("2.1234 >> 2", customContext);
 
-e.eval(); // returns 212.34
+e.instance().eval(); // returns 212.34
 ````
 
 ### Add Custom Functions
@@ -144,7 +144,7 @@ customContext.addFunction(new Function("average", 3) {
 });
 Expression e = new Expression("2 * average(12,4,8)", customContext);
 
-e.eval(); // returns 16
+e.instance().eval(); // returns 16
 ````
 
 ### Project Layout
