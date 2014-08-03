@@ -970,7 +970,12 @@ public class Expression {
 	 * @return The expression, allows to chain methods.
 	 */
 	public Expression setVariable(String variable, String value) {
-		variables.put(variable, new BigDecimal(value));
+		if (isNumber(value))
+			variables.put(variable, new BigDecimal(value));
+		else {
+			expression = expression.replaceAll("\\b" + variable + "\\b", "(" + value + ")");
+			rpn = null;
+		}
 		return this;
 	}
 
