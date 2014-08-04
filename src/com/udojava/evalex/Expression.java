@@ -238,6 +238,17 @@ public class Expression implements Cloneable{
 	 * What character to use for minus sign (negative values).
 	 */
 	private final char minusSign = '-';
+	
+	/**
+	 * Used for a recursive safety check to ensure that there is not a circular dependency
+	 */
+	private int recursionCounter = 0;
+	
+	/**
+	 * Limit for recursion of nested expression evaluations 
+	 */
+	private static final int RECURSION_SAFETY_LIMIT = 100;
+	
 
 	/**
 	 * The expression evaluators exception class.
@@ -941,8 +952,13 @@ public class Expression implements Cloneable{
 			    if( variables.get(token) instanceof BigDecimal )
 			        stack.push(((BigDecimal)variables.get(token)).round(mc));
 			    else if( variables.get(token) instanceof String ){
+			        // safety check for recursion depth
+			        if( recursionCounter++ == RECURSION_SAFETY_LIMIT )
+			            throw new RuntimeException( "Circular expression detected.  Cannot evaluate.");
+			        
 			        String nested = (String)variables.get(token);
 			        Expression e = this.clone();
+			        e.recursionCounter++;
 			        e.expression = nested;
                     stack.push(e.eval());
                 }
