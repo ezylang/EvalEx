@@ -4,6 +4,7 @@ import static org.junit.Assert.*;
 
 import java.math.BigDecimal;
 import java.math.MathContext;
+import java.util.List;
 
 import org.junit.Test;
 
@@ -72,4 +73,41 @@ public class TestVariables {
 				new Expression("3*longname1").with("longname1", new BigDecimal("7"))
 						.eval().toString());		
 	}
+	
+	@Test
+	public void testNestedVars(){
+	    String x = "1";
+	    String y = "2";
+	    String z = "2*x + 3*y";
+	    String a = "2*x + 4*z";
+		
+		Expression e = new Expression(a);
+		e.with("x",x);
+		e.with("y",y);
+		e.with("z",z);
+		
+		assertEquals("34", e.eval().toString());
+	}
+	
+
+	@Test
+	public void testUndeclaredVars(){
+	    String x = "1";
+	    String y = "2";
+	    String z = "2*x + 3*y";
+	    String a = "2*x + 4*z - 32*UND";
+	    
+	    Expression e = new Expression(a);
+	    e.with("x",x);
+	    e.with("y",y);
+	    e.with("z",z);
+	    
+	    List<String> undeclared = e.getUndeclaredVariables();
+	    assertEquals(1,  undeclared.size());
+	    assertEquals("UND", undeclared.get(0));
+	    
+	    e.with("UND", "some value");
+	    assertEquals(0,  e.getUndeclaredVariables().size());
+	}
+	
 }
