@@ -367,6 +367,7 @@ public class Expression {
 		 * Actual position in expression string.
 		 */
 		private int pos = 0;
+		
 		/**
 		 * The original input expression.
 		 */
@@ -458,6 +459,15 @@ public class Expression {
 		@Override
 		public void remove() {
 			throw new ExpressionException("remove() not supported");
+		}
+
+		/**
+		 * Get the actual character position in the string.
+		 * 
+		 * @return The actual character position.
+		 */
+		public int getPos() {
+			return pos;
 		}
 
 	}
@@ -804,6 +814,7 @@ public class Expression {
 		Tokenizer tokenizer = new Tokenizer(expression);
 
 		String lastFunction = null;
+		String previousToken = null;
 		while (tokenizer.hasNext()) {
 			String token = tokenizer.next();
 			if (isNumber(token)) {
@@ -836,6 +847,11 @@ public class Expression {
 				}
 				stack.push(token);
 			} else if ("(".equals(token)) {
+				if (previousToken != null) {
+					if (isNumber(previousToken)) {
+						throw new ExpressionException("Missing operator at character position " + tokenizer.getPos());
+					}
+				}
 				stack.push(token);
 			} else if (")".equals(token)) {
 				while (!stack.isEmpty() && !"(".equals(stack.peek())) {
@@ -850,6 +866,7 @@ public class Expression {
 					outputQueue.add(stack.pop());
 				}
 			}
+			previousToken = token;
 		}
 		while (!stack.isEmpty()) {
 			String element = stack.pop();
