@@ -120,6 +120,7 @@ import java.util.Stack;
 *   <tr><td>FLOOR(<i>expression</i>)</td><td>Rounds the value down to the nearest integer</td></tr>
 *   <tr><td>CEILING(<i>expression</i>)</td><td>Rounds the value up to the nearest integer</td></tr>
 *   <tr><td>LOG(<i>expression</i>)</td><td>Returns the natural logarithm (base e) of an expression</td></tr>
+*   <tr><td>LOG10(<i>expression</i>)</td><td>Returns the common logarithm (base 10) of an expression</td></tr>
 *   <tr><td>SQRT(<i>expression</i>)</td><td>Returns the square root of an expression</td></tr>
 *   <tr><td>SIN(<i>expression</i>)</td><td>Returns the trigonometric sine of an angle (in degrees)</td></tr>
 *   <tr><td>COS(<i>expression</i>)</td><td>Returns the trigonometric cosine of an angle (in degrees)</td></tr>
@@ -716,6 +717,13 @@ public class Expression {
 			@Override
 			public BigDecimal eval(List<BigDecimal> parameters) {
 				double d = Math.log(parameters.get(0).doubleValue());
+				return new BigDecimal(d, mc);
+			}
+		});
+		addFunction(new Function("LOG10", 1) {
+			@Override
+			public BigDecimal eval(List<BigDecimal> parameters) {
+				double d = Math.log10(parameters.get(0).doubleValue());
 				return new BigDecimal(d, mc);
 			}
 		});
