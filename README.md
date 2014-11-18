@@ -38,6 +38,8 @@ Key Features:
  result = new Expression("random() > 0.5").eval();
 
  result = new Expression("not(x<7 || sqrt(max(x,9)) <= 3))").with("x","22.9").eval();
+ 
+ result = new Expression("log10(100)").eval();
 ````
 
 ### Supported Operators
@@ -81,6 +83,7 @@ Key Features:
   <tr><td>FLOOR(<i>expression</i>)</td><td>Rounds the value down to the nearest integer</td></tr>
   <tr><td>CEILING(<i>expression</i>)</td><td>Rounds the value up to the nearest integer</td></tr>
   <tr><td>LOG(<i>expression</i>)</td><td>Returns the natural logarithm (base e) of an expression</td></tr>
+  <tr><td>LOG10(<i>expression</i>)</td><td>Returns the common logarithm (base 10) of an expression</td></tr>
   <tr><td>SQRT(<i>expression</i>)</td><td>Returns the square root of an expression</td></tr>
   <tr><td>SIN(<i>expression</i>)</td><td>Returns the trigonometric sine of an angle (in degrees)</td></tr>
   <tr><td>COS(<i>expression</i>)</td><td>Returns the trigonometric cosine of an angle (in degrees)</td></tr>
