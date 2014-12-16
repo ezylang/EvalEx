@@ -60,6 +60,13 @@ public class TestVariables {
 						.with("a", "2")
 						.with("b", "4").eval()
 						.toPlainString());
+		
+		assertEquals(
+				"68719480000",
+				new Expression("_a^(2+_b)^2")
+						.with("_a", "2")
+						.with("_b", "4").eval()
+						.toPlainString());
 	}
 	
 	@Test
@@ -70,6 +77,10 @@ public class TestVariables {
 		
 		assertEquals("21",
 				new Expression("3*longname1").with("longname1", new BigDecimal("7"))
+						.eval().toString());
+		
+		assertEquals("21",
+				new Expression("3*_longname1").with("_longname1", new BigDecimal("7"))
 						.eval().toString());		
 	}
 }
