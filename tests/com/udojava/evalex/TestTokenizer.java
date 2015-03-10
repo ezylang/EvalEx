@@ -51,8 +51,39 @@ public class TestTokenizer {
 		assertFalse(i.hasNext());
 		assertNull(i.next());
 	}
-	
-	@Test
+
+    @Test
+    public void testTokenizerExtraSpaces() {
+        Expression e = new Expression("1 ");
+        Iterator<String> i = e.getExpressionTokenizer();
+        assertTrue(i.hasNext());
+        assertEquals("1", i.next());
+        assertFalse(i.hasNext());
+        assertNull(i.next());
+
+        e = new Expression("       ");
+        i = e.getExpressionTokenizer();
+        assertFalse(i.hasNext());
+        assertNull(i.next());
+
+        e = new Expression("   1      ");
+        i = e.getExpressionTokenizer();
+        assertTrue(i.hasNext());
+        assertEquals("1", i.next());
+        assertFalse(i.hasNext());
+        assertNull(i.next());
+
+        e = new Expression("  1   +   2    ");
+        i = e.getExpressionTokenizer();
+        assertEquals("1", i.next());
+        assertEquals("+", i.next());
+        assertTrue(i.hasNext());
+        assertEquals("2", i.next());
+        assertFalse(i.hasNext());
+        assertNull(i.next());
+    }
+
+    @Test
 	public void testTokenizer1() {
 		Expression e = new Expression("1+2");
 		Iterator<String> i = e.getExpressionTokenizer();
