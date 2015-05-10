@@ -125,6 +125,9 @@ import java.util.Stack;
 *   <tr><td>SIN(<i>expression</i>)</td><td>Returns the trigonometric sine of an angle (in degrees)</td></tr>
 *   <tr><td>COS(<i>expression</i>)</td><td>Returns the trigonometric cosine of an angle (in degrees)</td></tr>
 *   <tr><td>TAN(<i>expression</i>)</td><td>Returns the trigonometric tangens of an angle (in degrees)</td></tr>
+*   <tr><td>ASIN(<i>expression</i>)</td><td>Returns the angle of asin (in degrees)</td></tr>
+*   <tr><td>ACOS(<i>expression</i>)</td><td>Returns the angle of acos (in degrees)</td></tr>
+*   <tr><td>ATAN(<i>expression</i>)</td><td>Returns the angle of atan (in degrees)</td></tr>
 *   <tr><td>SINH(<i>expression</i>)</td><td>Returns the hyperbolic sine of a value</td></tr>
 *   <tr><td>COSH(<i>expression</i>)</td><td>Returns the hyperbolic cosine of a value</td></tr>
 *   <tr><td>TANH(<i>expression</i>)</td><td>Returns the hyperbolic tangens of a value</td></tr>
@@ -652,6 +655,30 @@ public class Expression {
 			@Override
 			public BigDecimal eval(List<BigDecimal> parameters) {
 				double d = Math.tan(Math.toRadians(parameters.get(0)
+						.doubleValue()));
+				return new BigDecimal(d, mc);
+			}
+		});
+		addFunction(new Function("ASIN", 1) { // added by av
+			@Override
+			public BigDecimal eval(List<BigDecimal> parameters) {
+				double d = Math.toDegrees(Math.asin(parameters.get(0)
+						.doubleValue()));
+				return new BigDecimal(d, mc);
+			}
+		});
+		addFunction(new Function("ACOS", 1) { // added by av
+			@Override
+			public BigDecimal eval(List<BigDecimal> parameters) {
+				double d = Math.toDegrees(Math.acos(parameters.get(0)
+						.doubleValue()));
+				return new BigDecimal(d, mc);
+			}
+		});
+		addFunction(new Function("ATAN", 1) { // added by av
+			@Override
+			public BigDecimal eval(List<BigDecimal> parameters) {
+				double d = Math.toDegrees(Math.atan(parameters.get(0)
 						.doubleValue()));
 				return new BigDecimal(d, mc);
 			}
