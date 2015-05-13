@@ -1,5 +1,5 @@
 decrypt:
-  settings.xml: "repo/rultor_settings.xml.asc"
+  rultor_settings.xml: "repo/rultor_settings.xml.asc"
   pubring.gpg: "repo/pubring.gpg.asc"
   secring.gpg: "repo/secring.gpg.asc"
 release:
