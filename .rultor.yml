@@ -6,4 +6,5 @@ release:
   script: |
     mvn versions:set "-DnewVersion=${tag}"
     git commit -am "${tag}"
-    mvn clean deploy --settings ../rultor_settings.xml
+    git status
+    mvn clean deploy --settings /home/r/rultor_settings.xml
