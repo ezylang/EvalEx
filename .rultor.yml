@@ -5,6 +5,6 @@ decrypt:
 release:
   script: |
     mvn versions:set "-DnewVersion=${tag}"
-    git commit -am "${tag}"
     git status
+    git commit -a -m "${tag}" --allow-empty
     mvn clean deploy --settings /home/r/rultor_settings.xml
