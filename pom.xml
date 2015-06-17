@@ -12,6 +12,10 @@
 	<name>EvalEx</name>
 	<description>EvalEx is a handy expression evaluator for Java, that allows to evaluate simple mathematical and boolean expressions.</description>
 	<url>https://github.com/uklimaschewski/EvalEx</url>
+	<organization>
+		<name>Udo Klimaschewski</name>
+		<url>http://www.udojava.com</url>
+	</organization>
 	<licenses>
 		<license>
 			<name>MIT License</name>
@@ -29,6 +33,10 @@
 		<developerConnection>scm:git:git@github.com:uklimaschewski/EvalEx.git</developerConnection>
 		<url>git@github.com:uklimaschewski/EvalEx.git</url>
 	</scm>
+	<issueManagement>
+		<system>github</system>
+		<url>https://github.com/uklimaschewski/EvalEx/issues</url>
+	</issueManagement>
 	<build>
 		<sourceDirectory>src</sourceDirectory>
 		<testSourceDirectory>tests</testSourceDirectory>
@@ -40,6 +48,32 @@
 					<source />
 					<target />
 				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-source-plugin</artifactId>
+				<version>2.2.1</version>
+				<executions>
+					<execution>
+						<id>attach-sources</id>
+						<goals>
+							<goal>jar-no-fork</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-javadoc-plugin</artifactId>
+				<version>2.9.1</version>
+				<executions>
+					<execution>
+						<id>attach-javadocs</id>
+						<goals>
+							<goal>jar</goal>
+						</goals>
+					</execution>
+				</executions>
 			</plugin>
 		</plugins>
 	</build>
