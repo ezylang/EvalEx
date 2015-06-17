@@ -1,5 +1,5 @@
 decrypt:
-  rultor_settings.xml: "repo/rultor_settings.xml.asc"
+  settings.xml: "repo/settings.xml.asc"
   pubring.gpg: "repo/pubring.gpg.asc"
   secring.gpg: "repo/secring.gpg.asc"
 release:
@@ -7,4 +7,4 @@ release:
     mvn versions:set "-DnewVersion=${tag}"
     git status
     git commit -a -m "${tag}" --allow-empty
-    mvn clean deploy --settings /home/r/rultor_settings.xml
+    mvn clean deploy --settings /home/r/settings.xml
