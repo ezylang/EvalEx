@@ -7,4 +7,4 @@ release:
     mvn versions:set "-DnewVersion=${tag}"
     git status
     git commit -a -m "${tag}" --allow-empty
-    mvn --debug --settings /home/r/settings.xml clean deploy
+    mvn --settings /home/r/settings.xml clean deploy
