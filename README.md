@@ -15,7 +15,21 @@ Key Features:
 - Standard basic mathematical and boolean functions
 - Custom functions and operators can be added at runtime
 
-### Examples
+### Download / Maven
+You can download the binaries, source code and JavaDoc jars from [Maven Central](http://search.maven.org/#search%7Cga%7C1%7Ca%3A%22EvalEx%22%20g%3A%22com.udojava%22).
+
+To include it in your Maven project, refer to the artifact in your pom:
+````xml
+</dependencies>
+    <dependency>
+        <groupId>com.udojava</groupId>
+        <artifactId>EvalEx</artifactId>
+        <version>1.0</version>
+    </dependency>
+</dependencies>
+````
+
+### Usage Examples
 
 ````java
  BigDecimal result = null;
