@@ -18,6 +18,8 @@ Key Features:
 ### Download / Maven
 You can download the binaries, source code and JavaDoc jars from [Maven Central](http://search.maven.org/#search%7Cga%7C1%7Ca%3A%22EvalEx%22%20g%3A%22com.udojava%22).
 
+The project and source code in `zip` and `tar.gz` format can also be downloaded from the projects [release area](https://github.com/uklimaschewski/EvalEx/releases).
+
 To include it in your Maven project, refer to the artifact in your pom:
 ````xml
 </dependencies>
