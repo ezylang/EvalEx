@@ -34,6 +34,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Stack;
 
@@ -278,7 +279,7 @@ public class Expression {
 		 *            The number of parameters for this function.
 		 */
 		public Function(String name, int numParams) {
-			this.name = name.toUpperCase();
+			this.name = name.toUpperCase(Locale.ROOT);
 			this.numParams = numParams;
 		}
 
@@ -856,7 +857,7 @@ public class Expression {
 				outputQueue.add(token);
 			} else if (variables.containsKey(token)) {
 				outputQueue.add(token);
-			} else if (functions.containsKey(token.toUpperCase())) {
+			} else if (functions.containsKey(token.toUpperCase(Locale.ROOT))) {
 				stack.push(token);
 				lastFunction = token;
 			} else if (Character.isLetter(token.charAt(0))) {
@@ -897,7 +898,7 @@ public class Expression {
 				}
 				stack.pop();
 				if (!stack.isEmpty()
-						&& functions.containsKey(stack.peek().toUpperCase())) {
+						&& functions.containsKey(stack.peek().toUpperCase(Locale.ROOT))) {
 					outputQueue.add(stack.pop());
 				}
 			}
@@ -933,8 +934,8 @@ public class Expression {
 				stack.push(operators.get(token).eval(v2, v1));
 			} else if (variables.containsKey(token)) {
 				stack.push(variables.get(token).round(mc));
-			} else if (functions.containsKey(token.toUpperCase())) {
-				Function f = functions.get(token.toUpperCase());
+			} else if (functions.containsKey(token.toUpperCase(Locale.ROOT))) {
+				Function f = functions.get(token.toUpperCase(Locale.ROOT));
 				ArrayList<BigDecimal> p = new ArrayList<BigDecimal>(
 						f.getNumParams());
 				for (int i = 0; i < f.numParams; i++) {
