@@ -237,12 +237,12 @@ public class Expression {
 	/**
 	 * What character to use for decimal separators.
 	 */
-	private final char decimalSeparator = '.';
+	private static final char decimalSeparator = '.';
 
 	/**
 	 * What character to use for minus sign (negative values).
 	 */
-	private final char minusSign = '-';
+	private static final char minusSign = '-';
 
 	/**
 	 * The expression evaluators exception class.
