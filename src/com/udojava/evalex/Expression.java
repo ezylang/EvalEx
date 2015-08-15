@@ -1114,12 +1114,13 @@ public class Expression {
 	 * @return A string with the RPN representation for this expression.
 	 */
 	public String toRPN() {
-		String result = new String();
+		StringBuffer result = new StringBuffer();
 		for (String st : getRPN()) {
-			result = result.isEmpty() ? result : result + " ";
-			result += st;
+			if (result.length() != 0)
+				result.append(" ");
+			result.append(st);
 		}
-		return result;
+		return result.toString();
 	}
 
 }
