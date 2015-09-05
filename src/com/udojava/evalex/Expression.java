@@ -279,7 +279,7 @@ public class Expression {
 		 *            The number of parameters for this function.
 		 */
 		public Function(String name, int numParams) {
-			this.name = name.toUpperCase(Locale.ROOT);
+			this.name = name.toUpperCase(Locale.getDefault());
 			this.numParams = numParams;
 		}
 
@@ -857,7 +857,7 @@ public class Expression {
 				outputQueue.add(token);
 			} else if (variables.containsKey(token)) {
 				outputQueue.add(token);
-			} else if (functions.containsKey(token.toUpperCase(Locale.ROOT))) {
+			} else if (functions.containsKey(token.toUpperCase(Locale.getDefault()))) {
 				stack.push(token);
 				lastFunction = token;
 			} else if (Character.isLetter(token.charAt(0))) {
@@ -898,7 +898,7 @@ public class Expression {
 				}
 				stack.pop();
 				if (!stack.isEmpty()
-						&& functions.containsKey(stack.peek().toUpperCase(Locale.ROOT))) {
+						&& functions.containsKey(stack.peek().toUpperCase(Locale.getDefault()))) {
 					outputQueue.add(stack.pop());
 				}
 			}
@@ -934,8 +934,8 @@ public class Expression {
 				stack.push(operators.get(token).eval(v2, v1));
 			} else if (variables.containsKey(token)) {
 				stack.push(variables.get(token).round(mc));
-			} else if (functions.containsKey(token.toUpperCase(Locale.ROOT))) {
-				Function f = functions.get(token.toUpperCase(Locale.ROOT));
+			} else if (functions.containsKey(token.toUpperCase(Locale.getDefault()))) {
+				Function f = functions.get(token.toUpperCase(Locale.getDefault()));
 				ArrayList<BigDecimal> p = new ArrayList<BigDecimal>(
 						f.getNumParams());
 				for (int i = 0; i < f.numParams; i++) {
@@ -1115,7 +1115,7 @@ public class Expression {
 	 * @return A string with the RPN representation for this expression.
 	 */
 	public String toRPN() {
-		StringBuffer result = new StringBuffer();
+		StringBuilder result = new StringBuilder();
 		for (String st : getRPN()) {
 			if (result.length() != 0)
 				result.append(" ");
