@@ -1115,7 +1115,7 @@ public class Expression {
 	 * @return A string with the RPN representation for this expression.
 	 */
 	public String toRPN() {
-		StringBuffer result = new StringBuffer();
+		StringBuilder result = new StringBuilder();
 		for (String st : getRPN()) {
 			if (result.length() != 0)
 				result.append(" ");
