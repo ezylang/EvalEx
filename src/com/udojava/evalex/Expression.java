@@ -1105,6 +1105,8 @@ public class Expression {
 	 */
 	public BigDecimal eval() {
 
+		validate();
+
 		Stack<BigDecimal> stack = new Stack<BigDecimal>();
 
 		for (String token : getRPN()) {

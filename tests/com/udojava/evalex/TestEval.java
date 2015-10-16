@@ -17,7 +17,7 @@ public class TestEval {
 		String err = "";
 		try {
 			Expression expression = new Expression("12 18 2");
-			expression.validate().eval();
+			expression.eval();
 		} catch (ExpressionException e) {
 			err = e.getMessage();
 		}
@@ -30,7 +30,7 @@ public class TestEval {
 		String err = "";
 		try {
 			Expression expression = new Expression("(12)(18)");
-			expression.validate().eval();
+			expression.eval();
 		} catch (ExpressionException e) {
 			err = e.getMessage();
 		}
@@ -43,7 +43,7 @@ public class TestEval {
 		String err = "";
 		try {
 			Expression expression = new Expression("12 + * 18");
-			expression.validate().eval();
+			expression.eval();
 		} catch (ExpressionException e) {
 			err = e.getMessage();
 		}
@@ -56,7 +56,7 @@ public class TestEval {
 		String err = "";
 		try {
 			Expression expression = new Expression("");
-			expression.validate().eval();
+			expression.eval();
 		} catch (ExpressionException e) {
 			err = e.getMessage();
 		}
