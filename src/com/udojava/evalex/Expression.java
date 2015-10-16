@@ -1290,6 +1290,41 @@ public class Expression {
 	}
 
 	/**
+	 * Check that the expression have enough numbers and variables to fit the 
+	 * requirements of the operators and functions, also check 
+	 * for only 1 result stored at the end of the evaluation.  
+	 *
+	 * @return The expression, allows to chain methods.
+	 */
+	public Expression validate() {
+		/*- 
+		* Thanks to Norman Ramsey:
+		* http://http://stackoverflow.com/questions/789847/postfix-notation-validation
+		*/
+		int counter = 0;
+		for (String token : getRPN()) {
+			if (functions.containsKey(token.toUpperCase(Locale.ROOT))) {
+				Function f = functions.get(token.toUpperCase(Locale.ROOT));
+				counter -= f.getNumParams();
+			} else if (operators.containsKey(token)) {
+				//we only have binary operators
+				counter -= 2;
+			}
+			if (counter < 0) {
+	    			throw new ExpressionException("Too many operators or functions at: "
+					+ token);
+			}
+			counter++;
+		}
+		if (counter > 1) {
+	        	throw new ExpressionException("Too many numbers or variables");
+		} else if (counter < 1) {
+			throw new ExpressionException("Empty expression");
+		}
+		return this;
+	}
+
+	/**
 	 * Get a string representation of the RPN (Reverse Polish Notation) for this
 	 * expression.
 	 * 

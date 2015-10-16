@@ -13,6 +13,58 @@ import com.udojava.evalex.Expression.ExpressionException;
 public class TestEval {
 	
 	@Test
+	public void testInvalidExpressions1() {
+		String err = "";
+		try {
+			Expression expression = new Expression("12 18 2");
+			expression.validate().eval();
+		} catch (ExpressionException e) {
+			err = e.getMessage();
+		}
+
+		assertEquals("Too many numbers or variables", err);
+	}
+
+	@Test
+	public void testInvalidExpressions2() {
+		String err = "";
+		try {
+			Expression expression = new Expression("(12)(18)");
+			expression.validate().eval();
+		} catch (ExpressionException e) {
+			err = e.getMessage();
+		}
+
+		assertEquals("Too many numbers or variables", err);
+	}
+
+	@Test
+	public void testInvalidExpressions3() {
+		String err = "";
+		try {
+			Expression expression = new Expression("12 + * 18");
+			expression.validate().eval();
+		} catch (ExpressionException e) {
+			err = e.getMessage();
+		}
+
+		assertEquals("Too many operators or functions at: +", err);
+	}
+
+	@Test
+	public void testInvalidExpressions4() {
+		String err = "";
+		try {
+			Expression expression = new Expression("");
+			expression.validate().eval();
+		} catch (ExpressionException e) {
+			err = e.getMessage();
+		}
+
+		assertEquals("Empty expression", err);
+	}
+	
+	@Test
 	public void testWrongBrackets1() {
 		String err = "";
 		try {
