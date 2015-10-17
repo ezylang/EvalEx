@@ -1285,7 +1285,7 @@ public class Expression {
 	private List<String> getRPN() {
 		if (rpn == null) {
 			rpn = shuntingYard(this.expression);
-			validate();
+			validate(rpn);
 		}
 		return rpn;
 	}
@@ -1295,15 +1295,14 @@ public class Expression {
 	 * requirements of the operators and functions, also check 
 	 * for only 1 result stored at the end of the evaluation.  
 	 *
-	 * @return The expression, allows to chain methods.
 	 */
-	public Expression validate() {
+	private void validate(List<String> rpn) {
 		/*- 
 		* Thanks to Norman Ramsey:
 		* http://http://stackoverflow.com/questions/789847/postfix-notation-validation
 		*/
 		int counter = 0;
-		for (String token : getRPN()) {
+		for (String token : rpn) {
 			if (functions.containsKey(token.toUpperCase(Locale.ROOT))) {
 				Function f = functions.get(token.toUpperCase(Locale.ROOT));
 				counter -= f.getNumParams();
@@ -1322,7 +1321,6 @@ public class Expression {
 		} else if (counter < 1) {
 			throw new ExpressionException("Empty expression");
 		}
-		return this;
 	}
 
 	/**
