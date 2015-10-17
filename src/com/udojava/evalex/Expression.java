@@ -1105,8 +1105,6 @@ public class Expression {
 	 */
 	public BigDecimal eval() {
 
-		validate();
-
 		Stack<BigDecimal> stack = new Stack<BigDecimal>();
 
 		for (String token : getRPN()) {
@@ -1287,6 +1285,7 @@ public class Expression {
 	private List<String> getRPN() {
 		if (rpn == null) {
 			rpn = shuntingYard(this.expression);
+			validate();
 		}
 		return rpn;
 	}
