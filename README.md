@@ -92,8 +92,8 @@ To include it in your Maven project, refer to the artifact in your pom:
   <tr><td>NOT(<i>expression</i>)</td><td>Boolean negation, 1 (means true) if the expression is not zero</td></tr>
   <tr><td>IF(<i>condition</i>,<i>value_if_true</i>,<i>value_if_false</i>)</td><td>Returns one value if the condition evaluates to true or the other if it evaluates to false</td></tr>
   <tr><td>RANDOM()</td><td>Produces a random number between 0 and 1</td></tr>
-  <tr><td>MIN(<i>e1</i>,<i>e2</i>)</td><td>Returns the smaller of both expressions</td></tr>
-  <tr><td>MAX(<i>e1</i>,<i>e2</i>)</td><td>Returns the bigger of both expressions</td></tr>
+  <tr><td>MIN(<i>e1</i>,<i>e2</i>, <i>...</i>)</td><td>Returns the smallest of the given expressions</td></tr>
+  <tr><td>MAX(<i>e1</i>,<i>e2</i>, <i>...</i>)</td><td>Returns the biggest of the given expressions</td></tr>
   <tr><td>ABS(<i>expression</i>)</td><td>Returns the absolute (non-negative) value of the expression</td></tr>
   <tr><td>ROUND(<i>expression</i>,precision)</td><td>Rounds a value to a certain number of digits, uses the current rounding mode</td></tr>
   <tr><td>FLOOR(<i>expression</i>)</td><td>Rounds the value down to the nearest integer</td></tr>

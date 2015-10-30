@@ -36,5 +36,22 @@ public class TestCustoms {
 		
 		assertEquals("16", e.eval().toPlainString());
 	}
+	
+	@Test
+	public void testCustomFunctionVariableParameters() {
+		Expression e = new Expression("2 * average(12,4,8,2,9)");
+		e.addFunction(e.new Function("average", -1) {
+			@Override
+			public BigDecimal eval(List<BigDecimal> parameters) {
+				BigDecimal sum = new BigDecimal(0);
+				for (BigDecimal parameter : parameters) {
+					sum = sum.add(parameter);
+				}
+				return sum.divide(new BigDecimal(parameters.size()));
+			}
+		});
+		
+		assertEquals("14", e.eval().toPlainString());
+	}
 
 }
