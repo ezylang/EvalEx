@@ -14,7 +14,7 @@ Key Features:
 - Standard boolean and mathematical operators
 - Standard basic mathematical and boolean functions
 - Custom functions and operators can be added at runtime
-- Function can be defined with a variable number of arguments (see MIN and MAX functions)
+- Functions can be defined with a variable number of arguments (see MIN and MAX functions)
 
 ### Download / Maven
 You can download the binaries, source code and JavaDoc jars from [Maven Central](http://search.maven.org/#search%7Cga%7C1%7Ca%3A%22EvalEx%22%20g%3A%22com.udojava%22).
@@ -193,4 +193,4 @@ The software is licensed under the MIT Open Source license (see LICENSE file).
 
 * The *power of* operator (^) implementation was copied from [Stack Overflow](http://stackoverflow.com/questions/3579779/how-to-do-a-fractional-power-on-bigdecimal-in-java) Thanks to Gene Marin
 * The SQRT() function implementation was taken from the book [The Java Programmers Guide To numerical Computing](http://www.amazon.de/Java-Number-Cruncher-Programmers-Numerical/dp/0130460419) (Ronald Mak, 2002)
-* Varargs implementation based on "David's method" outlined in Gene Pavlovsky's comment [here].(http://www.kallisti.net.nz/blog/2008/02/extension-to-the-shunting-yard-algorithm-to-allow-variable-numbers-of-arguments-to-functions/#comment-125789)
+* Varargs implementation based on "David's method" outlined in Gene Pavlovsky's comment from  [here](http://www.kallisti.net.nz/blog/2008/02/extension-to-the-shunting-yard-algorithm-to-allow-variable-numbers-of-arguments-to-functions/#comment-125789)
