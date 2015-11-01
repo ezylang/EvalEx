@@ -323,6 +323,7 @@ import java.util.Stack;
  * the function name and the count of required parameters. The functions
  * `eval()` method will be called with a list of the BigDecimal parameters. All
  * existing functions can also be overridden. <br>
+ * A <code>-1</code> as the number of parameters denotes a variable number of arguments.<br>
  * For example, add a function `average(a,b,c)`, that will calculate the average
  * value of a, b and c: <br>
  * 
@@ -431,7 +432,8 @@ public class Expression {
 		 */
 		private String name;
 		/**
-		 * Number of parameters expected for this function.
+		 * Number of parameters expected for this function. 
+		 * <code>-1</code> denotes a variable number of parameters.
 		 */
 		private int numParams;
 
@@ -442,6 +444,7 @@ public class Expression {
 		 *            The name of the function.
 		 * @param numParams
 		 *            The number of parameters for this function.
+		 *            <code>-1</code> denotes a variable number of parameters.
 		 */
 		public Function(String name, int numParams) {
 			this.name = name.toUpperCase(Locale.ROOT);
