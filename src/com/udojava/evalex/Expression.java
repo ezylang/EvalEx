@@ -188,12 +188,12 @@ import java.util.Stack;
  * <td>Produces a random number between 0 and 1</td>
  * </tr>
  * <tr>
- * <td>MIN(<i>e1</i>,<i>e2</i>)</td>
- * <td>Returns the smaller of both expressions</td>
+ * <td>MIN(<i>e1</i>,<i>e2</i>, <i>...</i>)</td>
+ * <td>Returns the smallest of the given expressions</td>
  * </tr>
  * <tr>
- * <td>MAX(<i>e1</i>,<i>e2</i>)</td>
- * <td>Returns the bigger of both expressions</td>
+ * <td>MAX(<i>e1</i>,<i>e2</i>, <i>...</i>)</td>
+ * <td>Returns the biggest of the given expressions</td>
  * </tr>
  * <tr>
  * <td>ABS(<i>expression</i>)</td>
@@ -404,6 +404,12 @@ public class Expression {
 	private static final char minusSign = '-';
 
 	/**
+	 * The BigDecimal representation of the left parenthesis, 
+	 * used for parsing varying numbers of function parameters.
+	 */
+	private static final BigDecimal PARAMS_START = new BigDecimal(0);
+
+	/**
 	 * The expression evaluators exception class.
 	 */
 	public static class ExpressionException extends RuntimeException {
@@ -448,6 +454,10 @@ public class Expression {
 
 		public int getNumParams() {
 			return numParams;
+		}
+
+		public boolean numParamsVaries() {
+			return numParams < 0;
 		}
 
 		/**
@@ -896,20 +906,34 @@ public class Expression {
 				return new BigDecimal(d, mc);
 			}
 		});
-		addFunction(new Function("MAX", 2) {
+		addFunction(new Function("MAX", -1) {
 			@Override
 			public BigDecimal eval(List<BigDecimal> parameters) {
-				BigDecimal v1 = parameters.get(0);
-				BigDecimal v2 = parameters.get(1);
-				return v1.compareTo(v2) > 0 ? v1 : v2;
+				if (parameters.size() == 0) {
+					throw new ExpressionException("MAX requires at least one parameter");
+				}
+				BigDecimal max = null;
+				for (BigDecimal parameter : parameters) {
+					if (max == null || parameter.compareTo(max) > 0) {
+						max = parameter;
+					}
+				}
+				return max;
 			}
 		});
-		addFunction(new Function("MIN", 2) {
+		addFunction(new Function("MIN", -1) {
 			@Override
 			public BigDecimal eval(List<BigDecimal> parameters) {
-				BigDecimal v1 = parameters.get(0);
-				BigDecimal v2 = parameters.get(1);
-				return v1.compareTo(v2) < 0 ? v1 : v2;
+				if (parameters.size() == 0) {
+					throw new ExpressionException("MIN requires at least one parameter");
+				}
+				BigDecimal min = null;
+				for (BigDecimal parameter : parameters) {
+					if (min == null || parameter.compareTo(min) < 0) {
+						min = parameter;
+					}
+				}
+				return min;
 			}
 		});
 		addFunction(new Function("ABS", 1) {
@@ -1066,6 +1090,11 @@ public class Expression {
 								"Missing operator at character position "
 										+ tokenizer.getPos());
 					}
+					// if the ( is preceded by a valid function, then it
+					// denotes the start of a parameter list
+					if (functions.containsKey(previousToken.toUpperCase(Locale.ROOT))) {
+						outputQueue.add(token);
+					}
 				}
 				stack.push(token);
 			} else if (")".equals(token)) {
@@ -1117,12 +1146,22 @@ public class Expression {
 			} else if (functions.containsKey(token.toUpperCase(Locale.ROOT))) {
 				Function f = functions.get(token.toUpperCase(Locale.ROOT));
 				ArrayList<BigDecimal> p = new ArrayList<BigDecimal>(
-						f.getNumParams());
-				for (int i = 0; i < f.numParams; i++) {
+						!f.numParamsVaries() ? f.getNumParams() : 0);
+				// pop parameters off the stack until we hit the start of 
+				// this function's parameter list
+				while (!stack.isEmpty() && stack.peek() != PARAMS_START) {
 					p.add(0, stack.pop());
+				}
+				if (stack.peek() == PARAMS_START) {
+					stack.pop();
+				}
+				if (!f.numParamsVaries() && p.size() != f.getNumParams()) {
+					throw new ExpressionException("Function " + token + " expected " + f.getNumParams() + " parameters, got " + p.size());
 				}
 				BigDecimal fResult = f.eval(p);
 				stack.push(fResult);
+			} else if ("(".equals(token)) {
+				stack.push(PARAMS_START);
 			} else {
 				stack.push(new BigDecimal(token, mc));
 			}
@@ -1302,22 +1341,38 @@ public class Expression {
 		* http://http://stackoverflow.com/questions/789847/postfix-notation-validation
 		*/
 		int counter = 0;
+		Stack<Integer> params = new Stack<Integer>();
 		for (String token : rpn) {
-			if (functions.containsKey(token.toUpperCase(Locale.ROOT))) {
-				Function f = functions.get(token.toUpperCase(Locale.ROOT));
-				counter -= f.getNumParams();
+			if ("(".equals(token)) {
+				// is this a nested function call?
+				if (!params.isEmpty()) {
+					// increment the current function's param count
+					// (the return of the nested function call
+					// will be a parameter for the current function)
+					params.set(params.size() - 1, params.peek() + 1);
+				}
+				// start a new parameter count
+				params.push(0);
+			} else if (!params.isEmpty()) {
+				if (functions.containsKey(token.toUpperCase(Locale.ROOT))) {
+					// remove the parameters and the ( from the counter
+					counter -= params.pop() + 1;
+				} else {
+					// increment the current function's param count
+					params.set(params.size() - 1, params.peek() + 1);
+				}
 			} else if (operators.containsKey(token)) {
 				//we only have binary operators
 				counter -= 2;
 			}
 			if (counter < 0) {
-	    			throw new ExpressionException("Too many operators or functions at: "
+				throw new ExpressionException("Too many operators or functions at: "
 					+ token);
 			}
 			counter++;
 		}
 		if (counter > 1) {
-	        	throw new ExpressionException("Too many numbers or variables");
+			throw new ExpressionException("Too many numbers or variables");
 		} else if (counter < 1) {
 			throw new ExpressionException("Empty expression");
 		}

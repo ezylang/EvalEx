@@ -150,6 +150,51 @@ public class TestEval {
 	}
 
 	@Test
+	public void testExpectedParameterNumbers() {
+		String err = "";
+		try {
+			Expression expression = new Expression("Random(1)");
+			expression.eval();
+		} catch (ExpressionException e) {
+			err = e.getMessage();
+		}
+		assertEquals("Function Random expected 0 parameters, got 1", err);
+
+		try {
+			Expression expression = new Expression("SIN(1, 6)");
+			expression.eval();
+		} catch (ExpressionException e) {
+			err = e.getMessage();
+		}
+		assertEquals("Function SIN expected 1 parameters, got 2", err);
+	}
+
+	@Test
+	public void testVariableParameterNumbers() {
+		String err = "";
+		try {
+			Expression expression = new Expression("min()");
+			expression.eval();
+		} catch (ExpressionException e) {
+			err = e.getMessage();
+		}
+		assertEquals("MIN requires at least one parameter", err);
+
+		assertEquals("1", new Expression("min(1)").eval().toPlainString());
+		assertEquals("1", new Expression("min(1, 2)").eval().toPlainString());
+		assertEquals("1", new Expression("min(1, 2, 3)").eval().toPlainString());
+		assertEquals("3", new Expression("max(3, 2, 1)").eval().toPlainString());
+		assertEquals("9", new Expression("max(3, 2, 1, 4, 5, 6, 7, 8, 9, 0)").eval().toPlainString());
+	}
+
+	@Test
+	public void testExtremeFunctionNesting() {
+		assertNotSame("1.5", new Expression("Random()").eval().toPlainString());
+		assertEquals("0.0002791281", new Expression("SIN(SIN(COS(23.6)))").eval().toPlainString());
+		assertEquals("-4", new Expression("MIN(0, SIN(SIN(COS(23.6))), 0-MAX(3,4,MAX(0,SIN(1))), 10)").eval().toPlainString());
+	}
+
+	@Test
 	public void testTrigonometry() {
 		assertEquals("0.5", new Expression("SIN(30)").eval().toPlainString());
 		assertEquals("0.8660254", new Expression("cos(30)").eval().toPlainString());
