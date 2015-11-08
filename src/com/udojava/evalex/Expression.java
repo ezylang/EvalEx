@@ -593,8 +593,11 @@ public class Expression {
 				ch = input.charAt(++pos);
 			}
 			if (Character.isDigit(ch)) {
-				while ((Character.isDigit(ch) || ch == decimalSeparator)
-						&& (pos < input.length())) {
+				while ((Character.isDigit(ch) || ch == decimalSeparator
+                                                || ch == 'e' || ch == 'E'
+                                                || (ch == minusSign && token.length() > 0 
+                                                    && ('e'==token.charAt(token.length()-1) || 'E'==token.charAt(token.length()-1)))
+                                                ) && (pos < input.length())) {
 					token.append(input.charAt(pos++));
 					ch = pos == input.length() ? 0 : input.charAt(pos);
 				}
@@ -1030,9 +1033,11 @@ public class Expression {
 	private boolean isNumber(String st) {
 		if (st.charAt(0) == minusSign && st.length() == 1)
 			return false;
+		if (st.charAt(0) == 'e' ||  st.charAt(0) == 'E') return false;
 		for (char ch : st.toCharArray()) {
 			if (!Character.isDigit(ch) && ch != minusSign
-					&& ch != decimalSeparator)
+					&& ch != decimalSeparator
+                                        && ch != 'e' && ch != 'E')
 				return false;
 		}
 		return true;
