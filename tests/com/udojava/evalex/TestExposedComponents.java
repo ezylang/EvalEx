@@ -39,7 +39,7 @@ public class TestExposedComponents {
     @Test
     public void testDeclaredFunctionGetter() {
         Expression expression = new Expression("a+b");
-        int originalFunctionCount = expression.getDeclardFunctions().size();
+        int originalFunctionCount = expression.getDeclaredFunctions().size();
         expression.addFunction(expression.new Function("func1", 3) {
             @Override
             public BigDecimal eval(List<BigDecimal> parameters) {
@@ -47,15 +47,15 @@ public class TestExposedComponents {
             }
         });
 
-        Assert.assertTrue("Function list should have new func1 function declared", expression.getDeclardFunctions().contains("func1"));
-        Assert.assertEquals("Function list should have one more function declared", expression.getDeclardFunctions().size(), originalFunctionCount + 1);
+        Assert.assertTrue("Function list should have new func1 function declared", expression.getDeclaredFunctions().contains("func1"));
+        Assert.assertEquals("Function list should have one more function declared", expression.getDeclaredFunctions().size(), originalFunctionCount + 1);
     }
 
 
     @Test(expected = RuntimeException.class)
     public void testUnmodifiableFunctionList() {
         Expression expression = new Expression("c+d");
-        expression.getDeclardFunctions().add("$$$");
+        expression.getDeclaredFunctions().add("$$$");
     }
 
     @Test(expected = RuntimeException.class)

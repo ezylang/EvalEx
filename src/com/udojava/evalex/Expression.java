@@ -34,7 +34,6 @@ import java.util.*;
 
 /**
  * <h1>EvalEx - Java Expression Evaluator</h1>
- * <p/>
  * <h2>Introduction</h2> EvalEx is a handy expression evaluator for Java, that
  * allows to evaluate simple mathematical and boolean expressions. <br>
  * Key Features:
@@ -50,7 +49,6 @@ import java.util.*;
  * </ul>
  * <br>
  * <h2>Examples</h2>
- * <p/>
  * <pre>
  *  BigDecimal result = null;
  *
@@ -73,7 +71,7 @@ import java.util.*;
  *
  *  result = new Expression("not(x<7 || sqrt(max(x,9)) <= 3))").with("x","22.9").eval();
  * </pre>
- * <p/>
+ * 
  * <br>
  * <h2>Supported Operators</h2>
  * <table>
@@ -285,9 +283,9 @@ import java.util.*;
  * <td>The value zero</td>
  * </tr>
  * </table>
- * <p/>
+ * 
  * <h2>Add Custom Operators</h2>
- * <p/>
+ * 
  * Custom operators can be added easily, simply create an instance of
  * `Expression.Operator` and add it to the expression. Parameters are the
  * operator string, its precedence and if it is left associative. The operators
@@ -295,7 +293,7 @@ import java.util.*;
  * All existing operators can also be overridden. <br>
  * For example, add an operator `x >> n`, that moves the decimal point of _x_
  * _n_ digits to the right:
- * <p/>
+ * 
  * <pre>
  * Expression e = new Expression("2.1234 >> 2");
  *
@@ -308,10 +306,10 @@ import java.util.*;
  *
  * e.eval(); // returns 212.34
  * </pre>
- * <p/>
+ * 
  * <br>
  * <h2>Add Custom Functions</h2>
- * <p/>
+ * 
  * Adding custom functions is as easy as adding custom operators. Create an
  * instance of `Expression.Function`and add it to the expression. Parameters are
  * the function name and the count of required parameters. The functions
@@ -320,7 +318,7 @@ import java.util.*;
  * A <code>-1</code> as the number of parameters denotes a variable number of arguments.<br>
  * For example, add a function `average(a,b,c)`, that will calculate the average
  * value of a, b and c: <br>
- * <p/>
+ * 
  * <pre>
  * Expression e = new Expression("2 * average(12,4,8)");
  *
@@ -334,7 +332,7 @@ import java.util.*;
  *
  * e.eval(); // returns 16
  * </pre>
- * <p/>
+ * 
  * The software is licensed under the MIT Open Source license (see LICENSE
  * file). <br>
  * <ul>
@@ -401,7 +399,7 @@ public class Expression {
         return Collections.unmodifiableSet(operators.keySet());
     }
 
-    public Set<String> getDeclardFunctions() {
+    public Set<String> getDeclaredFunctions() {
         return Collections.unmodifiableSet(functions.keySet());
     }
 
