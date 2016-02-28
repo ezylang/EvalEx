@@ -410,6 +410,31 @@ public class Expression {
 	 */
 	private static final BigDecimal PARAMS_START = new BigDecimal(0);
 
+
+	/**
+	 * Exposing declared variables in the expression
+	 * @return declared variables
+     */
+	public Set<String> getDeclaredVariables() {
+		return Collections.unmodifiableSet(variables.keySet());
+	}
+
+	/**
+	 * Exposing declared operators in the expression
+	 * @return declared operators
+     */
+	public Set<String> getDeclaredOperators() {
+		return Collections.unmodifiableSet(operators.keySet());
+	}
+
+	/**
+	 * Exposing declared functions
+	 * @return declared functions
+     */
+	public Set<String> getDeclaredFunctions() {
+		return Collections.unmodifiableSet(functions.keySet());
+	}
+
 	/**
 	 * The expression evaluators exception class.
 	 */
