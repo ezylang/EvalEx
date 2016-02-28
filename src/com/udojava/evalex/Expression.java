@@ -382,17 +382,17 @@ public class Expression {
 	/**
 	 * All defined operators with name and implementation.
 	 */
-	private Map<String, Operator> operators = new HashMap<String, Expression.Operator>();
+	private Map<String, Operator> operators = new TreeMap<String, Operator>(String.CASE_INSENSITIVE_ORDER);
 
 	/**
 	 * All defined functions with name and implementation.
 	 */
-	private Map<String, Function> functions = new HashMap<String, Expression.Function>();
+	private Map<String, Function> functions = new TreeMap<String, Expression.Function>(String.CASE_INSENSITIVE_ORDER);
 
 	/**
 	 * All defined variables with name and value.
 	 */
-	private Map<String, BigDecimal> variables = new HashMap<String, BigDecimal>();
+	private Map<String, BigDecimal> variables = new TreeMap<String, BigDecimal>(String.CASE_INSENSITIVE_ORDER);
 
 	/**
 	 * What character to use for decimal separators.
@@ -1084,7 +1084,8 @@ public class Expression {
 			} else if (operators.containsKey(token)) {
 				Operator o1 = operators.get(token);
 				String token2 = stack.isEmpty() ? null : stack.peek();
-				while (operators.containsKey(token2)
+				while (token2!=null &&
+						operators.containsKey(token2)
 						&& ((o1.isLeftAssoc() && o1.getPrecedence() <= operators
 								.get(token2).getPrecedence()) || (o1
 								.getPrecedence() < operators.get(token2)
@@ -1255,7 +1256,7 @@ public class Expression {
 		if (isNumber(value))
 			variables.put(variable, new BigDecimal(value));
 		else {
-			expression = expression.replaceAll("\\b" + variable + "\\b", "("
+			expression = expression.replaceAll("(?i)\\b" + variable + "\\b", "("
 					+ value + ")");
 			rpn = null;
 		}
