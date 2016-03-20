@@ -31,12 +31,14 @@ import java.math.BigInteger;
 import java.math.MathContext;
 import java.math.RoundingMode;
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Set;
 import java.util.Stack;
+import java.util.TreeMap;
 
 /**
  * <h1>EvalEx - Java Expression Evaluator</h1>
@@ -382,17 +384,17 @@ public class Expression {
 	/**
 	 * All defined operators with name and implementation.
 	 */
-	private Map<String, Operator> operators = new HashMap<String, Expression.Operator>();
+	private Map<String, Operator> operators = new TreeMap<String, Operator>(String.CASE_INSENSITIVE_ORDER);
 
 	/**
 	 * All defined functions with name and implementation.
 	 */
-	private Map<String, Function> functions = new HashMap<String, Expression.Function>();
+	private Map<String, Function> functions = new TreeMap<String, Expression.Function>(String.CASE_INSENSITIVE_ORDER);
 
 	/**
 	 * All defined variables with name and value.
 	 */
-	private Map<String, BigDecimal> variables = new HashMap<String, BigDecimal>();
+	private Map<String, BigDecimal> variables = new TreeMap<String, BigDecimal>(String.CASE_INSENSITIVE_ORDER);
 
 	/**
 	 * What character to use for decimal separators.
@@ -1084,7 +1086,8 @@ public class Expression {
 			} else if (operators.containsKey(token)) {
 				Operator o1 = operators.get(token);
 				String token2 = stack.isEmpty() ? null : stack.peek();
-				while (operators.containsKey(token2)
+				while (token2!=null &&
+						operators.containsKey(token2)
 						&& ((o1.isLeftAssoc() && o1.getPrecedence() <= operators
 								.get(token2).getPrecedence()) || (o1
 								.getPrecedence() < operators.get(token2)
@@ -1255,7 +1258,7 @@ public class Expression {
 		if (isNumber(value))
 			variables.put(variable, new BigDecimal(value));
 		else {
-			expression = expression.replaceAll("\\b" + variable + "\\b", "("
+			expression = expression.replaceAll("(?i)\\b" + variable + "\\b", "("
 					+ value + ")");
 			rpn = null;
 		}
@@ -1402,6 +1405,30 @@ public class Expression {
 			result.append(st);
 		}
 		return result.toString();
+	}
+
+	/**
+	 * Exposing declared variables in the expression.
+	 * @return All declared variables.
+     */
+	public Set<String> getDeclaredVariables() {
+		return Collections.unmodifiableSet(variables.keySet());
+	}
+
+	/**
+	 * Exposing declared operators in the expression.
+	 * @return All declared operators.
+     */
+	public Set<String> getDeclaredOperators() {
+		return Collections.unmodifiableSet(operators.keySet());
+	}
+
+	/**
+	 * Exposing declared functions.
+	 * @return All declared functions.
+     */
+	public Set<String> getDeclaredFunctions() {
+		return Collections.unmodifiableSet(functions.keySet());
 	}
 
 }
