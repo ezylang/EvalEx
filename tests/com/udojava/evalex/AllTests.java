@@ -8,6 +8,6 @@ import org.junit.runners.Suite.SuiteClasses;
 @SuiteClasses({ TestTokenizer.class, TestRPN.class, TestEval.class,
 		TestVariables.class, TestBooleans.class, TestCustoms.class,
 		TestNested.class, TestVarArgs.class, TestSciNotation.class,
-		TestExposedComponents.class, TestCaseInsensitive.class })
+		TestExposedComponents.class, TestCaseInsensitive.class,TestLazyIf.class })
 public class AllTests {
 }
