@@ -389,7 +389,7 @@ public class Expression {
 	/**
 	 * All defined functions with name and implementation.
 	 */
-	private Map<String, Function> functions = new TreeMap<String, Expression.Function>(String.CASE_INSENSITIVE_ORDER);
+	private Map<String,LazyFunction> functions = new TreeMap<String, LazyFunction>(String.CASE_INSENSITIVE_ORDER);
 
 	/**
 	 * All defined variables with name and value.
@@ -410,7 +410,11 @@ public class Expression {
 	 * The BigDecimal representation of the left parenthesis, 
 	 * used for parsing varying numbers of function parameters.
 	 */
-	private static final BigDecimal PARAMS_START = new BigDecimal(0);
+	private static final LazyNumber PARAMS_START = new LazyNumber() {
+		public BigDecimal eval() {
+			return null;
+		}
+	};
 
 	/**
 	 * The expression evaluators exception class.
@@ -423,32 +427,35 @@ public class Expression {
 		}
 	}
 
+
 	/**
-	 * Abstract definition of a supported expression function. A function is
-	 * defined by a name, the number of parameters and the actual processing
-	 * implementation.
+	 * LazyNumber interface created for lazily evaluated functions
 	 */
-	public abstract class Function {
+	interface LazyNumber {
+		BigDecimal eval();
+	}
+
+	public abstract class LazyFunction {
 		/**
 		 * Name of this function.
 		 */
 		private String name;
 		/**
-		 * Number of parameters expected for this function. 
+		 * Number of parameters expected for this function.
 		 * <code>-1</code> denotes a variable number of parameters.
 		 */
 		private int numParams;
 
 		/**
 		 * Creates a new function with given name and parameter count.
-		 * 
+		 *
 		 * @param name
 		 *            The name of the function.
 		 * @param numParams
 		 *            The number of parameters for this function.
 		 *            <code>-1</code> denotes a variable number of parameters.
 		 */
-		public Function(String name, int numParams) {
+		public LazyFunction(String name, int numParams) {
 			this.name = name.toUpperCase(Locale.ROOT);
 			this.numParams = numParams;
 		}
@@ -464,10 +471,37 @@ public class Expression {
 		public boolean numParamsVaries() {
 			return numParams < 0;
 		}
+		public abstract LazyNumber lazyEval(List<LazyNumber> lazyParams);
+	}
+
+
+
+	/**
+	 * Abstract definition of a supported expression function. A function is
+	 * defined by a name, the number of parameters and the actual processing
+	 * implementation.
+	 */
+	public abstract class Function extends LazyFunction {
+
+		public Function(String name, int numParams) {
+			super(name, numParams);
+		}
+
+		public LazyNumber lazyEval(List<LazyNumber> lazyParams) {
+			final List<BigDecimal> params = new ArrayList<BigDecimal>();
+			for (LazyNumber lazyParam : lazyParams) {
+				params.add(lazyParam.eval());
+			}
+			return new LazyNumber() {
+				public BigDecimal eval() {
+					return Function.this.eval(params);
+				}
+			};
+		}
 
 		/**
 		 * Implementation for this function.
-		 * 
+		 *
 		 * @param parameters
 		 *            Parameters will be passed by the expression evaluator as a
 		 *            {@link List} of {@link BigDecimal} values.
@@ -476,7 +510,6 @@ public class Expression {
 		 */
 		public abstract BigDecimal eval(List<BigDecimal> parameters);
 	}
-
 	/**
 	 * Abstract definition of a supported operator. An operator is defined by
 	 * its name (pattern), precedence and if it is left- or right associative.
@@ -818,11 +851,11 @@ public class Expression {
 			}
 		});
 
-		addFunction(new Function("IF", 3) {
+		addLazyFunction(new LazyFunction("IF", 3) {
 			@Override
-			public BigDecimal eval(List<BigDecimal> parameters) {
-				boolean isTrue = !parameters.get(0).equals(BigDecimal.ZERO);
-				return isTrue ? parameters.get(1) : parameters.get(2);
+			public LazyNumber lazyEval(List<LazyNumber> lazyParams) {
+				boolean isTrue = !lazyParams.get(0).eval().equals(BigDecimal.ZERO);
+				return isTrue ? lazyParams.get(1) : lazyParams.get(2);
 			}
 		});
 
@@ -1147,18 +1180,27 @@ public class Expression {
 	 */
 	public BigDecimal eval() {
 
-		Stack<BigDecimal> stack = new Stack<BigDecimal>();
+		Stack<LazyNumber> stack = new Stack<LazyNumber>();
 
-		for (String token : getRPN()) {
+		for (final String token : getRPN()) {
 			if (operators.containsKey(token)) {
-				BigDecimal v1 = stack.pop();
-				BigDecimal v2 = stack.pop();
-				stack.push(operators.get(token).eval(v2, v1));
+				final LazyNumber v1 = stack.pop();
+				final LazyNumber v2 = stack.pop();
+				LazyNumber number = new LazyNumber() {
+					public BigDecimal eval() {
+						return operators.get(token).eval(v2.eval(), v1.eval());
+					}
+				};
+				stack.push(number);
 			} else if (variables.containsKey(token)) {
-				stack.push(variables.get(token).round(mc));
+				stack.push(new LazyNumber() {
+					public BigDecimal eval() {
+						return variables.get(token).round(mc);
+					}
+				});
 			} else if (functions.containsKey(token.toUpperCase(Locale.ROOT))) {
-				Function f = functions.get(token.toUpperCase(Locale.ROOT));
-				ArrayList<BigDecimal> p = new ArrayList<BigDecimal>(
+				LazyFunction f = functions.get(token.toUpperCase(Locale.ROOT));
+				ArrayList<LazyNumber> p = new ArrayList<LazyNumber>(
 						!f.numParamsVaries() ? f.getNumParams() : 0);
 				// pop parameters off the stack until we hit the start of 
 				// this function's parameter list
@@ -1171,15 +1213,19 @@ public class Expression {
 				if (!f.numParamsVaries() && p.size() != f.getNumParams()) {
 					throw new ExpressionException("Function " + token + " expected " + f.getNumParams() + " parameters, got " + p.size());
 				}
-				BigDecimal fResult = f.eval(p);
+				LazyNumber fResult = f.lazyEval(p);
 				stack.push(fResult);
 			} else if ("(".equals(token)) {
 				stack.push(PARAMS_START);
 			} else {
-				stack.push(new BigDecimal(token, mc));
+				stack.push(new LazyNumber() {
+					public BigDecimal eval() {
+						return new BigDecimal(token, mc);
+					}
+				});
 			}
 		}
-		return stack.pop().stripTrailingZeros();
+		return stack.pop().eval().stripTrailingZeros();
 	}
 
 	/**
@@ -1228,7 +1274,19 @@ public class Expression {
 	 *         there was none.
 	 */
 	public Function addFunction(Function function) {
-		return functions.put(function.getName(), function);
+		return (Function) functions.put(function.getName(), function);
+	}
+
+	/**
+	 * Adds a lazy function function to the list of supported functions
+	 *
+	 * @param function
+	 *            The function to add.
+	 * @return The previous operator with that name, or <code>null</code> if
+	 *         there was none.
+	 */
+	public LazyFunction addLazyFunction(LazyFunction function) {
+		return  functions.put(function.getName(), function);
 	}
 
 	/**
