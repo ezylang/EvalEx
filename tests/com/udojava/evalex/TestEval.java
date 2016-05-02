@@ -280,7 +280,7 @@ public class TestEval {
 	
 	@Test
 	public void testMathContext() {
-		Expression e = null;
+		Expression e;
 		e = new Expression("2.5/3").setPrecision(2);
 		assertEquals("0.83", e.eval().toPlainString());
 		
