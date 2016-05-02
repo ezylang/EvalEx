@@ -12,8 +12,13 @@
 		<url>http://www.udojava.com</url>
 	</organization>
 	<developers>
-		<developer>Udo Klimaschewski</developer>
-		<developer>David Sánchez i Gregori</developer>
+        <developer>
+            <name>Udo Klimaschewski</name>
+            <organizationUrl>https://github.com/uklimaschewski</organizationUrl>
+        </developer>
+		<developer>
+            <name>David Sánchez i Gregori</name>
+        </developer>
 	</developers>
 	<licenses>
 		<license>
@@ -21,12 +26,6 @@
 			<url>http://www.opensource.org/licenses/mit-license.php</url>
 		</license>
 	</licenses>
-	<developers>
-		<developer>
-			<name>Udo Klimaschewski</name>
-			<organizationUrl>https://github.com/uklimaschewski</organizationUrl>
-		</developer>
-	</developers>
 	<scm>
 		<connection>scm:git:git@github.com:uklimaschewski/EvalEx.git</connection>
 		<developerConnection>scm:git:git@github.com:uklimaschewski/EvalEx.git</developerConnection>
