@@ -1,15 +1,14 @@
 package com.udojava.evalex;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotSame;
+import com.udojava.evalex.Expression.ExpressionException;
+import org.junit.Test;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.List;
 
-import org.junit.Test;
-
-import com.udojava.evalex.Expression.ExpressionException;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotSame;
 
 
 public class TestEval {

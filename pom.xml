@@ -1,9 +1,9 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>com.udojava</groupId>
+	<groupId>world.dsig</groupId>
 	<artifactId>EvalEx</artifactId>
-	<version>1.0</version>
+	<version>1.2B</version>
 	<name>EvalEx</name>
 	<description>EvalEx is a handy expression evaluator for Java, that allows to evaluate simple mathematical and boolean expressions.</description>
 	<url>https://github.com/uklimaschewski/EvalEx</url>

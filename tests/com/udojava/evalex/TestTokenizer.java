@@ -1,10 +1,10 @@
 package com.udojava.evalex;
 
-import static org.junit.Assert.*;
+import org.junit.Test;
 
 import java.util.Iterator;
 
-import org.junit.Test;
+import static org.junit.Assert.*;
 
 
 public class TestTokenizer {
