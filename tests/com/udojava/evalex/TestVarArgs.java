@@ -1,14 +1,12 @@
 package com.udojava.evalex;
 
-import static org.junit.Assert.*;
+import com.udojava.evalex.Expression.ExpressionException;
+import org.junit.Test;
 
 import java.math.BigDecimal;
 import java.util.List;
 
-import org.junit.Test;
-
-import com.udojava.evalex.Expression.ExpressionException;
-import com.udojava.evalex.Expression.Function;
+import static org.junit.Assert.assertEquals;
 
 public class TestVarArgs {
 

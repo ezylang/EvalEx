@@ -1,12 +1,10 @@
 package com.udojava.evalex;
 
-import static org.junit.Assert.*;
+import org.junit.Test;
 
-import java.math.BigDecimal;
 import java.math.MathContext;
 
-import org.junit.Test;
-import org.junit.Ignore;
+import static org.junit.Assert.assertEquals;
 
 public class TestSciNotation {
 
@@ -63,7 +61,7 @@ public class TestSciNotation {
 		e = new Expression("sin( 3.e1 )");
 		assertEquals("0.5", e.eval().toPlainString());
 		
-		e = new Expression("2.2e-16 * 10.2");;
+		e = new Expression("2.2e-16 * 10.2");
 		assertEquals("2.244E-15", e.eval().toString());
 	}
 	

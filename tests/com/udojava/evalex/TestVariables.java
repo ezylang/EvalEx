@@ -1,18 +1,18 @@
 package com.udojava.evalex;
 
-import static org.junit.Assert.*;
+import org.junit.Test;
 
 import java.math.BigDecimal;
 import java.math.MathContext;
 
-import org.junit.Test;
+import static org.junit.Assert.assertEquals;
 
 public class TestVariables {
 
 	@Test
 	public void testVars() {
 		assertEquals("3.141593", new Expression("PI").eval().toString());
-		assertEquals("3.1415926535897932384626433832795028841971693993751058209749445923078164062862089986280348253421170679", new Expression("PI").setPrecision(MathContext.UNLIMITED.getPrecision()).eval().toString());
+		assertEquals(Expression.PI.toPlainString(), new Expression("PI").setPrecision(MathContext.UNLIMITED.getPrecision()).eval().toString());
 		assertEquals("3.141592653589793238462643383279503", new Expression("PI").setPrecision(MathContext.DECIMAL128.getPrecision()).eval().toString());
 		assertEquals("3.141592653589793", new Expression("PI").setPrecision(MathContext.DECIMAL64.getPrecision()).eval().toString());
 		assertEquals("3.141593", new Expression("PI").setPrecision(MathContext.DECIMAL32.getPrecision()).eval().toString());

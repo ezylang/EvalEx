@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.udojava</groupId>
 	<artifactId>EvalEx</artifactId>
-	<version>1.0</version>
+	<version>1.3</version>
 	<name>EvalEx</name>
 	<description>EvalEx is a handy expression evaluator for Java, that allows to evaluate simple mathematical and boolean expressions.</description>
 	<url>https://github.com/uklimaschewski/EvalEx</url>
@@ -11,18 +11,21 @@
 		<name>Udo Klimaschewski</name>
 		<url>http://www.udojava.com</url>
 	</organization>
+	<developers>
+        <developer>
+            <name>Udo Klimaschewski</name>
+            <organizationUrl>https://github.com/uklimaschewski</organizationUrl>
+        </developer>
+		<developer>
+            <name>David Sánchez i Gregori</name>
+        </developer>
+	</developers>
 	<licenses>
 		<license>
 			<name>MIT License</name>
 			<url>http://www.opensource.org/licenses/mit-license.php</url>
 		</license>
 	</licenses>
-	<developers>
-		<developer>
-			<name>Udo Klimaschewski</name>
-			<organizationUrl>https://github.com/uklimaschewski</organizationUrl>
-		</developer>
-	</developers>
 	<scm>
 		<connection>scm:git:git@github.com:uklimaschewski/EvalEx.git</connection>
 		<developerConnection>scm:git:git@github.com:uklimaschewski/EvalEx.git</developerConnection>

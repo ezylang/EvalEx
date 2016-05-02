@@ -1,11 +1,11 @@
 package com.udojava.evalex;
 
-import static org.junit.Assert.assertEquals;
+import org.junit.Test;
 
 import java.math.BigDecimal;
 import java.util.List;
 
-import org.junit.Test;
+import static org.junit.Assert.assertEquals;
 
 public class TestCustoms {
 

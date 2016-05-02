@@ -30,15 +30,7 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.math.MathContext;
 import java.math.RoundingMode;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-import java.util.Set;
-import java.util.Stack;
-import java.util.TreeMap;
+import java.util.*;
 
 /**
  * <h1>EvalEx - Java Expression Evaluator</h1>
@@ -364,7 +356,7 @@ public class Expression {
 	 * Definition of PI as a constant, can be used in expressions as variable.
 	 */
 	public static final BigDecimal PI = new BigDecimal(
-			"3.1415926535897932384626433832795028841971693993751058209749445923078164062862089986280348253421170679");
+			"3.14159265358979323846264338327950288419716939937510582097494459230781640628620899862803482534211706798214808651328230664709384460955058223172535940812848111745028410270193852110555964462294895493038196442881097566593344612847564823378678316527120190914564856692346034861045432664821339360726024914127372458700660631558817488152092096282925409171536436789259036001133053054882046652138414695194151160943305727036575959195309218611738193261179310511854807446237996274956735188575272489122793818301194912983367336244065664308602139494639522473719070217986094370277053921717629317675238467481846766940513200056812714526356082778577134275778960917363717872146844090122495343014654958537105079227968925");
 
 	/**
 	 * The {@link MathContext} to use for calculations.
@@ -488,7 +480,7 @@ public class Expression {
 		}
 
 		public LazyNumber lazyEval(List<LazyNumber> lazyParams) {
-			final List<BigDecimal> params = new ArrayList<BigDecimal>();
+			final List<BigDecimal> params = new ArrayList<BigDecimal>(64);
 			for (LazyNumber lazyParam : lazyParams) {
 				params.add(lazyParam.eval());
 			}
@@ -619,7 +611,7 @@ public class Expression {
 
 		@Override
 		public String next() {
-			StringBuilder token = new StringBuilder();
+			final StringBuilder token = new StringBuilder();
 			if (pos >= input.length()) {
 				return previousToken = null;
 			}
@@ -1067,7 +1059,7 @@ public class Expression {
 	 *            The string.
 	 * @return <code>true</code>, if the input string is a number.
 	 */
-	private boolean isNumber(String st) {
+	private static boolean isNumber(String st) {
 		if (st.charAt(0) == minusSign && st.length() == 1) return false;
 		if (st.charAt(0) == '+' && st.length() == 1) return false;
 		if (st.charAt(0) == 'e' ||  st.charAt(0) == 'E') return false;
@@ -1090,7 +1082,7 @@ public class Expression {
 	 *         member.
 	 */
 	private List<String> shuntingYard(String expression) {
-		List<String> outputQueue = new ArrayList<String>();
+		List<String> outputQueue = new ArrayList<String>(64);
 		Stack<String> stack = new Stack<String>();
 
 		Tokenizer tokenizer = new Tokenizer(expression);
@@ -1114,7 +1106,7 @@ public class Expression {
 				}
 				if (stack.isEmpty()) {
 					throw new ExpressionException("Parse error for function '"
-							+ lastFunction + "'");
+							+ lastFunction + '\'');
 				}
 			} else if (operators.containsKey(token)) {
 				Operator o1 = operators.get(token);
@@ -1180,7 +1172,7 @@ public class Expression {
 	 */
 	public BigDecimal eval() {
 
-		Stack<LazyNumber> stack = new Stack<LazyNumber>();
+		final Stack<LazyNumber> stack = new Stack<LazyNumber>();
 
 		for (final String token : getRPN()) {
 			if (operators.containsKey(token)) {
@@ -1199,21 +1191,23 @@ public class Expression {
 					}
 				});
 			} else if (functions.containsKey(token.toUpperCase(Locale.ROOT))) {
-				LazyFunction f = functions.get(token.toUpperCase(Locale.ROOT));
-				ArrayList<LazyNumber> p = new ArrayList<LazyNumber>(
+				final LazyFunction f = functions.get(token.toUpperCase(Locale.ROOT));
+				final ArrayList<LazyNumber> p = new ArrayList<LazyNumber>(
 						!f.numParamsVaries() ? f.getNumParams() : 0);
 				// pop parameters off the stack until we hit the start of 
 				// this function's parameter list
 				while (!stack.isEmpty() && stack.peek() != PARAMS_START) {
 					p.add(0, stack.pop());
 				}
-				if (stack.peek() == PARAMS_START) {
+
+				if (!stack.isEmpty() && stack.peek() == PARAMS_START) {
 					stack.pop();
 				}
+
 				if (!f.numParamsVaries() && p.size() != f.getNumParams()) {
 					throw new ExpressionException("Function " + token + " expected " + f.getNumParams() + " parameters, got " + p.size());
 				}
-				LazyNumber fResult = f.lazyEval(p);
+				final LazyNumber fResult = f.lazyEval(p);
 				stack.push(fResult);
 			} else if ("(".equals(token)) {
 				stack.push(PARAMS_START);
@@ -1316,8 +1310,8 @@ public class Expression {
 		if (isNumber(value))
 			variables.put(variable, new BigDecimal(value));
 		else {
-			expression = expression.replaceAll("(?i)\\b" + variable + "\\b", "("
-					+ value + ")");
+			expression = expression.replaceAll("(?i)\\b" + variable + "\\b", '('
+					+ value + ')');
 			rpn = null;
 		}
 		return this;
@@ -1459,7 +1453,7 @@ public class Expression {
 		StringBuilder result = new StringBuilder();
 		for (String st : getRPN()) {
 			if (result.length() != 0)
-				result.append(" ");
+				result.append(' ');
 			result.append(st);
 		}
 		return result.toString();
