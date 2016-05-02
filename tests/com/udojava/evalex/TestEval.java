@@ -3,7 +3,9 @@ package com.udojava.evalex;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotSame;
 
+import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.util.List;
 
 import org.junit.Test;
 
@@ -168,6 +170,51 @@ public class TestEval {
 		}
 		assertEquals("Function SIN expected 1 parameters, got 2", err);
 	}
+
+
+	@Test
+	public void testAtLarge(){
+
+			final Expression exp = new Expression("porc(DR1BC3,sum(DR1BC3,DR1BC2,DR1BC1))");
+
+			// Custom defined sum
+			exp.addFunction(exp.new Function("SUM", -1) {
+				@Override
+				public BigDecimal eval(List<BigDecimal> parameters) {
+					BigDecimal sum = BigDecimal.ZERO;
+					for (BigDecimal parameter : parameters) {
+						sum = sum.add(parameter);
+					}
+					return sum;
+				}
+			});
+			// Custom defined percentage.
+			exp.addFunction(exp.new Function("PORC", 2) {
+				@Override
+				public BigDecimal eval(List<BigDecimal> parameters) {
+					if (parameters.size() != 2) {
+						throw new ExpressionException("La función \"porc\" requiere dos parámetros");
+					}
+
+					if (parameters.get(1).floatValue() == 0) {
+						return BigDecimal.ZERO;
+					}
+
+					return parameters.get(0).
+							multiply(new BigDecimal("100")).
+							divide(parameters.get(1), 10, RoundingMode.HALF_UP);
+
+				}
+			});
+
+		exp.with("DR1BC3","10");
+		exp.with("DR1BC3","10");
+		exp.with("DR1BC2","50");
+		exp.with("DR1BC1","40");
+
+		assertEquals(10,exp.eval().intValue());
+	}
+
 
 	@Test
 	public void testVariableParameterNumbers() {
