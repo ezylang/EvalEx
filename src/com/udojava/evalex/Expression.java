@@ -281,6 +281,10 @@ import java.util.TreeMap;
  * <th>Description</th>
  * </tr>
  * <tr>
+ * <td>e</td>
+ * <td>The value of <i>e</i>, exact to 70 digits</td>
+ * </tr>
+ * <tr>
  * <td>PI</td>
  * <td>The value of <i>PI</i>, exact to 100 digits</td>
  * </tr>
