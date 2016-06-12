@@ -48,7 +48,7 @@ public class TestEval {
 			err = e.getMessage();
 		}
 
-		assertEquals("Too many operators or functions at: +", err);
+		assertEquals("Missing parameter(s) for operator +", err);
 	}
 
 	@Test
@@ -185,6 +185,84 @@ public class TestEval {
 		assertEquals("1", new Expression("min(1, 2, 3)").eval().toPlainString());
 		assertEquals("3", new Expression("max(3, 2, 1)").eval().toPlainString());
 		assertEquals("9", new Expression("max(3, 2, 1, 4, 5, 6, 7, 8, 9, 0)").eval().toPlainString());
+	}
+
+	@Test
+	public void testOrphanedOperators() {
+		String err = "";
+		try {
+			new Expression("/").eval();
+		} catch (ExpressionException e) {
+			err = e.getMessage();
+		}
+		assertEquals("Missing parameter(s) for operator /", err);
+
+		err = "";
+		try {
+			new Expression("3/").eval();
+		} catch (ExpressionException e) {
+			err = e.getMessage();
+		}
+		assertEquals("Missing parameter(s) for operator /", err);
+
+		err = "";
+		try {
+			new Expression("/3").eval();
+		} catch (ExpressionException e) {
+			err = e.getMessage();
+		}
+		assertEquals("Missing parameter(s) for operator /", err);
+
+		err = "";
+		try {
+			new Expression("SIN(MAX(23,45,12))/").eval();
+		} catch (ExpressionException e) {
+			err = e.getMessage();
+		}
+		assertEquals("Missing parameter(s) for operator /", err);
+
+		err = "";
+		try {
+			new Expression("+SIN(MAX(23,45,12))").eval();
+		} catch (ExpressionException e) {
+			err = e.getMessage();
+		}
+		assertEquals("Missing parameter(s) for operator +", err);
+	}
+
+	@Test
+	public void testOrphanedOperatorsInFunctionParameters() {
+		String err = "";
+		try {
+			new Expression("min(/)").eval();
+		} catch (ExpressionException e) {
+			err = e.getMessage();
+		}
+		assertEquals("Missing parameter(s) for operator / at character position 4", err);
+
+		err = "";
+		try {
+			new Expression("min(3/)").eval();
+		} catch (ExpressionException e) {
+			err = e.getMessage();
+		}
+		assertEquals("Missing parameter(s) for operator / at character position 5", err);
+
+		err = "";
+		try {
+			new Expression("min(/3)").eval();
+		} catch (ExpressionException e) {
+			err = e.getMessage();
+		}
+		assertEquals("Missing parameter(s) for operator /", err);
+
+		err = "";
+		try {
+			new Expression("SIN(MAX(23,45,12,23.6/))").eval();
+		} catch (ExpressionException e) {
+			err = e.getMessage();
+		}
+		assertEquals("Missing parameter(s) for operator / at character position 21", err);
 	}
 
 	@Test
