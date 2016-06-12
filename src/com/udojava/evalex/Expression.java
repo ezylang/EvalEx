@@ -1121,6 +1121,10 @@ public class Expression {
 			} else if (Character.isLetter(token.charAt(0))) {
 				stack.push(token);
 			} else if (",".equals(token)) {
+				if (operators.containsKey(previousToken)) {
+					throw new ExpressionException("Missing parameter(s) for operator " + previousToken +
+													  " at character position " + (tokenizer.getPos() - 1 - previousToken.length()));
+				}
 				while (!stack.isEmpty() && !"(".equals(stack.peek())) {
 					outputQueue.add(stack.pop());
 				}

@@ -263,6 +263,14 @@ public class TestEval {
 			err = e.getMessage();
 		}
 		assertEquals("Missing parameter(s) for operator / at character position 21", err);
+
+		err = "";
+		try {
+			new Expression("SIN(MAX(23,45,12/,23.6))").eval();
+		} catch (ExpressionException e) {
+			err = e.getMessage();
+		}
+		assertEquals("Missing parameter(s) for operator / at character position 16", err);
 	}
 
 	@Test
