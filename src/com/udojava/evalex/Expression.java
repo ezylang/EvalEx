@@ -1133,6 +1133,10 @@ public class Expression {
 							+ lastFunction + "'");
 				}
 			} else if (operators.containsKey(token)) {
+				if (",".equals(previousToken) || "(".equals(previousToken)) {
+					throw new ExpressionException("Missing parameter(s) for operator " + token +
+													  " at character position " + (tokenizer.getPos() - token.length()));
+				}
 				Operator o1 = operators.get(token);
 				String token2 = stack.isEmpty() ? null : stack.peek();
 				while (token2!=null &&

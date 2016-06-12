@@ -254,7 +254,7 @@ public class TestEval {
 		} catch (ExpressionException e) {
 			err = e.getMessage();
 		}
-		assertEquals("Missing parameter(s) for operator /", err);
+		assertEquals("Missing parameter(s) for operator / at character position 4", err);
 
 		err = "";
 		try {
@@ -271,6 +271,22 @@ public class TestEval {
 			err = e.getMessage();
 		}
 		assertEquals("Missing parameter(s) for operator / at character position 16", err);
+
+		err = "";
+		try {
+			new Expression("SIN(MAX(23,45,>=12,23.6))").eval();
+		} catch (ExpressionException e) {
+			err = e.getMessage();
+		}
+		assertEquals("Missing parameter(s) for operator >= at character position 14", err);
+
+		err = "";
+		try {
+			new Expression("SIN(MAX(>=23,45,12,23.6))").eval();
+		} catch (ExpressionException e) {
+			err = e.getMessage();
+		}
+		assertEquals("Missing parameter(s) for operator >= at character position 8", err);
 	}
 
 	@Test
