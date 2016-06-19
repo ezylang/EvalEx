@@ -1514,4 +1514,11 @@ public class Expression {
 		return Collections.unmodifiableSet(functions.keySet());
 	}
 
+	/**
+	 * @return The original expression string
+	 */
+	public String getExpression() {
+		return expression;
+	}
+
 }
