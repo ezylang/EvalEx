@@ -33,7 +33,7 @@ To include it in your Maven project, refer to the artifact in your pom:
 ````
 
 If you're using gradle add to your project's app build.gradle:
-````xml
+````gradle
 dependencies {
     ...
     compile 'com.udojava:EvalEx:1.0'
