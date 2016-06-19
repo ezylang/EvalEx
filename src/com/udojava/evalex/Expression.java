@@ -1121,6 +1121,10 @@ public class Expression {
 			} else if (Character.isLetter(token.charAt(0))) {
 				stack.push(token);
 			} else if (",".equals(token)) {
+				if (operators.containsKey(previousToken)) {
+					throw new ExpressionException("Missing parameter(s) for operator " + previousToken +
+													  " at character position " + (tokenizer.getPos() - 1 - previousToken.length()));
+				}
 				while (!stack.isEmpty() && !"(".equals(stack.peek())) {
 					outputQueue.add(stack.pop());
 				}
@@ -1129,6 +1133,10 @@ public class Expression {
 							+ lastFunction + "'");
 				}
 			} else if (operators.containsKey(token)) {
+				if (",".equals(previousToken) || "(".equals(previousToken)) {
+					throw new ExpressionException("Missing parameter(s) for operator " + token +
+													  " at character position " + (tokenizer.getPos() - token.length()));
+				}
 				Operator o1 = operators.get(token);
 				String token2 = stack.isEmpty() ? null : stack.peek();
 				while (token2!=null &&
@@ -1156,11 +1164,15 @@ public class Expression {
 				}
 				stack.push(token);
 			} else if (")".equals(token)) {
+				if (operators.containsKey(previousToken)) {
+					throw new ExpressionException("Missing parameter(s) for operator " + previousToken +
+													  " at character position " + (tokenizer.getPos() - 1 - previousToken.length()));
+				}
 				while (!stack.isEmpty() && !"(".equals(stack.peek())) {
 					outputQueue.add(stack.pop());
 				}
 				if (stack.isEmpty()) {
-					throw new RuntimeException("Mismatched parentheses");
+					throw new ExpressionException("Mismatched parentheses");
 				}
 				stack.pop();
 				if (!stack.isEmpty()
@@ -1174,10 +1186,10 @@ public class Expression {
 		while (!stack.isEmpty()) {
 			String element = stack.pop();
 			if ("(".equals(element) || ")".equals(element)) {
-				throw new RuntimeException("Mismatched parentheses");
+				throw new ExpressionException("Mismatched parentheses");
 			}
 			if (!operators.containsKey(element)) {
-				throw new RuntimeException("Unknown operator or function: "
+				throw new ExpressionException("Unknown operator or function: "
 						+ element);
 			}
 			outputQueue.add(element);
@@ -1221,9 +1233,6 @@ public class Expression {
 				}
 				if (stack.peek() == PARAMS_START) {
 					stack.pop();
-				}
-				if (!f.numParamsVaries() && p.size() != f.getNumParams()) {
-					throw new ExpressionException("Function " + token + " expected " + f.getNumParams() + " parameters, got " + p.size());
 				}
 				LazyNumber fResult = f.lazyEval(p);
 				stack.push(fResult);
@@ -1413,50 +1422,54 @@ public class Expression {
 	}
 
 	/**
-	 * Check that the expression have enough numbers and variables to fit the 
+	 * Check that the expression has enough numbers and variables to fit the
 	 * requirements of the operators and functions, also check 
-	 * for only 1 result stored at the end of the evaluation.  
-	 *
+	 * for only 1 result stored at the end of the evaluation.
 	 */
 	private void validate(List<String> rpn) {
-		/*- 
+		/*-
 		* Thanks to Norman Ramsey:
 		* http://http://stackoverflow.com/questions/789847/postfix-notation-validation
 		*/
-		int counter = 0;
-		Stack<Integer> params = new Stack<Integer>();
-		for (String token : rpn) {
-			if ("(".equals(token)) {
-				// is this a nested function call?
-				if (!params.isEmpty()) {
-					// increment the current function's param count
-					// (the return of the nested function call
-					// will be a parameter for the current function)
-					params.set(params.size() - 1, params.peek() + 1);
+		// each push on to this stack is a new function scope, with the value of each
+		// layer on the stack being the count of the number of parameters in that scope
+		Stack<Integer> stack = new Stack<Integer>();
+
+		// push the 'global' scope
+		stack.push(0);
+
+		for (final String token : rpn) {
+			if (operators.containsKey(token)) {
+				if (stack.peek() < 2) {
+					throw new ExpressionException("Missing parameter(s) for operator " + token);
 				}
-				// start a new parameter count
-				params.push(0);
-			} else if (!params.isEmpty()) {
-				if (functions.containsKey(token.toUpperCase(Locale.ROOT))) {
-					// remove the parameters and the ( from the counter
-					counter -= params.pop() + 1;
-				} else {
-					// increment the current function's param count
-					params.set(params.size() - 1, params.peek() + 1);
+				// pop the operator's 2 parameters and add the result
+				stack.set(stack.size() - 1, stack.peek() - 2 + 1);
+			} else if (variables.containsKey(token)) {
+				stack.set(stack.size() - 1, stack.peek() + 1);
+			} else if (functions.containsKey(token.toUpperCase(Locale.ROOT))) {
+				LazyFunction f = functions.get(token.toUpperCase(Locale.ROOT));
+				int numParams = stack.pop();
+				if (!f.numParamsVaries() && numParams != f.getNumParams()) {
+					throw new ExpressionException("Function " + token + " expected " + f.getNumParams() + " parameters, got " + numParams);
 				}
-			} else if (operators.containsKey(token)) {
-				//we only have binary operators
-				counter -= 2;
+				if (stack.size() <= 0) {
+					throw new ExpressionException("Too many function calls, maximum scope exceeded");
+				}
+				// push the result of the function
+				stack.set(stack.size() - 1, stack.peek() + 1);
+			} else if ("(".equals(token)) {
+				stack.push(0);
+			} else {
+				stack.set(stack.size() - 1, stack.peek() + 1);
 			}
-			if (counter < 0) {
-				throw new ExpressionException("Too many operators or functions at: "
-					+ token);
-			}
-			counter++;
 		}
-		if (counter > 1) {
+
+		if (stack.size() > 1) {
+			throw new ExpressionException("Too many unhandled function parameter lists");
+		} else if (stack.peek() > 1) {
 			throw new ExpressionException("Too many numbers or variables");
-		} else if (counter < 1) {
+		} else if (stack.peek() < 1) {
 			throw new ExpressionException("Empty expression");
 		}
 	}
