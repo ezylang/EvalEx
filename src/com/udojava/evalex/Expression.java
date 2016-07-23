@@ -1065,7 +1065,7 @@ public class Expression {
 			}
 		});
 
-		 variables.put("e", e);
+		variables.put("e", e);
 		variables.put("PI", PI);
 		variables.put("TRUE", BigDecimal.ONE);
 		variables.put("FALSE", BigDecimal.ZERO);
@@ -1519,6 +1519,28 @@ public class Expression {
 	 */
 	public String getExpression() {
 		return expression;
+	}
+
+	/**
+	 * Returns a list of the variables in the expression.
+	 * 
+	 * @return A list of the variable names in this expression.
+	 */
+	public List<String> getUsedVariables() {
+		List<String> result = new ArrayList<String>();
+		Tokenizer tokenizer = new Tokenizer(expression);
+		while (tokenizer.hasNext()) {
+			String token = tokenizer.next();
+			if (functions.containsKey(token) || operators.containsKey(token)
+					|| token.equals("(") || token.equals(")")
+					|| token.equals(",") || isNumber(token)
+					|| token.equals("PI") || token.equals("e")
+					|| token.equals("TRUE") || token.equals("FALSE")) {
+				continue;
+			}
+			result.add(token);
+		}
+		return result;
 	}
 
 }
