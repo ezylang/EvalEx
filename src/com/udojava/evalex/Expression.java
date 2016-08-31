@@ -36,6 +36,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 import java.util.Stack;
 import java.util.TreeMap;
@@ -381,9 +382,14 @@ public class Expression {
 	 * The {@link MathContext} to use for calculations.
 	 */
 	private MathContext mc = null;
+	
+  /**
+	 * The original infix expression.
+	 */
+	private final String originalExpression;
 
 	/**
-	 * The original infix expression.
+	 * The current infix expression, with optional variable substitutions.
 	 */
 	private String expression = null;
 
@@ -727,6 +733,7 @@ public class Expression {
 	public Expression(String expression, MathContext defaultMathContext) {
 		this.mc = defaultMathContext;
 		this.expression = expression;
+		this.originalExpression = expression;
 		addOperator(new Operator("+", 20, true) {
 			@Override
 			public BigDecimal eval(BigDecimal v1, BigDecimal v2) {
@@ -1542,5 +1549,38 @@ public class Expression {
 		}
 		return result;
 	}
+  
+
+  /**
+   * The original expression used to construct this expression, without
+   * variables substituted.
+   */
+  public String originalExpression() {
+    return this.originalExpression;
+  }
+
+
+  /** {@inheritDoc} */
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (o == null || getClass() != o.getClass()) return false;
+    Expression that = (Expression) o;
+    return Objects.equals(this.expression, that.expression);
+  }
+
+
+  /** {@inheritDoc} */
+  @Override
+  public int hashCode() {
+    return Objects.hash(this.expression);
+  }
+  
+  
+  /** {@inheritDoc} */
+  @Override
+  public String toString() {
+    return this.expression;
+  }
 
 }
