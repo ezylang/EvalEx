@@ -36,7 +36,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.Objects;
 import java.util.Set;
 import java.util.Stack;
 import java.util.TreeMap;
@@ -1566,14 +1565,18 @@ public class Expression {
     if (this == o) return true;
     if (o == null || getClass() != o.getClass()) return false;
     Expression that = (Expression) o;
-    return Objects.equals(this.expression, that.expression);
+    if (this.expression == null) {
+      return that.expression == null;
+    } else {
+      return this.expression.equals(that.expression);
+    }
   }
 
 
   /** {@inheritDoc} */
   @Override
   public int hashCode() {
-    return Objects.hash(this.expression);
+    return this.expression == null ? 0 : this.expression.hashCode();
   }
   
   
