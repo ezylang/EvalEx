@@ -1554,7 +1554,7 @@ public class Expression {
    * The original expression used to construct this expression, without
    * variables substituted.
    */
-  public String originalExpression() {
+  public String getOriginalExpression() {
     return this.originalExpression;
   }
 
