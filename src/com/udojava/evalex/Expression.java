@@ -530,7 +530,7 @@ public class Expression {
 	 * Abstract definition of a supported operator. An operator is defined by
 	 * its name (pattern), precedence and if it is left- or right associative.
 	 */
-	public abstract class Operator {
+	public static abstract class Operator {
 		/**
 		 * This operators name (pattern).
 		 */

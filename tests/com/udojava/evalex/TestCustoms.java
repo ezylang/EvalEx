@@ -13,7 +13,7 @@ public class TestCustoms {
 	public void testCustomOperator() {
 		Expression e = new Expression("2.1234 >> 2");
 		
-		e.addOperator(e.new Operator(">>", 30, true) {
+		e.addOperator(new Expression.Operator(">>", 30, true) {
 			@Override
 			public BigDecimal eval(BigDecimal v1, BigDecimal v2) {
 				return v1.movePointRight(v2.toBigInteger().intValue());
