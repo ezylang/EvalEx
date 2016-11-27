@@ -40,7 +40,7 @@ public class TestExposedComponents {
     public void testDeclaredFunctionGetter() {
         Expression expression = new Expression("a+b");
         int originalFunctionCount = expression.getDeclaredFunctions().size();
-        expression.addFunction(expression.new Function("func1", 3) {
+        expression.addFunction(new Expression.Function("func1", 3) {
             @Override
             public BigDecimal eval(List<BigDecimal> parameters) {
                 return null;

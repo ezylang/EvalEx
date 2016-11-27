@@ -26,7 +26,7 @@ public class TestCustoms {
 	@Test
 	public void testCustomFunction() {
 		Expression e = new Expression("2 * average(12,4,8)");
-		e.addFunction(e.new Function("average", 3) {
+		e.addFunction(new Expression.Function("average", 3) {
 			@Override
 			public BigDecimal eval(List<BigDecimal> parameters) {
 				BigDecimal sum = parameters.get(0).add(parameters.get(1)).add(parameters.get(2));
@@ -40,7 +40,7 @@ public class TestCustoms {
 	@Test
 	public void testCustomFunctionVariableParameters() {
 		Expression e = new Expression("2 * average(12,4,8,2,9)");
-		e.addFunction(e.new Function("average", -1) {
+		e.addFunction(new Expression.Function("average", -1) {
 			@Override
 			public BigDecimal eval(List<BigDecimal> parameters) {
 				BigDecimal sum = new BigDecimal(0);

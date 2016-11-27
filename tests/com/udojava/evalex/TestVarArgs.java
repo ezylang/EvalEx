@@ -66,7 +66,7 @@ public class TestVarArgs {
 	@Test
 	public void testCustomFunction1() {
 		Expression e = new Expression("3 * AVG(2,4)");
-		e.addFunction(e.new Function("AVG", -1) {
+		e.addFunction(new Expression.Function("AVG", -1) {
 			@Override
 			public BigDecimal eval(List<BigDecimal> parameters) {
 				if (parameters.size() == 0) {
@@ -86,7 +86,7 @@ public class TestVarArgs {
 	@Test
 	public void testCustomFunction2() {
 		Expression e = new Expression("4 * AVG(2,4,6,8,10,12)");
-		e.addFunction(e.new Function("AVG", -1) {
+		e.addFunction(new Expression.Function("AVG", -1) {
 			@Override
 			public BigDecimal eval(List<BigDecimal> parameters) {
 				if (parameters.size() == 0) {

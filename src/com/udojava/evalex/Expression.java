@@ -451,7 +451,7 @@ public class Expression {
 		BigDecimal eval();
 	}
 
-	public abstract class LazyFunction {
+	public static abstract class LazyFunction {
 		/**
 		 * Name of this function.
 		 */
@@ -497,7 +497,7 @@ public class Expression {
 	 * defined by a name, the number of parameters and the actual processing
 	 * implementation.
 	 */
-	public abstract class Function extends LazyFunction {
+	public static abstract class Function extends LazyFunction {
 
 		public Function(String name, int numParams) {
 			super(name, numParams);
