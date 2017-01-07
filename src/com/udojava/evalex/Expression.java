@@ -381,8 +381,18 @@ public class Expression {
 	 * The {@link MathContext} to use for calculations.
 	 */
 	private MathContext mc = null;
-	
-  /**
+
+	/**
+	 * The characters (other than letters and digits) allowed as the first character in a variable.
+	 */
+	private String firstVarChars = "_";
+
+	/**
+	 * The characters (other than letters and digits) allowed as the second or subsequent characters in a variable.
+	 */
+	private String varChars = "_";
+
+	/**
 	 * The original infix expression.
 	 */
 	private final String originalExpression;
@@ -662,8 +672,8 @@ public class Expression {
 				token.append(minusSign);
 				pos++;
 				token.append(next());
-			} else if (Character.isLetter(ch) || (ch == '_')) {
-				while ((Character.isLetter(ch) || Character.isDigit(ch) || (ch == '_'))
+			} else if (Character.isLetter(ch) || firstVarChars.indexOf(ch) >= 0) {
+				while ((Character.isLetter(ch) || Character.isDigit(ch) || varChars.indexOf(ch) >= 0)
 						&& (pos < input.length())) {
 					token.append(input.charAt(pos++));
 					ch = pos == input.length() ? 0 : input.charAt(pos);
@@ -1277,6 +1287,32 @@ public class Expression {
 	 */
 	public Expression setRoundingMode(RoundingMode roundingMode) {
 		this.mc = new MathContext(mc.getPrecision(), roundingMode);
+		return this;
+	}
+
+	/**
+	 * Sets the characters other than letters and digits that are valid as the
+	 * first character of a variable.
+	 *
+	 * @param chars
+	 *            The new set of variable characters.
+	 * @return The expression, allows to chain methods.
+	 */
+	public Expression setFirstVariableCharacters(String chars) {
+		this.firstVarChars = chars;
+		return this;
+	}
+
+	/**
+	 * Sets the characters other than letters and digits that are valid as the
+	 * second and subsequent characters of a variable.
+	 *
+	 * @param chars
+	 *            The new set of variable characters.
+	 * @return The expression, allows to chain methods.
+	 */
+	public Expression setVariableCharacters(String chars) {
+		this.varChars = chars;
 		return this;
 	}
 
