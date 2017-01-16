@@ -57,4 +57,11 @@ public class TestVariableCharacters {
 		expression = new Expression("a.b/2*PI+MIN(e,b)").setVariableCharacters("_.").setFirstVariableCharacters(".");
 		assertEquals("5.859875", expression.with("a.b", "2").and("b", "3").eval().toPlainString());
 	}
+
+	@Test
+	public void testFirstVarChar() {
+		Expression expression = new Expression("a.b*$PI").setVariableCharacters(".").setFirstVariableCharacters("$");
+		assertEquals("6", expression.with("a.b", "2").and("$PI", "3").eval().toPlainString());
+
+	}
 }
