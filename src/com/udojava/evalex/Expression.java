@@ -673,7 +673,8 @@ public class Expression {
 				pos++;
 				token.append(next());
 			} else if (Character.isLetter(ch) || firstVarChars.indexOf(ch) >= 0) {
-				while ((Character.isLetter(ch) || Character.isDigit(ch) || varChars.indexOf(ch) >= 0)
+				while ((Character.isLetter(ch) || Character.isDigit(ch)
+						|| varChars.indexOf(ch) >= 0 || token.length() == 0 && firstVarChars.indexOf(ch) >= 0)
 						&& (pos < input.length())) {
 					token.append(input.charAt(pos++));
 					ch = pos == input.length() ? 0 : input.charAt(pos);
@@ -683,7 +684,7 @@ public class Expression {
 				pos++;
 			} else {
 				while (!Character.isLetter(ch) && !Character.isDigit(ch)
-						&& ch != '_' && !Character.isWhitespace(ch)
+						&& firstVarChars.indexOf(ch) < 0 && !Character.isWhitespace(ch)
 						&& ch != '(' && ch != ')' && ch != ','
 						&& (pos < input.length())) {
 					token.append(input.charAt(pos));
