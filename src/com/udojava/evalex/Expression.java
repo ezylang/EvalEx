@@ -443,159 +443,6 @@ public class Expression {
 	};
 
 	/**
-	 * The expression evaluators exception class.
-	 */
-	public static class ExpressionException extends RuntimeException {
-		private static final long serialVersionUID = 1118142866870779047L;
-
-		public ExpressionException(String message) {
-			super(message);
-		}
-	}
-
-
-	/**
-	 * LazyNumber interface created for lazily evaluated functions
-	 */
-	interface LazyNumber {
-		BigDecimal eval();
-	}
-
-	public abstract class LazyFunction {
-		/**
-		 * Name of this function.
-		 */
-		private String name;
-		/**
-		 * Number of parameters expected for this function.
-		 * <code>-1</code> denotes a variable number of parameters.
-		 */
-		private int numParams;
-
-		/**
-		 * Creates a new function with given name and parameter count.
-		 *
-		 * @param name
-		 *            The name of the function.
-		 * @param numParams
-		 *            The number of parameters for this function.
-		 *            <code>-1</code> denotes a variable number of parameters.
-		 */
-		public LazyFunction(String name, int numParams) {
-			this.name = name.toUpperCase(Locale.ROOT);
-			this.numParams = numParams;
-		}
-
-		public String getName() {
-			return name;
-		}
-
-		public int getNumParams() {
-			return numParams;
-		}
-
-		public boolean numParamsVaries() {
-			return numParams < 0;
-		}
-		public abstract LazyNumber lazyEval(List<LazyNumber> lazyParams);
-	}
-
-
-
-	/**
-	 * Abstract definition of a supported expression function. A function is
-	 * defined by a name, the number of parameters and the actual processing
-	 * implementation.
-	 */
-	public abstract class Function extends LazyFunction {
-
-		public Function(String name, int numParams) {
-			super(name, numParams);
-		}
-
-		public LazyNumber lazyEval(List<LazyNumber> lazyParams) {
-			final List<BigDecimal> params = new ArrayList<BigDecimal>();
-			for (LazyNumber lazyParam : lazyParams) {
-				params.add(lazyParam.eval());
-			}
-			return new LazyNumber() {
-				public BigDecimal eval() {
-					return Function.this.eval(params);
-				}
-			};
-		}
-
-		/**
-		 * Implementation for this function.
-		 *
-		 * @param parameters
-		 *            Parameters will be passed by the expression evaluator as a
-		 *            {@link List} of {@link BigDecimal} values.
-		 * @return The function must return a new {@link BigDecimal} value as a
-		 *         computing result.
-		 */
-		public abstract BigDecimal eval(List<BigDecimal> parameters);
-	}
-	/**
-	 * Abstract definition of a supported operator. An operator is defined by
-	 * its name (pattern), precedence and if it is left- or right associative.
-	 */
-	public abstract class Operator {
-		/**
-		 * This operators name (pattern).
-		 */
-		private String oper;
-		/**
-		 * Operators precedence.
-		 */
-		private int precedence;
-		/**
-		 * Operator is left associative.
-		 */
-		private boolean leftAssoc;
-
-		/**
-		 * Creates a new operator.
-		 * 
-		 * @param oper
-		 *            The operator name (pattern).
-		 * @param precedence
-		 *            The operators precedence.
-		 * @param leftAssoc
-		 *            <code>true</code> if the operator is left associative,
-		 *            else <code>false</code>.
-		 */
-		public Operator(String oper, int precedence, boolean leftAssoc) {
-			this.oper = oper;
-			this.precedence = precedence;
-			this.leftAssoc = leftAssoc;
-		}
-
-		public String getOper() {
-			return oper;
-		}
-
-		public int getPrecedence() {
-			return precedence;
-		}
-
-		public boolean isLeftAssoc() {
-			return leftAssoc;
-		}
-
-		/**
-		 * Implementation for this operator.
-		 * 
-		 * @param v1
-		 *            Operand 1.
-		 * @param v2
-		 *            Operand 2.
-		 * @return The result of the operation.
-		 */
-		public abstract BigDecimal eval(BigDecimal v1, BigDecimal v2);
-	}
-
-	/**
 	 * Expression tokenizer that allows to iterate over a {@link String}
 	 * expression token by token. Blank characters will be skipped.
 	 */
@@ -1079,6 +926,26 @@ public class Expression {
 				} while (ix.compareTo(ixPrev) != 0);
 
 				return new BigDecimal(ix, mc.getPrecision());
+			}
+		});
+		addFunction(new Function("EXP", 1){
+			@Override
+			public BigDecimal eval(List<BigDecimal> parameters) {
+	       		         return new BigDecimal(Math.exp(parameters.get(0).doubleValue()));
+        	    }
+    		});
+		addFunction(new Function("FACT",1){
+			private BigDecimal fact(BigDecimal i){
+               			 if(i.doubleValue()==1 || i.doubleValue()==0)
+                		    return new BigDecimal(1);
+               			 return i.multiply(fact(i.subtract(new BigDecimal(1))));
+			}
+
+            		@Override
+            		public BigDecimal eval(List<BigDecimal> list) {
+				if(list.get(0).doubleValue()<0)
+            			        throw new ExpressionException("Argument to FACT function must not be negative!");	
+				return fact(list.get(0));
 			}
 		});
 
