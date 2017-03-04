@@ -1,9 +1,9 @@
 /*
-    Created By : iamsubhranil
+    Created By : uklimaschewski
+    Modified By : iamsubhranil
     Date : 4/3/17
     Time : 10:53 PM
     Package : com.udojava.evalex
-    Project : GraphPlotter
 */
 package com.udojava.evalex;
 
