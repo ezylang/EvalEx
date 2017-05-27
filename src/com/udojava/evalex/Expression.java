@@ -595,11 +595,41 @@ public class Expression {
 		public abstract BigDecimal eval(BigDecimal v1, BigDecimal v2);
 	}
 
+	enum TokenType {
+		VARIABLE, FUNCTION, LITERAL, OPERATOR, OPEN_PAREN, COMMA, CLOSE_PAREN
+	}
+
+	class Token {
+		public String surface = "";
+		public TokenType type;
+
+		public void append(char c) {
+			surface += c;
+		}
+
+		public void append(String s) {
+			surface += s;
+		}
+
+		public char charAt(int pos) {
+			return surface.charAt(pos);
+		}
+
+		public int length() {
+			return surface.length();
+		}
+
+		@Override
+		public String toString() {
+			return surface;
+		}
+	}
+
 	/**
 	 * Expression tokenizer that allows to iterate over a {@link String}
 	 * expression token by token. Blank characters will be skipped.
 	 */
-	private class Tokenizer implements Iterator<String> {
+	private class Tokenizer implements Iterator<Token> {
 
 		/**
 		 * Actual position in expression string.
@@ -613,7 +643,7 @@ public class Expression {
 		/**
 		 * The previous token or <code>null</code> if none.
 		 */
-		private String previousToken;
+		private Token previousToken;
 
 		/**
 		 * Creates a new tokenizer for an expression.
@@ -644,8 +674,8 @@ public class Expression {
 		}
 
 		@Override
-		public String next() {
-			StringBuilder token = new StringBuilder();
+		public Token next() {
+			Token token = new Token();
 			if (pos >= input.length()) {
 				return previousToken = null;
 			}
@@ -664,14 +694,15 @@ public class Expression {
 					token.append(input.charAt(pos++));
 					ch = pos == input.length() ? 0 : input.charAt(pos);
 				}
+				token.type = TokenType.LITERAL;
 			} else if (ch == minusSign
 					&& Character.isDigit(peekNextChar())
-					&& ("(".equals(previousToken) || ",".equals(previousToken)
-							|| previousToken == null || operators
-								.containsKey(previousToken))) {
+					&& (previousToken == null || "(".equals(previousToken.surface) || ",".equals(previousToken.surface)
+							 || operators.containsKey(previousToken.surface))) {
 				token.append(minusSign);
 				pos++;
-				token.append(next());
+				token.append(next().toString());
+				token.type = TokenType.LITERAL;
 			} else if (Character.isLetter(ch) || firstVarChars.indexOf(ch) >= 0) {
 				while ((Character.isLetter(ch) || Character.isDigit(ch)
 						|| varChars.indexOf(ch) >= 0 || token.length() == 0 && firstVarChars.indexOf(ch) >= 0)
@@ -679,7 +710,15 @@ public class Expression {
 					token.append(input.charAt(pos++));
 					ch = pos == input.length() ? 0 : input.charAt(pos);
 				}
+				token.type = ch == '(' ? TokenType.FUNCTION : TokenType.VARIABLE;
 			} else if (ch == '(' || ch == ')' || ch == ',') {
+				if(ch == '(') {
+					token.type = TokenType.OPEN_PAREN;
+				} else if (ch == ')') {
+					token.type = TokenType.CLOSE_PAREN;
+				} else {
+					token.type = TokenType.COMMA;
+				}
 				token.append(ch);
 				pos++;
 			} else {
@@ -694,12 +733,13 @@ public class Expression {
 						break;
 					}
 				}
+				token.type = TokenType.OPERATOR;
 				if (!operators.containsKey(token.toString())) {
 					throw new ExpressionException("Unknown operator '" + token
 							+ "' at position " + (pos - token.length() + 1));
 				}
 			}
-			return previousToken = token.toString();
+			return previousToken = token;
 		}
 
 		@Override
@@ -1118,44 +1158,47 @@ public class Expression {
 	 * @return A RPN representation of the expression, with each token as a list
 	 *         member.
 	 */
-	private List<String> shuntingYard(String expression) {
-		List<String> outputQueue = new ArrayList<String>();
-		Stack<String> stack = new Stack<String>();
+	private List<Token> shuntingYard(String expression) {
+		List<Token> outputQueue = new ArrayList<Token>();
+		Stack<Token> stack = new Stack<Token>();
 
 		Tokenizer tokenizer = new Tokenizer(expression);
 
-		String lastFunction = null;
-		String previousToken = null;
+		Token lastFunction = null;
+		Token previousToken = null;
 		while (tokenizer.hasNext()) {
-			String token = tokenizer.next();
-			if (isNumber(token)) {
-				outputQueue.add(token);
-			} else if (variables.containsKey(token)) {
-				outputQueue.add(token);
-			} else if (functions.containsKey(token.toUpperCase(Locale.ROOT))) {
-				stack.push(token);
-				lastFunction = token;
-			} else if (Character.isLetter(token.charAt(0))) {
-				stack.push(token);
-			} else if (",".equals(token)) {
-				if (operators.containsKey(previousToken)) {
+			Token nextToken = tokenizer.next();
+			String token = nextToken.surface;
+			if (nextToken.type == TokenType.LITERAL) {
+				outputQueue.add(nextToken);
+			} else if (nextToken.type == TokenType.VARIABLE) {
+				if (!variables.containsKey(token)) {
+					throw new ExpressionException("Unknown operator or function: "
+							+ token);
+				}
+				outputQueue.add(nextToken);
+			} else if (nextToken.type == TokenType.FUNCTION) {
+				stack.push(nextToken);
+				lastFunction = nextToken;
+			} else if (nextToken.type == TokenType.COMMA) {
+				if (previousToken != null && previousToken.type == TokenType.OPERATOR) {
 					throw new ExpressionException("Missing parameter(s) for operator " + previousToken +
 													  " at character position " + (tokenizer.getPos() - 1 - previousToken.length()));
 				}
-				while (!stack.isEmpty() && !"(".equals(stack.peek())) {
+				while (!stack.isEmpty() && stack.peek().type != TokenType.OPEN_PAREN) {
 					outputQueue.add(stack.pop());
 				}
 				if (stack.isEmpty()) {
 					throw new ExpressionException("Parse error for function '"
 							+ lastFunction + "'");
 				}
-			} else if (operators.containsKey(token)) {
-				if (",".equals(previousToken) || "(".equals(previousToken)) {
+			} else if (nextToken.type == TokenType.OPERATOR) {
+				if (previousToken != null && (previousToken.type == TokenType.COMMA || previousToken.type == TokenType.OPEN_PAREN)) {
 					throw new ExpressionException("Missing parameter(s) for operator " + token +
 													  " at character position " + (tokenizer.getPos() - token.length()));
 				}
 				Operator o1 = operators.get(token);
-				String token2 = stack.isEmpty() ? null : stack.peek();
+				String token2 = stack.isEmpty() ? null : stack.peek().toString();
 				while (token2!=null &&
 						operators.containsKey(token2)
 						&& ((o1.isLeftAssoc() && o1.getPrecedence() <= operators
@@ -1163,49 +1206,47 @@ public class Expression {
 								.getPrecedence() < operators.get(token2)
 								.getPrecedence()))) {
 					outputQueue.add(stack.pop());
-					token2 = stack.isEmpty() ? null : stack.peek();
+					token2 = stack.isEmpty() ? null : stack.peek().toString();
 				}
-				stack.push(token);
-			} else if ("(".equals(token)) {
+				stack.push(nextToken);
+			} else if (nextToken.type == TokenType.OPEN_PAREN) {
 				if (previousToken != null) {
-					if (isNumber(previousToken)) {
+					if (previousToken.type == TokenType.LITERAL) {
 						throw new ExpressionException(
 								"Missing operator at character position "
 										+ tokenizer.getPos());
 					}
 					// if the ( is preceded by a valid function, then it
 					// denotes the start of a parameter list
-					if (functions.containsKey(previousToken.toUpperCase(Locale.ROOT))) {
-						outputQueue.add(token);
+					if (previousToken.type == TokenType.FUNCTION) {
+						outputQueue.add(nextToken);
 					}
 				}
-				stack.push(token);
-			} else if (")".equals(token)) {
-				if (operators.containsKey(previousToken)) {
+				stack.push(nextToken);
+			} else if (nextToken.type == TokenType.CLOSE_PAREN) {
+				if (previousToken != null && previousToken.type == TokenType.OPERATOR) {
 					throw new ExpressionException("Missing parameter(s) for operator " + previousToken +
 													  " at character position " + (tokenizer.getPos() - 1 - previousToken.length()));
 				}
-				while (!stack.isEmpty() && !"(".equals(stack.peek())) {
+				while (!stack.isEmpty() && stack.peek().type != TokenType.OPEN_PAREN) {
 					outputQueue.add(stack.pop());
 				}
 				if (stack.isEmpty()) {
 					throw new ExpressionException("Mismatched parentheses");
 				}
 				stack.pop();
-				if (!stack.isEmpty()
-						&& functions.containsKey(stack.peek().toUpperCase(
-								Locale.ROOT))) {
+				if (!stack.isEmpty() && stack.peek().type == TokenType.FUNCTION) {
 					outputQueue.add(stack.pop());
 				}
 			}
-			previousToken = token;
+			previousToken = nextToken;
 		}
 		while (!stack.isEmpty()) {
-			String element = stack.pop();
-			if ("(".equals(element) || ")".equals(element)) {
+			Token element = stack.pop();
+			if (element.type == TokenType.OPEN_PAREN || element.type == TokenType.CLOSE_PAREN) {
 				throw new ExpressionException("Mismatched parentheses");
 			}
-			if (!operators.containsKey(element)) {
+			if (!operators.containsKey(element.surface)) {
 				throw new ExpressionException("Unknown operator or function: "
 						+ element);
 			}
@@ -1446,7 +1487,28 @@ public class Expression {
 	 * @return A new iterator instance for this expression.
 	 */
 	public Iterator<String> getExpressionTokenizer() {
-		return new Tokenizer(this.expression);
+		final String expression = this.expression;
+
+		return new Iterator<String>() {
+
+			Tokenizer tokenizer = new Tokenizer(expression);
+
+			@Override
+			public boolean hasNext() {
+				return tokenizer.hasNext();
+			}
+
+			@Override
+			public String next() {
+				Token nextToken = tokenizer.next();
+				return nextToken == null ? null : nextToken.toString();
+			}
+
+			@Override
+			public void remove() {
+				tokenizer.remove();
+			}
+		};
 	}
 
 	/**
@@ -1458,7 +1520,11 @@ public class Expression {
 	 */
 	private List<String> getRPN() {
 		if (rpn == null) {
-			rpn = shuntingYard(this.expression);
+			List<Token> tokenRpn = shuntingYard(this.expression);
+			rpn = new ArrayList<String>();
+			for(Token t : tokenRpn) {
+				rpn.add(t.surface);
+			}
 			validate(rpn);
 		}
 		return rpn;
@@ -1573,7 +1639,8 @@ public class Expression {
 		List<String> result = new ArrayList<String>();
 		Tokenizer tokenizer = new Tokenizer(expression);
 		while (tokenizer.hasNext()) {
-			String token = tokenizer.next();
+			Token nextToken = tokenizer.next();
+			String token = nextToken.toString();
 			if (functions.containsKey(token) || operators.containsKey(token)
 					|| token.equals("(") || token.equals(")")
 					|| token.equals(",") || isNumber(token)

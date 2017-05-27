@@ -1,13 +1,12 @@
 package com.udojava.evalex;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotSame;
+import com.udojava.evalex.Expression.ExpressionException;
+import org.junit.Test;
 
 import java.math.RoundingMode;
 
-import org.junit.Test;
-
-import com.udojava.evalex.Expression.ExpressionException;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotSame;
 
 
 public class TestEval {
@@ -228,6 +227,11 @@ public class TestEval {
 			err = e.getMessage();
 		}
 		assertEquals("Missing parameter(s) for operator +", err);
+	}
+
+	@Test(expected = ExpressionException.class)
+	public void closeParenAtStartCausesExpressionException() throws Exception {
+		new Expression("(").eval();
 	}
 
 	@Test
