@@ -1167,88 +1167,94 @@ public class Expression {
 		Token lastFunction = null;
 		Token previousToken = null;
 		while (tokenizer.hasNext()) {
-			Token nextToken = tokenizer.next();
-			String token = nextToken.surface;
-			if (nextToken.type == TokenType.LITERAL) {
-				outputQueue.add(nextToken);
-			} else if (nextToken.type == TokenType.VARIABLE) {
-				if (!variables.containsKey(token)) {
-					throw new ExpressionException("Unknown operator or function: "
-							+ token);
-				}
-				outputQueue.add(nextToken);
-			} else if (nextToken.type == TokenType.FUNCTION) {
-				stack.push(nextToken);
-				lastFunction = nextToken;
-			} else if (nextToken.type == TokenType.COMMA) {
-				if (previousToken != null && previousToken.type == TokenType.OPERATOR) {
-					throw new ExpressionException("Missing parameter(s) for operator " + previousToken +
-													  " at character position " + (tokenizer.getPos() - 1 - previousToken.length()));
-				}
-				while (!stack.isEmpty() && stack.peek().type != TokenType.OPEN_PAREN) {
-					outputQueue.add(stack.pop());
-				}
-				if (stack.isEmpty()) {
-					throw new ExpressionException("Parse error for function '"
-							+ lastFunction + "'");
-				}
-			} else if (nextToken.type == TokenType.OPERATOR) {
-				if (previousToken != null && (previousToken.type == TokenType.COMMA || previousToken.type == TokenType.OPEN_PAREN)) {
-					throw new ExpressionException("Missing parameter(s) for operator " + token +
-													  " at character position " + (tokenizer.getPos() - token.length()));
-				}
-				Operator o1 = operators.get(token);
-				String token2 = stack.isEmpty() ? null : stack.peek().toString();
-				while (token2!=null &&
-						operators.containsKey(token2)
-						&& ((o1.isLeftAssoc() && o1.getPrecedence() <= operators
-								.get(token2).getPrecedence()) || (o1
-								.getPrecedence() < operators.get(token2)
-								.getPrecedence()))) {
-					outputQueue.add(stack.pop());
-					token2 = stack.isEmpty() ? null : stack.peek().toString();
-				}
-				stack.push(nextToken);
-			} else if (nextToken.type == TokenType.OPEN_PAREN) {
-				if (previousToken != null) {
-					if (previousToken.type == TokenType.LITERAL) {
-						throw new ExpressionException(
-								"Missing operator at character position "
-										+ tokenizer.getPos());
+			Token token = tokenizer.next();
+			switch(token.type) {
+				case LITERAL:
+					outputQueue.add(token);
+					break;
+				case VARIABLE:
+					if (!variables.containsKey(token.surface)) {
+						throw new ExpressionException("Unknown operator or function: "
+								+ token);
 					}
-					// if the ( is preceded by a valid function, then it
-					// denotes the start of a parameter list
-					if (previousToken.type == TokenType.FUNCTION) {
-						outputQueue.add(nextToken);
+					outputQueue.add(token);
+					break;
+				case FUNCTION:
+					stack.push(token);
+					lastFunction = token;
+					break;
+				case COMMA:
+					if (previousToken != null && previousToken.type == TokenType.OPERATOR) {
+						throw new ExpressionException("Missing parameter(s) for operator " + previousToken +
+								" at character position " + (tokenizer.getPos() - 1 - previousToken.length()));
 					}
-				}
-				stack.push(nextToken);
-			} else if (nextToken.type == TokenType.CLOSE_PAREN) {
-				if (previousToken != null && previousToken.type == TokenType.OPERATOR) {
-					throw new ExpressionException("Missing parameter(s) for operator " + previousToken +
-													  " at character position " + (tokenizer.getPos() - 1 - previousToken.length()));
-				}
-				while (!stack.isEmpty() && stack.peek().type != TokenType.OPEN_PAREN) {
-					outputQueue.add(stack.pop());
-				}
-				if (stack.isEmpty()) {
-					throw new ExpressionException("Mismatched parentheses");
-				}
-				stack.pop();
-				if (!stack.isEmpty() && stack.peek().type == TokenType.FUNCTION) {
-					outputQueue.add(stack.pop());
-				}
+					while (!stack.isEmpty() && stack.peek().type != TokenType.OPEN_PAREN) {
+						outputQueue.add(stack.pop());
+					}
+					if (stack.isEmpty()) {
+						throw new ExpressionException("Parse error for function '"
+								+ lastFunction + "'");
+					}
+					break;
+				case OPERATOR:
+					if (previousToken != null && (previousToken.type == TokenType.COMMA || previousToken.type == TokenType.OPEN_PAREN)) {
+						throw new ExpressionException("Missing parameter(s) for operator " + token +
+								" at character position " + (tokenizer.getPos() - token.length()));
+					}
+					Operator o1 = operators.get(token.surface);
+					String token2 = stack.isEmpty() ? null : stack.peek().toString();
+					while (token2!=null &&
+							operators.containsKey(token2)
+							&& ((o1.isLeftAssoc() && o1.getPrecedence() <= operators
+							.get(token2).getPrecedence()) || (o1
+							.getPrecedence() < operators.get(token2)
+							.getPrecedence()))) {
+						outputQueue.add(stack.pop());
+						token2 = stack.isEmpty() ? null : stack.peek().toString();
+					}
+					stack.push(token);
+					break;
+				case OPEN_PAREN:
+					if (previousToken != null) {
+						if (previousToken.type == TokenType.LITERAL) {
+							throw new ExpressionException(
+									"Missing operator at character position "
+											+ tokenizer.getPos());
+						}
+						// if the ( is preceded by a valid function, then it
+						// denotes the start of a parameter list
+						if (previousToken.type == TokenType.FUNCTION) {
+							outputQueue.add(token);
+						}
+					}
+					stack.push(token);
+					break;
+				case CLOSE_PAREN:
+					if (previousToken != null && previousToken.type == TokenType.OPERATOR) {
+						throw new ExpressionException("Missing parameter(s) for operator " + previousToken +
+								" at character position " + (tokenizer.getPos() - 1 - previousToken.length()));
+					}
+					while (!stack.isEmpty() && stack.peek().type != TokenType.OPEN_PAREN) {
+						outputQueue.add(stack.pop());
+					}
+					if (stack.isEmpty()) {
+						throw new ExpressionException("Mismatched parentheses");
+					}
+					stack.pop();
+					if (!stack.isEmpty() && stack.peek().type == TokenType.FUNCTION) {
+						outputQueue.add(stack.pop());
+					}
 			}
-			previousToken = nextToken;
+			previousToken = token;
 		}
+
 		while (!stack.isEmpty()) {
 			Token element = stack.pop();
 			if (element.type == TokenType.OPEN_PAREN || element.type == TokenType.CLOSE_PAREN) {
 				throw new ExpressionException("Mismatched parentheses");
 			}
 			if (!operators.containsKey(element.surface)) {
-				throw new ExpressionException("Unknown operator or function: "
-						+ element);
+				throw new ExpressionException("Unknown operator or function: " + element);
 			}
 			outputQueue.add(element);
 		}
@@ -1525,7 +1531,7 @@ public class Expression {
 			for(Token t : tokenRpn) {
 				rpn.add(t.surface);
 			}
-			validate(rpn);
+			validate(tokenRpn);
 		}
 		return rpn;
 	}
@@ -1535,7 +1541,7 @@ public class Expression {
 	 * requirements of the operators and functions, also check 
 	 * for only 1 result stored at the end of the evaluation.
 	 */
-	private void validate(List<String> rpn) {
+	private void validate(List<Token> rpn) {
 		/*-
 		* Thanks to Norman Ramsey:
 		* http://http://stackoverflow.com/questions/789847/postfix-notation-validation
@@ -1547,30 +1553,35 @@ public class Expression {
 		// push the 'global' scope
 		stack.push(0);
 
-		for (final String token : rpn) {
-			if (operators.containsKey(token)) {
-				if (stack.peek() < 2) {
-					throw new ExpressionException("Missing parameter(s) for operator " + token);
-				}
-				// pop the operator's 2 parameters and add the result
-				stack.set(stack.size() - 1, stack.peek() - 2 + 1);
-			} else if (variables.containsKey(token)) {
-				stack.set(stack.size() - 1, stack.peek() + 1);
-			} else if (functions.containsKey(token.toUpperCase(Locale.ROOT))) {
-				LazyFunction f = functions.get(token.toUpperCase(Locale.ROOT));
-				int numParams = stack.pop();
-				if (!f.numParamsVaries() && numParams != f.getNumParams()) {
-					throw new ExpressionException("Function " + token + " expected " + f.getNumParams() + " parameters, got " + numParams);
-				}
-				if (stack.size() <= 0) {
-					throw new ExpressionException("Too many function calls, maximum scope exceeded");
-				}
-				// push the result of the function
-				stack.set(stack.size() - 1, stack.peek() + 1);
-			} else if ("(".equals(token)) {
-				stack.push(0);
-			} else {
-				stack.set(stack.size() - 1, stack.peek() + 1);
+		for (final Token token : rpn) {
+			switch(token.type) {
+				case OPERATOR:
+					if (stack.peek() < 2) {
+						throw new ExpressionException("Missing parameter(s) for operator " + token);
+					}
+					// pop the operator's 2 parameters and add the result
+					stack.set(stack.size() - 1, stack.peek() - 2 + 1);
+					break;
+				case VARIABLE:
+					stack.set(stack.size() - 1, stack.peek() + 1);
+					break;
+				case FUNCTION:
+					LazyFunction f = functions.get(token.surface.toUpperCase(Locale.ROOT));
+					int numParams = stack.pop();
+					if (!f.numParamsVaries() && numParams != f.getNumParams()) {
+						throw new ExpressionException("Function " + token + " expected " + f.getNumParams() + " parameters, got " + numParams);
+					}
+					if (stack.size() <= 0) {
+						throw new ExpressionException("Too many function calls, maximum scope exceeded");
+					}
+					// push the result of the function
+					stack.set(stack.size() - 1, stack.peek() + 1);
+					break;
+				case OPEN_PAREN:
+					stack.push(0);
+					break;
+				default:
+					stack.set(stack.size() - 1, stack.peek() + 1);
 			}
 		}
 
