@@ -405,7 +405,7 @@ public class Expression {
 	/**
 	 * The cached RPN (Reverse Polish Notation) of the expression.
 	 */
-	private List<String> rpn = null;
+	private List<Token> rpn = null;
 
 	/**
 	 * All defined operators with name and implementation.
@@ -697,8 +697,8 @@ public class Expression {
 				token.type = TokenType.LITERAL;
 			} else if (ch == minusSign
 					&& Character.isDigit(peekNextChar())
-					&& (previousToken == null || "(".equals(previousToken.surface) || ",".equals(previousToken.surface)
-							 || operators.containsKey(previousToken.surface))) {
+					&& (previousToken == null || previousToken.type == TokenType.OPEN_PAREN || previousToken.type == TokenType.COMMA
+							 || previousToken.type == TokenType.OPERATOR)) {
 				token.append(minusSign);
 				pos++;
 				token.append(next().toString());
@@ -1173,10 +1173,6 @@ public class Expression {
 					outputQueue.add(token);
 					break;
 				case VARIABLE:
-					if (!variables.containsKey(token.surface)) {
-						throw new ExpressionException("Unknown operator or function: "
-								+ token);
-					}
 					outputQueue.add(token);
 					break;
 				case FUNCTION:
@@ -1270,44 +1266,53 @@ public class Expression {
 
 		Stack<LazyNumber> stack = new Stack<LazyNumber>();
 
-		for (final String token : getRPN()) {
-			if (operators.containsKey(token)) {
-				final LazyNumber v1 = stack.pop();
-				final LazyNumber v2 = stack.pop();
-				LazyNumber number = new LazyNumber() {
-					public BigDecimal eval() {
-						return operators.get(token).eval(v2.eval(), v1.eval());
+		for (final Token token : getRPN()) {
+			switch(token.type) {
+				case OPERATOR:
+					final LazyNumber v1 = stack.pop();
+					final LazyNumber v2 = stack.pop();
+					LazyNumber number = new LazyNumber() {
+						public BigDecimal eval() {
+							return operators.get(token.surface).eval(v2.eval(), v1.eval());
+						}
+					};
+					stack.push(number);
+					break;
+				case VARIABLE:
+					if (!variables.containsKey(token.surface)) {
+						throw new ExpressionException("Unknown operator or function: " + token);
 					}
-				};
-				stack.push(number);
-			} else if (variables.containsKey(token)) {
-				stack.push(new LazyNumber() {
-					public BigDecimal eval() {
-						return variables.get(token).round(mc);
+
+					stack.push(new LazyNumber() {
+						public BigDecimal eval() {
+							return variables.get(token.surface).round(mc);
+						}
+					});
+					break;
+				case FUNCTION:
+					LazyFunction f = functions.get(token.surface.toUpperCase(Locale.ROOT));
+					ArrayList<LazyNumber> p = new ArrayList<LazyNumber>(
+							!f.numParamsVaries() ? f.getNumParams() : 0);
+					// pop parameters off the stack until we hit the start of
+					// this function's parameter list
+					while (!stack.isEmpty() && stack.peek() != PARAMS_START) {
+						p.add(0, stack.pop());
 					}
-				});
-			} else if (functions.containsKey(token.toUpperCase(Locale.ROOT))) {
-				LazyFunction f = functions.get(token.toUpperCase(Locale.ROOT));
-				ArrayList<LazyNumber> p = new ArrayList<LazyNumber>(
-						!f.numParamsVaries() ? f.getNumParams() : 0);
-				// pop parameters off the stack until we hit the start of 
-				// this function's parameter list
-				while (!stack.isEmpty() && stack.peek() != PARAMS_START) {
-					p.add(0, stack.pop());
-				}
-				if (stack.peek() == PARAMS_START) {
-					stack.pop();
-				}
-				LazyNumber fResult = f.lazyEval(p);
-				stack.push(fResult);
-			} else if ("(".equals(token)) {
-				stack.push(PARAMS_START);
-			} else {
-				stack.push(new LazyNumber() {
-					public BigDecimal eval() {
-						return new BigDecimal(token, mc);
+					if (stack.peek() == PARAMS_START) {
+						stack.pop();
 					}
-				});
+					LazyNumber fResult = f.lazyEval(p);
+					stack.push(fResult);
+					break;
+				case OPEN_PAREN:
+					stack.push(PARAMS_START);
+					break;
+				case LITERAL:
+					stack.push(new LazyNumber() {
+						public BigDecimal eval() {
+							return new BigDecimal(token.surface, mc);
+						}
+					});
 			}
 		}
 		return stack.pop().eval().stripTrailingZeros();
@@ -1524,14 +1529,10 @@ public class Expression {
 	 * 
 	 * @return The cached RPN instance.
 	 */
-	private List<String> getRPN() {
+	private List<Token> getRPN() {
 		if (rpn == null) {
-			List<Token> tokenRpn = shuntingYard(this.expression);
-			rpn = new ArrayList<String>();
-			for(Token t : tokenRpn) {
-				rpn.add(t.surface);
-			}
-			validate(tokenRpn);
+			rpn = shuntingYard(this.expression);
+			validate(rpn);
 		}
 		return rpn;
 	}
@@ -1602,10 +1603,10 @@ public class Expression {
 	 */
 	public String toRPN() {
 		StringBuilder result = new StringBuilder();
-		for (String st : getRPN()) {
+		for (Token t : getRPN()) {
 			if (result.length() != 0)
 				result.append(" ");
-			result.append(st);
+			result.append(t.toString());
 		}
 		return result.toString();
 	}
@@ -1652,9 +1653,7 @@ public class Expression {
 		while (tokenizer.hasNext()) {
 			Token nextToken = tokenizer.next();
 			String token = nextToken.toString();
-			if (functions.containsKey(token) || operators.containsKey(token)
-					|| token.equals("(") || token.equals(")")
-					|| token.equals(",") || isNumber(token)
+			if (nextToken.type != TokenType.VARIABLE
 					|| token.equals("PI") || token.equals("e")
 					|| token.equals("TRUE") || token.equals("FALSE")) {
 				continue;

@@ -1,11 +1,11 @@
 package com.udojava.evalex;
 
-import static org.junit.Assert.*;
+import org.junit.Test;
 
 import java.math.BigDecimal;
 import java.math.MathContext;
 
-import org.junit.Test;
+import static org.junit.Assert.assertEquals;
 
 public class TestVariables {
 
@@ -82,5 +82,10 @@ public class TestVariables {
 		assertEquals("21",
 				new Expression("3*_longname1").with("_longname1", new BigDecimal("7"))
 						.eval().toString());		
+	}
+
+	@Test(expected = Expression.ExpressionException.class)
+	public void failsIfVariableDoesNotExist() throws Exception {
+		new Expression("3*unknown").eval();
 	}
 }
