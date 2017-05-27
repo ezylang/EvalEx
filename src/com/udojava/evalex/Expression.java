@@ -1188,6 +1188,11 @@ public class Expression {
 								" at character position " + token.pos);
 					}
 					Operator o1 = operators.get(token.surface);
+					if(o1 == null) {
+						throw new ExpressionException("Unknown operator '" + token
+								+ "' at position " + (token.pos + 1));
+					}
+
 					String token2 = stack.isEmpty() ? null : stack.peek().toString();
 					while (token2!=null &&
 							operators.containsKey(token2)
@@ -1543,11 +1548,6 @@ public class Expression {
 		for (final Token token : rpn) {
 			switch(token.type) {
 				case OPERATOR:
-					if (!operators.containsKey(token.toString())) {
-						throw new ExpressionException("Unknown operator '" + token
-								+ "' at position " + (token.pos + 1));
-					}
-
 					if (stack.peek() < 2) {
 						throw new ExpressionException("Missing parameter(s) for operator " + token);
 					}
@@ -1559,6 +1559,11 @@ public class Expression {
 					break;
 				case FUNCTION:
 					LazyFunction f = functions.get(token.surface.toUpperCase(Locale.ROOT));
+					if(f == null) {
+						throw new ExpressionException("Unknown function '" + token
+								+ "' at position " + (token.pos + 1));
+					}
+
 					int numParams = stack.pop();
 					if (!f.numParamsVaries() && numParams != f.getNumParams()) {
 						throw new ExpressionException("Function " + token + " expected " + f.getNumParams() + " parameters, got " + numParams);
