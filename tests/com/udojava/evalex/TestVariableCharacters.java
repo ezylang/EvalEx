@@ -2,8 +2,6 @@ package com.udojava.evalex;
 
 import org.junit.Test;
 
-import java.math.BigDecimal;
-
 import static org.junit.Assert.assertEquals;
 
 public class TestVariableCharacters {
@@ -12,8 +10,7 @@ public class TestVariableCharacters {
 	public void testBadVarChar() {
 		String err = "";
 		try {
-			//TODO will eventially be able to revert this
-			Expression expression = new Expression("a.b/2*PI+MIN(e,b)").with("a", new BigDecimal(10));
+			Expression expression = new Expression("a.b/2*PI+MIN(e,b)");
 			expression.eval();
 		} catch (Expression.ExpressionException e) {
 			err = e.getMessage();
@@ -27,8 +24,7 @@ public class TestVariableCharacters {
 		Expression expression;
 
 		try {
-			//TODO will eventially be able to revert this
-			expression = new Expression("a.b/2*PI+MIN(e,b)").with("a", new BigDecimal(10)).setVariableCharacters("_");
+			expression = new Expression("a.b/2*PI+MIN(e,b)").setVariableCharacters("_");
 			expression.eval();
 		} catch (Expression.ExpressionException e) {
 			err = e.getMessage();

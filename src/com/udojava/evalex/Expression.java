@@ -602,6 +602,7 @@ public class Expression {
 	class Token {
 		public String surface = "";
 		public TokenType type;
+		public int pos;
 
 		public void append(char c) {
 			surface += c;
@@ -676,6 +677,7 @@ public class Expression {
 		@Override
 		public Token next() {
 			Token token = new Token();
+
 			if (pos >= input.length()) {
 				return previousToken = null;
 			}
@@ -683,6 +685,7 @@ public class Expression {
 			while (Character.isWhitespace(ch) && pos < input.length()) {
 				ch = input.charAt(++pos);
 			}
+			token.pos = pos;
 			if (Character.isDigit(ch)) {
 				while ((Character.isDigit(ch) || ch == decimalSeparator
                                                 || ch == 'e' || ch == 'E'
@@ -734,10 +737,6 @@ public class Expression {
 					}
 				}
 				token.type = TokenType.OPERATOR;
-				if (!operators.containsKey(token.toString())) {
-					throw new ExpressionException("Unknown operator '" + token
-							+ "' at position " + (pos - token.length() + 1));
-				}
 			}
 			return previousToken = token;
 		}
@@ -745,15 +744,6 @@ public class Expression {
 		@Override
 		public void remove() {
 			throw new ExpressionException("remove() not supported");
-		}
-
-		/**
-		 * Get the actual character position in the string.
-		 * 
-		 * @return The actual character position.
-		 */
-		public int getPos() {
-			return pos;
 		}
 
 	}
@@ -1182,7 +1172,7 @@ public class Expression {
 				case COMMA:
 					if (previousToken != null && previousToken.type == TokenType.OPERATOR) {
 						throw new ExpressionException("Missing parameter(s) for operator " + previousToken +
-								" at character position " + (tokenizer.getPos() - 1 - previousToken.length()));
+								" at character position " + previousToken.pos);
 					}
 					while (!stack.isEmpty() && stack.peek().type != TokenType.OPEN_PAREN) {
 						outputQueue.add(stack.pop());
@@ -1195,7 +1185,7 @@ public class Expression {
 				case OPERATOR:
 					if (previousToken != null && (previousToken.type == TokenType.COMMA || previousToken.type == TokenType.OPEN_PAREN)) {
 						throw new ExpressionException("Missing parameter(s) for operator " + token +
-								" at character position " + (tokenizer.getPos() - token.length()));
+								" at character position " + token.pos);
 					}
 					Operator o1 = operators.get(token.surface);
 					String token2 = stack.isEmpty() ? null : stack.peek().toString();
@@ -1214,8 +1204,7 @@ public class Expression {
 					if (previousToken != null) {
 						if (previousToken.type == TokenType.LITERAL) {
 							throw new ExpressionException(
-									"Missing operator at character position "
-											+ tokenizer.getPos());
+									"Missing operator at character position " + (token.pos + 1));
 						}
 						// if the ( is preceded by a valid function, then it
 						// denotes the start of a parameter list
@@ -1228,7 +1217,7 @@ public class Expression {
 				case CLOSE_PAREN:
 					if (previousToken != null && previousToken.type == TokenType.OPERATOR) {
 						throw new ExpressionException("Missing parameter(s) for operator " + previousToken +
-								" at character position " + (tokenizer.getPos() - 1 - previousToken.length()));
+								" at character position " + previousToken.pos);
 					}
 					while (!stack.isEmpty() && stack.peek().type != TokenType.OPEN_PAREN) {
 						outputQueue.add(stack.pop());
@@ -1248,9 +1237,6 @@ public class Expression {
 			Token element = stack.pop();
 			if (element.type == TokenType.OPEN_PAREN || element.type == TokenType.CLOSE_PAREN) {
 				throw new ExpressionException("Mismatched parentheses");
-			}
-			if (!operators.containsKey(element.surface)) {
-				throw new ExpressionException("Unknown operator or function: " + element);
 			}
 			outputQueue.add(element);
 		}
@@ -1557,6 +1543,11 @@ public class Expression {
 		for (final Token token : rpn) {
 			switch(token.type) {
 				case OPERATOR:
+					if (!operators.containsKey(token.toString())) {
+						throw new ExpressionException("Unknown operator '" + token
+								+ "' at position " + (token.pos + 1));
+					}
+
 					if (stack.peek() < 2) {
 						throw new ExpressionException("Missing parameter(s) for operator " + token);
 					}
