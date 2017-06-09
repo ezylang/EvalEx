@@ -392,4 +392,47 @@ public class TestEval {
 
 		assertEquals("Unknown operator '|*|' at position 3", err);
 	}
+
+	@Test
+	public void testNull() {
+		Expression e = null;
+		e = new Expression("null");
+		assertEquals(null, e.eval());
+	}
+	
+	@Test
+	public void testCalculationWithNull() {
+		String err = "";
+		try {
+			new Expression("null+1").eval();
+		} catch (ArithmeticException e) {
+			err = e.getMessage();
+		}
+		assertEquals("First operand may not be null",err);
+		
+		err = "";
+		try {
+			new Expression("1 + NULL").eval();
+		} catch (ArithmeticException e) {
+			err = e.getMessage();
+		}
+		assertEquals("Second operand may not be null",err);
+		
+		err = "";
+		try {
+			new Expression("round(Null, 1)").eval();
+		} catch (ArithmeticException e) {
+			err = e.getMessage();
+		}
+		assertEquals("First operand may not be null",err);
+
+		err = "";
+		try {
+			new Expression("round(1, NulL)").eval();
+		} catch (ArithmeticException e) {
+			err = e.getMessage();
+		}
+		assertEquals("Second operand may not be null",err);
+	}
+
 }
