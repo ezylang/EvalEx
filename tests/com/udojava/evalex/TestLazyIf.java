@@ -3,6 +3,8 @@ package com.udojava.evalex;
 import org.junit.Assert;
 import org.junit.Test;
 
+import static org.junit.Assert.assertEquals;
+
 import java.math.BigDecimal;
 
 /**
@@ -18,4 +20,16 @@ public class TestLazyIf {
         Assert.assertEquals(expression.eval(),new BigDecimal(0));
 
     }
+    
+    @Test
+    public void testLazyIfWithNull() {
+		String err = "";
+		try {
+        	new Expression("if(a,0,12/a)").setVariable("a", "null").eval();
+		} catch (ArithmeticException e) {
+			err = e.getMessage();
+		}
+		assertEquals("Operand may not be null",err);
+    }
+
 }
