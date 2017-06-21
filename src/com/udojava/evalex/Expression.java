@@ -1258,11 +1258,6 @@ public class Expression {
 		return outputQueue;
 	}
 
-	public BigDecimal eval(Map<String, BigDecimal> vars) {
-		variables = vars;
-		return eval();
-	}
-
 	/**
 	 * Evaluates the expression.
 	 * 
@@ -1272,7 +1267,7 @@ public class Expression {
 
 		Stack<LazyNumber> stack = new Stack<LazyNumber>();
 
-		for (final Token token : compile()) {
+		for (final Token token : getRPN()) {
 			switch(token.type) {
 				case OPERATOR:
 					final LazyNumber v1 = stack.pop();
@@ -1543,7 +1538,7 @@ public class Expression {
 	 * 
 	 * @return The cached RPN instance.
 	 */
-	public List<Token> compile() {
+	private List<Token> getRPN() {
 		if (rpn == null) {
 			rpn = shuntingYard(this.expression);
 			validate(rpn);
@@ -1622,7 +1617,7 @@ public class Expression {
 	 */
 	public String toRPN() {
 		StringBuilder result = new StringBuilder();
-		for (Token t : compile()) {
+		for (Token t : getRPN()) {
 			if (result.length() != 0)
 				result.append(" ");
 			result.append(t.toString());
