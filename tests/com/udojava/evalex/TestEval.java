@@ -3,7 +3,6 @@ package com.udojava.evalex;
 import com.udojava.evalex.Expression.ExpressionException;
 import org.junit.Test;
 
-import java.math.BigDecimal;
 import java.math.RoundingMode;
 
 import static org.junit.Assert.assertEquals;
@@ -380,11 +379,4 @@ public class TestEval {
 
 		assertEquals("Unknown operator '|*|' at position 3", err);
 	}
-
-	@Test
-	public void canEvalHexExpression() throws Exception {
-		BigDecimal result = new Expression("0xcafe").eval();
-		assertEquals("51966", result.toPlainString());
-	}
-
 }
