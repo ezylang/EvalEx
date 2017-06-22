@@ -7,7 +7,6 @@ import java.util.List;
 
 import org.junit.Test;
 
-import com.udojava.evalex.Expression.LazyFunction;
 import com.udojava.evalex.Expression.LazyNumber;
 
 public class TestCustoms {
@@ -59,8 +58,8 @@ public class TestCustoms {
 	
 	@Test
 	public void testCustomFunctionStringParameters() {
-        Expression e = new Expression("STRCMP(test, test2)");
-        e.addLazyFunction(e.new LazyFunction("STRCMP", 2) {
+        Expression e = new Expression("STREQ(test, test2)");
+        e.addLazyFunction(e.new LazyFunction("STREQ", 2) {
             private LazyNumber ZERO = new LazyNumber() {
                 public BigDecimal eval() {
                     return BigDecimal.ZERO;
