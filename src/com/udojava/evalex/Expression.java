@@ -440,6 +440,10 @@ public class Expression {
 		public BigDecimal eval() {
 			return null;
 		}
+		
+		public String getString() {
+            return null;
+        }
 	};
 
 	/**
@@ -459,6 +463,7 @@ public class Expression {
 	 */
 	interface LazyNumber {
 		BigDecimal eval();
+		String getString();
 	}
 
 	public abstract class LazyFunction {
@@ -522,6 +527,10 @@ public class Expression {
 				public BigDecimal eval() {
 					return Function.this.eval(params);
 				}
+				
+				public String getString() {
+		            return String.valueOf(Function.this.eval(params));
+		        }
 			};
 		}
 
@@ -1231,6 +1240,10 @@ public class Expression {
 					public BigDecimal eval() {
 						return operators.get(token).eval(v2.eval(), v1.eval());
 					}
+					
+					public String getString() {
+                        return String.valueOf(operators.get(token).eval(v2.eval(), v1.eval()));
+                    }
 				};
 				stack.push(number);
 			} else if (variables.containsKey(token)) {
@@ -1238,6 +1251,10 @@ public class Expression {
 					public BigDecimal eval() {
 						return variables.get(token).round(mc);
 					}
+					
+					public String getString() {
+                        return String.valueOf(variables.get(token).round(mc));
+                    }
 				});
 			} else if (functions.containsKey(token.toUpperCase(Locale.ROOT))) {
 				LazyFunction f = functions.get(token.toUpperCase(Locale.ROOT));
@@ -1260,6 +1277,10 @@ public class Expression {
 					public BigDecimal eval() {
 						return new BigDecimal(token, mc);
 					}
+					
+					public String getString() {
+                        return token;
+                    }
 				});
 			}
 		}
