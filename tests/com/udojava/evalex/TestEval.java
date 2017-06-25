@@ -10,6 +10,19 @@ import static org.junit.Assert.assertNotSame;
 
 
 public class TestEval {
+
+	@Test
+	public void testsinAB() {
+		String err = "";
+		try {
+			Expression expression = new Expression("sin(a+x)");
+			expression.eval();
+		} catch (ExpressionException e) {
+			err = e.getMessage();
+		}
+
+		assertEquals("Unknown operator or function: a", err);
+	}
 	
 	@Test
 	public void testInvalidExpressions1() {
