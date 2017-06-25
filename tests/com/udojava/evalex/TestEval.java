@@ -1,13 +1,12 @@
 package com.udojava.evalex;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotSame;
+import com.udojava.evalex.Expression.ExpressionException;
+import org.junit.Test;
 
 import java.math.RoundingMode;
 
-import org.junit.Test;
-
-import com.udojava.evalex.Expression.ExpressionException;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotSame;
 
 
 public class TestEval {
@@ -230,6 +229,11 @@ public class TestEval {
 		assertEquals("Missing parameter(s) for operator +", err);
 	}
 
+	@Test(expected = ExpressionException.class)
+	public void closeParenAtStartCausesExpressionException() throws Exception {
+		new Expression("(").eval();
+	}
+
 	@Test
 	public void testOrphanedOperatorsInFunctionParameters() {
 		String err = "";
@@ -351,5 +355,28 @@ public class TestEval {
 		e = new Expression("2.5/3").setRoundingMode(RoundingMode.UP);
 		assertEquals("0.8333334", e.eval().toPlainString());
 	}
-	
+
+	@Test
+	public void unknownFunctionsFailGracefully() throws Exception {
+		String err = "";
+		try {
+			new Expression("unk(1,2,3)").eval();
+		} catch(ExpressionException e) {
+			err = e.getMessage();
+		}
+
+		assertEquals("Unknown function 'unk' at position 1", err);
+	}
+
+	@Test
+	public void unknownOperatorsFailGracefully() throws Exception {
+		String err = "";
+		try {
+			new Expression("a |*| b").eval();
+		} catch(ExpressionException e) {
+			err = e.getMessage();
+		}
+
+		assertEquals("Unknown operator '|*|' at position 3", err);
+	}
 }
