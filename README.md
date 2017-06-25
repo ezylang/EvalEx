@@ -27,7 +27,7 @@ To include it in your Maven project, refer to the artifact in your pom:
     <dependency>
         <groupId>com.udojava</groupId>
         <artifactId>EvalEx</artifactId>
-        <version>1.0</version>
+        <version>1.6</version>
     </dependency>
 </dependencies>
 ````
