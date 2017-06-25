@@ -36,7 +36,7 @@ public class TestCaseInsensitive {
 
         Expression expression = new Expression("a+testsum(1,3)");
         expression.setVariable("A", new BigDecimal(1));
-        expression.addFunction(expression.new Function("testSum",-1){
+        expression.addFunction(new Expression.Function("testSum",-1){
             @Override
             public BigDecimal eval(List<BigDecimal> parameters) {
                 BigDecimal value =null;
