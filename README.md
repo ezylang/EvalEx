@@ -27,7 +27,7 @@ To include it in your Maven project, refer to the artifact in your pom:
     <dependency>
         <groupId>com.udojava</groupId>
         <artifactId>EvalEx</artifactId>
-        <version>1.0</version>
+        <version>1.6</version>
     </dependency>
 </dependencies>
 ````
@@ -181,45 +181,6 @@ e.addFunction(e.new Function("average", -1) {
 });
 
 e.eval(); // returns 16
-````
-
-#### Custom Functions With String Parameters
-
-You can create a custom function with string parameters. Create an instance of `Expression.LazyFunction`and add it to the expression.
-Parameters are the function name and the count of required parameters. The functions `lazyEval()` method will be called with a list of the LazyNumber parameters.
-A `-1` as the number of parameters denotes a variable number of arguments.
-
-For example, add a function `STREQ(string1,string2)`, that will compare whether string1 and string2 is equal:
-
-````java
-Expression e = new Expression("STREQ(test, test2)");
-e.addLazyFunction(e.new LazyFunction("STREQ", 2) {
-    private LazyNumber ZERO = new LazyNumber() {
-        public BigDecimal eval() {
-            return BigDecimal.ZERO;
-        }
-        public String getString() {
-            return "0";
-        }
-     };
-    private LazyNumber ONE = new LazyNumber() {
-        public BigDecimal eval() {
-            return BigDecimal.ONE;
-        }         
-        public String getString() {
-            return null;
-        }
-    };  
-    @Override
-    public LazyNumber lazyEval(List<LazyNumber> lazyParams) {
-        if (lazyParams.get(0).getString().equals(lazyParams.get(1).getString())) {
-            return ZERO;
-        }
-        return ONE;
-    }
-});
-
-e.eval(); // returns 1
 ````
 
 ### Project Layout
