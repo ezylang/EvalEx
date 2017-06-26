@@ -757,7 +757,7 @@ public class Expression {
 						break;
 					}
 				}
-				token.type = TokenType.OPERATOR;			    
+				token.type = TokenType.OPERATOR;
 			}
 			return previousToken = token;
 		}
@@ -1180,9 +1180,9 @@ public class Expression {
 		while (tokenizer.hasNext()) {
 			Token token = tokenizer.next();
 			switch(token.type) {
-			    case STRINGPARAM:
-                    stack.push(token);
-                    break;
+				case STRINGPARAM:
+					stack.push(token);
+					break;
 				case LITERAL:
 					outputQueue.add(token);
 					break;
