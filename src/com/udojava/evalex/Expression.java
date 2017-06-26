@@ -605,7 +605,7 @@ public class Expression {
 	}
 
 	enum TokenType {
-		VARIABLE, FUNCTION, LITERAL, OPERATOR, OPEN_PAREN, COMMA, CLOSE_PAREN
+		VARIABLE, FUNCTION, LITERAL, OPERATOR, OPEN_PAREN, COMMA, CLOSE_PAREN, STRINGPARAM
 	}
 
 	class Token {
@@ -715,6 +715,18 @@ public class Expression {
 				pos++;
 				token.append(next().toString());
 				token.type = TokenType.LITERAL;
+			} else if (ch == '"') {
+			    pos++;
+	            if (previousToken.type != TokenType.STRINGPARAM) {
+	                ch = input.charAt(pos);
+	                while (ch != '"') {
+	                    token.append(input.charAt(pos++));
+	                    ch = pos == input.length() ? 0 : input.charAt(pos);
+	                }
+	                token.type = TokenType.STRINGPARAM;
+	            } else {
+	                return next();
+	            }
 			} else if (Character.isLetter(ch) || firstVarChars.indexOf(ch) >= 0) {
 				while ((Character.isLetter(ch) || Character.isDigit(ch)
 						|| varChars.indexOf(ch) >= 0 || token.length() == 0 && firstVarChars.indexOf(ch) >= 0)
@@ -745,7 +757,7 @@ public class Expression {
 						break;
 					}
 				}
-				token.type = TokenType.OPERATOR;
+				token.type = TokenType.OPERATOR;			    
 			}
 			return previousToken = token;
 		}
@@ -1168,6 +1180,10 @@ public class Expression {
 		while (tokenizer.hasNext()) {
 			Token token = tokenizer.next();
 			switch(token.type) {
+			    case STRINGPARAM:
+                    stack.push(token);
+                    lastFunction = token;
+                    break;
 				case LITERAL:
 					outputQueue.add(token);
 					break;
@@ -1275,22 +1291,26 @@ public class Expression {
 						public BigDecimal eval() {
 							return operators.get(token.surface).eval(v2.eval(), v1.eval());
 						}
+						
+						public String getString() {
+						    return String.valueOf(operators.get(token.surface).eval(v2.eval(), v1.eval()));
+						}
 					};
 					stack.push(number);
 					break;
 				case VARIABLE:
-					if (!variables.containsKey(token.surface)) {
-						throw new ExpressionException("Unknown operator or function: " + token);
-					}
-					
-					public String getString() {
-                        return String.valueOf(operators.get(token).eval(v2.eval(), v1.eval()));
+				    if (!variables.containsKey(token.surface)) {
+                        throw new ExpressionException("Unknown operator or function: " + token);
                     }
-
+				    
 					stack.push(new LazyNumber() {
 						public BigDecimal eval() {
 							return variables.get(token.surface).round(mc);
 						}
+						
+						public String getString() {
+	                        return token.surface;
+	                    }
 					});
 					break;
 				case FUNCTION:
@@ -1303,16 +1323,10 @@ public class Expression {
 						p.add(0, stack.pop());
 					}
 					
-					public String getString() {
-                        return String.valueOf(variables.get(token).round(mc));
-                    }
 					if (stack.peek() == PARAMS_START) {
 						stack.pop();
 					}
 					
-					public String getString() {
-                        return token;
-                    }
 					LazyNumber fResult = f.lazyEval(p);
 					stack.push(fResult);
 					break;
@@ -1324,7 +1338,23 @@ public class Expression {
 						public BigDecimal eval() {
 							return new BigDecimal(token.surface, mc);
 						}
+						
+						public String getString() {
+	                        return String.valueOf(token.surface);
+	                    }
 					});
+					break;
+				case STRINGPARAM:
+				    stack.push(new LazyNumber() {
+				        public BigDecimal eval() {
+                            return null;
+                        }
+                        
+                        public String getString() {
+                            return token.surface;
+                        } 
+				    });
+				    break;
 			}
 		}
 		return stack.pop().eval().stripTrailingZeros();

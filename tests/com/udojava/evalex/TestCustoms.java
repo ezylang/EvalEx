@@ -58,7 +58,7 @@ public class TestCustoms {
 	
 	@Test
 	public void testCustomFunctionStringParameters() {
-        Expression e = new Expression("STREQ(test, test2)");
+        Expression e = new Expression("STREQ(\"test\", \"test2\")");
         e.addLazyFunction(e.new LazyFunction("STREQ", 2) {
             private LazyNumber ZERO = new LazyNumber() {
                 public BigDecimal eval() {
