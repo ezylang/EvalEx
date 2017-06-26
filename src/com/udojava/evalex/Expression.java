@@ -1182,7 +1182,6 @@ public class Expression {
 			switch(token.type) {
 			    case STRINGPARAM:
                     stack.push(token);
-                    lastFunction = token;
                     break;
 				case LITERAL:
 					outputQueue.add(token);
