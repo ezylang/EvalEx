@@ -605,7 +605,7 @@ public class Expression {
 	}
 
 	enum TokenType {
-		VARIABLE, FUNCTION, LITERAL, OPERATOR, OPEN_PAREN, COMMA, CLOSE_PAREN, STRINGPARAM
+		VARIABLE, FUNCTION, LITERAL, OPERATOR, OPEN_PAREN, COMMA, CLOSE_PAREN, HEX_LITERAL, STRINGPARAM
 	}
 
 	class Token {
@@ -683,6 +683,10 @@ public class Expression {
 			}
 		}
 
+		private boolean isHexDigit(char ch) {
+			return ch == 'x' || ch == 'X' || (ch >= '0' && ch <= '9') || (ch >= 'a' && ch <= 'f') || (ch >= 'A' && ch <= 'F');
+		}
+
 		@Override
 		public Token next() {
 			Token token = new Token();
@@ -695,8 +699,12 @@ public class Expression {
 				ch = input.charAt(++pos);
 			}
 			token.pos = pos;
+
+			boolean isHex = false;
+
 			if (Character.isDigit(ch)) {
-				while ((Character.isDigit(ch) || ch == decimalSeparator
+				if(ch == '0' && (peekNextChar() == 'x' || peekNextChar() == 'X')) isHex = true;
+				while ((isHex && isHexDigit(ch)) || (Character.isDigit(ch) || ch == decimalSeparator
                                                 || ch == 'e' || ch == 'E'
                                                 || (ch == minusSign && token.length() > 0 
                                                     && ('e'==token.charAt(token.length()-1) || 'E'==token.charAt(token.length()-1)))
@@ -706,7 +714,7 @@ public class Expression {
 					token.append(input.charAt(pos++));
 					ch = pos == input.length() ? 0 : input.charAt(pos);
 				}
-				token.type = TokenType.LITERAL;
+				token.type = isHex ? TokenType.HEX_LITERAL : TokenType.LITERAL;
 			} else if (ch == minusSign
 					&& Character.isDigit(peekNextChar())
 					&& (previousToken == null || previousToken.type == TokenType.OPEN_PAREN || previousToken.type == TokenType.COMMA
@@ -1248,6 +1256,7 @@ public class Expression {
 					stack.push(token);
 					break;
 				case LITERAL:
+				case HEX_LITERAL:
 					outputQueue.add(token);
 					break;
 				case VARIABLE:
@@ -1420,6 +1429,16 @@ public class Expression {
 
 						public String getString() {
 							return token.surface;
+						} 
+					});
+					break;
+				case HEX_LITERAL:
+					stack.push(new LazyNumber() {
+						public BigDecimal eval() {
+							return new BigDecimal(new BigInteger(token.surface.substring(2), 16), mc);
+						}
+						public String getString() {
+							return new BigInteger(token.surface.substring(2), 16).toString();
 						} 
 					});
 					break;
