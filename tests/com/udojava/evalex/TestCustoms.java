@@ -7,6 +7,8 @@ import java.util.List;
 
 import org.junit.Test;
 
+import com.udojava.evalex.Expression.LazyNumber;
+
 public class TestCustoms {
 
 	@Test
@@ -52,6 +54,42 @@ public class TestCustoms {
 		});
 		
 		assertEquals("14", e.eval().toPlainString());
+	}
+	
+	@Test
+	public void testCustomFunctionStringParameters() {
+        Expression e = new Expression("STREQ(\"test\", \"test2\")");
+        e.addLazyFunction(e.new LazyFunction("STREQ", 2) {
+            private LazyNumber ZERO = new LazyNumber() {
+                public BigDecimal eval() {
+                    return BigDecimal.ZERO;
+                }
+                
+                public String getString() {
+                    return "0";
+                }
+             };
+           
+            private LazyNumber ONE = new LazyNumber() {
+                public BigDecimal eval() {
+                    return BigDecimal.ONE;
+                }
+                 
+                public String getString() {
+                    return null;
+                }
+            };
+          
+            @Override
+            public LazyNumber lazyEval(List<LazyNumber> lazyParams) {
+                if (lazyParams.get(0).getString().equals(lazyParams.get(1).getString())) {
+                    return ZERO;
+                }
+                return ONE;
+            }
+        });
+       
+        assertEquals("1", e.eval().toPlainString());
 	}
 
 }
