@@ -798,36 +798,42 @@ public class Expression {
 		addOperator(new Operator("+", 20, true) {
 			@Override
 			public BigDecimal eval(BigDecimal v1, BigDecimal v2) {
+				assertNotNull(v1, v2);
 				return v1.add(v2, mc);
 			}
 		});
 		addOperator(new Operator("-", 20, true) {
 			@Override
 			public BigDecimal eval(BigDecimal v1, BigDecimal v2) {
+				assertNotNull(v1, v2);
 				return v1.subtract(v2, mc);
 			}
 		});
 		addOperator(new Operator("*", 30, true) {
 			@Override
 			public BigDecimal eval(BigDecimal v1, BigDecimal v2) {
+				assertNotNull(v1, v2);
 				return v1.multiply(v2, mc);
 			}
 		});
 		addOperator(new Operator("/", 30, true) {
 			@Override
 			public BigDecimal eval(BigDecimal v1, BigDecimal v2) {
+				assertNotNull(v1, v2);
 				return v1.divide(v2, mc);
 			}
 		});
 		addOperator(new Operator("%", 30, true) {
 			@Override
 			public BigDecimal eval(BigDecimal v1, BigDecimal v2) {
+				assertNotNull(v1, v2);
 				return v1.remainder(v2, mc);
 			}
 		});
 		addOperator(new Operator("^", 40, false) {
 			@Override
 			public BigDecimal eval(BigDecimal v1, BigDecimal v2) {
+				assertNotNull(v1, v2);
 				/*- 
 				 * Thanks to Gene Marin:
 				 * http://stackoverflow.com/questions/3579779/how-to-do-a-fractional-power-on-bigdecimal-in-java
@@ -852,6 +858,7 @@ public class Expression {
 		addOperator(new Operator("&&", 4, false) {
 			@Override
 			public BigDecimal eval(BigDecimal v1, BigDecimal v2) {
+				assertNotNull(v1, v2);
 				boolean b1 = !v1.equals(BigDecimal.ZERO);
 				boolean b2 = !v2.equals(BigDecimal.ZERO);
 				return b1 && b2 ? BigDecimal.ONE : BigDecimal.ZERO;
@@ -861,6 +868,7 @@ public class Expression {
 		addOperator(new Operator("||", 2, false) {
 			@Override
 			public BigDecimal eval(BigDecimal v1, BigDecimal v2) {
+				assertNotNull(v1, v2);
 				boolean b1 = !v1.equals(BigDecimal.ZERO);
 				boolean b2 = !v2.equals(BigDecimal.ZERO);
 				return b1 || b2 ? BigDecimal.ONE : BigDecimal.ZERO;
@@ -870,6 +878,7 @@ public class Expression {
 		addOperator(new Operator(">", 10, false) {
 			@Override
 			public BigDecimal eval(BigDecimal v1, BigDecimal v2) {
+				assertNotNull(v1, v2);
 				return v1.compareTo(v2) == 1 ? BigDecimal.ONE : BigDecimal.ZERO;
 			}
 		});
@@ -877,6 +886,7 @@ public class Expression {
 		addOperator(new Operator(">=", 10, false) {
 			@Override
 			public BigDecimal eval(BigDecimal v1, BigDecimal v2) {
+				assertNotNull(v1, v2);
 				return v1.compareTo(v2) >= 0 ? BigDecimal.ONE : BigDecimal.ZERO;
 			}
 		});
@@ -884,6 +894,7 @@ public class Expression {
 		addOperator(new Operator("<", 10, false) {
 			@Override
 			public BigDecimal eval(BigDecimal v1, BigDecimal v2) {
+				assertNotNull(v1, v2);
 				return v1.compareTo(v2) == -1 ? BigDecimal.ONE
 						: BigDecimal.ZERO;
 			}
@@ -892,6 +903,7 @@ public class Expression {
 		addOperator(new Operator("<=", 10, false) {
 			@Override
 			public BigDecimal eval(BigDecimal v1, BigDecimal v2) {
+				assertNotNull(v1, v2);
 				return v1.compareTo(v2) <= 0 ? BigDecimal.ONE : BigDecimal.ZERO;
 			}
 		});
@@ -899,6 +911,12 @@ public class Expression {
 		addOperator(new Operator("=", 7, false) {
 			@Override
 			public BigDecimal eval(BigDecimal v1, BigDecimal v2) {
+				if (v1 == v2) {
+					return BigDecimal.ONE;
+				}
+				if (v1 == null  || v2 == null) {
+					return BigDecimal.ZERO;
+				}
 				return v1.compareTo(v2) == 0 ? BigDecimal.ONE : BigDecimal.ZERO;
 			}
 		});
@@ -912,12 +930,19 @@ public class Expression {
 		addOperator(new Operator("!=", 7, false) {
 			@Override
 			public BigDecimal eval(BigDecimal v1, BigDecimal v2) {
+				if (v1 == v2) {
+					return BigDecimal.ZERO;
+				}
+				if (v1 == null  || v2 == null) {
+					return BigDecimal.ONE;
+				}
 				return v1.compareTo(v2) != 0 ? BigDecimal.ONE : BigDecimal.ZERO;
 			}
 		});
 		addOperator(new Operator("<>", 7, false) {
 			@Override
 			public BigDecimal eval(BigDecimal v1, BigDecimal v2) {
+				assertNotNull(v1, v2);
 				return operators.get("!=").eval(v1, v2);
 			}
 		});
@@ -925,6 +950,7 @@ public class Expression {
 		addFunction(new Function("NOT", 1) {
 			@Override
 			public BigDecimal eval(List<BigDecimal> parameters) {
+				assertNotNull(parameters.get(0));
 				boolean zero = parameters.get(0).compareTo(BigDecimal.ZERO) == 0;
 				return zero ? BigDecimal.ONE : BigDecimal.ZERO;
 			}
@@ -933,7 +959,9 @@ public class Expression {
 		addLazyFunction(new LazyFunction("IF", 3) {
 			@Override
 			public LazyNumber lazyEval(List<LazyNumber> lazyParams) {
-				boolean isTrue = !lazyParams.get(0).eval().equals(BigDecimal.ZERO);
+				BigDecimal result = lazyParams.get(0).eval();
+				assertNotNull(result);
+				boolean isTrue = !result.equals(BigDecimal.ZERO);
 				return isTrue ? lazyParams.get(1) : lazyParams.get(2);
 			}
 		});
@@ -948,6 +976,7 @@ public class Expression {
 		addFunction(new Function("SIN", 1) {
 			@Override
 			public BigDecimal eval(List<BigDecimal> parameters) {
+				assertNotNull(parameters.get(0));
 				double d = Math.sin(Math.toRadians(parameters.get(0)
 						.doubleValue()));
 				return new BigDecimal(d, mc);
@@ -956,6 +985,7 @@ public class Expression {
 		addFunction(new Function("COS", 1) {
 			@Override
 			public BigDecimal eval(List<BigDecimal> parameters) {
+				assertNotNull(parameters.get(0));
 				double d = Math.cos(Math.toRadians(parameters.get(0)
 						.doubleValue()));
 				return new BigDecimal(d, mc);
@@ -964,6 +994,7 @@ public class Expression {
 		addFunction(new Function("TAN", 1) {
 			@Override
 			public BigDecimal eval(List<BigDecimal> parameters) {
+				assertNotNull(parameters.get(0));
 				double d = Math.tan(Math.toRadians(parameters.get(0)
 						.doubleValue()));
 				return new BigDecimal(d, mc);
@@ -972,6 +1003,7 @@ public class Expression {
 		addFunction(new Function("ASIN", 1) { // added by av
 			@Override
 			public BigDecimal eval(List<BigDecimal> parameters) {
+				assertNotNull(parameters.get(0));
 				double d = Math.toDegrees(Math.asin(parameters.get(0)
 						.doubleValue()));
 				return new BigDecimal(d, mc);
@@ -980,6 +1012,7 @@ public class Expression {
 		addFunction(new Function("ACOS", 1) { // added by av
 			@Override
 			public BigDecimal eval(List<BigDecimal> parameters) {
+				assertNotNull(parameters.get(0));
 				double d = Math.toDegrees(Math.acos(parameters.get(0)
 						.doubleValue()));
 				return new BigDecimal(d, mc);
@@ -988,6 +1021,7 @@ public class Expression {
 		addFunction(new Function("ATAN", 1) { // added by av
 			@Override
 			public BigDecimal eval(List<BigDecimal> parameters) {
+				assertNotNull(parameters.get(0));
 				double d = Math.toDegrees(Math.atan(parameters.get(0)
 						.doubleValue()));
 				return new BigDecimal(d, mc);
@@ -996,6 +1030,7 @@ public class Expression {
 		addFunction(new Function("SINH", 1) {
 			@Override
 			public BigDecimal eval(List<BigDecimal> parameters) {
+				assertNotNull(parameters.get(0));
 				double d = Math.sinh(parameters.get(0).doubleValue());
 				return new BigDecimal(d, mc);
 			}
@@ -1003,6 +1038,7 @@ public class Expression {
 		addFunction(new Function("COSH", 1) {
 			@Override
 			public BigDecimal eval(List<BigDecimal> parameters) {
+				assertNotNull(parameters.get(0));
 				double d = Math.cosh(parameters.get(0).doubleValue());
 				return new BigDecimal(d, mc);
 			}
@@ -1010,6 +1046,7 @@ public class Expression {
 		addFunction(new Function("TANH", 1) {
 			@Override
 			public BigDecimal eval(List<BigDecimal> parameters) {
+				assertNotNull(parameters.get(0));
 				double d = Math.tanh(parameters.get(0).doubleValue());
 				return new BigDecimal(d, mc);
 			}
@@ -1017,6 +1054,7 @@ public class Expression {
 		addFunction(new Function("RAD", 1) {
 			@Override
 			public BigDecimal eval(List<BigDecimal> parameters) {
+				assertNotNull(parameters.get(0));
 				double d = Math.toRadians(parameters.get(0).doubleValue());
 				return new BigDecimal(d, mc);
 			}
@@ -1024,6 +1062,7 @@ public class Expression {
 		addFunction(new Function("DEG", 1) {
 			@Override
 			public BigDecimal eval(List<BigDecimal> parameters) {
+				assertNotNull(parameters.get(0));
 				double d = Math.toDegrees(parameters.get(0).doubleValue());
 				return new BigDecimal(d, mc);
 			}
@@ -1036,6 +1075,7 @@ public class Expression {
 				}
 				BigDecimal max = null;
 				for (BigDecimal parameter : parameters) {
+					assertNotNull(parameter);
 					if (max == null || parameter.compareTo(max) > 0) {
 						max = parameter;
 					}
@@ -1051,6 +1091,7 @@ public class Expression {
 				}
 				BigDecimal min = null;
 				for (BigDecimal parameter : parameters) {
+					assertNotNull(parameter);
 					if (min == null || parameter.compareTo(min) < 0) {
 						min = parameter;
 					}
@@ -1061,12 +1102,14 @@ public class Expression {
 		addFunction(new Function("ABS", 1) {
 			@Override
 			public BigDecimal eval(List<BigDecimal> parameters) {
+				assertNotNull(parameters.get(0));
 				return parameters.get(0).abs(mc);
 			}
 		});
 		addFunction(new Function("LOG", 1) {
 			@Override
 			public BigDecimal eval(List<BigDecimal> parameters) {
+				assertNotNull(parameters.get(0));
 				double d = Math.log(parameters.get(0).doubleValue());
 				return new BigDecimal(d, mc);
 			}
@@ -1074,6 +1117,7 @@ public class Expression {
 		addFunction(new Function("LOG10", 1) {
 			@Override
 			public BigDecimal eval(List<BigDecimal> parameters) {
+				assertNotNull(parameters.get(0));
 				double d = Math.log10(parameters.get(0).doubleValue());
 				return new BigDecimal(d, mc);
 			}
@@ -1081,6 +1125,7 @@ public class Expression {
 		addFunction(new Function("ROUND", 2) {
 			@Override
 			public BigDecimal eval(List<BigDecimal> parameters) {
+				assertNotNull(parameters.get(0), parameters.get(1));
 				BigDecimal toRound = parameters.get(0);
 				int precision = parameters.get(1).intValue();
 				return toRound.setScale(precision, mc.getRoundingMode());
@@ -1089,6 +1134,7 @@ public class Expression {
 		addFunction(new Function("FLOOR", 1) {
 			@Override
 			public BigDecimal eval(List<BigDecimal> parameters) {
+				assertNotNull(parameters.get(0));
 				BigDecimal toRound = parameters.get(0);
 				return toRound.setScale(0, RoundingMode.FLOOR);
 			}
@@ -1096,6 +1142,7 @@ public class Expression {
 		addFunction(new Function("CEILING", 1) {
 			@Override
 			public BigDecimal eval(List<BigDecimal> parameters) {
+				assertNotNull(parameters.get(0));
 				BigDecimal toRound = parameters.get(0);
 				return toRound.setScale(0, RoundingMode.CEILING);
 			}
@@ -1103,6 +1150,7 @@ public class Expression {
 		addFunction(new Function("SQRT", 1) {
 			@Override
 			public BigDecimal eval(List<BigDecimal> parameters) {
+				assertNotNull(parameters.get(0));
 				/*
 				 * From The Java Programmers Guide To numerical Computing
 				 * (Ronald Mak, 2003)
@@ -1135,9 +1183,25 @@ public class Expression {
 
 		variables.put("e", e);
 		variables.put("PI", PI);
+		variables.put("NULL", null);
 		variables.put("TRUE", BigDecimal.ONE);
 		variables.put("FALSE", BigDecimal.ZERO);
 
+	}
+	
+	private void assertNotNull(BigDecimal v1) {
+		if (v1 == null) {
+			throw new ArithmeticException("Operand may not be null");
+		}
+	}
+	
+	private void assertNotNull(BigDecimal v1, BigDecimal v2) {
+		if (v1 == null) {
+			throw new ArithmeticException("First operand may not be null");
+		}
+		if (v2 == null) {
+			throw new ArithmeticException("Second operand may not be null");
+		}		
 	}
 
 	/**
@@ -1304,7 +1368,8 @@ public class Expression {
 
 					stack.push(new LazyNumber() {
 						public BigDecimal eval() {
-							return variables.get(token.surface).round(mc);
+							BigDecimal value = variables.get(token.surface);
+							return value == null ? null : value.round(mc);
 						}
 
 						public String getString() {
@@ -1335,6 +1400,10 @@ public class Expression {
 				case LITERAL:
 					stack.push(new LazyNumber() {
 						public BigDecimal eval() {
+							if (token.surface.equalsIgnoreCase("NULL")) {
+								return null;
+							}
+
 							return new BigDecimal(token.surface, mc);
 						}
 
@@ -1356,7 +1425,8 @@ public class Expression {
 					break;
 			}
 		}
-		return stack.pop().eval().stripTrailingZeros();
+		BigDecimal result = stack.pop().eval();
+		return result == null ? null : result.stripTrailingZeros();
 	}
 
 	/**
@@ -1472,6 +1542,9 @@ public class Expression {
 	public Expression setVariable(String variable, String value) {
 		if (isNumber(value))
 			variables.put(variable, new BigDecimal(value));
+		else if (value.equalsIgnoreCase("null")) {
+			variables.put(variable, null);
+		}
 		else {
 			expression = expression.replaceAll("(?i)\\b" + variable + "\\b", "("
 					+ value + ")");

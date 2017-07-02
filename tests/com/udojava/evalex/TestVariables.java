@@ -88,4 +88,22 @@ public class TestVariables {
 	public void failsIfVariableDoesNotExist() throws Exception {
 		new Expression("3*unknown").eval();
 	}
+	
+	@Test
+	public void testNullVariable() {
+		Expression e = null;
+		e = new Expression("a").with("a", "null");
+		assertEquals(null, e.eval());
+		
+		e = new Expression("a").with("a", (BigDecimal)null);
+		assertEquals(null, e.eval());
+		
+		String err = "";
+		try {
+			new Expression("a+1").with("a", "null").eval();
+		} catch (ArithmeticException ex) {
+			err = ex.getMessage();
+		}
+		assertEquals("First operand may not be null",err);
+	}
 }
