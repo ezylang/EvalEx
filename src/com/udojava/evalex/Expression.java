@@ -461,7 +461,7 @@ public class Expression {
 	/**
 	 * LazyNumber interface created for lazily evaluated functions
 	 */
-	interface LazyNumber {
+	public interface LazyNumber {
 		BigDecimal eval();
 		String getString();
 	}
