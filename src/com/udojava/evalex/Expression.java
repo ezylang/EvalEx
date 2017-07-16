@@ -1630,29 +1630,30 @@ public class Expression {
 	 * 
 	 * @return A new iterator instance for this expression.
 	 */
-	public Iterator<String> getExpressionTokenizer() {
+	public Iterator<Token> getExpressionTokenizer() {
 		final String expression = this.expression;
 
-		return new Iterator<String>() {
-
-			Tokenizer tokenizer = new Tokenizer(expression);
-
-			@Override
-			public boolean hasNext() {
-				return tokenizer.hasNext();
-			}
-
-			@Override
-			public String next() {
-				Token nextToken = tokenizer.next();
-				return nextToken == null ? null : nextToken.toString();
-			}
-
-			@Override
-			public void remove() {
-				tokenizer.remove();
-			}
-		};
+		return new Tokenizer(expression);
+//		return new Iterator<String>() {
+//
+//			Tokenizer tokenizer = new Tokenizer(expression);
+//
+//			@Override
+//			public boolean hasNext() {
+//				return tokenizer.hasNext();
+//			}
+//
+//			@Override
+//			public String next() {
+//				Token nextToken = tokenizer.next();
+//				return nextToken == null ? null : nextToken.toString();
+//			}
+//
+//			@Override
+//			public void remove() {
+//				tokenizer.remove();
+//			}
+//		};
 	}
 
 	/**

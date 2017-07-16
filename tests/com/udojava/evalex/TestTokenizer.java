@@ -1,53 +1,59 @@
 package com.udojava.evalex;
 
-import static org.junit.Assert.*;
-import static org.junit.Assert.assertEquals;
+import com.udojava.evalex.Expression.TokenType;
+import com.udojava.evalex.Expression.Token;
+import org.junit.Test;
 
 import java.util.Iterator;
 
-import org.junit.Test;
+import static org.junit.Assert.*;
 
 
 public class TestTokenizer {
-	
+
+	private void assertToken(String surface, Expression.TokenType type, Expression.Token actual) {
+		assertEquals(surface, actual.surface);
+		assertEquals(type, actual.type);
+	}
+
 	@Test
 	public void testNumbers() {
 		Expression e;
-		Iterator<String> i;
+		Iterator<Token> i;
 		
 		e = new Expression("1");
 		i = e.getExpressionTokenizer();
-		assertEquals("1", i.next());
+		assertToken("1", TokenType.LITERAL, i.next());
 		assertFalse(i.hasNext());
 		assertNull(i.next());
 		
 		e = new Expression("-1");
 		i = e.getExpressionTokenizer();
-		assertEquals("-1", i.next());
+		assertToken("-1", TokenType.LITERAL, i.next());
 		assertFalse(i.hasNext());
 		assertNull(i.next());
 		
 		e = new Expression("123");
 		i = e.getExpressionTokenizer();
-		assertEquals("123", i.next());
+		assertToken("123", TokenType.LITERAL, i.next());
 		assertFalse(i.hasNext());
 		assertNull(i.next());
 		
 		e = new Expression("-123");
 		i = e.getExpressionTokenizer();
-		assertEquals("-123", i.next());
+		assertToken("-123", TokenType.LITERAL, i.next());
 		assertFalse(i.hasNext());
 		assertNull(i.next());
 		
 		e = new Expression("123.4");
 		i = e.getExpressionTokenizer();
-		assertEquals("123.4", i.next());
+		assertToken("123.4", TokenType.LITERAL, i.next());
 		assertFalse(i.hasNext());
 		assertNull(i.next());
 		
 		e = new Expression("-123.456");
 		i = e.getExpressionTokenizer();
-		assertEquals("-123.456", i.next());
+		assertToken("-123.456", TokenType.LITERAL, i.next());
 		assertFalse(i.hasNext());
 		assertNull(i.next());
 	}
@@ -55,9 +61,9 @@ public class TestTokenizer {
     @Test
     public void testTokenizerExtraSpaces() {
         Expression e = new Expression("1 ");
-        Iterator<String> i = e.getExpressionTokenizer();
+        Iterator<Token> i = e.getExpressionTokenizer();
         assertTrue(i.hasNext());
-        assertEquals("1", i.next());
+		assertToken("1", TokenType.LITERAL, i.next());
         assertFalse(i.hasNext());
         assertNull(i.next());
 
@@ -69,16 +75,15 @@ public class TestTokenizer {
         e = new Expression("   1      ");
         i = e.getExpressionTokenizer();
         assertTrue(i.hasNext());
-        assertEquals("1", i.next());
+		assertToken("1", TokenType.LITERAL, i.next());
         assertFalse(i.hasNext());
         assertNull(i.next());
 
         e = new Expression("  1   +   2    ");
         i = e.getExpressionTokenizer();
-        assertEquals("1", i.next());
-        assertEquals("+", i.next());
-        assertTrue(i.hasNext());
-        assertEquals("2", i.next());
+		assertToken("1", TokenType.LITERAL, i.next());
+		assertToken("+", TokenType.OPERATOR, i.next());
+		assertToken("2", TokenType.LITERAL, i.next());
         assertFalse(i.hasNext());
         assertNull(i.next());
     }
@@ -86,184 +91,189 @@ public class TestTokenizer {
     @Test
 	public void testTokenizer1() {
 		Expression e = new Expression("1+2");
-		Iterator<String> i = e.getExpressionTokenizer();
-		
-		assertEquals("1", i.next());
-		assertEquals("+", i.next());
-		assertEquals("2", i.next());
+		Iterator<Token> i = e.getExpressionTokenizer();
+
+		assertToken("1", TokenType.LITERAL, i.next());
+		assertToken("+", TokenType.OPERATOR, i.next());
+		assertToken("2", TokenType.LITERAL, i.next());
 	}
 
 	@Test
 	public void testTokenizer2() {
 		Expression e = new Expression("1 + 2");
-		Iterator<String> i = e.getExpressionTokenizer();
-		
-		assertEquals("1", i.next());
-		assertEquals("+", i.next());
-		assertEquals("2", i.next());
+		Iterator<Token> i = e.getExpressionTokenizer();
+
+		assertToken("1", TokenType.LITERAL, i.next());
+		assertToken("+", TokenType.OPERATOR, i.next());
+		assertToken("2", TokenType.LITERAL, i.next());
 	}
 	
 	@Test
 	public void testTokenizer3() {
 		Expression e = new Expression(" 1 + 2 ");
-		Iterator<String> i = e.getExpressionTokenizer();
-		
-		assertEquals("1", i.next());
-		assertEquals("+", i.next());
-		assertEquals("2", i.next());
+		Iterator<Token> i = e.getExpressionTokenizer();
+
+		assertToken("1", TokenType.LITERAL, i.next());
+		assertToken("+", TokenType.OPERATOR, i.next());
+		assertToken("2", TokenType.LITERAL, i.next());
 	}
 	
 	@Test
 	public void testTokenizer4() {
 		Expression e = new Expression("1+2-3/4*5");
-		Iterator<String> i = e.getExpressionTokenizer();
-		
-		assertEquals("1", i.next());
-		assertEquals("+", i.next());
-		assertEquals("2", i.next());
-		assertEquals("-", i.next());
-		assertEquals("3", i.next());
-		assertEquals("/", i.next());
-		assertEquals("4", i.next());
-		assertEquals("*", i.next());
-		assertEquals("5", i.next());
+		Iterator<Token> i = e.getExpressionTokenizer();
+
+		assertToken("1", TokenType.LITERAL, i.next());
+		assertToken("+", TokenType.OPERATOR, i.next());
+		assertToken("2", TokenType.LITERAL, i.next());
+		assertToken("-", TokenType.OPERATOR, i.next());
+		assertToken("3", TokenType.LITERAL, i.next());
+		assertToken("/", TokenType.OPERATOR, i.next());
+		assertToken("4", TokenType.LITERAL, i.next());
+		assertToken("*", TokenType.OPERATOR, i.next());
+		assertToken("5", TokenType.LITERAL, i.next());
 	}
 		
 	@Test
 	public void testTokenizer5() {
 		Expression e = new Expression("1+2.1-3.45/4.982*5.0");
-		Iterator<String> i = e.getExpressionTokenizer();
-		
-		assertEquals("1", i.next());
-		assertEquals("+", i.next());
-		assertEquals("2.1", i.next());
-		assertEquals("-", i.next());
-		assertEquals("3.45", i.next());
-		assertEquals("/", i.next());
-		assertEquals("4.982", i.next());
-		assertEquals("*", i.next());
-		assertEquals("5.0", i.next());
+		Iterator<Token> i = e.getExpressionTokenizer();
+
+		assertToken("1", TokenType.LITERAL, i.next());
+		assertToken("+", TokenType.OPERATOR, i.next());
+		assertToken("2.1", TokenType.LITERAL, i.next());
+		assertToken("-", TokenType.OPERATOR, i.next());
+		assertToken("3.45", TokenType.LITERAL, i.next());
+		assertToken("/", TokenType.OPERATOR, i.next());
+		assertToken("4.982", TokenType.LITERAL, i.next());
+		assertToken("*", TokenType.OPERATOR, i.next());
+		assertToken("5.0", TokenType.LITERAL, i.next());
+
 	}
 	
 	@Test
 	public void testTokenizer6() {
 		Expression e = new Expression("-3+4*-1");
-		Iterator<String> i = e.getExpressionTokenizer();
-		
-		assertEquals("-3", i.next());
-		assertEquals("+", i.next());
-		assertEquals("4", i.next());
-		assertEquals("*", i.next());
-		assertEquals("-1", i.next());
+		Iterator<Token> i = e.getExpressionTokenizer();
+
+		assertToken("-3", TokenType.LITERAL, i.next());
+		assertToken("+", TokenType.OPERATOR, i.next());
+		assertToken("4", TokenType.LITERAL, i.next());
+		assertToken("*", TokenType.OPERATOR, i.next());
+		assertToken("-1", TokenType.LITERAL, i.next());
 	}
 	
 	@Test
 	public void testTokenizer7() {
 		Expression e = new Expression("(-3+4)*-1/(7-(5*-8))");
-		Iterator<String> i = e.getExpressionTokenizer();
-		
-		assertEquals("(", i.next());
-		assertEquals("-3", i.next());
-		assertEquals("+", i.next());
-		assertEquals("4", i.next());
-		assertEquals(")", i.next());
-		assertEquals("*", i.next());
-		assertEquals("-1", i.next());
-		assertEquals("/", i.next());
-		assertEquals("(", i.next());
-		assertEquals("7", i.next());
-		assertEquals("-", i.next());
-		assertEquals("(", i.next());
-		assertEquals("5", i.next());
-		assertEquals("*", i.next());
-		assertEquals("-8", i.next());
-		assertEquals(")", i.next());
-		assertEquals(")", i.next());
+		Iterator<Token> i = e.getExpressionTokenizer();
+
+		assertToken("(", TokenType.OPEN_PAREN, i.next());
+		assertToken("-3", TokenType.LITERAL, i.next());
+		assertToken("+", TokenType.OPERATOR, i.next());
+		assertToken("4", TokenType.LITERAL, i.next());
+		assertToken(")", TokenType.CLOSE_PAREN, i.next());
+
+		assertToken("*", TokenType.OPERATOR, i.next());
+		assertToken("-1", TokenType.LITERAL, i.next());
+		assertToken("/", TokenType.OPERATOR, i.next());
+		assertToken("(", TokenType.OPEN_PAREN, i.next());
+		assertToken("7", TokenType.LITERAL, i.next());
+		assertToken("-", TokenType.OPERATOR, i.next());
+		assertToken("(", TokenType.OPEN_PAREN, i.next());
+		assertToken("5", TokenType.LITERAL, i.next());
+		assertToken("*", TokenType.OPERATOR, i.next());
+		assertToken("-8", TokenType.LITERAL, i.next());
+		assertToken(")", TokenType.CLOSE_PAREN, i.next());
+		assertToken(")", TokenType.CLOSE_PAREN, i.next());
 	}
-	
+
+	@Test
 	public void testTokenizer8() {
 		Expression e = new Expression("(1.9+2.8)/4.7");
-		Iterator<String> i = e.getExpressionTokenizer();
-		
-		assertEquals("(", i.next());
-		assertEquals("1.9", i.next());
-		assertEquals("+", i.next());
-		assertEquals("2.8", i.next());
-		assertEquals(")", i.next());
-		assertEquals("/", i.next());
-		assertEquals("4.7", i.next());		
+		Iterator<Token> i = e.getExpressionTokenizer();
+
+		assertToken("(", TokenType.OPEN_PAREN, i.next());
+		assertToken("1.9", TokenType.LITERAL, i.next());
+		assertToken("+", TokenType.OPERATOR, i.next());
+		assertToken("2.8", TokenType.LITERAL, i.next());
+		assertToken(")", TokenType.CLOSE_PAREN, i.next());
+		assertToken("/", TokenType.OPERATOR, i.next());
+		assertToken("4.7", TokenType.LITERAL, i.next());
+
 	}
 	
 	@Test
 	public void testTokenizerFunction1() {
 		Expression e = new Expression("ABS(3.5)");
-		Iterator<String> i = e.getExpressionTokenizer();
-		
-		assertEquals("ABS", i.next());
-		assertEquals("(", i.next());
-		assertEquals("3.5", i.next());
-		assertEquals(")", i.next());
+		Iterator<Token> i = e.getExpressionTokenizer();
+
+		assertToken("ABS", TokenType.FUNCTION, i.next());
+		assertToken("(", TokenType.OPEN_PAREN, i.next());
+		assertToken("3.5", TokenType.LITERAL, i.next());
+		assertToken(")", TokenType.CLOSE_PAREN, i.next());
 	}
 	
 	@Test
 	public void testTokenizerFunction2() {
 		Expression e = new Expression("3-ABS(3.5)/9");
-		Iterator<String> i = e.getExpressionTokenizer();
-		
-		assertEquals("3", i.next());
-		assertEquals("-", i.next());
-		assertEquals("ABS", i.next());
-		assertEquals("(", i.next());
-		assertEquals("3.5", i.next());
-		assertEquals(")", i.next());
-		assertEquals("/", i.next());
-		assertEquals("9", i.next());
+		Iterator<Token> i = e.getExpressionTokenizer();
+
+		assertToken("3", TokenType.LITERAL, i.next());
+		assertToken("-", TokenType.OPERATOR, i.next());
+		assertToken("ABS", TokenType.FUNCTION, i.next());
+		assertToken("(", TokenType.OPEN_PAREN, i.next());
+		assertToken("3.5", TokenType.LITERAL, i.next());
+		assertToken(")", TokenType.CLOSE_PAREN, i.next());
+		assertToken("/", TokenType.OPERATOR, i.next());
+		assertToken("9", TokenType.LITERAL, i.next());
+
 	}
 	@Test
 	
 	public void testTokenizerFunction3() {
 		Expression e = new Expression("MAX(3.5,5.2)");
-		Iterator<String> i = e.getExpressionTokenizer();
-		
-		assertEquals("MAX", i.next());
-		assertEquals("(", i.next());
-		assertEquals("3.5", i.next());
-		assertEquals(",", i.next());
-		assertEquals("5.2", i.next());
-		assertEquals(")", i.next());
+		Iterator<Token> i = e.getExpressionTokenizer();
+
+		assertToken("MAX", TokenType.FUNCTION, i.next());
+		assertToken("(", TokenType.OPEN_PAREN, i.next());
+		assertToken("3.5", TokenType.LITERAL, i.next());
+		assertToken(",", TokenType.COMMA, i.next());
+		assertToken("5.2", TokenType.LITERAL, i.next());
+		assertToken(")", TokenType.CLOSE_PAREN, i.next());
 	}
 	
 	@Test
 	public void testTokenizerFunction4() {
 		Expression e = new Expression("3-MAX(3.5,5.2)/9");
-		Iterator<String> i = e.getExpressionTokenizer();
-		
-		assertEquals("3", i.next());
-		assertEquals("-", i.next());
-		assertEquals("MAX", i.next());
-		assertEquals("(", i.next());
-		assertEquals("3.5", i.next());
-		assertEquals(",", i.next());
-		assertEquals("5.2", i.next());
-		assertEquals(")", i.next());
-		assertEquals("/", i.next());
-		assertEquals("9", i.next());
+		Iterator<Token> i = e.getExpressionTokenizer();
+
+		assertToken("3", TokenType.LITERAL, i.next());
+		assertToken("-", TokenType.OPERATOR, i.next());
+		assertToken("MAX", TokenType.FUNCTION, i.next());
+		assertToken("(", TokenType.OPEN_PAREN, i.next());
+		assertToken("3.5", TokenType.LITERAL, i.next());
+		assertToken(",", TokenType.COMMA, i.next());
+		assertToken("5.2", TokenType.LITERAL, i.next());
+		assertToken(")", TokenType.CLOSE_PAREN, i.next());
+		assertToken("/", TokenType.OPERATOR, i.next());
+		assertToken("9", TokenType.LITERAL, i.next());
 	}
 	
 	@Test
 	public void testTokenizerFunction5() {
 		Expression e = new Expression("3/MAX(-3.5,-5.2)/9");
-		Iterator<String> i = e.getExpressionTokenizer();
-		
-		assertEquals("3", i.next());
-		assertEquals("/", i.next());
-		assertEquals("MAX", i.next());
-		assertEquals("(", i.next());
-		assertEquals("-3.5", i.next());
-		assertEquals(",", i.next());
-		assertEquals("-5.2", i.next());
-		assertEquals(")", i.next());
-		assertEquals("/", i.next());
-		assertEquals("9", i.next());
+		Iterator<Token> i = e.getExpressionTokenizer();
+
+		assertToken("3", TokenType.LITERAL, i.next());
+		assertToken("/", TokenType.OPERATOR, i.next());
+		assertToken("MAX", TokenType.FUNCTION, i.next());
+		assertToken("(", TokenType.OPEN_PAREN, i.next());
+		assertToken("-3.5", TokenType.LITERAL, i.next());
+		assertToken(",", TokenType.COMMA, i.next());
+		assertToken("-5.2", TokenType.LITERAL, i.next());
+		assertToken(")", TokenType.CLOSE_PAREN, i.next());
+		assertToken("/", TokenType.OPERATOR, i.next());
+		assertToken("9", TokenType.LITERAL, i.next());
 	}
 }
