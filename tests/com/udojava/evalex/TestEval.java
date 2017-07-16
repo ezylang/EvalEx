@@ -137,6 +137,7 @@ public class TestEval {
 	public void testUnaryMinus() throws Exception {
 		assertEquals("-3", new Expression("-3").eval().toPlainString());
 		assertEquals("-2", new Expression("-SQRT(4)").eval().toPlainString());
+		assertEquals("-12", new Expression("-(5*3+(+10-13))").eval().toPlainString());
 	}
 	
 	@Test
