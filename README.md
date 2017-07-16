@@ -71,8 +71,8 @@ dependencies {
 <table>
   <tr><th>Mathematical Operators</th></tr>
   <tr><th>Operator</th><th>Description</th></tr>
-  <tr><td>+</td><td>Additive operator</td></tr>
-  <tr><td>-</td><td>Subtraction operator</td></tr>
+  <tr><td>+</td><td>Additive operator / Unary plus</td></tr>
+  <tr><td>-</td><td>Subtraction operator / Unary minus</td></tr>
   <tr><td>*</td><td>Multiplication operator</td></tr>
   <tr><td>/</td><td>Division operator</td></tr>
   <tr><td>%</td><td>Remainder operator (Modulo)</td></tr>
