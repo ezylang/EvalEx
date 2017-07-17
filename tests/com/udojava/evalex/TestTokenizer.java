@@ -29,7 +29,7 @@ public class TestTokenizer {
 		
 		e = new Expression("-1");
 		i = e.getExpressionTokenizer();
-		assertToken("-", TokenType.UNARY_OPERATOR, i.next());
+		assertToken("-u", TokenType.UNARY_OPERATOR, i.next());
 		assertToken("1", TokenType.LITERAL, i.next());
 		assertFalse(i.hasNext());
 		assertNull(i.next());
@@ -42,7 +42,7 @@ public class TestTokenizer {
 		
 		e = new Expression("-123");
 		i = e.getExpressionTokenizer();
-		assertToken("-", TokenType.UNARY_OPERATOR, i.next());
+		assertToken("-u", TokenType.UNARY_OPERATOR, i.next());
 		assertToken("123", TokenType.LITERAL, i.next());
 		assertFalse(i.hasNext());
 		assertNull(i.next());
@@ -55,7 +55,7 @@ public class TestTokenizer {
 		
 		e = new Expression("-123.456");
 		i = e.getExpressionTokenizer();
-		assertToken("-", TokenType.UNARY_OPERATOR, i.next());
+		assertToken("-u", TokenType.UNARY_OPERATOR, i.next());
 		assertToken("123.456", TokenType.LITERAL, i.next());
 		assertFalse(i.hasNext());
 		assertNull(i.next());
@@ -159,12 +159,12 @@ public class TestTokenizer {
 		Expression e = new Expression("-3+4*-1");
 		Iterator<Token> i = e.getExpressionTokenizer();
 
-		assertToken("-", TokenType.UNARY_OPERATOR, i.next());
+		assertToken("-u", TokenType.UNARY_OPERATOR, i.next());
 		assertToken("3", TokenType.LITERAL, i.next());
 		assertToken("+", TokenType.OPERATOR, i.next());
 		assertToken("4", TokenType.LITERAL, i.next());
 		assertToken("*", TokenType.OPERATOR, i.next());
-		assertToken("-", TokenType.UNARY_OPERATOR, i.next());
+		assertToken("-u", TokenType.UNARY_OPERATOR, i.next());
 		assertToken("1", TokenType.LITERAL, i.next());
 	}
 	
@@ -174,14 +174,14 @@ public class TestTokenizer {
 		Iterator<Token> i = e.getExpressionTokenizer();
 
 		assertToken("(", TokenType.OPEN_PAREN, i.next());
-		assertToken("-", TokenType.UNARY_OPERATOR, i.next());
+		assertToken("-u", TokenType.UNARY_OPERATOR, i.next());
 		assertToken("3", TokenType.LITERAL, i.next());
 		assertToken("+", TokenType.OPERATOR, i.next());
 		assertToken("4", TokenType.LITERAL, i.next());
 		assertToken(")", TokenType.CLOSE_PAREN, i.next());
 
 		assertToken("*", TokenType.OPERATOR, i.next());
-		assertToken("-", TokenType.UNARY_OPERATOR, i.next());
+		assertToken("-u", TokenType.UNARY_OPERATOR, i.next());
 		assertToken("1", TokenType.LITERAL, i.next());
 		assertToken("/", TokenType.OPERATOR, i.next());
 		assertToken("(", TokenType.OPEN_PAREN, i.next());
@@ -190,7 +190,7 @@ public class TestTokenizer {
 		assertToken("(", TokenType.OPEN_PAREN, i.next());
 		assertToken("5", TokenType.LITERAL, i.next());
 		assertToken("*", TokenType.OPERATOR, i.next());
-		assertToken("-", TokenType.UNARY_OPERATOR, i.next());
+		assertToken("-u", TokenType.UNARY_OPERATOR, i.next());
 		assertToken("8", TokenType.LITERAL, i.next());
 		assertToken(")", TokenType.CLOSE_PAREN, i.next());
 		assertToken(")", TokenType.CLOSE_PAREN, i.next());
@@ -277,10 +277,10 @@ public class TestTokenizer {
 		assertToken("/", TokenType.OPERATOR, i.next());
 		assertToken("MAX", TokenType.FUNCTION, i.next());
 		assertToken("(", TokenType.OPEN_PAREN, i.next());
-		assertToken("-", TokenType.UNARY_OPERATOR, i.next());
+		assertToken("-u", TokenType.UNARY_OPERATOR, i.next());
 		assertToken("3.5", TokenType.LITERAL, i.next());
 		assertToken(",", TokenType.COMMA, i.next());
-		assertToken("-", TokenType.UNARY_OPERATOR, i.next());
+		assertToken("-u", TokenType.UNARY_OPERATOR, i.next());
 		assertToken("5.2", TokenType.LITERAL, i.next());
 		assertToken(")", TokenType.CLOSE_PAREN, i.next());
 		assertToken("/", TokenType.OPERATOR, i.next());

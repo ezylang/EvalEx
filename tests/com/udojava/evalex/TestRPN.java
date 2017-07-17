@@ -22,8 +22,8 @@ public class TestRPN {
 	public void testFunctions() {
 		
 		assertEquals("( 23.6 SIN", new Expression("SIN(23.6)").toRPN());
-		assertEquals("( 7 - 8 MAX", new Expression("MAX(-7,8)").toRPN());
-		assertEquals("( ( 3.7 SIN ( 2.6 8.0 - MAX MAX", new Expression("MAX(SIN(3.7),MAX(2.6,-8.0))").toRPN());
+		assertEquals("( 7 -u 8 MAX", new Expression("MAX(-7,8)").toRPN());
+		assertEquals("( ( 3.7 SIN ( 2.6 8.0 -u MAX MAX", new Expression("MAX(SIN(3.7),MAX(2.6,-8.0))").toRPN());
 	}
 
 	@Test

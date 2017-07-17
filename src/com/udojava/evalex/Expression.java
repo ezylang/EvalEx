@@ -412,8 +412,6 @@ public class Expression {
 	 */
 	private Map<String, Operator> operators = new TreeMap<String, Operator>(String.CASE_INSENSITIVE_ORDER);
 
-	private Map<String, UnaryOperator> unaryOperators = new TreeMap<String, UnaryOperator>(String.CASE_INSENSITIVE_ORDER);
-
 	/**
 	 * All defined functions with name and implementation.
 	 */
@@ -773,13 +771,13 @@ public class Expression {
 						&& firstVarChars.indexOf(ch) < 0 && !Character.isWhitespace(ch)
 						&& ch != '(' && ch != ')' && ch != ','
 						&& (pos < input.length())) {
-					greedyMatch += ch;
-					pos++;
-					if(operators.containsKey(greedyMatch)) {
-						validOperatorSeenUntil = pos;
-					}
-					ch = pos == input.length() ? 0 : input.charAt(pos);
-					}
+							greedyMatch += ch;
+							pos++;
+							if(operators.containsKey(greedyMatch)) {
+								validOperatorSeenUntil = pos;
+							}
+							ch = pos == input.length() ? 0 : input.charAt(pos);
+				}
 				if(validOperatorSeenUntil != -1) {
 					token.append(input.substring(initialPos, validOperatorSeenUntil));
 					pos = validOperatorSeenUntil;
@@ -788,10 +786,11 @@ public class Expression {
 				}
 
 				if(previousToken == null || previousToken.type == TokenType.OPERATOR || previousToken.type == TokenType.OPEN_PAREN || previousToken.type == TokenType.COMMA) {
+					token.surface += "u";
 					token.type = TokenType.UNARY_OPERATOR;
 				} else {
-				token.type = TokenType.OPERATOR;
-			}
+					token.type = TokenType.OPERATOR;
+				}
 			}
 			return previousToken = token;
 		}
@@ -980,13 +979,13 @@ public class Expression {
 				return operators.get("!=").eval(v1, v2);
 			}
 		});
-		addUnaryOperator(new UnaryOperator("-", 40, false) {
+		addOperator(new UnaryOperator("-", 60, false) {
 			@Override
 			public BigDecimal evalUnary(BigDecimal v1) {
 				return v1.multiply(new BigDecimal(-1));
 			}
 		});
-		addUnaryOperator(new UnaryOperator("+", 40, false) {
+		addOperator(new UnaryOperator("+", 60, false) {
 			@Override
 			public BigDecimal evalUnary(BigDecimal v1) {
 				return v1.multiply(BigDecimal.ONE);
@@ -1328,38 +1327,24 @@ public class Expression {
 								+ "' at position " + (token.pos + 1));
 					}
 
-					Token nextToken = stack.isEmpty() ? null : stack.peek();
-					while (nextToken != null &&
-							nextToken.type == TokenType.OPERATOR
-							&& ((o1.isLeftAssoc()
-								&& o1.getPrecedence() <= operators.get(nextToken.surface).getPrecedence())
-								|| (o1.getPrecedence() < operators.get(nextToken.surface).getPrecedence()))) {
-						outputQueue.add(stack.pop());
-						nextToken = stack.isEmpty() ? null : stack.peek();
-					}
+					shuntOperators(outputQueue, stack, o1);
 					stack.push(token);
 					break;
 				}
 				case UNARY_OPERATOR: {
-					if (previousToken != null && previousToken.type != TokenType.OPERATOR && previousToken.type != TokenType.COMMA && previousToken.type != TokenType.OPEN_PAREN) {
+					if (previousToken != null && previousToken.type != TokenType.OPERATOR
+							&& previousToken.type != TokenType.COMMA && previousToken.type != TokenType.OPEN_PAREN) {
 						throw new ExpressionException("Invalid position for unary operator " + token +
 								" at character position " + token.pos);
 					}
-					Operator o1 = unaryOperators.get(token.surface);
+					Operator o1 = operators.get(token.surface);
 					if (o1 == null) {
-						throw new ExpressionException("Unknown unary operator '" + token
+						throw new ExpressionException("Unknown unary operator '"
+								+ token.surface.substring(0,token.surface.length() - 1)
 								+ "' at position " + (token.pos + 1));
 					}
 
-					Token nextToken = stack.isEmpty() ? null : stack.peek();
-					while (nextToken != null &&
-							nextToken.type == TokenType.OPERATOR
-							&& ((o1.isLeftAssoc()
-								&& o1.getPrecedence() <= operators.get(nextToken.surface).getPrecedence())
-								|| (o1.getPrecedence() < operators.get(nextToken.surface).getPrecedence()))) {
-						outputQueue.add(stack.pop());
-						nextToken = stack.isEmpty() ? null : stack.peek();
-					}
+					shuntOperators(outputQueue, stack, o1);
 					stack.push(token);
 					break;
 				}
@@ -1406,6 +1391,18 @@ public class Expression {
 		return outputQueue;
 	}
 
+	private void shuntOperators(List<Token> outputQueue, Stack<Token> stack, Operator o1) {
+		Expression.Token nextToken = stack.isEmpty() ? null : stack.peek();
+		while (nextToken != null &&
+                (nextToken.type == Expression.TokenType.OPERATOR || nextToken.type == Expression.TokenType.UNARY_OPERATOR)
+                && ((o1.isLeftAssoc()
+                    && o1.getPrecedence() <= operators.get(nextToken.surface).getPrecedence())
+                    || (o1.getPrecedence() < operators.get(nextToken.surface).getPrecedence()))) {
+            outputQueue.add(stack.pop());
+            nextToken = stack.isEmpty() ? null : stack.peek();
+        }
+	}
+
 	/**
 	 * Evaluates the expression.
 	 * 
@@ -1421,12 +1418,12 @@ public class Expression {
 					final LazyNumber value = stack.pop();
 					LazyNumber result = new LazyNumber() {
 						public BigDecimal eval() {
-							return unaryOperators.get(token.surface).eval(value.eval(), null);
+							return operators.get(token.surface).eval(value.eval(), null);
 						}
 
 						@Override
 						public String getString() {
-							return String.valueOf(unaryOperators.get(token.surface).eval(value.eval(), null));
+							return String.valueOf(operators.get(token.surface).eval(value.eval(), null));
 						}
 					};
 					stack.push(result);
@@ -1584,11 +1581,11 @@ public class Expression {
 	 *         there was none.
 	 */
 	public Operator addOperator(Operator operator) {
-		return operators.put(operator.getOper(), operator);
-	}
-
-	public Operator addUnaryOperator(UnaryOperator operator) {
-		return unaryOperators.put(operator.getOper(), operator);
+		String key = operator.getOper();
+		if(operator instanceof UnaryOperator) {
+			key += "u";
+		}
+		return operators.put(key, operator);
 	}
 
 	/**
