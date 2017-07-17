@@ -1,22 +1,27 @@
 package com.udojava.evalex;
 
-import static org.junit.Assert.assertEquals;
+import org.junit.Test;
 
 import java.util.Iterator;
 
-import org.junit.Test;
+import static org.junit.Assert.assertEquals;
 
 
 public class TestBooleans {
 
+	private void assertToken(String surface, Expression.TokenType type, Expression.Token actual) {
+		assertEquals(surface, actual.surface);
+		assertEquals(type, actual.type);
+	}
+
 	@Test
 	public void testAndTokenizer() {
 		Expression e = new Expression("1&&0");
-		Iterator<String> i = e.getExpressionTokenizer();
-		
-		assertEquals("1", i.next());
-		assertEquals("&&", i.next());
-		assertEquals("0", i.next());
+		Iterator<Expression.Token> i = e.getExpressionTokenizer();
+
+		assertToken("1", Expression.TokenType.LITERAL, i.next());
+		assertToken("&&", Expression.TokenType.OPERATOR, i.next());
+		assertToken("0", Expression.TokenType.LITERAL, i.next());
 	}
 
 	@Test

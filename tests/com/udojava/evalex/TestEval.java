@@ -62,7 +62,7 @@ public class TestEval {
 			err = e.getMessage();
 		}
 
-		assertEquals("Missing parameter(s) for operator +", err);
+		assertEquals("Unknown unary operator '*' at position 6", err);
 	}
 
 	@Test
@@ -131,6 +131,26 @@ public class TestEval {
 		assertEquals("7.98", new Expression("4.2*1.9").eval().toPlainString());
 		assertEquals("2", new Expression("8%3").eval().toPlainString());
 		assertEquals("0", new Expression("8%2").eval().toPlainString());
+	}
+	
+	@Test
+	public void testUnaryMinus() throws Exception {
+		assertEquals("-3", new Expression("-3").eval().toPlainString());
+		assertEquals("-2", new Expression("-SQRT(4)").eval().toPlainString());
+		assertEquals("-12", new Expression("-(5*3+(+10-13))").eval().toPlainString());
+		assertEquals("-2.75", new Expression("-2+3/4*-1").eval().toPlainString());
+		assertEquals("9", new Expression("-3^2").eval().toPlainString());
+		assertEquals("0.5", new Expression("4^-0.5").eval().toPlainString());
+		assertEquals("-1.25", new Expression("-2+3/4").eval().toPlainString());
+		assertEquals("-1", new Expression("-(3+-4*-1/-2)").eval().toPlainString());
+	}
+
+	@Test
+	public void testUnaryPlus() throws Exception {
+		assertEquals("3", new Expression("+3").eval().toPlainString());
+		assertEquals("4", new Expression("+(3-1+2)").eval().toPlainString());
+		assertEquals("4", new Expression("+(3-(+1)+2)").eval().toPlainString());
+		assertEquals("9", new Expression("+3^2").eval().toPlainString());
 	}
 	
 	@Test
@@ -209,7 +229,7 @@ public class TestEval {
 		} catch (ExpressionException e) {
 			err = e.getMessage();
 		}
-		assertEquals("Missing parameter(s) for operator /", err);
+		assertEquals("Unknown unary operator '/' at position 1", err);
 
 		err = "";
 		try {
@@ -225,7 +245,7 @@ public class TestEval {
 		} catch (ExpressionException e) {
 			err = e.getMessage();
 		}
-		assertEquals("Missing parameter(s) for operator /", err);
+		assertEquals("Unknown unary operator '/' at position 1", err);
 
 		err = "";
 		try {
@@ -235,13 +255,6 @@ public class TestEval {
 		}
 		assertEquals("Missing parameter(s) for operator /", err);
 
-		err = "";
-		try {
-			new Expression("+SIN(MAX(23,45,12))").eval();
-		} catch (ExpressionException e) {
-			err = e.getMessage();
-		}
-		assertEquals("Missing parameter(s) for operator +", err);
 	}
 
 	@Test(expected = ExpressionException.class)
@@ -257,7 +270,7 @@ public class TestEval {
 		} catch (ExpressionException e) {
 			err = e.getMessage();
 		}
-		assertEquals("Missing parameter(s) for operator / at character position 4", err);
+		assertEquals("Unknown unary operator '/' at position 5", err);
 
 		err = "";
 		try {
@@ -273,7 +286,7 @@ public class TestEval {
 		} catch (ExpressionException e) {
 			err = e.getMessage();
 		}
-		assertEquals("Missing parameter(s) for operator / at character position 4", err);
+		assertEquals("Unknown unary operator '/' at position 5", err);
 
 		err = "";
 		try {
@@ -297,7 +310,7 @@ public class TestEval {
 		} catch (ExpressionException e) {
 			err = e.getMessage();
 		}
-		assertEquals("Missing parameter(s) for operator >= at character position 14", err);
+		assertEquals("Unknown unary operator '>=' at position 15", err);
 
 		err = "";
 		try {
@@ -305,7 +318,7 @@ public class TestEval {
 		} catch (ExpressionException e) {
 			err = e.getMessage();
 		}
-		assertEquals("Missing parameter(s) for operator >= at character position 8", err);
+		assertEquals("Unknown unary operator '>=' at position 9", err);
 	}
 
 	@Test

@@ -48,7 +48,7 @@ public class TestVariableCharacters {
 		} catch (Expression.ExpressionException e) {
 			err = e.getMessage();
 		}
-		assertEquals("Unknown operator '.' at position 1", err);
+		assertEquals("Unknown unary operator '.' at position 1", err);
 
 		expression = new Expression("a.b/2*PI+MIN(e,b)").setVariableCharacters("_.").setFirstVariableCharacters(".");
 		assertEquals("5.859875", expression.with("a.b", "2").and("b", "3").eval().toPlainString());
