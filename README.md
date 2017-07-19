@@ -1,3 +1,4 @@
+
 EvalEx - Java Expression Evaluator
 ==========
 
@@ -15,19 +16,21 @@ Key Features:
 - Standard basic mathematical and boolean functions
 - Custom functions and operators can be added at runtime
 - Functions can be defined with a variable number of arguments (see MIN and MAX functions)
+- Supports for hexadecimal numbers and scientific notations of numbers
+- Supports string literals in functions
 
 ### Download / Maven
 You can download the binaries, source code and JavaDoc jars from [Maven Central](http://search.maven.org/#search%7Cga%7C1%7Ca%3A%22EvalEx%22%20g%3A%22com.udojava%22).
 
 The project and source code in `zip` and `tar.gz` format can also be downloaded from the projects [release area](https://github.com/uklimaschewski/EvalEx/releases).
 
-To include it in your Maven project, refer to the artifact in your pom:
+To include it in your Maven project, refer to the artifact in your pom. For example:
 ````xml
 </dependencies>
     <dependency>
         <groupId>com.udojava</groupId>
         <artifactId>EvalEx</artifactId>
-        <version>1.6</version>
+        <version>1.9</version>
     </dependency>
 </dependencies>
 ````
@@ -36,7 +39,7 @@ If you're using gradle add to your project's app build.gradle:
 ````gradle
 dependencies {
     ...
-    compile 'com.udojava:EvalEx:1.0'
+    compile 'com.udojava:EvalEx:1.9'
 }
 ````
 
@@ -131,6 +134,7 @@ dependencies {
   <tr><td>PI</td><td>The value of <i>PI</i>, exact to 100 digits</td></tr>
   <tr><td>TRUE</td><td>The value one</td></tr>
   <tr><td>FALSE</td><td>The value zero</td></tr>
+  <tr><td>NULL</td><td>The null value</td></tr>
 </table>
 
 ### Add Custom Operators
@@ -189,7 +193,7 @@ You can create a custom function with string parameters. Create an instance of `
 Parameters are the function name and the count of required parameters. The functions `lazyEval()` method will be called with a list of the LazyNumber parameters.
 A `-1` as the number of parameters denotes a variable number of arguments. String parameters needs to be surrounded by `"`.
 
-For example, add a function `STREQ("string1","string2")`, that will compare whether string1 and string2 is equal:
+For example, add a function `STREQ("string1","string2")`, that will compare whether string1 and string2 are equal:
 
 ````java
 Expression e = new Expression("STREQ(\"test\", \"test2\")");
@@ -231,7 +235,7 @@ The software was created and tested using Java 1.6.0.
   
 ### Author and License
 
-Copyright 2012-2015 by Udo Klimaschewski
+Copyright 2012-2017 by Udo Klimaschewski
 
 http://about.me/udo.klimaschewski
 
