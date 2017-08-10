@@ -251,6 +251,10 @@ import java.util.TreeMap;
  * <td>Returns the angle of atan (in degrees)</td>
  * </tr>
  * <tr>
+ * <td>ATAN2(<i>expression, expression</i>)</td>
+ * <td>Returns the angle of atan2 (in degrees)</td>
+ * </tr>
+ * <tr>
  * <td>SINH(<i>expression</i>)</td>
  * <td>Returns the hyperbolic sine of a value</td>
  * </tr>
@@ -1052,7 +1056,7 @@ public class Expression {
 				return new BigDecimal(d, mc);
 			}
 		});
-		addFunction(new Function("ASIN", 1) { // added by av
+		addFunction(new Function("ASIN", 1) {
 			@Override
 			public BigDecimal eval(List<BigDecimal> parameters) {
 				assertNotNull(parameters.get(0));
@@ -1061,7 +1065,7 @@ public class Expression {
 				return new BigDecimal(d, mc);
 			}
 		});
-		addFunction(new Function("ACOS", 1) { // added by av
+		addFunction(new Function("ACOS", 1) {
 			@Override
 			public BigDecimal eval(List<BigDecimal> parameters) {
 				assertNotNull(parameters.get(0));
@@ -1070,12 +1074,22 @@ public class Expression {
 				return new BigDecimal(d, mc);
 			}
 		});
-		addFunction(new Function("ATAN", 1) { // added by av
+		addFunction(new Function("ATAN", 1) {
 			@Override
 			public BigDecimal eval(List<BigDecimal> parameters) {
 				assertNotNull(parameters.get(0));
 				double d = Math.toDegrees(Math.atan(parameters.get(0)
 						.doubleValue()));
+				return new BigDecimal(d, mc);
+			}
+		});
+		addFunction(new Function("ATAN2", 2) {
+			@Override
+			public BigDecimal eval(List<BigDecimal> parameters) {
+				assertNotNull(parameters.get(0), parameters.get(1));
+				double d = Math.toDegrees(Math.atan2(
+                                                parameters.get(0).doubleValue(),
+                                                parameters.get(1).doubleValue()));
 				return new BigDecimal(d, mc);
 			}
 		});
