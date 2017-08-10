@@ -751,6 +751,13 @@ public class Expression {
 					token.append(input.charAt(pos++));
 					ch = pos == input.length() ? 0 : input.charAt(pos);
 				}
+				//Remove optional white spaces after function or variable name
+				if (ch == ' ') {
+					while (ch == ' ' && pos < input.length()) {
+						ch = input.charAt(pos++);
+					}
+					pos--;
+				}
 				token.type = ch == '(' ? TokenType.FUNCTION : TokenType.VARIABLE;
 			} else if (ch == '(' || ch == ')' || ch == ',') {
 				if(ch == '(') {
