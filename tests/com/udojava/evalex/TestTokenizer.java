@@ -15,6 +15,20 @@ public class TestTokenizer {
 		assertEquals(surface, actual.surface);
 		assertEquals(type, actual.type);
 	}
+	
+	@Test
+	public void testSpacesFunctions() {
+		Expression e;
+		Iterator<Token> i;
+		
+		e = new Expression("sin (30)");
+		i = e.getExpressionTokenizer();
+		assertToken("sin", TokenType.FUNCTION, i.next());
+		assertToken("(", TokenType.OPEN_PAREN, i.next());
+		assertToken("30", TokenType.LITERAL, i.next());
+		assertToken(")", TokenType.CLOSE_PAREN, i.next());
+		assertFalse(i.hasNext());
+	}
 
 	@Test
 	public void testNumbers() {
