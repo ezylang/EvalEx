@@ -251,7 +251,7 @@ import java.util.TreeMap;
  * <td>Returns the angle of atan (in degrees)</td>
  * </tr>
  * <tr>
- * <td>ATAN2(<i>expression, expression</i>)</td>
+ * <td>ATAN2(<i>y</i>,<i>x</i>)</td>
  * <td>Returns the angle of atan2 (in degrees)</td>
  * </tr>
  * <tr>
