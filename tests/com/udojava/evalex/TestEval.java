@@ -338,6 +338,12 @@ public class TestEval {
 		assertEquals("1", new Expression("TANH(30)").eval().toPlainString());
 		assertEquals("0.5235988", new Expression("RAD(30)").eval().toPlainString());
 		assertEquals("1718.873", new Expression("DEG(30)").eval().toPlainString());
+		assertEquals("30", new Expression("atan(0.5773503)").eval().toPlainString());
+		assertEquals("30", new Expression("atan2(0.5773503, 1)").eval().toPlainString());
+		assertEquals("33.69007", new Expression("atan2(2, 3)").eval().toPlainString());
+		assertEquals("146.3099", new Expression("atan2(2, -3)").eval().toPlainString());
+		assertEquals("-146.3099", new Expression("atan2(-2, -3)").eval().toPlainString());
+		assertEquals("-33.69007", new Expression("atan2(-2, 3)").eval().toPlainString());
 		
 	}
 	
