@@ -522,18 +522,27 @@ public class Expression {
 			super(name, numParams);
 		}
 
-		public LazyNumber lazyEval(List<LazyNumber> lazyParams) {
-			final List<BigDecimal> params = new ArrayList<BigDecimal>();
-			for (LazyNumber lazyParam : lazyParams) {
-				params.add(lazyParam.eval());
-			}
+		public LazyNumber lazyEval(final List<LazyNumber> lazyParams) {
 			return new LazyNumber() {
+			    
+			    private List<BigDecimal> params;
+			    
 				public BigDecimal eval() {
-					return Function.this.eval(params);
+					return Function.this.eval(getParams());
 				}
 
 				public String getString() {
-					return String.valueOf(Function.this.eval(params));
+					return String.valueOf(Function.this.eval(getParams()));
+				}
+				
+				private List<BigDecimal> getParams() {
+                    if (params == null) {
+                        params = new ArrayList<BigDecimal>();
+                        for (LazyNumber lazyParam : lazyParams) {
+                            params.add(lazyParam.eval());
+                        }
+                    }
+		            return params;
 				}
 			};
 		}
