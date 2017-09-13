@@ -30,7 +30,7 @@ To include it in your Maven project, refer to the artifact in your pom. For exam
     <dependency>
         <groupId>com.udojava</groupId>
         <artifactId>EvalEx</artifactId>
-        <version>1.11</version>
+        <version>1.12</version>
     </dependency>
 </dependencies>
 ````
