@@ -18,7 +18,13 @@ public class TestLazyIf {
         Expression expression = new Expression("if(a=0,0,12/a)");
         expression.setVariable("a", new BigDecimal(0));
         Assert.assertEquals(expression.eval(),new BigDecimal(0));
-
+    }
+    
+    @Test
+    public void testLazyIfWithNestedFunction() {
+        Expression expression = new Expression("if(a=0,0,abs(12/a))");
+        expression.setVariable("a", new BigDecimal(0));
+        Assert.assertEquals(expression.eval(),new BigDecimal(0));
     }
     
     @Test
