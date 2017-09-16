@@ -18,7 +18,7 @@ Key Features:
 - Functions can be defined with a variable number of arguments (see MIN and MAX functions)
 - Supports for hexadecimal numbers and scientific notations of numbers
 - Supports string literals in functions
-- Supports implicit multiplication, e.g. (a+b)(a-b) or 2(x-y) which equals to (a+b)*(a-b) or 2*(x-y)
+- Supports implicit multiplication, e.g. (a+b)(a-b) or 2(x-y) which equals to (a+b)\*(a-b) or 2\*(x-y)
 
 ### Download / Maven
 You can download the binaries, source code and JavaDoc jars from [Maven Central](http://search.maven.org/#search%7Cga%7C1%7Ca%3A%22EvalEx%22%20g%3A%22com.udojava%22).
