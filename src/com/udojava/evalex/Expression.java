@@ -1380,9 +1380,14 @@ public class Expression {
 				}
 				case OPEN_PAREN:
 					if (previousToken != null) {
-						if (previousToken.type == TokenType.LITERAL) {
-							throw new ExpressionException(
-									"Missing operator at character position " + (token.pos + 1));
+						if (previousToken.type == TokenType.LITERAL || previousToken.type == TokenType.CLOSE_PAREN
+								|| previousToken.type == TokenType.VARIABLE
+								|| previousToken.type == TokenType.HEX_LITERAL) {
+							// Implicit multiplication, e.g. 23(a+b) or (a+b)(a-b)
+							Token multiplication = new Token();
+							multiplication.append("*");
+							multiplication.type = TokenType.OPERATOR;
+							stack.push(multiplication);
 						}
 						// if the ( is preceded by a valid function, then it
 						// denotes the start of a parameter list

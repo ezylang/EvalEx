@@ -300,4 +300,17 @@ public class TestTokenizer {
 		assertToken("/", TokenType.OPERATOR, i.next());
 		assertToken("9", TokenType.LITERAL, i.next());
 	}
+	
+	@Test
+	public void testInsertImplizitMultiplication() {
+		Expression e = new Expression("22(3+1)");
+		Iterator<Token> i = e.getExpressionTokenizer();
+		
+		assertToken("22", TokenType.LITERAL, i.next());
+		assertToken("(", TokenType.OPEN_PAREN, i.next());
+		assertToken("3", TokenType.LITERAL, i.next());
+		assertToken("+", TokenType.OPERATOR, i.next());
+		assertToken("1", TokenType.LITERAL, i.next());
+		assertToken(")", TokenType.CLOSE_PAREN, i.next());
+	}
 }

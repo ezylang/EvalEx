@@ -40,19 +40,6 @@ public class TestEval {
 	}
 
 	@Test
-	public void testInvalidExpressions2() {
-		String err = "";
-		try {
-			Expression expression = new Expression("(12)(18)");
-			expression.eval();
-		} catch (ExpressionException e) {
-			err = e.getMessage();
-		}
-
-		assertEquals("Too many numbers or variables", err);
-	}
-
-	@Test
 	public void testInvalidExpressions3() {
 		String err = "";
 		try {
@@ -76,30 +63,6 @@ public class TestEval {
 		}
 
 		assertEquals("Empty expression", err);
-	}
-	
-	@Test
-	public void testWrongBrackets1() {
-		String err = "";
-		try {
-			Expression expression = new Expression("2*3(5*3)");
-			expression.eval();
-		} catch (ExpressionException e) {
-			err = e.getMessage();
-		}
-		assertEquals("Missing operator at character position 4", err);
-	}
-	
-	@Test
-	public void testWrongBrackets2() {
-		String err = "";
-		try {
-			Expression expression = new Expression("2*(3((5*3)))");
-			expression.eval();
-		} catch (ExpressionException e) {
-			err = e.getMessage();
-		}
-		assertEquals("Missing operator at character position 5", err);
 	}
 	
 	@Test
@@ -495,6 +458,18 @@ public class TestEval {
 		Expression expression = new Expression("200.40000 / 2");
 		assertEquals("100.2", expression.eval().toPlainString());
 		assertEquals("100.2000", expression.eval(false).toPlainString());
+	}
+	
+	@Test
+	public void testImplicitMultiplication() {
+		Expression expression = new Expression("22(3+1)");
+		assertEquals("88", expression.eval().toPlainString());
+		
+		expression = new Expression("(a+b)(a-b)");
+		assertEquals("-3", expression.with("a", "1").and("b", "2").eval().toPlainString());
+		
+		expression = new Expression("0xA(a+b)");
+		assertEquals("30", expression.with("a", "1").and("b", "2").eval().toPlainString());
 	}
 	
 }
