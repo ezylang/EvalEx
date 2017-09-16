@@ -488,4 +488,14 @@ public class TestEval {
 	public void hexExpressionsEvaluatedAsExpected() throws Exception {
 		BigDecimal result = new Expression("0xcafe + 0xbabe").eval();
 		assertEquals("99772", result.toPlainString());
-	}}
+	}
+	
+	@Test
+	public void testResultZeroStripping() {
+		Expression expression = new Expression("200.40000 / 2");
+		assertEquals("100.2", expression.eval().toPlainString());
+		assertEquals("100.2000", expression.eval(false).toPlainString());
+	}
+	
+}
+

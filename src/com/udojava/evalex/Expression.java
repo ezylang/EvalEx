@@ -1436,9 +1436,20 @@ public class Expression {
 	/**
 	 * Evaluates the expression.
 	 * 
-	 * @return The result of the expression.
+	 * @return The result of the expression. Trailing zeros are not stripped.
 	 */
 	public BigDecimal eval() {
+		return eval(true);
+	}
+	
+	/**
+	 * Evaluates the expression.
+	 * 
+	 * @param stripTrailingZeros If set to <code>true</code> trailing zeros in the result are stripped.
+	 * 
+	 * @return The result of the expression.
+	 */
+	public BigDecimal eval(boolean stripTrailingZeros) {
 
 		Stack<LazyNumber> stack = new Stack<LazyNumber>();
 
@@ -1548,7 +1559,7 @@ public class Expression {
 			}
 		}
 		BigDecimal result = stack.pop().eval();
-		return result == null ? null : result.stripTrailingZeros();
+		return result == null ? null : stripTrailingZeros ? result.stripTrailingZeros() : result;
 	}
 
 	/**
