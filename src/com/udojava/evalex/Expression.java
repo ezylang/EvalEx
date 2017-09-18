@@ -1441,7 +1441,7 @@ public class Expression {
 	/**
 	 * Evaluates the expression.
 	 * 
-	 * @return The result of the expression. Trailing zeros are not stripped.
+	 * @return The result of the expression. Trailing zeros are stripped.
 	 */
 	public BigDecimal eval() {
 		return eval(true);
