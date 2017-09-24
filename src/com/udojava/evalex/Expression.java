@@ -480,6 +480,28 @@ public class Expression {
 		 * <code>-1</code> denotes a variable number of parameters.
 		 */
 		private int numParams;
+		
+		/**
+		 * Whether this function is a boolean function.
+		 */
+		protected boolean booleanFunction = false;
+
+		/**
+		 * Creates a new function with given name and parameter count.
+		 *
+		 * @param name
+		 *            The name of the function.
+		 * @param numParams
+		 *            The number of parameters for this function.
+		 *            <code>-1</code> denotes a variable number of parameters.
+		 * @param booleanFunction
+		 *            Whether this function is a boolean function.
+		 */
+		public LazyFunction(String name, int numParams, boolean booleanFunction) {
+			this.name = name.toUpperCase(Locale.ROOT);
+			this.numParams = numParams;
+			this.booleanFunction = booleanFunction;
+		}
 
 		/**
 		 * Creates a new function with given name and parameter count.
@@ -494,7 +516,7 @@ public class Expression {
 			this.name = name.toUpperCase(Locale.ROOT);
 			this.numParams = numParams;
 		}
-
+		
 		public String getName() {
 			return name;
 		}
@@ -506,6 +528,15 @@ public class Expression {
 		public boolean numParamsVaries() {
 			return numParams < 0;
 		}
+		
+		public boolean isBooleanFunction() {
+			return this.booleanFunction;
+		}
+		
+		public void setBooleanFunction(boolean booleanFunction) {
+			this.booleanFunction = booleanFunction;
+		}
+		
 		public abstract LazyNumber lazyEval(List<LazyNumber> lazyParams);
 	}
 
@@ -520,6 +551,10 @@ public class Expression {
 
 		public Function(String name, int numParams) {
 			super(name, numParams);
+		}
+		
+		public Function(String name, int numParams, boolean booleanFunction) {
+			super(name, numParams, booleanFunction);
 		}
 
 		public LazyNumber lazyEval(final List<LazyNumber> lazyParams) {
@@ -575,7 +610,39 @@ public class Expression {
 		 * Operator is left associative.
 		 */
 		private boolean leftAssoc;
+		/**
+		 * Whether this operator is boolean or not.
+		 */
+		protected boolean booleanOperator = false;
 
+		public boolean isBooleanOperator() {
+			return booleanOperator;
+		}
+
+		public void setBooleanOperator(boolean booleanOperator) {
+			this.booleanOperator = booleanOperator;
+		}
+
+		/**
+		 * Creates a new operator.
+		 * 
+		 * @param oper
+		 *            The operator name (pattern).
+		 * @param precedence
+		 *            The operators precedence.
+		 * @param leftAssoc
+		 *            <code>true</code> if the operator is left associative,
+		 *            else <code>false</code>.
+		 * @param booleanOperator
+		 * 	          Whether this operator is boolean.
+		 */
+		public Operator(String oper, int precedence, boolean leftAssoc, boolean booleanOperator) {
+			this.oper = oper;
+			this.precedence = precedence;
+			this.leftAssoc = leftAssoc;
+			this.booleanOperator = booleanOperator;
+		}
+		
 		/**
 		 * Creates a new operator.
 		 * 
@@ -908,7 +975,7 @@ public class Expression {
 				return result;
 			}
 		});
-		addOperator(new Operator("&&", 4, false) {
+		addOperator(new Operator("&&", 4, false, true) {
 			@Override
 			public BigDecimal eval(BigDecimal v1, BigDecimal v2) {
 				assertNotNull(v1, v2);
@@ -918,7 +985,7 @@ public class Expression {
 			}
 		});
 
-		addOperator(new Operator("||", 2, false) {
+		addOperator(new Operator("||", 2, false, true) {
 			@Override
 			public BigDecimal eval(BigDecimal v1, BigDecimal v2) {
 				assertNotNull(v1, v2);
@@ -928,7 +995,7 @@ public class Expression {
 			}
 		});
 
-		addOperator(new Operator(">", 10, false) {
+		addOperator(new Operator(">", 10, false, true) {
 			@Override
 			public BigDecimal eval(BigDecimal v1, BigDecimal v2) {
 				assertNotNull(v1, v2);
@@ -936,7 +1003,7 @@ public class Expression {
 			}
 		});
 
-		addOperator(new Operator(">=", 10, false) {
+		addOperator(new Operator(">=", 10, false, true) {
 			@Override
 			public BigDecimal eval(BigDecimal v1, BigDecimal v2) {
 				assertNotNull(v1, v2);
@@ -944,7 +1011,7 @@ public class Expression {
 			}
 		});
 
-		addOperator(new Operator("<", 10, false) {
+		addOperator(new Operator("<", 10, false, true) {
 			@Override
 			public BigDecimal eval(BigDecimal v1, BigDecimal v2) {
 				assertNotNull(v1, v2);
@@ -953,7 +1020,7 @@ public class Expression {
 			}
 		});
 
-		addOperator(new Operator("<=", 10, false) {
+		addOperator(new Operator("<=", 10, false, true) {
 			@Override
 			public BigDecimal eval(BigDecimal v1, BigDecimal v2) {
 				assertNotNull(v1, v2);
@@ -961,7 +1028,7 @@ public class Expression {
 			}
 		});
 
-		addOperator(new Operator("=", 7, false) {
+		addOperator(new Operator("=", 7, false, true) {
 			@Override
 			public BigDecimal eval(BigDecimal v1, BigDecimal v2) {
 				if (v1 == v2) {
@@ -973,14 +1040,14 @@ public class Expression {
 				return v1.compareTo(v2) == 0 ? BigDecimal.ONE : BigDecimal.ZERO;
 			}
 		});
-		addOperator(new Operator("==", 7, false) {
+		addOperator(new Operator("==", 7, false, true) {
 			@Override
 			public BigDecimal eval(BigDecimal v1, BigDecimal v2) {
 				return operators.get("=").eval(v1, v2);
 			}
 		});
 
-		addOperator(new Operator("!=", 7, false) {
+		addOperator(new Operator("!=", 7, false, true) {
 			@Override
 			public BigDecimal eval(BigDecimal v1, BigDecimal v2) {
 				if (v1 == v2) {
@@ -992,7 +1059,7 @@ public class Expression {
 				return v1.compareTo(v2) != 0 ? BigDecimal.ONE : BigDecimal.ZERO;
 			}
 		});
-		addOperator(new Operator("<>", 7, false) {
+		addOperator(new Operator("<>", 7, false, true) {
 			@Override
 			public BigDecimal eval(BigDecimal v1, BigDecimal v2) {
 				assertNotNull(v1, v2);
@@ -1012,7 +1079,7 @@ public class Expression {
 			}
 		});
 
-		addFunction(new Function("NOT", 1) {
+		addFunction(new Function("NOT", 1, true) {
 			@Override
 			public BigDecimal eval(List<BigDecimal> parameters) {
 				assertNotNull(parameters.get(0));
@@ -1942,6 +2009,36 @@ public class Expression {
   @Override
   public String toString() {
     return this.expression;
+  }
+
+  /**
+   * Checks whether the expression is a boolean expression.
+   * An expression is considered a boolean expression, if the last operator or function is boolean.
+   * The IF function is handled special.
+   * If the third parameter is boolean, then the IF is also considered boolean, else non-boolean.
+   * 
+   * @return <code>true</code> if the last operator/function was a boolean.
+   */
+  public boolean isBoolean() {
+	List<Token> rpn = getRPN();
+	if (rpn.size() > 0) {
+		for (int i = rpn.size() - 1; i >= 0; i--) {
+			Token t = rpn.get(i);
+			/*
+			 * The IF function is handled special.
+			 * If the third parameter is boolean, then the IF is also considered a boolean.
+			 * Just skip the IF function to check the second parameter.
+			 */
+			if (t.surface.equals("IF"))
+				continue;
+			if (t.type == TokenType.FUNCTION) {
+				return functions.get(t.surface).isBooleanFunction();
+			} else if (t.type == TokenType.OPERATOR) {
+				return operators.get(t.surface).isBooleanOperator();
+			}
+		}
+	}
+	return false;
   }
 
 }

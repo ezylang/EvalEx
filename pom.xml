@@ -1,37 +1,58 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
+
 	<groupId>com.udojava</groupId>
 	<artifactId>EvalEx</artifactId>
 	<version>1.0</version>
+
 	<name>EvalEx</name>
 	<description>EvalEx is a handy expression evaluator for Java, that allows to evaluate simple mathematical and boolean expressions.</description>
 	<url>https://github.com/uklimaschewski/EvalEx</url>
+
 	<organization>
 		<name>Udo Klimaschewski</name>
 		<url>http://www.udojava.com</url>
 	</organization>
+
 	<licenses>
 		<license>
 			<name>MIT License</name>
 			<url>http://www.opensource.org/licenses/mit-license.php</url>
 		</license>
 	</licenses>
+
 	<developers>
 		<developer>
 			<name>Udo Klimaschewski</name>
 			<organizationUrl>https://github.com/uklimaschewski</organizationUrl>
 		</developer>
 	</developers>
+
 	<scm>
 		<connection>scm:git:git@github.com:uklimaschewski/EvalEx.git</connection>
 		<developerConnection>scm:git:git@github.com:uklimaschewski/EvalEx.git</developerConnection>
 		<url>git@github.com:uklimaschewski/EvalEx.git</url>
 	</scm>
+
+	<properties>
+		<maven.compiler.source>1.8</maven.compiler.source>
+		<maven.compiler.target>1.8</maven.compiler.target>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+
+
+        <versionMavenGPG>1.6</versionMavenGPG>
+        <versionMavenDocs>3.0.0-M1</versionMavenDocs>
+        <versionMavenSources>3.0.1</versionMavenSources>
+
+        <versionSonatypeStage>1.6.8</versionSonatypeStage>
+	</properties>
+
 	<issueManagement>
 		<system>github</system>
 		<url>https://github.com/uklimaschewski/EvalEx/issues</url>
 	</issueManagement>
+
 	<distributionManagement>
 		<repository>
 			<id>oss.sonatype.org</id>
@@ -42,38 +63,26 @@
 			<url>https://oss.sonatype.org/content/repositories/snapshots</url>
 		</snapshotRepository>
 	</distributionManagement>
+
+	<dependencies>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>4.4</version>
+			<scope>test</scope>
+		</dependency>
+	</dependencies>
+
 	<build>
-		<sourceDirectory>src</sourceDirectory>
-		<testSourceDirectory>tests</testSourceDirectory>
 		<plugins>
-			<plugin>
-				<artifactId>maven-compiler-plugin</artifactId>
-				<version>3.1</version>
-				<configuration>
-					<source />
-					<target />
-				</configuration>
-			</plugin>
+            <!--Attack sources and javadocs-->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-source-plugin</artifactId>
-				<version>2.2.1</version>
+				<version>${versionMavenSources}</version>
 				<executions>
 					<execution>
-						<id>attach-sources</id>
-						<goals>
-							<goal>jar-no-fork</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-javadoc-plugin</artifactId>
-				<version>2.9.1</version>
-				<executions>
-					<execution>
-						<id>attach-javadocs</id>
+                        <phase>package</phase>
 						<goals>
 							<goal>jar</goal>
 						</goals>
@@ -82,8 +91,23 @@
 			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-javadoc-plugin</artifactId>
+				<version>${versionMavenDocs}</version>
+				<executions>
+					<execution>
+						<phase>package</phase>
+						<goals>
+							<goal>jar</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+
+            <!--GPG Sign-->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-gpg-plugin</artifactId>
-				<version>1.5</version>
+				<version>${versionMavenGPG}</version>
 				<executions>
 					<execution>
 						<id>sign-artifacts</id>
@@ -94,56 +118,19 @@
 					</execution>
 				</executions>
 			</plugin>
-			<plugin>
-				<groupId>org.codehaus.mojo</groupId>
-				<artifactId>versions-maven-plugin</artifactId>
-				<version>2.1</version>
-				<configuration>
-					<generateBackupPoms>false</generateBackupPoms>
-				</configuration>
-			</plugin>
-			<plugin>
-				<artifactId>maven-deploy-plugin</artifactId>
-				<configuration>
-					<skip>true</skip>
-				</configuration>
-			</plugin>
-			<plugin>
-				<artifactId>maven-source-plugin</artifactId>
-				<executions>
-					<execution>
-						<id>package-sources</id>
-						<goals>
-							<goal>jar</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
-			<plugin>
-				<artifactId>maven-javadoc-plugin</artifactId>
-				<executions>
-					<execution>
-						<id>package-javadoc</id>
-						<phase>package</phase>
-						<goals>
-							<goal>jar</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
+
+            <!--Sonatype Stage-->
 			<plugin>
 				<groupId>org.sonatype.plugins</groupId>
 				<artifactId>nexus-staging-maven-plugin</artifactId>
-				<version>1.6</version>
+				<version>${versionSonatypeStage}</version>
 				<extensions>true</extensions>
 				<configuration>
 					<serverId>oss.sonatype.org</serverId>
 					<nexusUrl>https://oss.sonatype.org/</nexusUrl>
-					<description>${project.version}</description>
 				</configuration>
 				<executions>
 					<execution>
-						<id>deploy-to-sonatype</id>
 						<phase>deploy</phase>
 						<goals>
 							<goal>deploy</goal>
@@ -154,12 +141,5 @@
 			</plugin>
 		</plugins>
 	</build>
-	<dependencies>
-		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-			<version>4.4</version>
-			<scope>test</scope>
-		</dependency>
-	</dependencies>
+
 </project>

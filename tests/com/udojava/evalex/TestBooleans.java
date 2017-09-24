@@ -5,6 +5,8 @@ import org.junit.Test;
 import java.util.Iterator;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 
 public class TestBooleans {
@@ -12,6 +14,42 @@ public class TestBooleans {
 	private void assertToken(String surface, Expression.TokenType type, Expression.Token actual) {
 		assertEquals(surface, actual.surface);
 		assertEquals(type, actual.type);
+	}
+	
+	@Test
+	public void testIsBoolean() {
+		Expression e = new Expression("1==1");
+		assertTrue(e.isBoolean());
+		
+		e = new Expression("a==b").with("a", "1").and("b", "2");
+		assertTrue(e.isBoolean());
+		
+		e = new Expression("(1==1)||(c==a+b)");
+		assertTrue(e.isBoolean());
+		
+		e = new Expression("(z+z==x-y)||(c==a+b)");
+		assertTrue(e.isBoolean());
+		
+		e = new Expression("NOT(a+b)");
+		assertTrue(e.isBoolean());
+		
+		e = new Expression("a+b");
+		assertFalse(e.isBoolean());
+
+		e = new Expression("(a==b)+(b==c)");
+		assertFalse(e.isBoolean());
+		
+		e = new Expression("SQRT(2)");
+		assertFalse(e.isBoolean());
+		
+		e = new Expression("SQRT(2) == SQRT(b)");
+		assertTrue(e.isBoolean());
+		
+		e = new Expression("IF(a==b,x+y,x-y)");
+		assertFalse(e.isBoolean());
+		
+		e = new Expression("IF(a==b,x==y,a==b)");
+		assertTrue(e.isBoolean());
 	}
 
 	@Test
