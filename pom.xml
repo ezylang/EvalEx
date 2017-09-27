@@ -4,7 +4,7 @@
 
 	<groupId>com.udojava</groupId>
 	<artifactId>EvalEx</artifactId>
-	<version>1.0</version>
+	<version>1.15</version>
 
 	<name>EvalEx</name>
 	<description>EvalEx is a handy expression evaluator for Java, that allows to evaluate simple mathematical and boolean expressions.</description>
@@ -75,7 +75,7 @@
 
 	<build>
 		<plugins>
-            <!--Attack sources and javadocs-->
+            <!--Attach sources and javadocs-->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-source-plugin</artifactId>
