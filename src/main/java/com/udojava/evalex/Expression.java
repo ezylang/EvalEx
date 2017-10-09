@@ -1193,6 +1193,113 @@ public class Expression {
 				return new BigDecimal(d, mc);
 			}
 		});
+		addFunction(new Function("SEC", 1) {
+			@Override
+			public BigDecimal eval(List<BigDecimal> parameters) {
+				assertNotNull(parameters.get(0));
+				/** Formula: sec(x) = 1 / cos(x)*/
+				double one = 1;
+				double d = Math.cos(Math.toRadians(parameters.get(0).doubleValue()));
+				return new BigDecimal((one/d), mc);
+			}
+		});
+		addFunction(new Function("CSC", 1) {
+			@Override
+			public BigDecimal eval(List<BigDecimal> parameters) {
+				assertNotNull(parameters.get(0));
+				/** Formula: csc(x) = 1 / sin(x)*/
+				double one = 1;
+				double d = Math.sin(Math.toRadians(parameters.get(0)
+						.doubleValue()));
+				return new BigDecimal((one/d), mc);
+			}
+		});
+		addFunction(new Function("SECH", 1) {
+			@Override
+			public BigDecimal eval(List<BigDecimal> parameters) {
+				assertNotNull(parameters.get(0));
+				/** Formula: sech(x) = 1 / cosh(x)*/
+				double one = 1;
+				double d = Math.cosh(parameters.get(0).doubleValue());
+				return new BigDecimal((one/d), mc);
+			}
+		});
+		addFunction(new Function("CSCH", 1) {
+			@Override
+			public BigDecimal eval(List<BigDecimal> parameters) {
+				assertNotNull(parameters.get(0));
+				/** Formula: csch(x) = 1 / sinh(x)*/
+				double one = 1;
+				double d = Math.sinh(parameters.get(0).doubleValue());
+				return new BigDecimal((one/d), mc);
+			}
+		});
+		addFunction(new Function("COT", 1) {
+			@Override
+			public BigDecimal eval(List<BigDecimal> parameters) {
+				assertNotNull(parameters.get(0));
+				/** Formula: cot(x) = cos(x) / sin(x) = 1 / tan(x)*/
+				double one = 1;
+				double d = Math.tan(Math.toRadians(parameters.get(0).doubleValue()));
+				return new BigDecimal((one/d), mc);
+			}
+		});
+		addFunction(new Function("ACOT", 1) {
+			@Override
+			public BigDecimal eval(List<BigDecimal> parameters) {
+				assertNotNull(parameters.get(0));
+				/** Formula: acot(x) = atan(1/x) */
+				double d = Math.toDegrees(Math.atan(1/parameters.get(0).doubleValue()));
+				return new BigDecimal(d, mc);
+			}
+		});
+		addFunction(new Function("COTH", 1) {
+			@Override
+			public BigDecimal eval(List<BigDecimal> parameters) {
+				assertNotNull(parameters.get(0));
+				/** Formula: coth(x) = 1 / tanh(x) */
+				double one = 1;
+				double d = Math.tanh(Math.toRadians(parameters.get(0).doubleValue()));
+				return new BigDecimal((one/d), mc);
+			}
+		});
+		addFunction(new Function("ASINH", 1) {
+			@Override
+			public BigDecimal eval(List<BigDecimal> parameters) {
+				assertNotNull(parameters.get(0));
+				/**Formula: asinh(x) = ln(x + sqrt(x^2 + 1)) */
+				double d = Math.log(parameters.get(0).doubleValue()+
+						(Math.sqrt(Math.pow(parameters.get(0).doubleValue(), 2) + 1)));
+				return new BigDecimal(d, mc);
+			}
+		});
+		addFunction(new Function("ACOSH", 1) {
+			@Override
+			public BigDecimal eval(List<BigDecimal> parameters) {
+				assertNotNull(parameters.get(0));
+				/**Formula: acosh(x) = ln(x + sqrt(x^2 - 1)) */
+				if (Double.compare(parameters.get(0).doubleValue(), 1) < 0) {
+					throw new ExpressionException("Number must be x >= 1");
+				}
+				double d = Math.log(parameters.get(0).doubleValue()+
+						(Math.sqrt(Math.pow(parameters.get(0).doubleValue(), 2) - 1)));
+				return new BigDecimal(d, mc);
+			}
+		});
+		addFunction(new Function("ATANH", 1) {
+			@Override
+			public BigDecimal eval(List<BigDecimal> parameters) {
+				assertNotNull(parameters.get(0));
+				/**Formula: atanh(x) = 0.5*ln((1 + x)/(1 - x)) */
+				if (Math.abs(parameters.get(0).doubleValue()) > 1 ||
+						Math.abs(parameters.get(0).doubleValue()) == 1) {
+					throw new ExpressionException("Number must be |x| < 1");
+				}
+				double d = 0.5*Math.log((1 + parameters.get(0).doubleValue())/
+						(1 - parameters.get(0).doubleValue()));
+				return new BigDecimal(d, mc);
+			}
+		});
 		addFunction(new Function("RAD", 1) {
 			@Override
 			public BigDecimal eval(List<BigDecimal> parameters) {
