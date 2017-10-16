@@ -329,15 +329,13 @@ public class TestEval {
 		assertEquals("1", new Expression("COT(45)").eval().toPlainString());
 		assertEquals("0.5773503", new Expression("COT(60)").eval().toPlainString());
 		assertEquals("0.2679492", new Expression("COT(75)").eval().toPlainString());
-		assertEquals("90", new Expression("ACOT(0)").eval().toPlainString());
 		assertEquals("1.909152", new Expression("ACOT(30)").eval().toPlainString());
 		assertEquals("1.27303", new Expression("ACOT(45)").eval().toPlainString());
 		assertEquals("0.9548413", new Expression("ACOT(60)").eval().toPlainString());
 		assertEquals("0.7638985", new Expression("ACOT(75)").eval().toPlainString());
-		assertEquals("2.081283", new Expression("COTH(30)").eval().toPlainString());
-		assertEquals("1.524869", new Expression("COTH(45)").eval().toPlainString());
-		assertEquals("1.280878", new Expression("COTH(60)").eval().toPlainString());
-		assertEquals("1.157379", new Expression("COTH(75)").eval().toPlainString());
+		assertEquals("1", new Expression("COTH(30)").eval().toPlainString());
+		assertEquals("1.199538", new Expression("COTH(1.2)").eval().toPlainString());
+		assertEquals("1.016596", new Expression("COTH(2.4)").eval().toPlainString());
 		assertEquals("4.094622", new Expression("ASINH(30)").eval().toPlainString());
 		assertEquals("4.499933", new Expression("ASINH(45)").eval().toPlainString());
 		assertEquals("4.787561", new Expression("ASINH(60)").eval().toPlainString());

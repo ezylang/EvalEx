@@ -117,13 +117,23 @@ dependencies {
   <tr><td>SIN(<i>expression</i>)</td><td>Returns the trigonometric sine of an angle (in degrees)</td></tr>
   <tr><td>COS(<i>expression</i>)</td><td>Returns the trigonometric cosine of an angle (in degrees)</td></tr>
   <tr><td>TAN(<i>expression</i>)</td><td>Returns the trigonometric tangens of an angle (in degrees)</td></tr>
+  <tr><td>COT(<i>expression</i>)</td><td>Returns the trigonometric cotangens of an angle (in degrees)</td></tr>
   <tr><td>ASIN(<i>expression</i>)</td><td>Returns the angle of asin (in degrees)</td></tr>
   <tr><td>ACOS(<i>expression</i>)</td><td>Returns the angle of acos (in degrees)</td></tr>
   <tr><td>ATAN(<i>expression</i>)</td><td>Returns the angle of atan (in degrees)</td></tr>
+  <tr><td>ACOT(<i>expression</i>)</td><td>Returns the angle of acot (in degrees)</td></tr>
   <tr><td>ATAN2(<i>y</i>,<i>x</i>)</td><td>Returns the angle of atan2 (in degrees)</td></tr>
   <tr><td>SINH(<i>expression</i>)</td><td>Returns the hyperbolic sine of a value</td></tr>
   <tr><td>COSH(<i>expression</i>)</td><td>Returns the hyperbolic cosine of a value</td></tr>
   <tr><td>TANH(<i>expression</i>)</td><td>Returns the hyperbolic tangens of a value</td></tr>
+  <tr><td>COTH(<i>expression</i>)</td><td>Returns the hyperbolic cotangens of a value</td></tr>
+  <tr><td>SEC(<i>expression</i>)</td><td>Returns the secans (in degrees)</td></tr>
+  <tr><td>CSC(<i>expression</i>)</td><td>Returns the cosecans (in degrees)</td></tr>
+  <tr><td>SECH(<i>expression</i>)</td><td>Returns the hiperbolic secans (in degrees)</td></tr>
+  <tr><td>CSCH(<i>expression</i>)</td><td>Returns the hiperbolic cosecans (in degrees)</td></tr>
+  <tr><td>ASINH(<i>expression</i>)</td><td>Returns the angle of hiperbolic sine (in degrees)</td></tr>
+  <tr><td>ACOSH(<i>expression</i>)</td><td>Returns the angle of hiperbolic cosine (in degrees)</td></tr>
+  <tr><td>ATANH(<i>expression</i>)</td><td>Returns the angle of hiperbolic tangens of a value</td></tr>
   <tr><td>RAD(<i>expression</i>)</td><td>Converts an angle measured in degrees to an approximately equivalent angle measured in radians</td></tr>
   <tr><td>DEG(<i>expression</i>)</td><td>Converts an angle measured in radians to an approximately equivalent angle measured in degrees</td></tr>
 </table>

@@ -1249,6 +1249,9 @@ public class Expression {
 			public BigDecimal eval(List<BigDecimal> parameters) {
 				assertNotNull(parameters.get(0));
 				/** Formula: acot(x) = atan(1/x) */
+				if (parameters.get(0).doubleValue() == 0) {
+					throw new ExpressionException("Number must not be 0");
+				}
 				double d = Math.toDegrees(Math.atan(1/parameters.get(0).doubleValue()));
 				return new BigDecimal(d, mc);
 			}
@@ -1259,7 +1262,7 @@ public class Expression {
 				assertNotNull(parameters.get(0));
 				/** Formula: coth(x) = 1 / tanh(x) */
 				double one = 1;
-				double d = Math.tanh(Math.toRadians(parameters.get(0).doubleValue()));
+				double d = Math.tanh(parameters.get(0).doubleValue());
 				return new BigDecimal((one/d), mc);
 			}
 		});
