@@ -268,19 +268,19 @@ import java.util.TreeMap;
  * </tr>
  * <tr>
  * <td>SEC(<i>expression</i>)</td>
- * <td>Returns the secans (in degrees)</td>
+ * <td>Returns the secant (in degrees)</td>
  * </tr>
  * <tr>
  * <td>CSC(<i>expression</i>)</td>
- * <td>Returns the cosecans (in degrees)</td>
+ * <td>Returns the cosecant (in degrees)</td>
  * </tr>
  * <tr>
  * <td>SECH(<i>expression</i>)</td>
- * <td>Returns the hiperbolic secans (in degrees)</td>
+ * <td>Returns the hyperbolic secant (in degrees)</td>
  * </tr>
  * <tr>
  * <td>CSCH(<i>expression</i>)</td>
- * <td>Returns the hiperbolic cosecans (in degrees)</td>
+ * <td>Returns the hyperbolic cosecant (in degrees)</td>
  * </tr>
  * <tr>
  * <td>COT(<i>expression</i>)</td>
@@ -296,15 +296,15 @@ import java.util.TreeMap;
  * </tr>
  * <tr>
  * <td>ASINH(<i>expression</i>)</td>
- * <td>Returns the angle of hiperbolic sine (in degrees)</td>
+ * <td>Returns the angle of hyperbolic sine (in degrees)</td>
  * </tr>
  * <tr>
  * <td>ACOSH(<i>expression</i>)</td>
- * <td>Returns the angle of hiperbolic cosine (in degrees)</td>
+ * <td>Returns the angle of hyperbolic cosine (in degrees)</td>
  * </tr>
  * <tr>
  * <td>ATANH(<i>expression</i>)</td>
- * <td>Returns the angle of hiperbolic tangens of a value</td>
+ * <td>Returns the angle of hyperbolic tangens of a value</td>
  * </tr>
  * <td>RAD(<i>expression</i>)</td>
  * <td>Converts an angle measured in degrees to an approximately equivalent
