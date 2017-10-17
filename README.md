@@ -1,4 +1,3 @@
-
 EvalEx - Java Expression Evaluator
 ==========
 
@@ -126,8 +125,8 @@ dependencies {
   <tr><td>COSH(<i>expression</i>)</td><td>Returns the hyperbolic cosine of a value</td></tr>
   <tr><td>TANH(<i>expression</i>)</td><td>Returns the hyperbolic tangens of a value</td></tr>
   <tr><td>COTH(<i>expression</i>)</td><td>Returns the hyperbolic cotangens of a value</td></tr>
-  <tr><td>SEC(<i>expression</i>)</td><td>Returns the secans (in degrees)</td></tr>
-  <tr><td>CSC(<i>expression</i>)</td><td>Returns the cosecans (in degrees)</td></tr>
+  <tr><td>SEC(<i>expression</i>)</td><td>Returns the secant (in degrees)</td></tr>
+  <tr><td>CSC(<i>expression</i>)</td><td>Returns the cosecant (in degrees)</td></tr>
   <tr><td>SECH(<i>expression</i>)</td><td>Returns the hyperbolic secant (in degrees)</td></tr>
   <tr><td>CSCH(<i>expression</i>)</td><td>Returns the hyperbolic cosecant (in degrees)</td></tr>
   <tr><td>ASINH(<i>expression</i>)</td><td>Returns the angle of hyperbolic sine (in degrees)</td></tr>
