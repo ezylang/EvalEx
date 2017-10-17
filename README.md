@@ -31,7 +31,7 @@ To include it in your Maven project, refer to the artifact in your pom. For exam
     <dependency>
         <groupId>com.udojava</groupId>
         <artifactId>EvalEx</artifactId>
-        <version>1.15</version>
+        <version>1.16</version>
     </dependency>
 </dependencies>
 ````
@@ -40,7 +40,7 @@ If you're using gradle add to your project's app build.gradle:
 ````gradle
 dependencies {
     ...
-    compile 'com.udojava:EvalEx:1.15'
+    compile 'com.udojava:EvalEx:1.16'
 }
 ````
 
@@ -92,8 +92,7 @@ dependencies {
   <tr><td>&lt;&gt;</td><td>Not equals</td></tr>
   <tr><td>&lt;</td><td>Less than</td></tr>
   <tr><td>&lt;=</td><td>Less than or equal to</td></tr>
-  <tr><td>&gt;</td><td>Greater than</td></tr>
-  <tr><td>&gt;=</td><td>Greater than or equal to</td></tr>
+  <tr><td>&gt;</td><td>Greater than</td></tr>  <tr><td>&gt;=</td><td>Greater than or equal to</td></tr>
   <tr><td>&amp;&amp;</td><td>Boolean and</td></tr>
   <tr><td>||</td><td>Boolean or</td></tr>
 </table>
@@ -129,11 +128,11 @@ dependencies {
   <tr><td>COTH(<i>expression</i>)</td><td>Returns the hyperbolic cotangens of a value</td></tr>
   <tr><td>SEC(<i>expression</i>)</td><td>Returns the secans (in degrees)</td></tr>
   <tr><td>CSC(<i>expression</i>)</td><td>Returns the cosecans (in degrees)</td></tr>
-  <tr><td>SECH(<i>expression</i>)</td><td>Returns the hiperbolic secans (in degrees)</td></tr>
-  <tr><td>CSCH(<i>expression</i>)</td><td>Returns the hiperbolic cosecans (in degrees)</td></tr>
-  <tr><td>ASINH(<i>expression</i>)</td><td>Returns the angle of hiperbolic sine (in degrees)</td></tr>
-  <tr><td>ACOSH(<i>expression</i>)</td><td>Returns the angle of hiperbolic cosine (in degrees)</td></tr>
-  <tr><td>ATANH(<i>expression</i>)</td><td>Returns the angle of hiperbolic tangens of a value</td></tr>
+  <tr><td>SECH(<i>expression</i>)</td><td>Returns the hyperbolic secant (in degrees)</td></tr>
+  <tr><td>CSCH(<i>expression</i>)</td><td>Returns the hyperbolic cosecant (in degrees)</td></tr>
+  <tr><td>ASINH(<i>expression</i>)</td><td>Returns the angle of hyperbolic sine (in degrees)</td></tr>
+  <tr><td>ACOSH(<i>expression</i>)</td><td>Returns the angle of hyperbolic cosine (in degrees)</td></tr>
+  <tr><td>ATANH(<i>expression</i>)</td><td>Returns the angle of hyperbolic tangens of a value</td></tr>
   <tr><td>RAD(<i>expression</i>)</td><td>Converts an angle measured in degrees to an approximately equivalent angle measured in radians</td></tr>
   <tr><td>DEG(<i>expression</i>)</td><td>Converts an angle measured in radians to an approximately equivalent angle measured in degrees</td></tr>
 </table>
