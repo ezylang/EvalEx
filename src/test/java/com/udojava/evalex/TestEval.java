@@ -307,7 +307,47 @@ public class TestEval {
 		assertEquals("146.3099", new Expression("atan2(2, -3)").eval().toPlainString());
 		assertEquals("-146.3099", new Expression("atan2(-2, -3)").eval().toPlainString());
 		assertEquals("-33.69007", new Expression("atan2(-2, 3)").eval().toPlainString());
-		
+		assertEquals("1.154701", new Expression("SEC(30)").eval().toPlainString());
+		assertEquals("1.414214", new Expression("SEC(45)").eval().toPlainString());
+		assertEquals("2", new Expression("SEC(60)").eval().toPlainString());
+		assertEquals("3.863703", new Expression("SEC(75)").eval().toPlainString());
+		assertEquals("2", new Expression("CSC(30)").eval().toPlainString());
+		assertEquals("1.414214", new Expression("CSC(45)").eval().toPlainString());
+		assertEquals("1.154701", new Expression("CSC(60)").eval().toPlainString());
+		assertEquals("1.035276", new Expression("CSC(75)").eval().toPlainString());
+		assertEquals("0.0000000000001871525", new Expression("SECH(30)").eval().toPlainString());
+		assertEquals("0.00000000000000000005725037", new Expression("SECH(45)").eval().toPlainString());
+		assertEquals("0.00000000000000000000000001751302", new Expression("SECH(60)").eval().toPlainString());
+		assertEquals("0.000000000000000000000000000000005357274",
+																	new Expression("SECH(75)").eval().toPlainString());
+		assertEquals("0.0000000000001871525", new Expression("CSCH(30)").eval().toPlainString());
+		assertEquals("0.00000000000000000005725037", new Expression("CSCH(45)").eval().toPlainString());
+		assertEquals("0.00000000000000000000000001751302", new Expression("CSCH(60)").eval().toPlainString());
+		assertEquals("0.000000000000000000000000000000005357274",
+																	new Expression("CSCH(75)").eval().toPlainString());
+		assertEquals("1.732051", new Expression("COT(30)").eval().toPlainString());
+		assertEquals("1", new Expression("COT(45)").eval().toPlainString());
+		assertEquals("0.5773503", new Expression("COT(60)").eval().toPlainString());
+		assertEquals("0.2679492", new Expression("COT(75)").eval().toPlainString());
+		assertEquals("1.909152", new Expression("ACOT(30)").eval().toPlainString());
+		assertEquals("1.27303", new Expression("ACOT(45)").eval().toPlainString());
+		assertEquals("0.9548413", new Expression("ACOT(60)").eval().toPlainString());
+		assertEquals("0.7638985", new Expression("ACOT(75)").eval().toPlainString());
+		assertEquals("1", new Expression("COTH(30)").eval().toPlainString());
+		assertEquals("1.199538", new Expression("COTH(1.2)").eval().toPlainString());
+		assertEquals("1.016596", new Expression("COTH(2.4)").eval().toPlainString());
+		assertEquals("4.094622", new Expression("ASINH(30)").eval().toPlainString());
+		assertEquals("4.499933", new Expression("ASINH(45)").eval().toPlainString());
+		assertEquals("4.787561", new Expression("ASINH(60)").eval().toPlainString());
+		assertEquals("5.01068", new Expression("ASINH(75)").eval().toPlainString());
+		assertEquals("0", new Expression("ACOSH(1)").eval().toPlainString());
+		assertEquals("4.094067", new Expression("ACOSH(30)").eval().toPlainString());
+		assertEquals("4.499686", new Expression("ACOSH(45)").eval().toPlainString());
+		assertEquals("4.787422", new Expression("ACOSH(60)").eval().toPlainString());
+		assertEquals("5.010591", new Expression("ACOSH(75)").eval().toPlainString());
+		assertEquals("0", new Expression("ATANH(0)").eval().toPlainString());
+		assertEquals("0.5493061", new Expression("ATANH(0.5)").eval().toPlainString());
+		assertEquals("-0.5493061", new Expression("ATANH(-0.5)").eval().toPlainString());
 	}
 	
 	@Test
