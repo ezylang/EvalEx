@@ -73,6 +73,19 @@ public class TestTokenizer {
 		assertToken("123.456", TokenType.LITERAL, i.next());
 		assertFalse(i.hasNext());
 		assertNull(i.next());
+		
+		e = new Expression(".1");
+		i = e.getExpressionTokenizer();
+		assertToken(".1", TokenType.LITERAL, i.next());
+		assertFalse(i.hasNext());
+		assertNull(i.next());	
+		
+		e = new Expression("-.1");
+		i = e.getExpressionTokenizer();
+		assertToken("-u", TokenType.UNARY_OPERATOR, i.next());
+		assertToken(".1", TokenType.LITERAL, i.next());
+		assertFalse(i.hasNext());
+		assertNull(i.next());	
 	}
 
     @Test
