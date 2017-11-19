@@ -838,7 +838,7 @@ public class Expression {
 
 			boolean isHex = false;
 
-			if (Character.isDigit(ch)) {
+			if (Character.isDigit(ch) || (ch == decimalSeparator && Character.isDigit(peekNextChar()))) {
 				if(ch == '0' && (peekNextChar() == 'x' || peekNextChar() == 'X')) isHex = true;
 				while ((isHex && isHexDigit(ch)) || (Character.isDigit(ch) || ch == decimalSeparator
                                                 || ch == 'e' || ch == 'E'
@@ -1505,6 +1505,7 @@ public class Expression {
 	private boolean isNumber(String st) {
 		if (st.charAt(0) == minusSign && st.length() == 1) return false;
 		if (st.charAt(0) == '+' && st.length() == 1) return false;
+		if (st.charAt(0) == decimalSeparator && (st.length() == 1 || !Character.isDigit(st.charAt(1)))) return false;
 		if (st.charAt(0) == 'e' ||  st.charAt(0) == 'E') return false;
 		for (char ch : st.toCharArray()) {
 			if (!Character.isDigit(ch) && ch != minusSign
