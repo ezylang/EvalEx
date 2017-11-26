@@ -140,4 +140,12 @@ public class TestBooleans {
 		assertEquals("3", new Expression("IF(FALSE, 5, 3)").eval().toString());
 		assertEquals("5.35", new Expression("If(2, 5.35, 3)").eval().toString());
 	}
+	
+	@Test
+	public void testDecimals() {
+		assertEquals("0", new Expression("if(0.0, 1, 0)").eval().toPlainString());
+		assertEquals("0", new Expression("0.0 || 0.0").eval().toPlainString());
+		assertEquals("1", new Expression("not(0.0)").eval().toPlainString());
+		assertEquals("0", new Expression("0.0 && 0.0").eval().toPlainString());
+	}
 }

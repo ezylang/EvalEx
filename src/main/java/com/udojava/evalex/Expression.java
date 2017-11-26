@@ -1018,8 +1018,8 @@ public class Expression {
 			@Override
 			public BigDecimal eval(BigDecimal v1, BigDecimal v2) {
 				assertNotNull(v1, v2);
-				boolean b1 = !v1.equals(BigDecimal.ZERO);
-				boolean b2 = !v2.equals(BigDecimal.ZERO);
+				boolean b1 = v1.compareTo(BigDecimal.ZERO) != 0;
+				boolean b2 = v2.compareTo(BigDecimal.ZERO) != 0;
 				return b1 && b2 ? BigDecimal.ONE : BigDecimal.ZERO;
 			}
 		});
@@ -1028,8 +1028,8 @@ public class Expression {
 			@Override
 			public BigDecimal eval(BigDecimal v1, BigDecimal v2) {
 				assertNotNull(v1, v2);
-				boolean b1 = !v1.equals(BigDecimal.ZERO);
-				boolean b2 = !v2.equals(BigDecimal.ZERO);
+				boolean b1 = v1.compareTo(BigDecimal.ZERO) != 0;
+				boolean b2 = v2.compareTo(BigDecimal.ZERO) != 0;
 				return b1 || b2 ? BigDecimal.ONE : BigDecimal.ZERO;
 			}
 		});
@@ -1132,7 +1132,7 @@ public class Expression {
 			public LazyNumber lazyEval(List<LazyNumber> lazyParams) {
 				BigDecimal result = lazyParams.get(0).eval();
 				assertNotNull(result);
-				boolean isTrue = !result.equals(BigDecimal.ZERO);
+				boolean isTrue = result.compareTo(BigDecimal.ZERO) != 0;
 				return isTrue ? lazyParams.get(1) : lazyParams.get(2);
 			}
 		});
