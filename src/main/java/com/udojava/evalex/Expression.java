@@ -408,6 +408,46 @@ import java.util.TreeMap;
 public class Expression {
 
 	/**
+	 * Unary operators precedence: + and - as prefix
+	 */
+	public static final int OPERATOR_PRECEDENCE_UNARY = 60;
+
+	/**
+	 * Equality operators precedence: =, ==, !=. <>
+	 */
+	public static final int OPERATOR_PRECEDENCE_EQUALITY = 7;
+
+	/**
+	 * Comparative operators precedence: <,>,<=,>=
+	 */
+	public static final int OPERATOR_PRECEDENCE_COMPARISON = 10;
+
+	/**
+	 * Or operator precedence: ||
+	 */
+	public static final int OPERATOR_PRECEDENCE_OR = 2;
+
+	/**
+	 * And operator precedence: &&
+	 */
+	public static final int OPERATOR_PRECEDENCE_AND = 4;
+
+	/**
+	 * Power operator precedence: ^
+	 */
+	public static final int OPERATOR_PRECEDENCE_POWER = 40;
+
+	/**
+	 * Multiplicative operators precedence: *,/,%
+	 */
+	public static final int OPERATOR_PRECEDENCE_MULTIPLICATIVE = 30;
+
+	/**
+	 * Additive operators precedence: + and -
+	 */
+	public static final int OPERATOR_PRECEDENCE_ADDITIVE = 20;
+
+	/**
 	 * Definition of PI as a constant, can be used in expressions as variable.
 	 */
 	public static final BigDecimal PI = new BigDecimal(
@@ -954,42 +994,42 @@ public class Expression {
 		this.mc = defaultMathContext;
 		this.expression = expression;
 		this.originalExpression = expression;
-		addOperator(new Operator("+", 20, true) {
+		addOperator(new Operator("+", OPERATOR_PRECEDENCE_ADDITIVE, true) {
 			@Override
 			public BigDecimal eval(BigDecimal v1, BigDecimal v2) {
 				assertNotNull(v1, v2);
 				return v1.add(v2, mc);
 			}
 		});
-		addOperator(new Operator("-", 20, true) {
+		addOperator(new Operator("-", OPERATOR_PRECEDENCE_ADDITIVE, true) {
 			@Override
 			public BigDecimal eval(BigDecimal v1, BigDecimal v2) {
 				assertNotNull(v1, v2);
 				return v1.subtract(v2, mc);
 			}
 		});
-		addOperator(new Operator("*", 30, true) {
+		addOperator(new Operator("*", OPERATOR_PRECEDENCE_MULTIPLICATIVE, true) {
 			@Override
 			public BigDecimal eval(BigDecimal v1, BigDecimal v2) {
 				assertNotNull(v1, v2);
 				return v1.multiply(v2, mc);
 			}
 		});
-		addOperator(new Operator("/", 30, true) {
+		addOperator(new Operator("/", OPERATOR_PRECEDENCE_MULTIPLICATIVE, true) {
 			@Override
 			public BigDecimal eval(BigDecimal v1, BigDecimal v2) {
 				assertNotNull(v1, v2);
 				return v1.divide(v2, mc);
 			}
 		});
-		addOperator(new Operator("%", 30, true) {
+		addOperator(new Operator("%", OPERATOR_PRECEDENCE_MULTIPLICATIVE, true) {
 			@Override
 			public BigDecimal eval(BigDecimal v1, BigDecimal v2) {
 				assertNotNull(v1, v2);
 				return v1.remainder(v2, mc);
 			}
 		});
-		addOperator(new Operator("^", 40, false) {
+		addOperator(new Operator("^", OPERATOR_PRECEDENCE_POWER, false) {
 			@Override
 			public BigDecimal eval(BigDecimal v1, BigDecimal v2) {
 				assertNotNull(v1, v2);
@@ -1014,7 +1054,7 @@ public class Expression {
 				return result;
 			}
 		});
-		addOperator(new Operator("&&", 4, false, true) {
+		addOperator(new Operator("&&", OPERATOR_PRECEDENCE_AND, false, true) {
 			@Override
 			public BigDecimal eval(BigDecimal v1, BigDecimal v2) {
 				assertNotNull(v1, v2);
@@ -1024,7 +1064,7 @@ public class Expression {
 			}
 		});
 
-		addOperator(new Operator("||", 2, false, true) {
+		addOperator(new Operator("||", OPERATOR_PRECEDENCE_OR, false, true) {
 			@Override
 			public BigDecimal eval(BigDecimal v1, BigDecimal v2) {
 				assertNotNull(v1, v2);
@@ -1034,7 +1074,7 @@ public class Expression {
 			}
 		});
 
-		addOperator(new Operator(">", 10, false, true) {
+		addOperator(new Operator(">", OPERATOR_PRECEDENCE_COMPARISON, false, true) {
 			@Override
 			public BigDecimal eval(BigDecimal v1, BigDecimal v2) {
 				assertNotNull(v1, v2);
@@ -1042,7 +1082,7 @@ public class Expression {
 			}
 		});
 
-		addOperator(new Operator(">=", 10, false, true) {
+		addOperator(new Operator(">=", OPERATOR_PRECEDENCE_COMPARISON, false, true) {
 			@Override
 			public BigDecimal eval(BigDecimal v1, BigDecimal v2) {
 				assertNotNull(v1, v2);
@@ -1050,7 +1090,7 @@ public class Expression {
 			}
 		});
 
-		addOperator(new Operator("<", 10, false, true) {
+		addOperator(new Operator("<", OPERATOR_PRECEDENCE_COMPARISON, false, true) {
 			@Override
 			public BigDecimal eval(BigDecimal v1, BigDecimal v2) {
 				assertNotNull(v1, v2);
@@ -1059,7 +1099,7 @@ public class Expression {
 			}
 		});
 
-		addOperator(new Operator("<=", 10, false, true) {
+		addOperator(new Operator("<=", OPERATOR_PRECEDENCE_COMPARISON, false, true) {
 			@Override
 			public BigDecimal eval(BigDecimal v1, BigDecimal v2) {
 				assertNotNull(v1, v2);
@@ -1067,7 +1107,7 @@ public class Expression {
 			}
 		});
 
-		addOperator(new Operator("=", 7, false, true) {
+		addOperator(new Operator("=", OPERATOR_PRECEDENCE_EQUALITY, false, true) {
 			@Override
 			public BigDecimal eval(BigDecimal v1, BigDecimal v2) {
 				if (v1 == v2) {
@@ -1079,14 +1119,14 @@ public class Expression {
 				return v1.compareTo(v2) == 0 ? BigDecimal.ONE : BigDecimal.ZERO;
 			}
 		});
-		addOperator(new Operator("==", 7, false, true) {
+		addOperator(new Operator("==", OPERATOR_PRECEDENCE_EQUALITY, false, true) {
 			@Override
 			public BigDecimal eval(BigDecimal v1, BigDecimal v2) {
 				return operators.get("=").eval(v1, v2);
 			}
 		});
 
-		addOperator(new Operator("!=", 7, false, true) {
+		addOperator(new Operator("!=", OPERATOR_PRECEDENCE_EQUALITY, false, true) {
 			@Override
 			public BigDecimal eval(BigDecimal v1, BigDecimal v2) {
 				if (v1 == v2) {
@@ -1098,20 +1138,20 @@ public class Expression {
 				return v1.compareTo(v2) != 0 ? BigDecimal.ONE : BigDecimal.ZERO;
 			}
 		});
-		addOperator(new Operator("<>", 7, false, true) {
+		addOperator(new Operator("<>", OPERATOR_PRECEDENCE_EQUALITY, false, true) {
 			@Override
 			public BigDecimal eval(BigDecimal v1, BigDecimal v2) {
 				assertNotNull(v1, v2);
 				return operators.get("!=").eval(v1, v2);
 			}
 		});
-		addOperator(new UnaryOperator("-", 60, false) {
+		addOperator(new UnaryOperator("-", OPERATOR_PRECEDENCE_UNARY, false) {
 			@Override
 			public BigDecimal evalUnary(BigDecimal v1) {
 				return v1.multiply(new BigDecimal(-1));
 			}
 		});
-		addOperator(new UnaryOperator("+", 60, false) {
+		addOperator(new UnaryOperator("+", OPERATOR_PRECEDENCE_UNARY, false) {
 			@Override
 			public BigDecimal evalUnary(BigDecimal v1) {
 				return v1.multiply(BigDecimal.ONE);
