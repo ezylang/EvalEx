@@ -514,5 +514,17 @@ public class TestEval {
 		assertEquals("30", expression.with("a", "1").and("b", "2").eval().toPlainString());
 	}
 	
+	@Test
+	public void testNoLeadingZero() {
+	    Expression e = new Expression("0.1 + .1");
+	    assertEquals("0.2", e.eval().toPlainString());
+
+	    e = new Expression(".2*.3");
+	    assertEquals("0.06", e.eval().toPlainString());
+
+	    e = new Expression(".2*.3+.1");
+	    assertEquals("0.16", e.eval().toPlainString());
+	}
+	
 }
 
