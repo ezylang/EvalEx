@@ -503,7 +503,8 @@ public class Expression {
 	/**
 	 * All defined variables with name and value.
 	 */
-	private Map<String, BigDecimal> variables = new TreeMap<String, BigDecimal>(String.CASE_INSENSITIVE_ORDER);
+	private Map<String, LazyNumber> variables = new TreeMap<String, LazyNumber>(String.CASE_INSENSITIVE_ORDER);
+
 
 	/**
 	 * What character to use for decimal separators.
@@ -547,6 +548,23 @@ public class Expression {
 	public interface LazyNumber {
 		BigDecimal eval();
 		String getString();
+	}
+
+	/**
+	 * Construct a LazyNumber from a BigDecimal
+	 */
+	private LazyNumber LazyNumber(final BigDecimal bigDecimal){
+		return new LazyNumber(){
+				@Override
+				public String getString() {
+					return bigDecimal.toPlainString();
+				}
+		
+				@Override
+				public BigDecimal eval() {
+					return bigDecimal;
+				}
+		};	
 	}
 
 	public abstract class LazyFunction {
@@ -1512,11 +1530,11 @@ public class Expression {
 			}
 		});
 
-		variables.put("e", e);
-		variables.put("PI", PI);
+		variables.put("e", LazyNumber(e));
+		variables.put("PI", LazyNumber(PI));
 		variables.put("NULL", null);
-		variables.put("TRUE", BigDecimal.ONE);
-		variables.put("FALSE", BigDecimal.ZERO);
+		variables.put("TRUE", LazyNumber(BigDecimal.ONE));
+		variables.put("FALSE", LazyNumber(BigDecimal.ZERO));
 
 	}
 	
@@ -1753,7 +1771,8 @@ public class Expression {
 
 					stack.push(new LazyNumber() {
 						public BigDecimal eval() {
-							BigDecimal value = variables.get(token.surface);
+							LazyNumber lazyVariable = variables.get(token.surface);
+							BigDecimal value = lazyVariable == null ? null : lazyVariable.eval();
 							return value == null ? null : value.round(mc);
 						}
 
@@ -1915,6 +1934,21 @@ public class Expression {
 		return  functions.put(function.getName(), function);
 	}
 
+
+		/**
+	 * Sets a variable value.
+	 * 
+	 * @param variable
+	 *            The variable name.
+	 * @param value
+	 *            The variable value.
+	 * @return The expression, allows to chain methods.
+	 */
+	private Expression setVariable(String variable, LazyNumber value) {
+		variables.put(variable, value);
+		return this;
+	}
+
 	/**
 	 * Sets a variable value.
 	 * 
@@ -1925,7 +1959,7 @@ public class Expression {
 	 * @return The expression, allows to chain methods.
 	 */
 	public Expression setVariable(String variable, BigDecimal value) {
-		variables.put(variable, value);
+		variables.put(variable, LazyNumber(value));
 		return this;
 	}
 
@@ -1940,13 +1974,31 @@ public class Expression {
 	 */
 	public Expression setVariable(String variable, String value) {
 		if (isNumber(value))
-			variables.put(variable, new BigDecimal(value));
+			variables.put(variable, LazyNumber(new BigDecimal(value)));
 		else if (value.equalsIgnoreCase("null")) {
 			variables.put(variable, null);
 		}
 		else {
-			expression = expression.replaceAll("(?i)\\b" + variable + "\\b", "("
-					+ value + ")");
+			final String expStr = value;
+			variables.put(variable, new LazyNumber(){
+					private final Map<String, LazyNumber> outerVariables = variables;
+					private final Map<String, LazyFunction> outerFunctions = functions;
+					private final String innerExpressionString = expStr;
+
+					@Override
+					public String getString() {
+						return innerExpressionString;
+					}
+			
+					@Override
+					public BigDecimal eval() {
+						Expression innerE = new Expression(innerExpressionString);
+						innerE.variables = outerVariables;
+						innerE.functions = outerFunctions;
+						BigDecimal val = innerE.eval();
+						return val;
+					}
+			});
 			rpn = null;
 		}
 		return this;
@@ -2003,6 +2055,7 @@ public class Expression {
 	public Expression with(String variable, String value) {
 		return setVariable(variable, value);
 	}
+
 
 	/**
 	 * Get an iterator for this expression, allows iterating over an expression
