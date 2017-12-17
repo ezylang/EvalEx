@@ -1974,7 +1974,7 @@ public class Expression {
 	 */
 	public Expression setVariable(String variable, String value) {
 		if (isNumber(value))
-			variables.put(variable, LazyNumber(new BigDecimal(value)));
+			variables.put(variable, LazyNumber(new BigDecimal(value, mc)));
 		else if (value.equalsIgnoreCase("null")) {
 			variables.put(variable, null);
 		}
@@ -1983,7 +1983,9 @@ public class Expression {
 			variables.put(variable, new LazyNumber(){
 					private final Map<String, LazyNumber> outerVariables = variables;
 					private final Map<String, LazyFunction> outerFunctions = functions;
+					private final Map<String, Operator> outerOperators = operators;
 					private final String innerExpressionString = expStr;
+					private final MathContext inneMc = mc;
 
 					@Override
 					public String getString() {
@@ -1992,9 +1994,10 @@ public class Expression {
 			
 					@Override
 					public BigDecimal eval() {
-						Expression innerE = new Expression(innerExpressionString);
+						Expression innerE = new Expression(innerExpressionString, inneMc);
 						innerE.variables = outerVariables;
 						innerE.functions = outerFunctions;
+						innerE.operators = outerOperators;
 						BigDecimal val = innerE.eval();
 						return val;
 					}

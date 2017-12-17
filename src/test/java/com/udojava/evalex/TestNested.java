@@ -3,6 +3,8 @@ package com.udojava.evalex;
 import static org.junit.Assert.assertEquals;
 
 import java.math.BigDecimal;
+import java.math.MathContext;
+import java.math.RoundingMode;
 import java.util.List;
 
 import org.junit.Test;
@@ -81,5 +83,25 @@ public class TestNested {
 		// a+b = p+q+b = b+q+q+b = 2b+2q = 2(x*2 + y) + 2(myAvg(x+b)) = 2(7*2+5) + 2((7+(7*2+5))/2 = 38 + 26 = 64 
 		String res = e.eval().toPlainString();
 		assertEquals("64", res);
+	}
+	
+	@Test
+	public void testNestedOutOfOrderVarsWithOperators(){
+		MathContext mc = new MathContext(12, RoundingMode.HALF_UP);
+		Expression e = new Expression("a+y", mc);
+		e.addOperator(e.new Operator(">>", 30, true) {
+			@Override
+			public BigDecimal eval(BigDecimal v1, BigDecimal v2) {
+				BigDecimal res = v1.movePointRight(v2.toBigInteger().intValue());
+				return res;
+			}
+		});
+		e.with("b", "123.45678"); // e=((123.45678 >> 2))+2+y
+		e.with("x", "b >> 2"); // e=((b >> 2)+2)+y
+		e.with("a", "X+2"); // e=(x+2)+y
+		e.with("y","5"); // e=((123.45678>>2)+2)+5 = 12345.678+2+5 = 12352.678
+		BigDecimal res = e.eval();
+		String resStr = res.toPlainString();
+		assertEquals("12352.678", resStr);
 	}
 }
