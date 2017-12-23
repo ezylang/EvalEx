@@ -553,7 +553,7 @@ public class Expression {
 	/**
 	 * Construct a LazyNumber from a BigDecimal
 	 */
-	private LazyNumber LazyNumber(final BigDecimal bigDecimal){
+	private LazyNumber CreateLazyNumber(final BigDecimal bigDecimal){
 		return new LazyNumber(){
 				@Override
 				public String getString() {
@@ -1530,11 +1530,11 @@ public class Expression {
 			}
 		});
 
-		variables.put("e", LazyNumber(e));
-		variables.put("PI", LazyNumber(PI));
+		variables.put("e", CreateLazyNumber(e));
+		variables.put("PI", CreateLazyNumber(PI));
 		variables.put("NULL", null);
-		variables.put("TRUE", LazyNumber(BigDecimal.ONE));
-		variables.put("FALSE", LazyNumber(BigDecimal.ZERO));
+		variables.put("TRUE", CreateLazyNumber(BigDecimal.ONE));
+		variables.put("FALSE", CreateLazyNumber(BigDecimal.ZERO));
 
 	}
 	
@@ -1959,7 +1959,7 @@ public class Expression {
 	 * @return The expression, allows to chain methods.
 	 */
 	public Expression setVariable(String variable, BigDecimal value) {
-		variables.put(variable, LazyNumber(value));
+		variables.put(variable, CreateLazyNumber(value));
 		return this;
 	}
 
@@ -1974,7 +1974,7 @@ public class Expression {
 	 */
 	public Expression setVariable(String variable, String value) {
 		if (isNumber(value))
-			variables.put(variable, LazyNumber(new BigDecimal(value, mc)));
+			variables.put(variable, CreateLazyNumber(new BigDecimal(value, mc)));
 		else if (value.equalsIgnoreCase("null")) {
 			variables.put(variable, null);
 		}
