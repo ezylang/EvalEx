@@ -40,6 +40,8 @@ import java.util.Set;
 import java.util.Stack;
 import java.util.TreeMap;
 
+import javax.lang.model.element.VariableElement;
+
 /**
  * <h1>EvalEx - Java Expression Evaluator</h1>
  * 
@@ -2007,6 +2009,18 @@ public class Expression {
 		return this;
 	}
 
+	private Expression CreateEmbeddedExpression(final String expression){
+		final Map<String, LazyNumber> outerVariables = variables;
+		final Map<String, LazyFunction> outerFunctions = functions;
+		final Map<String, Operator> outerOperators = operators;
+		final MathContext inneMc = mc;
+		Expression exp = new Expression(expression, inneMc);
+						exp.variables = outerVariables;
+						exp.functions = outerFunctions;
+						exp.operators = outerOperators;
+		return exp;
+	}
+
 	/**
 	 * Sets a variable value.
 	 * 
@@ -2163,7 +2177,19 @@ public class Expression {
 		for (Token t : getRPN()) {
 			if (result.length() != 0)
 				result.append(" ");
-			result.append(t.toString());
+			if(t.type == TokenType.VARIABLE && variables.containsKey(t.surface)){
+				LazyNumber innerVariable = variables.get(t.surface);
+				String innerExp = innerVariable.getString();
+				if(isNumber(innerExp)) { // if it is a number, then we don't expan in the RPN
+					result.append(t.toString());
+				} else { // expand the nested variable to its RPN representation
+					Expression exp = CreateEmbeddedExpression(innerExp);
+					String nestedExpRpn = exp.toRPN();
+					result.append(nestedExpRpn);
+				}
+			} else {
+				result.append(t.toString());
+			}
 		}
 		return result.toString();
 	}
