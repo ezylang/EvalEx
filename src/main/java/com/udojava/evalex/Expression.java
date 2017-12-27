@@ -40,6 +40,8 @@ import java.util.Set;
 import java.util.Stack;
 import java.util.TreeMap;
 
+import javax.lang.model.element.VariableElement;
+
 /**
  * <h1>EvalEx - Java Expression Evaluator</h1>
  * 
@@ -503,7 +505,8 @@ public class Expression {
 	/**
 	 * All defined variables with name and value.
 	 */
-	private Map<String, BigDecimal> variables = new TreeMap<String, BigDecimal>(String.CASE_INSENSITIVE_ORDER);
+	private Map<String, LazyNumber> variables = new TreeMap<String, LazyNumber>(String.CASE_INSENSITIVE_ORDER);
+
 
 	/**
 	 * What character to use for decimal separators.
@@ -547,6 +550,23 @@ public class Expression {
 	public interface LazyNumber {
 		BigDecimal eval();
 		String getString();
+	}
+
+	/**
+	 * Construct a LazyNumber from a BigDecimal
+	 */
+	private LazyNumber CreateLazyNumber(final BigDecimal bigDecimal){
+		return new LazyNumber(){
+				@Override
+				public String getString() {
+					return bigDecimal.toPlainString();
+				}
+		
+				@Override
+				public BigDecimal eval() {
+					return bigDecimal;
+				}
+		};	
 	}
 
 	public abstract class LazyFunction {
@@ -1512,11 +1532,11 @@ public class Expression {
 			}
 		});
 
-		variables.put("e", e);
-		variables.put("PI", PI);
+		variables.put("e", CreateLazyNumber(e));
+		variables.put("PI", CreateLazyNumber(PI));
 		variables.put("NULL", null);
-		variables.put("TRUE", BigDecimal.ONE);
-		variables.put("FALSE", BigDecimal.ZERO);
+		variables.put("TRUE", CreateLazyNumber(BigDecimal.ONE));
+		variables.put("FALSE", CreateLazyNumber(BigDecimal.ZERO));
 
 	}
 	
@@ -1753,7 +1773,8 @@ public class Expression {
 
 					stack.push(new LazyNumber() {
 						public BigDecimal eval() {
-							BigDecimal value = variables.get(token.surface);
+							LazyNumber lazyVariable = variables.get(token.surface);
+							BigDecimal value = lazyVariable == null ? null : lazyVariable.eval();
 							return value == null ? null : value.round(mc);
 						}
 
@@ -1915,6 +1936,21 @@ public class Expression {
 		return  functions.put(function.getName(), function);
 	}
 
+
+		/**
+	 * Sets a variable value.
+	 * 
+	 * @param variable
+	 *            The variable name.
+	 * @param value
+	 *            The variable value.
+	 * @return The expression, allows to chain methods.
+	 */
+	private Expression setVariable(String variable, LazyNumber value) {
+		variables.put(variable, value);
+		return this;
+	}
+
 	/**
 	 * Sets a variable value.
 	 * 
@@ -1925,7 +1961,7 @@ public class Expression {
 	 * @return The expression, allows to chain methods.
 	 */
 	public Expression setVariable(String variable, BigDecimal value) {
-		variables.put(variable, value);
+		variables.put(variable, CreateLazyNumber(value));
 		return this;
 	}
 
@@ -1940,16 +1976,49 @@ public class Expression {
 	 */
 	public Expression setVariable(String variable, String value) {
 		if (isNumber(value))
-			variables.put(variable, new BigDecimal(value));
+			variables.put(variable, CreateLazyNumber(new BigDecimal(value, mc)));
 		else if (value.equalsIgnoreCase("null")) {
 			variables.put(variable, null);
 		}
 		else {
-			expression = expression.replaceAll("(?i)\\b" + variable + "\\b", "("
-					+ value + ")");
+			final String expStr = value;
+			variables.put(variable, new LazyNumber(){
+					private final Map<String, LazyNumber> outerVariables = variables;
+					private final Map<String, LazyFunction> outerFunctions = functions;
+					private final Map<String, Operator> outerOperators = operators;
+					private final String innerExpressionString = expStr;
+					private final MathContext inneMc = mc;
+
+					@Override
+					public String getString() {
+						return innerExpressionString;
+					}
+			
+					@Override
+					public BigDecimal eval() {
+						Expression innerE = new Expression(innerExpressionString, inneMc);
+						innerE.variables = outerVariables;
+						innerE.functions = outerFunctions;
+						innerE.operators = outerOperators;
+						BigDecimal val = innerE.eval();
+						return val;
+					}
+			});
 			rpn = null;
 		}
 		return this;
+	}
+
+	private Expression CreateEmbeddedExpression(final String expression){
+		final Map<String, LazyNumber> outerVariables = variables;
+		final Map<String, LazyFunction> outerFunctions = functions;
+		final Map<String, Operator> outerOperators = operators;
+		final MathContext inneMc = mc;
+		Expression exp = new Expression(expression, inneMc);
+						exp.variables = outerVariables;
+						exp.functions = outerFunctions;
+						exp.operators = outerOperators;
+		return exp;
 	}
 
 	/**
@@ -2003,6 +2072,7 @@ public class Expression {
 	public Expression with(String variable, String value) {
 		return setVariable(variable, value);
 	}
+
 
 	/**
 	 * Get an iterator for this expression, allows iterating over an expression
@@ -2107,7 +2177,19 @@ public class Expression {
 		for (Token t : getRPN()) {
 			if (result.length() != 0)
 				result.append(" ");
-			result.append(t.toString());
+			if(t.type == TokenType.VARIABLE && variables.containsKey(t.surface)){
+				LazyNumber innerVariable = variables.get(t.surface);
+				String innerExp = innerVariable.getString();
+				if(isNumber(innerExp)) { // if it is a number, then we don't expan in the RPN
+					result.append(t.toString());
+				} else { // expand the nested variable to its RPN representation
+					Expression exp = CreateEmbeddedExpression(innerExp);
+					String nestedExpRpn = exp.toRPN();
+					result.append(nestedExpRpn);
+				}
+			} else {
+				result.append(t.toString());
+			}
 		}
 		return result.toString();
 	}

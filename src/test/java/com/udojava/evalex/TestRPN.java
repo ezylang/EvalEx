@@ -31,4 +31,25 @@ public class TestRPN {
 
 		assertEquals("( 23.6 4 / SIN", new Expression("SIN(23.6/4)").toRPN());
 	}
+
+	@Test
+	public void testNested() {
+		Expression e = new Expression("x+y");
+		e.with("x", "a+b");
+		assertEquals("a b + y +", e.toRPN());
+	}
+
+	@Test
+	public void testComplexNested() {
+		Expression e = new Expression("x+y");
+		e.with("a", "p/q");
+		e.with("p", "q*y");
+		e.with("x", "p*12"); // x y + = p 12 * y +
+		e.with("y", "a"); // p 12 * p q / +
+		e.with("p", "15");
+		e.with("q", "14");
+		String rpn = e.toRPN();
+		assertEquals("p 12 * p q / +", rpn);
+
+	}
 }
