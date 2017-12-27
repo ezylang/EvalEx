@@ -2,6 +2,7 @@ package com.udojava.evalex;
 
 import com.udojava.evalex.Expression.ExpressionException;
 import org.junit.Test;
+import org.junit.experimental.categories.Categories.ExcludeCategory;
 
 import java.math.BigDecimal;
 import java.math.MathContext;
@@ -526,5 +527,16 @@ public class TestEval {
 	    assertEquals("0.16", e.eval().toPlainString());
 	}
 	
+	@Test
+	public void testUnexpectedComma() {
+		String err = "";
+		try {
+			Expression expression = new Expression("2+3,8");
+			expression.eval();
+		} catch (ExpressionException e) {
+			err = e.getMessage();
+		}
+		assertEquals("Unexpected comma at character position 3", err);
+	}
 }
 
