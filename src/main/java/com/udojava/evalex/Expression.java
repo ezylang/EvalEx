@@ -354,7 +354,7 @@ import java.util.TreeMap;
  * <pre>
  * Expression e = new Expression("2.1234 >> 2");
  * 
- * e.addOperator(e.new Operator(">>", 30, true) {
+ * e.addOperator(new AbstractOperator(">>", 30, true) {
  *     {@literal @}Override
  *     public BigDecimal eval(BigDecimal v1, BigDecimal v2) {
  *         return v1.movePointRight(v2.toBigInteger().intValue());
@@ -380,7 +380,7 @@ import java.util.TreeMap;
  * <pre>
  * Expression e = new Expression("2 * average(12,4,8)");
  * 
- * e.addFunction(e.new Function("average", 3) {
+ * e.addFunction(new AbstractFunction("average", 3) {
  *     {@literal @}Override
  *     public BigDecimal eval(List<BigDecimal> parameters) {
  *         BigDecimal sum = parameters.get(0).add(parameters.get(1)).add(parameters.get(2));
@@ -496,12 +496,12 @@ public class Expression {
 	/**
 	 * All defined operators with name and implementation.
 	 */
-	private Map<String, Operator> operators = new TreeMap<String, Operator>(String.CASE_INSENSITIVE_ORDER);
+	private Map<String, com.udojava.evalex.Operator> operators = new TreeMap<String, com.udojava.evalex.Operator>(String.CASE_INSENSITIVE_ORDER);
 
 	/**
 	 * All defined functions with name and implementation.
 	 */
-	private Map<String, LazyFunction> functions = new TreeMap<String, LazyFunction>(String.CASE_INSENSITIVE_ORDER);
+	private Map<String, com.udojava.evalex.LazyFunction> functions = new TreeMap<String, com.udojava.evalex.LazyFunction>(String.CASE_INSENSITIVE_ORDER);
 
 	/**
 	 * All defined variables with name and value.
@@ -569,22 +569,7 @@ public class Expression {
 		};
 	}
 
-	public abstract class LazyFunction {
-		/**
-		 * Name of this function.
-		 */
-		private String name;
-		/**
-		 * Number of parameters expected for this function. <code>-1</code>
-		 * denotes a variable number of parameters.
-		 */
-		private int numParams;
-
-		/**
-		 * Whether this function is a boolean function.
-		 */
-		protected boolean booleanFunction = false;
-
+	public abstract class LazyFunction extends AbstractLazyFunction {
 		/**
 		 * Creates a new function with given name and parameter count.
 		 *
@@ -597,9 +582,7 @@ public class Expression {
 		 *            Whether this function is a boolean function.
 		 */
 		public LazyFunction(String name, int numParams, boolean booleanFunction) {
-			this.name = name.toUpperCase(Locale.ROOT);
-			this.numParams = numParams;
-			this.booleanFunction = booleanFunction;
+			super(name, numParams, booleanFunction);
 		}
 
 		/**
@@ -612,31 +595,8 @@ public class Expression {
 		 *            <code>-1</code> denotes a variable number of parameters.
 		 */
 		public LazyFunction(String name, int numParams) {
-			this.name = name.toUpperCase(Locale.ROOT);
-			this.numParams = numParams;
+			super(name, numParams);
 		}
-
-		public String getName() {
-			return name;
-		}
-
-		public int getNumParams() {
-			return numParams;
-		}
-
-		public boolean numParamsVaries() {
-			return numParams < 0;
-		}
-
-		public boolean isBooleanFunction() {
-			return this.booleanFunction;
-		}
-
-		public void setBooleanFunction(boolean booleanFunction) {
-			this.booleanFunction = booleanFunction;
-		}
-
-		public abstract LazyNumber lazyEval(List<LazyNumber> lazyParams);
 	}
 
 	/**
@@ -644,7 +604,7 @@ public class Expression {
 	 * defined by a name, the number of parameters and the actual processing
 	 * implementation.
 	 */
-	public abstract class Function extends LazyFunction {
+	public abstract class Function extends AbstractFunction {
 
 		public Function(String name, int numParams) {
 			super(name, numParams);
@@ -653,74 +613,14 @@ public class Expression {
 		public Function(String name, int numParams, boolean booleanFunction) {
 			super(name, numParams, booleanFunction);
 		}
-
-		public LazyNumber lazyEval(final List<LazyNumber> lazyParams) {
-			return new LazyNumber() {
-
-				private List<BigDecimal> params;
-
-				public BigDecimal eval() {
-					return Function.this.eval(getParams());
-				}
-
-				public String getString() {
-					return String.valueOf(Function.this.eval(getParams()));
-				}
-
-				private List<BigDecimal> getParams() {
-					if (params == null) {
-						params = new ArrayList<BigDecimal>();
-						for (LazyNumber lazyParam : lazyParams) {
-							params.add(lazyParam.eval());
-						}
-					}
-					return params;
-				}
-			};
-		}
-
-		/**
-		 * Implementation for this function.
-		 *
-		 * @param parameters
-		 *            Parameters will be passed by the expression evaluator as a
-		 *            {@link List} of {@link BigDecimal} values.
-		 * @return The function must return a new {@link BigDecimal} value as a
-		 *         computing result.
-		 */
-		public abstract BigDecimal eval(List<BigDecimal> parameters);
 	}
 
 	/**
 	 * Abstract definition of a supported operator. An operator is defined by
 	 * its name (pattern), precedence and if it is left- or right associative.
 	 */
-	public abstract class Operator {
-		/**
-		 * This operators name (pattern).
-		 */
-		private String oper;
-		/**
-		 * Operators precedence.
-		 */
-		private int precedence;
-		/**
-		 * Operator is left associative.
-		 */
-		private boolean leftAssoc;
-		/**
-		 * Whether this operator is boolean or not.
-		 */
-		protected boolean booleanOperator = false;
-
-		public boolean isBooleanOperator() {
-			return booleanOperator;
-		}
-
-		public void setBooleanOperator(boolean booleanOperator) {
-			this.booleanOperator = booleanOperator;
-		}
-
+	public abstract class Operator extends AbstractOperator {
+		
 		/**
 		 * Creates a new operator.
 		 * 
@@ -735,10 +635,7 @@ public class Expression {
 		 *            Whether this operator is boolean.
 		 */
 		public Operator(String oper, int precedence, boolean leftAssoc, boolean booleanOperator) {
-			this.oper = oper;
-			this.precedence = precedence;
-			this.leftAssoc = leftAssoc;
-			this.booleanOperator = booleanOperator;
+			super(oper, precedence, leftAssoc, booleanOperator);
 		}
 
 		/**
@@ -753,50 +650,15 @@ public class Expression {
 		 *            else <code>false</code>.
 		 */
 		public Operator(String oper, int precedence, boolean leftAssoc) {
-			this.oper = oper;
-			this.precedence = precedence;
-			this.leftAssoc = leftAssoc;
+			super(oper, precedence, leftAssoc);
 		}
-
-		public String getOper() {
-			return oper;
-		}
-
-		public int getPrecedence() {
-			return precedence;
-		}
-
-		public boolean isLeftAssoc() {
-			return leftAssoc;
-		}
-
-		/**
-		 * Implementation for this operator.
-		 * 
-		 * @param v1
-		 *            Operand 1.
-		 * @param v2
-		 *            Operand 2.
-		 * @return The result of the operation.
-		 */
-		public abstract BigDecimal eval(BigDecimal v1, BigDecimal v2);
 	}
 
-	public abstract class UnaryOperator extends Operator {
+	public abstract class UnaryOperator extends AbstractUnaryOperator {
 
 		public UnaryOperator(String oper, int precedence, boolean leftAssoc) {
 			super(oper, precedence, leftAssoc);
 		}
-
-		@Override
-		public BigDecimal eval(BigDecimal v1, BigDecimal v2) {
-			if (v2 != null) {
-				throw new ExpressionException("Did not expect a second parameter for unary operator");
-			}
-			return evalUnary(v1);
-		}
-
-		abstract public BigDecimal evalUnary(BigDecimal v1);
 	}
 
 	enum TokenType {
@@ -1625,7 +1487,7 @@ public class Expression {
 					throw new ExpressionException(
 							"Missing parameter(s) for operator " + token + " at character position " + token.pos);
 				}
-				Operator o1 = operators.get(token.surface);
+				com.udojava.evalex.Operator o1 = operators.get(token.surface);
 				if (o1 == null) {
 					throw new ExpressionException("Unknown operator '" + token + "' at position " + (token.pos + 1));
 				}
@@ -1640,7 +1502,7 @@ public class Expression {
 					throw new ExpressionException(
 							"Invalid position for unary operator " + token + " at character position " + token.pos);
 				}
-				Operator o1 = operators.get(token.surface);
+				com.udojava.evalex.Operator o1 = operators.get(token.surface);
 				if (o1 == null) {
 					throw new ExpressionException(
 							"Unknown unary operator '" + token.surface.substring(0, token.surface.length() - 1)
@@ -1699,7 +1561,7 @@ public class Expression {
 		return outputQueue;
 	}
 
-	private void shuntOperators(List<Token> outputQueue, Stack<Token> stack, Operator o1) {
+	private void shuntOperators(List<Token> outputQueue, Stack<Token> stack, com.udojava.evalex.Operator o1) {
 		Expression.Token nextToken = stack.isEmpty() ? null : stack.peek();
 		while (nextToken != null
 				&& (nextToken.type == Expression.TokenType.OPERATOR
@@ -1782,7 +1644,7 @@ public class Expression {
 				});
 				break;
 			case FUNCTION:
-				LazyFunction f = functions.get(token.surface.toUpperCase(Locale.ROOT));
+				com.udojava.evalex.LazyFunction f = functions.get(token.surface.toUpperCase(Locale.ROOT));
 				ArrayList<LazyNumber> p = new ArrayList<LazyNumber>(!f.numParamsVaries() ? f.getNumParams() : 0);
 				// pop parameters off the stack until we hit the start of
 				// this function's parameter list
@@ -1905,7 +1767,7 @@ public class Expression {
 	 * @return The previous operator with that name, or <code>null</code> if
 	 *         there was none.
 	 */
-	public Operator addOperator(Operator operator) {
+	public com.udojava.evalex.Operator addOperator(com.udojava.evalex.Operator operator) {
 		String key = operator.getOper();
 		if (operator instanceof UnaryOperator) {
 			key += "u";
@@ -1921,8 +1783,8 @@ public class Expression {
 	 * @return The previous operator with that name, or <code>null</code> if
 	 *         there was none.
 	 */
-	public Function addFunction(Function function) {
-		return (Function) functions.put(function.getName(), function);
+	public com.udojava.evalex.Function addFunction(com.udojava.evalex.Function function) {
+		return (com.udojava.evalex.Function) functions.put(function.getName(), function);
 	}
 
 	/**
@@ -1933,7 +1795,7 @@ public class Expression {
 	 * @return The previous operator with that name, or <code>null</code> if
 	 *         there was none.
 	 */
-	public LazyFunction addLazyFunction(LazyFunction function) {
+	public com.udojava.evalex.LazyFunction addLazyFunction(com.udojava.evalex.LazyFunction function) {
 		return functions.put(function.getName(), function);
 	}
 
@@ -1969,8 +1831,8 @@ public class Expression {
 			final String expStr = value;
 			variables.put(variable, new LazyNumber() {
 				private final Map<String, LazyNumber> outerVariables = variables;
-				private final Map<String, LazyFunction> outerFunctions = functions;
-				private final Map<String, Operator> outerOperators = operators;
+				private final Map<String, com.udojava.evalex.LazyFunction> outerFunctions = functions;
+				private final Map<String, com.udojava.evalex.Operator> outerOperators = operators;
 				private final String innerExpressionString = expStr;
 				private final MathContext inneMc = mc;
 
@@ -2003,8 +1865,8 @@ public class Expression {
 	 */
 	private Expression createEmbeddedExpression(final String expression) {
 		final Map<String, LazyNumber> outerVariables = variables;
-		final Map<String, LazyFunction> outerFunctions = functions;
-		final Map<String, Operator> outerOperators = operators;
+		final Map<String, com.udojava.evalex.LazyFunction> outerFunctions = functions;
+		final Map<String, com.udojava.evalex.Operator> outerOperators = operators;
 		final MathContext inneMc = mc;
 		Expression exp = new Expression(expression, inneMc);
 		exp.variables = outerVariables;
@@ -2126,7 +1988,7 @@ public class Expression {
 				stack.set(stack.size() - 1, stack.peek() - 2 + 1);
 				break;
 			case FUNCTION:
-				LazyFunction f = functions.get(token.surface.toUpperCase(Locale.ROOT));
+				com.udojava.evalex.LazyFunction f = functions.get(token.surface.toUpperCase(Locale.ROOT));
 				if (f == null) {
 					throw new ExpressionException("Unknown function '" + token + "' at position " + (token.pos + 1));
 				}

@@ -158,7 +158,7 @@ For example, add an operator `x >> n`, that moves the decimal point of _x_ _n_ d
 ````java
 Expression e = new Expression("2.1234 >> 2");
 
-e.addOperator(e.new Operator(">>", 30, true) {
+e.addOperator(new AbstractOperator(">>", 30, true) {
     @Override
     public BigDecimal eval(BigDecimal v1, BigDecimal v2) {
         return v1.movePointRight(v2.toBigInteger().intValue());
@@ -180,7 +180,7 @@ For example, add a function `average(a,b,c)`, that will calculate the average va
 ````java
 Expression e = new Expression("2 * average(12,4,8)");
 
-e.addFunction(e.new Function("average", -1) {
+e.addFunction(new AbstractFunction("average", -1) {
     @Override
     public BigDecimal eval(List<BigDecimal> parameters) {
 				if (parameters.size() == 0) {
@@ -207,7 +207,7 @@ For example, add a function `STREQ("string1","string2")`, that will compare whet
 
 ````java
 Expression e = new Expression("STREQ(\"test\", \"test2\")");
-e.addLazyFunction(e.new LazyFunction("STREQ", 2) {
+e.addLazyFunction(new AbstractLazyFunction("STREQ", 2) {
     private LazyNumber ZERO = new LazyNumber() {
         public BigDecimal eval() {
             return BigDecimal.ZERO;
@@ -245,7 +245,7 @@ The software was created and tested using Java 1.6.0.
   
 ### Author and License
 
-Copyright 2012-2017 by Udo Klimaschewski
+Copyright 2012-2018 by Udo Klimaschewski
 
 http://about.me/udo.klimaschewski
 
