@@ -7,7 +7,6 @@ EvalEx is a handy expression evaluator for Java, that allows to evaluate simple 
 
 Key Features:
 - Uses BigDecimal for calculation and result
-- Single class implementation, very compact
 - No dependencies to external libraries
 - Precision and rounding mode can be set
 - Supports variables
@@ -30,7 +29,7 @@ To include it in your Maven project, refer to the artifact in your pom. For exam
     <dependency>
         <groupId>com.udojava</groupId>
         <artifactId>EvalEx</artifactId>
-        <version>1.18</version>
+        <version>2.0</version>
     </dependency>
 </dependencies>
 ````
@@ -39,7 +38,7 @@ If you're using gradle add to your project's app build.gradle:
 ````gradle
 dependencies {
     ...
-    compile 'com.udojava:EvalEx:1.18'
+    compile 'com.udojava:EvalEx:2.0'
 }
 ````
 
@@ -241,7 +240,7 @@ e.eval(); // returns 1
 The software was created and tested using Java 1.6.0.
 
     src/   The Java sources
-    tests/ JUnit tests
+    test/  JUnit tests
   
 ### Author and License
 
@@ -251,7 +250,9 @@ http://about.me/udo.klimaschewski
 
 http://UdoJava.com
 
-The software is licensed under the MIT Open Source license (see LICENSE file).
+**Thanks to all who contributed to this project: [Contributors](https://github.com/uklimaschewski/EvalEx/graphs/contributors)**
+
+The software is licensed under the MIT Open Source license (see [LICENSE](https://raw.githubusercontent.com/uklimaschewski/EvalEx/master/LICENSE) file).
 
 * The *power of* operator (^) implementation was copied from [Stack Overflow](http://stackoverflow.com/questions/3579779/how-to-do-a-fractional-power-on-bigdecimal-in-java) Thanks to Gene Marin
 * The SQRT() function implementation was taken from the book [The Java Programmers Guide To numerical Computing](http://www.amazon.de/Java-Number-Cruncher-Programmers-Numerical/dp/0130460419) (Ronald Mak, 2002)
