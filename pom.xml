@@ -41,11 +41,11 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
 
-        <versionMavenGPG>1.6</versionMavenGPG>
-        <versionMavenDocs>3.0.0-M1</versionMavenDocs>
-        <versionMavenSources>3.0.1</versionMavenSources>
+		<versionMavenGPG>1.6</versionMavenGPG>
+		<versionMavenDocs>3.0.0-M1</versionMavenDocs>
+		<versionMavenSources>3.0.1</versionMavenSources>
 
-        <versionSonatypeStage>1.6.8</versionSonatypeStage>
+		<versionSonatypeStage>1.6.8</versionSonatypeStage>
 	</properties>
 
 	<issueManagement>
@@ -82,7 +82,7 @@
 				<version>${versionMavenSources}</version>
 				<executions>
 					<execution>
-                        <phase>package</phase>
+						<phase>package</phase>
 						<goals>
 							<goal>jar</goal>
 						</goals>
@@ -93,6 +93,9 @@
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-javadoc-plugin</artifactId>
 				<version>${versionMavenDocs}</version>
+				<configuration>
+					<doclint>none</doclint>
+				</configuration>
 				<executions>
 					<execution>
 						<phase>package</phase>
