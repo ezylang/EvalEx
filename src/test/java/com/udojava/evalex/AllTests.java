@@ -9,6 +9,7 @@ import org.junit.runners.Suite.SuiteClasses;
 		TestVariables.class, TestBooleans.class, TestCustoms.class,
 		TestNested.class, TestVarArgs.class, TestSciNotation.class,
 		TestExposedComponents.class, TestCaseInsensitive.class,
-		TestLazyIf.class, TestGetUsedVariables.class, TestVariableCharacters.class })
+		TestLazyIf.class, TestGetUsedVariables.class, TestVariableCharacters.class,
+		TestThreadSafety.class })
 public class AllTests {
 }

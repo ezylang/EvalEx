@@ -153,22 +153,7 @@ public class Expression {
 	 */
 	private List<Token> rpn = null;
 
-	/**
-	 * All defined operators with name and implementation.
-	 */
-	private Map<String, LazyOperator> operators = new TreeMap<String, LazyOperator>(
-			String.CASE_INSENSITIVE_ORDER);
-
-	/**
-	 * All defined functions with name and implementation.
-	 */
-	private Map<String, com.udojava.evalex.LazyFunction> functions = new TreeMap<String, com.udojava.evalex.LazyFunction>(
-			String.CASE_INSENSITIVE_ORDER);
-
-	/**
-	 * All defined variables with name and value.
-	 */
-	private Map<String, LazyNumber> variables = new TreeMap<String, LazyNumber>(String.CASE_INSENSITIVE_ORDER);
+	private Scope scope = new Scope();
 
 	/**
 	 * What character to use for decimal separators.
@@ -486,7 +471,7 @@ public class Expression {
 						&& (pos < input.length())) {
 					greedyMatch += ch;
 					pos++;
-					if (operators.containsKey(greedyMatch)) {
+					if (scope.containsOperator(greedyMatch)) {
 						validOperatorSeenUntil = pos;
 					}
 					ch = pos == input.length() ? 0 : input.charAt(pos);
@@ -679,7 +664,7 @@ public class Expression {
 		addOperator(new Operator("==", OPERATOR_PRECEDENCE_EQUALITY, false, true) {
 			@Override
 			public BigDecimal eval(BigDecimal v1, BigDecimal v2) {
-				return ((Operator)operators.get("=")).eval(v1, v2);
+				return ((Operator)scope.getOperator("=")).eval(v1, v2);
 			}
 		});
 
@@ -699,7 +684,7 @@ public class Expression {
 			@Override
 			public BigDecimal eval(BigDecimal v1, BigDecimal v2) {
 				assertNotNull(v1, v2);
-				return ((Operator)operators.get("!=")).eval(v1, v2);
+				return ((Operator)scope.getOperator("!=")).eval(v1, v2);
 			}
 		});
 		addOperator(new UnaryOperator("-", OPERATOR_PRECEDENCE_UNARY, false) {
@@ -1057,11 +1042,11 @@ public class Expression {
 			}
 		});
 
-		variables.put("e", CreateLazyNumber(e));
-		variables.put("PI", CreateLazyNumber(PI));
-		variables.put("NULL", null);
-		variables.put("TRUE", CreateLazyNumber(BigDecimal.ONE));
-		variables.put("FALSE", CreateLazyNumber(BigDecimal.ZERO));
+		scope.addVariable("e", CreateLazyNumber(e));
+		scope.addVariable("PI", CreateLazyNumber(PI));
+		scope.addVariable("NULL", (LazyNumber)null);
+		scope.addVariable("TRUE", CreateLazyNumber(BigDecimal.ONE));
+		scope.addVariable("FALSE", CreateLazyNumber(BigDecimal.ZERO));
 
 	}
 
@@ -1161,7 +1146,7 @@ public class Expression {
 					throw new ExpressionException(
 							"Missing parameter(s) for operator " + token + " at character position " + token.pos);
 				}
-				LazyOperator o1 = operators.get(token.surface);
+				LazyOperator o1 = scope.getOperator(token.surface);
 				if (o1 == null) {
 					throw new ExpressionException("Unknown operator '" + token + "' at position " + (token.pos + 1));
 				}
@@ -1176,7 +1161,7 @@ public class Expression {
 					throw new ExpressionException(
 							"Invalid position for unary operator " + token + " at character position " + token.pos);
 				}
-				LazyOperator o1 = operators.get(token.surface);
+				LazyOperator o1 = scope.getOperator(token.surface);
 				if (o1 == null) {
 					throw new ExpressionException(
 							"Unknown unary operator '" + token.surface.substring(0, token.surface.length() - 1)
@@ -1240,8 +1225,8 @@ public class Expression {
 		while (nextToken != null
 				&& (nextToken.type == Expression.TokenType.OPERATOR
 						|| nextToken.type == Expression.TokenType.UNARY_OPERATOR)
-				&& ((o1.isLeftAssoc() && o1.getPrecedence() <= operators.get(nextToken.surface).getPrecedence())
-						|| (o1.getPrecedence() < operators.get(nextToken.surface).getPrecedence()))) {
+				&& ((o1.isLeftAssoc() && o1.getPrecedence() <= scope.getOperator(nextToken.surface).getPrecedence())
+						|| (o1.getPrecedence() < scope.getOperator(nextToken.surface).getPrecedence()))) {
 			outputQueue.add(stack.pop());
 			nextToken = stack.isEmpty() ? null : stack.peek();
 		}
@@ -1266,6 +1251,32 @@ public class Expression {
 	 * @return The result of the expression.
 	 */
 	public BigDecimal eval(boolean stripTrailingZeros) {
+		return eval(null, stripTrailingZeros);
+	}
+
+	/**
+	 * Evaluates the expression.
+	 * 
+	 * @param stripTrailingZeros
+	 *            If set to <code>true</code> trailing zeros in the result are
+	 *            stripped.
+	 * 
+	 * @return The result of the expression.
+	 */
+	public BigDecimal eval(Scope additionalScope) {
+		return eval(additionalScope, true);
+	}
+	
+	/**
+	 * Evaluates the expression.
+	 * 
+	 * @param stripTrailingZeros
+	 *            If set to <code>true</code> trailing zeros in the result are
+	 *            stripped.
+	 * 
+	 * @return The result of the expression.
+	 */
+	public BigDecimal eval(Scope additionalScope, boolean stripTrailingZeros) {
 
 		Stack<LazyNumber> stack = new Stack<LazyNumber>();
 
@@ -1275,12 +1286,12 @@ public class Expression {
 				final LazyNumber value = stack.pop();
 				LazyNumber result = new LazyNumber() {
 					public BigDecimal eval() {
-						return operators.get(token.surface).eval(value, null).eval();
+						return getOperator(token.surface, additionalScope, scope).eval(value, null).eval();
 					}
 
 					@Override
 					public String getString() {
-						return String.valueOf(operators.get(token.surface).eval(value, null).eval());
+						return String.valueOf(getOperator(token.surface, additionalScope, scope).eval(value, null).eval());
 					}
 				};
 				stack.push(result);
@@ -1291,23 +1302,23 @@ public class Expression {
 				final LazyNumber v2 = stack.pop();
 				LazyNumber result = new LazyNumber() {
 					public BigDecimal eval() {
-						return operators.get(token.surface).eval(v2, v1).eval();
+						return getOperator(token.surface, additionalScope, scope).eval(v2, v1).eval();
 					}
 
 					public String getString() {
-						return String.valueOf(operators.get(token.surface).eval(v2, v1).eval());
+						return String.valueOf(getOperator(token.surface, additionalScope, scope).eval(v2, v1).eval());
 					}
 				};
 				stack.push(result);
 				break;
 			case VARIABLE:
-				if (!variables.containsKey(token.surface)) {
+				if (!hasVariable(token.surface, additionalScope, scope)) {
 					throw new ExpressionException("Unknown operator or function: " + token);
 				}
 
 				stack.push(new LazyNumber() {
 					public BigDecimal eval() {
-						LazyNumber lazyVariable = variables.get(token.surface);
+						LazyNumber lazyVariable = getVariable(token.surface, additionalScope, scope);
 						BigDecimal value = lazyVariable == null ? null : lazyVariable.eval();
 						return value == null ? null : value.round(mc);
 					}
@@ -1318,7 +1329,7 @@ public class Expression {
 				});
 				break;
 			case FUNCTION:
-				com.udojava.evalex.LazyFunction f = functions.get(token.surface.toUpperCase(Locale.ROOT));
+				com.udojava.evalex.LazyFunction f = getFunction(token.surface.toUpperCase(Locale.ROOT), additionalScope, scope);
 				ArrayList<LazyNumber> p = new ArrayList<LazyNumber>(!f.numParamsVaries() ? f.getNumParams() : 0);
 				// pop parameters off the stack until we hit the start of
 				// this function's parameter list
@@ -1380,6 +1391,63 @@ public class Expression {
 		}
 		BigDecimal result = stack.pop().eval();
 		return result == null ? null : stripTrailingZeros ? result.stripTrailingZeros() : result;
+	}
+
+	private boolean hasFunction(String name, Scope primaryScope, Scope secondaryScope) {
+		return (primaryScope != null && primaryScope.containsFunction(name))
+				|| (secondaryScope != null && secondaryScope.containsFunction(name));
+	}
+
+	private boolean hasOperator(String name, Scope primaryScope, Scope secondaryScope) {
+		return (primaryScope != null && primaryScope.containsOperator(name))
+				|| (secondaryScope != null && secondaryScope.containsOperator(name));
+	}
+
+	private boolean hasVariable(String name, Scope primaryScope, Scope secondaryScope) {
+		return (primaryScope != null && primaryScope.containsVariable(name))
+				|| (secondaryScope != null && secondaryScope.containsVariable(name));
+	}
+	
+	private com.udojava.evalex.LazyFunction getFunction(String name, Scope primaryScope, Scope secondaryScope) {
+		com.udojava.evalex.LazyFunction function = null;
+		
+		if (primaryScope != null) {
+			function = primaryScope.getFunction(name);
+		}
+		
+		if (function == null && secondaryScope != null) {
+			function = secondaryScope.getFunction(name);
+		}
+		
+		return function;
+	}
+
+	private LazyOperator getOperator(String name, Scope primaryScope, Scope secondaryScope) {
+		LazyOperator operator = null;
+		
+		if (primaryScope != null) {
+			operator = primaryScope.getOperator(name);
+		}
+		
+		if (operator == null && secondaryScope != null) {
+			operator = secondaryScope.getOperator(name);
+		}
+		
+		return operator;
+	}
+
+	private LazyNumber getVariable(String name, Scope primaryScope, Scope secondaryScope) {
+		LazyNumber variable = null;
+		
+		if (primaryScope != null) {
+			variable = primaryScope.getVariable(name);
+		}
+		
+		if (variable == null && secondaryScope != null) {
+			variable = secondaryScope.getVariable(name);
+		}
+		
+		return variable;
 	}
 
 	/**
@@ -1446,7 +1514,8 @@ public class Expression {
 		if (operator instanceof AbstractUnaryOperator) {
 			key += "u";
 		}
-		return (OPERATOR)operators.put(key, operator);
+		scope.addOperator(key, operator);
+		return operator;
 	}
 
 	/**
@@ -1458,7 +1527,8 @@ public class Expression {
 	 *         there was none.
 	 */
 	public com.udojava.evalex.Function addFunction(com.udojava.evalex.Function function) {
-		return (com.udojava.evalex.Function) functions.put(function.getName(), function);
+		scope.addFunction(function.getName(), function);
+		return function;
 	}
 
 	/**
@@ -1470,7 +1540,8 @@ public class Expression {
 	 *         there was none.
 	 */
 	public com.udojava.evalex.LazyFunction addLazyFunction(com.udojava.evalex.LazyFunction function) {
-		return functions.put(function.getName(), function);
+		scope.addFunction(function.getName(), function);
+		return function;
 	}
 
 	/**
@@ -1496,7 +1567,7 @@ public class Expression {
 	 * @return The expression, allows to chain methods.
 	 */
 	public Expression setVariable(String variable, LazyNumber value) {
-		variables.put(variable, value);
+		scope.addVariable(variable, value);
 		return this;
 	}
 
@@ -1511,15 +1582,13 @@ public class Expression {
 	 */
 	public Expression setVariable(String variable, String value) {
 		if (isNumber(value))
-			variables.put(variable, CreateLazyNumber(new BigDecimal(value, mc)));
+			scope.addVariable(variable, CreateLazyNumber(new BigDecimal(value, mc)));
 		else if (value.equalsIgnoreCase("null")) {
-			variables.put(variable, null);
+			scope.addVariable(variable, (LazyNumber)null);
 		} else {
 			final String expStr = value;
-			variables.put(variable, new LazyNumber() {
-				private final Map<String, LazyNumber> outerVariables = variables;
-				private final Map<String, com.udojava.evalex.LazyFunction> outerFunctions = functions;
-				private final Map<String, LazyOperator> outerOperators = operators;
+			scope.addVariable(variable, new LazyNumber() {
+				private final Scope outerScope = scope;
 				private final String innerExpressionString = expStr;
 				private final MathContext inneMc = mc;
 
@@ -1531,9 +1600,7 @@ public class Expression {
 				@Override
 				public BigDecimal eval() {
 					Expression innerE = new Expression(innerExpressionString, inneMc);
-					innerE.variables = outerVariables;
-					innerE.functions = outerFunctions;
-					innerE.operators = outerOperators;
+					innerE.scope = outerScope;
 					BigDecimal val = innerE.eval();
 					return val;
 				}
@@ -1551,14 +1618,10 @@ public class Expression {
 	 * @return The inner Expression instance.
 	 */
 	private Expression createEmbeddedExpression(final String expression) {
-		final Map<String, LazyNumber> outerVariables = variables;
-		final Map<String, com.udojava.evalex.LazyFunction> outerFunctions = functions;
-		final Map<String, LazyOperator> outerOperators = operators;
+		final Scope outerScope = scope;
 		final MathContext inneMc = mc;
 		Expression exp = new Expression(expression, inneMc);
-		exp.variables = outerVariables;
-		exp.functions = outerFunctions;
-		exp.operators = outerOperators;
+		exp.scope = outerScope;
 		return exp;
 	}
 
@@ -1659,7 +1722,7 @@ public class Expression {
 	 * 
 	 * @return The cached RPN instance.
 	 */
-	private List<Token> getRPN() {
+	private synchronized List<Token> getRPN() {
 		if (rpn == null) {
 			rpn = shuntingYard(this.expression);
 			validate(rpn);
@@ -1701,7 +1764,7 @@ public class Expression {
 				stack.set(stack.size() - 1, stack.peek() - 2 + 1);
 				break;
 			case FUNCTION:
-				com.udojava.evalex.LazyFunction f = functions.get(token.surface.toUpperCase(Locale.ROOT));
+				com.udojava.evalex.LazyFunction f = scope.getFunction(token.surface.toUpperCase(Locale.ROOT));
 				if (f == null) {
 					throw new ExpressionException("Unknown function '" + token + "' at position " + (token.pos + 1));
 				}
@@ -1745,8 +1808,8 @@ public class Expression {
 		for (Token t : getRPN()) {
 			if (result.length() != 0)
 				result.append(" ");
-			if (t.type == TokenType.VARIABLE && variables.containsKey(t.surface)) {
-				LazyNumber innerVariable = variables.get(t.surface);
+			if (t.type == TokenType.VARIABLE && scope.containsVariable(t.surface)) {
+				LazyNumber innerVariable = scope.getVariable(t.surface);
 				String innerExp = innerVariable.getString();
 				if (isNumber(innerExp)) { // if it is a number, then we don't
 											// expan in the RPN
@@ -1769,7 +1832,7 @@ public class Expression {
 	 * @return All declared variables.
 	 */
 	public Set<String> getDeclaredVariables() {
-		return Collections.unmodifiableSet(variables.keySet());
+		return scope.getDeclaredVariableNames();
 	}
 
 	/**
@@ -1778,7 +1841,7 @@ public class Expression {
 	 * @return All declared operators.
 	 */
 	public Set<String> getDeclaredOperators() {
-		return Collections.unmodifiableSet(operators.keySet());
+		return scope.getDeclaredOperatorNames();
 	}
 
 	/**
@@ -1787,7 +1850,7 @@ public class Expression {
 	 * @return All declared functions.
 	 */
 	public Set<String> getDeclaredFunctions() {
-		return Collections.unmodifiableSet(functions.keySet());
+		return scope.getDeclaredFunctionNames();
 	}
 
 	/**
@@ -1873,9 +1936,9 @@ public class Expression {
 				if (t.surface.equals("IF"))
 					continue;
 				if (t.type == TokenType.FUNCTION) {
-					return functions.get(t.surface).isBooleanFunction();
+					return scope.getFunction(t.surface).isBooleanFunction();
 				} else if (t.type == TokenType.OPERATOR) {
-					return operators.get(t.surface).isBooleanOperator();
+					return scope.getOperator(t.surface).isBooleanOperator();
 				}
 			}
 		}
