@@ -8,23 +8,24 @@ import java.util.List;
 import org.junit.Test;
 
 import com.udojava.evalex.Expression.LazyNumber;
+import com.udojava.evalex.Expression.UnaryOperator;
 
 public class TestCustoms {
 
 	@Test
 	public void testCustomOperator() {
 		Expression e = new Expression("2.1234 >> 2");
-		
+
 		e.addOperator(e.new Operator(">>", 30, true) {
 			@Override
 			public BigDecimal eval(BigDecimal v1, BigDecimal v2) {
 				return v1.movePointRight(v2.toBigInteger().intValue());
 			}
 		});
-		
+
 		assertEquals("212.34", e.eval().toPlainString());
 	}
-	
+
 	@Test
 	public void testCustomFunction() {
 		Expression e = new Expression("2 * average(12,4,8)");
@@ -35,10 +36,10 @@ public class TestCustoms {
 				return sum.divide(new BigDecimal(3));
 			}
 		});
-		
+
 		assertEquals("16", e.eval().toPlainString());
 	}
-	
+
 	@Test
 	public void testCustomFunctionInstanceClass() {
 		Expression e = new Expression("2 * average(12,4,8)");
@@ -49,10 +50,10 @@ public class TestCustoms {
 				return sum.divide(new BigDecimal(3));
 			}
 		});
-		
+
 		assertEquals("16", e.eval().toPlainString());
 	}
-	
+
 	@Test
 	public void testCustomFunctionVariableParameters() {
 		Expression e = new Expression("2 * average(12,4,8,2,9)");
@@ -66,10 +67,10 @@ public class TestCustoms {
 				return sum.divide(new BigDecimal(parameters.size()));
 			}
 		});
-		
+
 		assertEquals("14", e.eval().toPlainString());
 	}
-	
+
 	@Test
 	public void testCustomFunctionVariableParametersInstanceClass() {
 		Expression e = new Expression("2 * average(12,4,8,2,9)");
@@ -83,80 +84,92 @@ public class TestCustoms {
 				return sum.divide(new BigDecimal(parameters.size()));
 			}
 		});
-		
+
 		assertEquals("14", e.eval().toPlainString());
 	}
-	
+
 	@Test
 	public void testCustomFunctionStringParameters() {
-        Expression e = new Expression("STREQ(\"test\", \"test2\")");
-        e.addLazyFunction(e.new LazyFunction("STREQ", 2) {
-            private LazyNumber ZERO = new LazyNumber() {
-                public BigDecimal eval() {
-                    return BigDecimal.ZERO;
-                }
-                
-                public String getString() {
-                    return "0";
-                }
-             };
-           
-            private LazyNumber ONE = new LazyNumber() {
-                public BigDecimal eval() {
-                    return BigDecimal.ONE;
-                }
-                 
-                public String getString() {
-                    return null;
-                }
-            };
-          
-            @Override
-            public LazyNumber lazyEval(List<LazyNumber> lazyParams) {
-                if (lazyParams.get(0).getString().equals(lazyParams.get(1).getString())) {
-                    return ZERO;
-                }
-                return ONE;
-            }
-        });
-       
-        assertEquals("1", e.eval().toPlainString());
-	}
-	
-	@Test
-	public void testCustomFunctionStringParametersInstanceClass() {
-        Expression e = new Expression("STREQ(\"test\", \"test2\")");
-        e.addLazyFunction(e.new LazyFunction("STREQ", 2) {
-            private LazyNumber ZERO = new LazyNumber() {
-                public BigDecimal eval() {
-                    return BigDecimal.ZERO;
-                }
-                
-                public String getString() {
-                    return "0";
-                }
-             };
-           
-            private LazyNumber ONE = new LazyNumber() {
-                public BigDecimal eval() {
-                    return BigDecimal.ONE;
-                }
-                 
-                public String getString() {
-                    return null;
-                }
-            };
-          
-            @Override
-            public LazyNumber lazyEval(List<LazyNumber> lazyParams) {
-                if (lazyParams.get(0).getString().equals(lazyParams.get(1).getString())) {
-                    return ZERO;
-                }
-                return ONE;
-            }
-        });
-       
-        assertEquals("1", e.eval().toPlainString());
+		Expression e = new Expression("STREQ(\"test\", \"test2\")");
+		e.addLazyFunction(e.new LazyFunction("STREQ", 2) {
+			private LazyNumber ZERO = new LazyNumber() {
+				public BigDecimal eval() {
+					return BigDecimal.ZERO;
+				}
+
+				public String getString() {
+					return "0";
+				}
+			};
+
+			private LazyNumber ONE = new LazyNumber() {
+				public BigDecimal eval() {
+					return BigDecimal.ONE;
+				}
+
+				public String getString() {
+					return null;
+				}
+			};
+
+			@Override
+			public LazyNumber lazyEval(List<LazyNumber> lazyParams) {
+				if (lazyParams.get(0).getString().equals(lazyParams.get(1).getString())) {
+					return ZERO;
+				}
+				return ONE;
+			}
+		});
+
+		assertEquals("1", e.eval().toPlainString());
 	}
 
+	@Test
+	public void testCustomFunctionStringParametersInstanceClass() {
+		Expression e = new Expression("STREQ(\"test\", \"test2\")");
+		e.addLazyFunction(e.new LazyFunction("STREQ", 2) {
+			private LazyNumber ZERO = new LazyNumber() {
+				public BigDecimal eval() {
+					return BigDecimal.ZERO;
+				}
+
+				public String getString() {
+					return "0";
+				}
+			};
+
+			private LazyNumber ONE = new LazyNumber() {
+				public BigDecimal eval() {
+					return BigDecimal.ONE;
+				}
+
+				public String getString() {
+					return null;
+				}
+			};
+
+			@Override
+			public LazyNumber lazyEval(List<LazyNumber> lazyParams) {
+				if (lazyParams.get(0).getString().equals(lazyParams.get(1).getString())) {
+					return ZERO;
+				}
+				return ONE;
+			}
+		});
+
+		assertEquals("1", e.eval().toPlainString());
+	}
+
+	@Test
+	public void testUnary() {
+		Expression exp = new Expression("~23");
+
+		exp.addOperator(new AbstractUnaryOperator("~", 60, false) {
+			@Override
+			public BigDecimal evalUnary(BigDecimal bigDecimal) {
+				return bigDecimal;
+			}
+		});
+		assertEquals("23", exp.eval().toPlainString());
+	}
 }

@@ -1429,7 +1429,7 @@ public class Expression {
 	 */
 	public com.udojava.evalex.Operator addOperator(com.udojava.evalex.Operator operator) {
 		String key = operator.getOper();
-		if (operator instanceof UnaryOperator) {
+		if (operator instanceof AbstractUnaryOperator) {
 			key += "u";
 		}
 		return operators.put(key, operator);
