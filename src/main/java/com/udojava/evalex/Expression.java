@@ -1469,7 +1469,20 @@ public class Expression {
 	 * @return The expression, allows to chain methods.
 	 */
 	public Expression setVariable(String variable, BigDecimal value) {
-		variables.put(variable, CreateLazyNumber(value));
+		return setVariable(variable, CreateLazyNumber(value));
+	}
+
+	/**
+	 * Sets a variable value.
+	 * 
+	 * @param variable
+	 *            The variable name.
+	 * @param value
+	 *            The variable value.
+	 * @return The expression, allows to chain methods.
+	 */
+	public Expression setVariable(String variable, LazyNumber value) {
+		variables.put(variable, value);
 		return this;
 	}
 
@@ -1557,6 +1570,19 @@ public class Expression {
 	 *            The variable value.
 	 * @return The expression, allows to chain methods.
 	 */
+	public Expression with(String variable, LazyNumber value) {
+		return setVariable(variable, value);
+	}
+
+	/**
+	 * Sets a variable value.
+	 * 
+	 * @param variable
+	 *            The variable to set.
+	 * @param value
+	 *            The variable value.
+	 * @return The expression, allows to chain methods.
+	 */
 	public Expression and(String variable, String value) {
 		return setVariable(variable, value);
 	}
@@ -1571,6 +1597,19 @@ public class Expression {
 	 * @return The expression, allows to chain methods.
 	 */
 	public Expression and(String variable, BigDecimal value) {
+		return setVariable(variable, value);
+	}
+
+	/**
+	 * Sets a variable value.
+	 * 
+	 * @param variable
+	 *            The variable to set.
+	 * @param value
+	 *            The variable value.
+	 * @return The expression, allows to chain methods.
+	 */
+	public Expression and(String variable, LazyNumber value) {
 		return setVariable(variable, value);
 	}
 
