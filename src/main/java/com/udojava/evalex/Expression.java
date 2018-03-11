@@ -40,6 +40,8 @@ import java.util.Set;
 import java.util.Stack;
 import java.util.TreeMap;
 
+import com.udojava.evalex.Expression.LazyNumber;
+
 /**
  * <h1>EvalEx - Java Expression Evaluator</h1>
  * 
@@ -154,7 +156,7 @@ public class Expression {
 	/**
 	 * All defined operators with name and implementation.
 	 */
-	private Map<String, com.udojava.evalex.Operator> operators = new TreeMap<String, com.udojava.evalex.Operator>(
+	private Map<String, LazyOperator> operators = new TreeMap<String, LazyOperator>(
 			String.CASE_INSENSITIVE_ORDER);
 
 	/**
@@ -602,9 +604,15 @@ public class Expression {
 			@Override
 			public BigDecimal eval(BigDecimal v1, BigDecimal v2) {
 				assertNotNull(v1, v2);
+				
 				boolean b1 = v1.compareTo(BigDecimal.ZERO) != 0;
+				
+				if (!b1) {
+					return BigDecimal.ZERO;
+				}
+				
 				boolean b2 = v2.compareTo(BigDecimal.ZERO) != 0;
-				return b1 && b2 ? BigDecimal.ONE : BigDecimal.ZERO;
+				return b2 ? BigDecimal.ONE : BigDecimal.ZERO;
 			}
 		});
 
@@ -612,9 +620,15 @@ public class Expression {
 			@Override
 			public BigDecimal eval(BigDecimal v1, BigDecimal v2) {
 				assertNotNull(v1, v2);
+				
 				boolean b1 = v1.compareTo(BigDecimal.ZERO) != 0;
+				
+				if (b1) {
+					return BigDecimal.ONE;
+				}
+				
 				boolean b2 = v2.compareTo(BigDecimal.ZERO) != 0;
-				return b1 || b2 ? BigDecimal.ONE : BigDecimal.ZERO;
+				return b2 ? BigDecimal.ONE : BigDecimal.ZERO;
 			}
 		});
 
@@ -665,7 +679,7 @@ public class Expression {
 		addOperator(new Operator("==", OPERATOR_PRECEDENCE_EQUALITY, false, true) {
 			@Override
 			public BigDecimal eval(BigDecimal v1, BigDecimal v2) {
-				return operators.get("=").eval(v1, v2);
+				return ((Operator)operators.get("=")).eval(v1, v2);
 			}
 		});
 
@@ -685,7 +699,7 @@ public class Expression {
 			@Override
 			public BigDecimal eval(BigDecimal v1, BigDecimal v2) {
 				assertNotNull(v1, v2);
-				return operators.get("!=").eval(v1, v2);
+				return ((Operator)operators.get("!=")).eval(v1, v2);
 			}
 		});
 		addOperator(new UnaryOperator("-", OPERATOR_PRECEDENCE_UNARY, false) {
@@ -1147,7 +1161,7 @@ public class Expression {
 					throw new ExpressionException(
 							"Missing parameter(s) for operator " + token + " at character position " + token.pos);
 				}
-				com.udojava.evalex.Operator o1 = operators.get(token.surface);
+				LazyOperator o1 = operators.get(token.surface);
 				if (o1 == null) {
 					throw new ExpressionException("Unknown operator '" + token + "' at position " + (token.pos + 1));
 				}
@@ -1162,7 +1176,7 @@ public class Expression {
 					throw new ExpressionException(
 							"Invalid position for unary operator " + token + " at character position " + token.pos);
 				}
-				com.udojava.evalex.Operator o1 = operators.get(token.surface);
+				LazyOperator o1 = operators.get(token.surface);
 				if (o1 == null) {
 					throw new ExpressionException(
 							"Unknown unary operator '" + token.surface.substring(0, token.surface.length() - 1)
@@ -1221,7 +1235,7 @@ public class Expression {
 		return outputQueue;
 	}
 
-	private void shuntOperators(List<Token> outputQueue, Stack<Token> stack, com.udojava.evalex.Operator o1) {
+	private void shuntOperators(List<Token> outputQueue, Stack<Token> stack, LazyOperator o1) {
 		Expression.Token nextToken = stack.isEmpty() ? null : stack.peek();
 		while (nextToken != null
 				&& (nextToken.type == Expression.TokenType.OPERATOR
@@ -1261,12 +1275,12 @@ public class Expression {
 				final LazyNumber value = stack.pop();
 				LazyNumber result = new LazyNumber() {
 					public BigDecimal eval() {
-						return operators.get(token.surface).eval(value.eval(), null);
+						return operators.get(token.surface).eval(value, null).eval();
 					}
 
 					@Override
 					public String getString() {
-						return String.valueOf(operators.get(token.surface).eval(value.eval(), null));
+						return String.valueOf(operators.get(token.surface).eval(value, null).eval());
 					}
 				};
 				stack.push(result);
@@ -1277,11 +1291,11 @@ public class Expression {
 				final LazyNumber v2 = stack.pop();
 				LazyNumber result = new LazyNumber() {
 					public BigDecimal eval() {
-						return operators.get(token.surface).eval(v2.eval(), v1.eval());
+						return operators.get(token.surface).eval(v2, v1).eval();
 					}
 
 					public String getString() {
-						return String.valueOf(operators.get(token.surface).eval(v2.eval(), v1.eval()));
+						return String.valueOf(operators.get(token.surface).eval(v2, v1).eval());
 					}
 				};
 				stack.push(result);
@@ -1427,12 +1441,12 @@ public class Expression {
 	 * @return The previous operator with that name, or <code>null</code> if
 	 *         there was none.
 	 */
-	public com.udojava.evalex.Operator addOperator(com.udojava.evalex.Operator operator) {
+	public <OPERATOR extends LazyOperator> OPERATOR addOperator(OPERATOR operator) {
 		String key = operator.getOper();
 		if (operator instanceof AbstractUnaryOperator) {
 			key += "u";
 		}
-		return operators.put(key, operator);
+		return (OPERATOR)operators.put(key, operator);
 	}
 
 	/**
@@ -1505,7 +1519,7 @@ public class Expression {
 			variables.put(variable, new LazyNumber() {
 				private final Map<String, LazyNumber> outerVariables = variables;
 				private final Map<String, com.udojava.evalex.LazyFunction> outerFunctions = functions;
-				private final Map<String, com.udojava.evalex.Operator> outerOperators = operators;
+				private final Map<String, LazyOperator> outerOperators = operators;
 				private final String innerExpressionString = expStr;
 				private final MathContext inneMc = mc;
 
@@ -1539,7 +1553,7 @@ public class Expression {
 	private Expression createEmbeddedExpression(final String expression) {
 		final Map<String, LazyNumber> outerVariables = variables;
 		final Map<String, com.udojava.evalex.LazyFunction> outerFunctions = functions;
-		final Map<String, com.udojava.evalex.Operator> outerOperators = operators;
+		final Map<String, LazyOperator> outerOperators = operators;
 		final MathContext inneMc = mc;
 		Expression exp = new Expression(expression, inneMc);
 		exp.variables = outerVariables;
