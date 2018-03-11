@@ -457,8 +457,8 @@ public class Expression {
 					ch = pos == input.length() ? 0 : input.charAt(pos);
 				}
 				// Remove optional white spaces after function or variable name
-				if (ch == ' ') {
-					while (ch == ' ' && pos < input.length()) {
+				if (Character.isWhitespace(ch)) {
+					while (Character.isWhitespace(ch) && pos < input.length()) {
 						ch = input.charAt(pos++);
 					}
 					pos--;
