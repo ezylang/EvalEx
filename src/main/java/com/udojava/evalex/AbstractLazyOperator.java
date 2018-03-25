@@ -26,14 +26,27 @@
  */
 package com.udojava.evalex;
 
-import java.math.BigDecimal;
-
-import com.udojava.evalex.Expression.LazyNumber;
-
 /**
  * Abstract implementation of an operator.
  */
-public abstract class AbstractOperator extends AbstractLazyOperator implements Operator {
+public abstract class AbstractLazyOperator implements LazyOperator {
+	/**
+	 * This operators name (pattern).
+	 */
+	protected String oper;
+	/**
+	 * Operators precedence.
+	 */
+	protected int precedence;
+	/**
+	 * Operator is left associative.
+	 */
+	protected boolean leftAssoc;
+	/**
+	 * Whether this operator is boolean or not.
+	 */
+	protected boolean booleanOperator = false;
+
 	/**
 	 * Creates a new operator.
 	 * 
@@ -47,8 +60,11 @@ public abstract class AbstractOperator extends AbstractLazyOperator implements O
 	 * @param booleanOperator
 	 *            Whether this operator is boolean.
 	 */
-	protected AbstractOperator(String oper, int precedence, boolean leftAssoc, boolean booleanOperator) {
-		super(oper, precedence, leftAssoc, booleanOperator);
+	protected AbstractLazyOperator(String oper, int precedence, boolean leftAssoc, boolean booleanOperator) {
+		this.oper = oper;
+		this.precedence = precedence;
+		this.leftAssoc = leftAssoc;
+		this.booleanOperator = booleanOperator;
 	}
 
 	/**
@@ -62,19 +78,25 @@ public abstract class AbstractOperator extends AbstractLazyOperator implements O
 	 *            <code>true</code> if the operator is left associative,
 	 *            else <code>false</code>.
 	 */
-	protected AbstractOperator(String oper, int precedence, boolean leftAssoc) {
-		super(oper, precedence, leftAssoc);
+	protected AbstractLazyOperator(String oper, int precedence, boolean leftAssoc) {
+		this.oper = oper;
+		this.precedence = precedence;
+		this.leftAssoc = leftAssoc;
 	}
 
-	public LazyNumber eval(LazyNumber v1, LazyNumber v2) {
-		return new LazyNumber() {
-			public BigDecimal eval() {
-				return AbstractOperator.this.eval(v1.eval(), v2.eval());
-			}
+	public String getOper() {
+		return oper;
+	}
 
-			public String getString() {
-				return String.valueOf(AbstractOperator.this.eval(v1.eval(), v2.eval()));
-			}
-		};
+	public int getPrecedence() {
+		return precedence;
+	}
+
+	public boolean isLeftAssoc() {
+		return leftAssoc;
+	}
+
+	public boolean isBooleanOperator() {
+		return booleanOperator;
 	}
 }

@@ -29,6 +29,7 @@ package com.udojava.evalex;
 import java.math.BigDecimal;
 
 import com.udojava.evalex.Expression.ExpressionException;
+import com.udojava.evalex.Expression.LazyNumber;
 
 /**
  * Abstract implementation of an unary operator.<br>
@@ -53,6 +54,23 @@ public abstract class AbstractUnaryOperator extends AbstractOperator {
 	 */
 	protected AbstractUnaryOperator(String oper, int precedence, boolean leftAssoc) {
 		super(oper, precedence, leftAssoc);
+	}
+
+	public LazyNumber eval(LazyNumber v1, LazyNumber v2) {
+		if (v2 != null) {
+			throw new ExpressionException("Did not expect a second parameter for unary operator");
+		}
+		return new LazyNumber() {
+			@Override
+			public String getString() {
+				return String.valueOf(AbstractUnaryOperator.this.evalUnary(v1.eval()));
+			}
+			
+			@Override
+			public BigDecimal eval() {
+				return AbstractUnaryOperator.this.evalUnary(v1.eval());
+			}
+		};
 	}
 
 	public BigDecimal eval(BigDecimal v1, BigDecimal v2) {
