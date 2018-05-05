@@ -111,6 +111,7 @@ public class TestEval {
 		assertEquals("1.8", new Expression("2+-.2").eval().toPlainString());
 	}
 
+
 	@Test
 	public void testUnaryPlus() throws Exception {
 		assertEquals("3", new Expression("+3").eval().toPlainString());

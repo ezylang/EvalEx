@@ -1,9 +1,9 @@
 /*
  * Copyright 2012-2018 Udo Klimaschewski
- * 
+ *
  * http://UdoJava.com/
  * http://about.me/udo.klimaschewski
- * 
+ *
  * Permission is hereby granted, free of charge, to any person obtaining
  * a copy of this software and associated documentation files (the
  * "Software"), to deal in the Software without restriction, including
@@ -11,10 +11,10 @@
  * distribute, sublicense, and/or sell copies of the Software, and to
  * permit persons to whom the Software is furnished to do so, subject to
  * the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be
  * included in all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
  * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
  * MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
@@ -22,7 +22,7 @@
  * LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
  * OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
- * 
+ *
  */
 package com.udojava.evalex;
 
@@ -44,7 +44,7 @@ import com.udojava.evalex.Expression.LazyNumber;
 
 /**
  * <h1>EvalEx - Java Expression Evaluator</h1>
- * 
+ *
  * <h2>Introduction</h2> EvalEx is a handy expression evaluator for Java, that
  * allows to evaluate simple mathematical and boolean expressions. <br>
  * For more information, see:
@@ -61,7 +61,7 @@ import com.udojava.evalex.Expression.LazyNumber;
  * "http://www.amazon.de/Java-Number-Cruncher-Programmers-Numerical/dp/0130460419">The
  * Java Programmers Guide To numerical Computing</a> (Ronald Mak, 2002).</li>
  * </ul>
- * 
+ *
  * @authors Thanks to all who contributed to this project: <a href=
  *          "https://github.com/uklimaschewski/EvalEx/graphs/contributors">Contributors</a>
  * @see <a href="https://github.com/uklimaschewski/EvalEx">GitHub repository</a>
@@ -285,7 +285,7 @@ public class Expression {
 
 		/**
 		 * Creates a new operator.
-		 * 
+		 *
 		 * @param oper
 		 *            The operator name (pattern).
 		 * @param precedence
@@ -302,7 +302,7 @@ public class Expression {
 
 		/**
 		 * Creates a new operator.
-		 * 
+		 *
 		 * @param oper
 		 *            The operator name (pattern).
 		 * @param precedence
@@ -376,7 +376,7 @@ public class Expression {
 
 		/**
 		 * Creates a new tokenizer for an expression.
-		 * 
+		 *
 		 * @param input
 		 *            The expression string.
 		 */
@@ -391,7 +391,7 @@ public class Expression {
 
 		/**
 		 * Peek at the next character, without advancing the iterator.
-		 * 
+		 *
 		 * @return The next character or character 0, if at end of string.
 		 */
 		private char peekNextChar() {
@@ -427,15 +427,15 @@ public class Expression {
 					isHex = true;
 				while ((isHex
 						&& isHexDigit(
-								ch))
+						ch))
 						|| (Character.isDigit(ch) || ch == decimalSeparator || ch == 'e' || ch == 'E'
-								|| (ch == minusSign && token.length() > 0
-										&& ('e' == token.charAt(token.length() - 1)
-												|| 'E' == token.charAt(token.length() - 1)))
-								|| (ch == '+' && token.length() > 0
-										&& ('e' == token.charAt(token.length() - 1)
-												|| 'E' == token.charAt(token.length() - 1))))
-								&& (pos < input.length())) {
+						|| (ch == minusSign && token.length() > 0
+						&& ('e' == token.charAt(token.length() - 1)
+						|| 'E' == token.charAt(token.length() - 1)))
+						|| (ch == '+' && token.length() > 0
+						&& ('e' == token.charAt(token.length() - 1)
+						|| 'E' == token.charAt(token.length() - 1))))
+						&& (pos < input.length())) {
 					token.append(input.charAt(pos++));
 					ch = pos == input.length() ? 0 : input.charAt(pos);
 				}
@@ -519,7 +519,7 @@ public class Expression {
 	/**
 	 * Creates a new expression instance from an expression string with a given
 	 * default match context of {@link MathContext#DECIMAL32}.
-	 * 
+	 *
 	 * @param expression
 	 *            The expression. E.g. <code>"2.4*sin(3)/(2-4)"</code> or
 	 *            <code>"sin(y)>0 & max(z, 3)>3"</code>
@@ -531,7 +531,7 @@ public class Expression {
 	/**
 	 * Creates a new expression instance from an expression string with a given
 	 * default match context.
-	 * 
+	 *
 	 * @param expression
 	 *            The expression. E.g. <code>"2.4*sin(3)/(2-4)"</code> or
 	 *            <code>"sin(y)>0 & max(z, 3)>3"</code>
@@ -581,7 +581,7 @@ public class Expression {
 			@Override
 			public BigDecimal eval(BigDecimal v1, BigDecimal v2) {
 				assertNotNull(v1, v2);
-				/*- 
+				/*-
 				 * Thanks to Gene Marin:
 				 * http://stackoverflow.com/questions/3579779/how-to-do-a-fractional-power-on-bigdecimal-in-java
 				 */
@@ -604,13 +604,13 @@ public class Expression {
 			@Override
 			public BigDecimal eval(BigDecimal v1, BigDecimal v2) {
 				assertNotNull(v1, v2);
-				
+
 				boolean b1 = v1.compareTo(BigDecimal.ZERO) != 0;
-				
+
 				if (!b1) {
 					return BigDecimal.ZERO;
 				}
-				
+
 				boolean b2 = v2.compareTo(BigDecimal.ZERO) != 0;
 				return b2 ? BigDecimal.ONE : BigDecimal.ZERO;
 			}
@@ -620,13 +620,13 @@ public class Expression {
 			@Override
 			public BigDecimal eval(BigDecimal v1, BigDecimal v2) {
 				assertNotNull(v1, v2);
-				
+
 				boolean b1 = v1.compareTo(BigDecimal.ZERO) != 0;
-				
+
 				if (b1) {
 					return BigDecimal.ONE;
 				}
-				
+
 				boolean b2 = v2.compareTo(BigDecimal.ZERO) != 0;
 				return b2 ? BigDecimal.ONE : BigDecimal.ZERO;
 			}
@@ -714,7 +714,19 @@ public class Expression {
 				return v1.multiply(BigDecimal.ONE);
 			}
 		});
+		addFunction(new Function("FACT", 1, false) {
+			@Override
+			public BigDecimal eval(List<BigDecimal> parameters) {
+				assertNotNull(parameters.get(0));
 
+				int number = parameters.get(0).intValue();
+				BigDecimal factorial = BigDecimal.ONE;
+				for (int i = 1; i <= number; i++) {
+					factorial = factorial.multiply(new BigDecimal(i));
+				}
+				return factorial;
+			}
+		});
 		addFunction(new Function("NOT", 1, true) {
 			@Override
 			public BigDecimal eval(List<BigDecimal> parameters) {
@@ -1082,7 +1094,7 @@ public class Expression {
 
 	/**
 	 * Is the string a number?
-	 * 
+	 *
 	 * @param st
 	 *            The string.
 	 * @return <code>true</code>, if the input string is a number.
@@ -1107,7 +1119,7 @@ public class Expression {
 	/**
 	 * Implementation of the <i>Shunting Yard</i> algorithm to transform an
 	 * infix expression to a RPN expression.
-	 * 
+	 *
 	 * @param expression
 	 *            The input expression in infx.
 	 * @return A RPN representation of the expression, with each token as a list
@@ -1124,103 +1136,103 @@ public class Expression {
 		while (tokenizer.hasNext()) {
 			Token token = tokenizer.next();
 			switch (token.type) {
-			case STRINGPARAM:
-				stack.push(token);
-				break;
-			case LITERAL:
-			case HEX_LITERAL:
-				outputQueue.add(token);
-				break;
-			case VARIABLE:
-				outputQueue.add(token);
-				break;
-			case FUNCTION:
-				stack.push(token);
-				lastFunction = token;
-				break;
-			case COMMA:
-				if (previousToken != null && previousToken.type == TokenType.OPERATOR) {
-					throw new ExpressionException("Missing parameter(s) for operator " + previousToken
-							+ " at character position " + previousToken.pos);
-				}
-				while (!stack.isEmpty() && stack.peek().type != TokenType.OPEN_PAREN) {
-					outputQueue.add(stack.pop());
-				}
-				if (stack.isEmpty()) {
-					if (lastFunction == null) {
-						throw new ExpressionException("Unexpected comma at character position " + token.pos);
-					} else {
+				case STRINGPARAM:
+					stack.push(token);
+					break;
+				case LITERAL:
+				case HEX_LITERAL:
+					outputQueue.add(token);
+					break;
+				case VARIABLE:
+					outputQueue.add(token);
+					break;
+				case FUNCTION:
+					stack.push(token);
+					lastFunction = token;
+					break;
+				case COMMA:
+					if (previousToken != null && previousToken.type == TokenType.OPERATOR) {
+						throw new ExpressionException("Missing parameter(s) for operator " + previousToken
+								+ " at character position " + previousToken.pos);
+					}
+					while (!stack.isEmpty() && stack.peek().type != TokenType.OPEN_PAREN) {
+						outputQueue.add(stack.pop());
+					}
+					if (stack.isEmpty()) {
+						if (lastFunction == null) {
+							throw new ExpressionException("Unexpected comma at character position " + token.pos);
+						} else {
+							throw new ExpressionException(
+									"Parse error for function '" + lastFunction + "' at character position " + token.pos);
+						}
+					}
+					break;
+				case OPERATOR: {
+					if (previousToken != null
+							&& (previousToken.type == TokenType.COMMA || previousToken.type == TokenType.OPEN_PAREN)) {
 						throw new ExpressionException(
-								"Parse error for function '" + lastFunction + "' at character position " + token.pos);
+								"Missing parameter(s) for operator " + token + " at character position " + token.pos);
 					}
-				}
-				break;
-			case OPERATOR: {
-				if (previousToken != null
-						&& (previousToken.type == TokenType.COMMA || previousToken.type == TokenType.OPEN_PAREN)) {
-					throw new ExpressionException(
-							"Missing parameter(s) for operator " + token + " at character position " + token.pos);
-				}
-				LazyOperator o1 = operators.get(token.surface);
-				if (o1 == null) {
-					throw new ExpressionException("Unknown operator '" + token + "' at position " + (token.pos + 1));
-				}
+					LazyOperator o1 = operators.get(token.surface);
+					if (o1 == null) {
+						throw new ExpressionException("Unknown operator '" + token + "' at position " + (token.pos + 1));
+					}
 
-				shuntOperators(outputQueue, stack, o1);
-				stack.push(token);
-				break;
-			}
-			case UNARY_OPERATOR: {
-				if (previousToken != null && previousToken.type != TokenType.OPERATOR
-						&& previousToken.type != TokenType.COMMA && previousToken.type != TokenType.OPEN_PAREN) {
-					throw new ExpressionException(
-							"Invalid position for unary operator " + token + " at character position " + token.pos);
+					shuntOperators(outputQueue, stack, o1);
+					stack.push(token);
+					break;
 				}
-				LazyOperator o1 = operators.get(token.surface);
-				if (o1 == null) {
-					throw new ExpressionException(
-							"Unknown unary operator '" + token.surface.substring(0, token.surface.length() - 1)
-									+ "' at position " + (token.pos + 1));
-				}
+				case UNARY_OPERATOR: {
+					if (previousToken != null && previousToken.type != TokenType.OPERATOR
+							&& previousToken.type != TokenType.COMMA && previousToken.type != TokenType.OPEN_PAREN) {
+						throw new ExpressionException(
+								"Invalid position for unary operator " + token + " at character position " + token.pos);
+					}
+					LazyOperator o1 = operators.get(token.surface);
+					if (o1 == null) {
+						throw new ExpressionException(
+								"Unknown unary operator '" + token.surface.substring(0, token.surface.length() - 1)
+										+ "' at position " + (token.pos + 1));
+					}
 
-				shuntOperators(outputQueue, stack, o1);
-				stack.push(token);
-				break;
-			}
-			case OPEN_PAREN:
-				if (previousToken != null) {
-					if (previousToken.type == TokenType.LITERAL || previousToken.type == TokenType.CLOSE_PAREN
-							|| previousToken.type == TokenType.VARIABLE
-							|| previousToken.type == TokenType.HEX_LITERAL) {
-						// Implicit multiplication, e.g. 23(a+b) or (a+b)(a-b)
-						Token multiplication = new Token();
-						multiplication.append("*");
-						multiplication.type = TokenType.OPERATOR;
-						stack.push(multiplication);
+					shuntOperators(outputQueue, stack, o1);
+					stack.push(token);
+					break;
+				}
+				case OPEN_PAREN:
+					if (previousToken != null) {
+						if (previousToken.type == TokenType.LITERAL || previousToken.type == TokenType.CLOSE_PAREN
+								|| previousToken.type == TokenType.VARIABLE
+								|| previousToken.type == TokenType.HEX_LITERAL) {
+							// Implicit multiplication, e.g. 23(a+b) or (a+b)(a-b)
+							Token multiplication = new Token();
+							multiplication.append("*");
+							multiplication.type = TokenType.OPERATOR;
+							stack.push(multiplication);
+						}
+						// if the ( is preceded by a valid function, then it
+						// denotes the start of a parameter list
+						if (previousToken.type == TokenType.FUNCTION) {
+							outputQueue.add(token);
+						}
 					}
-					// if the ( is preceded by a valid function, then it
-					// denotes the start of a parameter list
-					if (previousToken.type == TokenType.FUNCTION) {
-						outputQueue.add(token);
+					stack.push(token);
+					break;
+				case CLOSE_PAREN:
+					if (previousToken != null && previousToken.type == TokenType.OPERATOR) {
+						throw new ExpressionException("Missing parameter(s) for operator " + previousToken
+								+ " at character position " + previousToken.pos);
 					}
-				}
-				stack.push(token);
-				break;
-			case CLOSE_PAREN:
-				if (previousToken != null && previousToken.type == TokenType.OPERATOR) {
-					throw new ExpressionException("Missing parameter(s) for operator " + previousToken
-							+ " at character position " + previousToken.pos);
-				}
-				while (!stack.isEmpty() && stack.peek().type != TokenType.OPEN_PAREN) {
-					outputQueue.add(stack.pop());
-				}
-				if (stack.isEmpty()) {
-					throw new ExpressionException("Mismatched parentheses");
-				}
-				stack.pop();
-				if (!stack.isEmpty() && stack.peek().type == TokenType.FUNCTION) {
-					outputQueue.add(stack.pop());
-				}
+					while (!stack.isEmpty() && stack.peek().type != TokenType.OPEN_PAREN) {
+						outputQueue.add(stack.pop());
+					}
+					if (stack.isEmpty()) {
+						throw new ExpressionException("Mismatched parentheses");
+					}
+					stack.pop();
+					if (!stack.isEmpty() && stack.peek().type == TokenType.FUNCTION) {
+						outputQueue.add(stack.pop());
+					}
 			}
 			previousToken = token;
 		}
@@ -1239,9 +1251,9 @@ public class Expression {
 		Expression.Token nextToken = stack.isEmpty() ? null : stack.peek();
 		while (nextToken != null
 				&& (nextToken.type == Expression.TokenType.OPERATOR
-						|| nextToken.type == Expression.TokenType.UNARY_OPERATOR)
+				|| nextToken.type == Expression.TokenType.UNARY_OPERATOR)
 				&& ((o1.isLeftAssoc() && o1.getPrecedence() <= operators.get(nextToken.surface).getPrecedence())
-						|| (o1.getPrecedence() < operators.get(nextToken.surface).getPrecedence()))) {
+				|| (o1.getPrecedence() < operators.get(nextToken.surface).getPrecedence()))) {
 			outputQueue.add(stack.pop());
 			nextToken = stack.isEmpty() ? null : stack.peek();
 		}
@@ -1249,7 +1261,7 @@ public class Expression {
 
 	/**
 	 * Evaluates the expression.
-	 * 
+	 *
 	 * @return The result of the expression. Trailing zeros are stripped.
 	 */
 	public BigDecimal eval() {
@@ -1258,11 +1270,11 @@ public class Expression {
 
 	/**
 	 * Evaluates the expression.
-	 * 
+	 *
 	 * @param stripTrailingZeros
 	 *            If set to <code>true</code> trailing zeros in the result are
 	 *            stripped.
-	 * 
+	 *
 	 * @return The result of the expression.
 	 */
 	public BigDecimal eval(boolean stripTrailingZeros) {
@@ -1271,111 +1283,111 @@ public class Expression {
 
 		for (final Token token : getRPN()) {
 			switch (token.type) {
-			case UNARY_OPERATOR: {
-				final LazyNumber value = stack.pop();
-				LazyNumber result = new LazyNumber() {
-					public BigDecimal eval() {
-						return operators.get(token.surface).eval(value, null).eval();
-					}
+				case UNARY_OPERATOR: {
+					final LazyNumber value = stack.pop();
+					LazyNumber result = new LazyNumber() {
+						public BigDecimal eval() {
+							return operators.get(token.surface).eval(value, null).eval();
+						}
 
-					@Override
-					public String getString() {
-						return String.valueOf(operators.get(token.surface).eval(value, null).eval());
-					}
-				};
-				stack.push(result);
-				break;
-			}
-			case OPERATOR:
-				final LazyNumber v1 = stack.pop();
-				final LazyNumber v2 = stack.pop();
-				LazyNumber result = new LazyNumber() {
-					public BigDecimal eval() {
-						return operators.get(token.surface).eval(v2, v1).eval();
-					}
-
-					public String getString() {
-						return String.valueOf(operators.get(token.surface).eval(v2, v1).eval());
-					}
-				};
-				stack.push(result);
-				break;
-			case VARIABLE:
-				if (!variables.containsKey(token.surface)) {
-					throw new ExpressionException("Unknown operator or function: " + token);
+						@Override
+						public String getString() {
+							return String.valueOf(operators.get(token.surface).eval(value, null).eval());
+						}
+					};
+					stack.push(result);
+					break;
 				}
+				case OPERATOR:
+					final LazyNumber v1 = stack.pop();
+					final LazyNumber v2 = stack.pop();
+					LazyNumber result = new LazyNumber() {
+						public BigDecimal eval() {
+							return operators.get(token.surface).eval(v2, v1).eval();
+						}
 
-				stack.push(new LazyNumber() {
-					public BigDecimal eval() {
-						LazyNumber lazyVariable = variables.get(token.surface);
-						BigDecimal value = lazyVariable == null ? null : lazyVariable.eval();
-						return value == null ? null : value.round(mc);
+						public String getString() {
+							return String.valueOf(operators.get(token.surface).eval(v2, v1).eval());
+						}
+					};
+					stack.push(result);
+					break;
+				case VARIABLE:
+					if (!variables.containsKey(token.surface)) {
+						throw new ExpressionException("Unknown operator or function: " + token);
 					}
 
-					public String getString() {
-						return token.surface;
+					stack.push(new LazyNumber() {
+						public BigDecimal eval() {
+							LazyNumber lazyVariable = variables.get(token.surface);
+							BigDecimal value = lazyVariable == null ? null : lazyVariable.eval();
+							return value == null ? null : value.round(mc);
+						}
+
+						public String getString() {
+							return token.surface;
+						}
+					});
+					break;
+				case FUNCTION:
+					com.udojava.evalex.LazyFunction f = functions.get(token.surface.toUpperCase(Locale.ROOT));
+					ArrayList<LazyNumber> p = new ArrayList<LazyNumber>(!f.numParamsVaries() ? f.getNumParams() : 0);
+					// pop parameters off the stack until we hit the start of
+					// this function's parameter list
+					while (!stack.isEmpty() && stack.peek() != PARAMS_START) {
+						p.add(0, stack.pop());
 					}
-				});
-				break;
-			case FUNCTION:
-				com.udojava.evalex.LazyFunction f = functions.get(token.surface.toUpperCase(Locale.ROOT));
-				ArrayList<LazyNumber> p = new ArrayList<LazyNumber>(!f.numParamsVaries() ? f.getNumParams() : 0);
-				// pop parameters off the stack until we hit the start of
-				// this function's parameter list
-				while (!stack.isEmpty() && stack.peek() != PARAMS_START) {
-					p.add(0, stack.pop());
-				}
 
-				if (stack.peek() == PARAMS_START) {
-					stack.pop();
-				}
+					if (stack.peek() == PARAMS_START) {
+						stack.pop();
+					}
 
-				LazyNumber fResult = f.lazyEval(p);
-				stack.push(fResult);
-				break;
-			case OPEN_PAREN:
-				stack.push(PARAMS_START);
-				break;
-			case LITERAL:
-				stack.push(new LazyNumber() {
-					public BigDecimal eval() {
-						if (token.surface.equalsIgnoreCase("NULL")) {
+					LazyNumber fResult = f.lazyEval(p);
+					stack.push(fResult);
+					break;
+				case OPEN_PAREN:
+					stack.push(PARAMS_START);
+					break;
+				case LITERAL:
+					stack.push(new LazyNumber() {
+						public BigDecimal eval() {
+							if (token.surface.equalsIgnoreCase("NULL")) {
+								return null;
+							}
+
+							return new BigDecimal(token.surface, mc);
+						}
+
+						public String getString() {
+							return String.valueOf(new BigDecimal(token.surface, mc));
+						}
+					});
+					break;
+				case STRINGPARAM:
+					stack.push(new LazyNumber() {
+						public BigDecimal eval() {
 							return null;
 						}
 
-						return new BigDecimal(token.surface, mc);
-					}
+						public String getString() {
+							return token.surface;
+						}
+					});
+					break;
+				case HEX_LITERAL:
+					stack.push(new LazyNumber() {
+						public BigDecimal eval() {
+							return new BigDecimal(new BigInteger(token.surface.substring(2), 16), mc);
+						}
 
-					public String getString() {
-						return String.valueOf(new BigDecimal(token.surface, mc));
-					}
-				});
-				break;
-			case STRINGPARAM:
-				stack.push(new LazyNumber() {
-					public BigDecimal eval() {
-						return null;
-					}
-
-					public String getString() {
-						return token.surface;
-					}
-				});
-				break;
-			case HEX_LITERAL:
-				stack.push(new LazyNumber() {
-					public BigDecimal eval() {
-						return new BigDecimal(new BigInteger(token.surface.substring(2), 16), mc);
-					}
-
-					public String getString() {
-						return new BigInteger(token.surface.substring(2), 16).toString();
-					}
-				});
-				break;
-			default:
-				throw new ExpressionException(
-						"Unexpected token '" + token.surface + "' at character position " + token.pos);
+						public String getString() {
+							return new BigInteger(token.surface.substring(2), 16).toString();
+						}
+					});
+					break;
+				default:
+					throw new ExpressionException(
+							"Unexpected token '" + token.surface + "' at character position " + token.pos);
 			}
 		}
 		BigDecimal result = stack.pop().eval();
@@ -1384,10 +1396,10 @@ public class Expression {
 
 	/**
 	 * Sets the precision for expression evaluation.
-	 * 
+	 *
 	 * @param precision
 	 *            The new precision.
-	 * 
+	 *
 	 * @return The expression, allows to chain methods.
 	 */
 	public Expression setPrecision(int precision) {
@@ -1397,7 +1409,7 @@ public class Expression {
 
 	/**
 	 * Sets the rounding mode for expression evaluation.
-	 * 
+	 *
 	 * @param roundingMode
 	 *            The new rounding mode.
 	 * @return The expression, allows to chain methods.
@@ -1435,7 +1447,7 @@ public class Expression {
 
 	/**
 	 * Adds an operator to the list of supported operators.
-	 * 
+	 *
 	 * @param operator
 	 *            The operator to add.
 	 * @return The previous operator with that name, or <code>null</code> if
@@ -1451,7 +1463,7 @@ public class Expression {
 
 	/**
 	 * Adds a function to the list of supported functions
-	 * 
+	 *
 	 * @param function
 	 *            The function to add.
 	 * @return The previous operator with that name, or <code>null</code> if
@@ -1475,7 +1487,7 @@ public class Expression {
 
 	/**
 	 * Sets a variable value.
-	 * 
+	 *
 	 * @param variable
 	 *            The variable name.
 	 * @param value
@@ -1488,7 +1500,7 @@ public class Expression {
 
 	/**
 	 * Sets a variable value.
-	 * 
+	 *
 	 * @param variable
 	 *            The variable name.
 	 * @param value
@@ -1502,7 +1514,7 @@ public class Expression {
 
 	/**
 	 * Sets a variable value.
-	 * 
+	 *
 	 * @param variable
 	 *            The variable to set.
 	 * @param value
@@ -1545,7 +1557,7 @@ public class Expression {
 
 	/**
 	 * Creates a new inner expression for nested expression.
-	 * 
+	 *
 	 * @param expression
 	 *            The string expression.
 	 * @return The inner Expression instance.
@@ -1564,7 +1576,7 @@ public class Expression {
 
 	/**
 	 * Sets a variable value.
-	 * 
+	 *
 	 * @param variable
 	 *            The variable to set.
 	 * @param value
@@ -1577,7 +1589,7 @@ public class Expression {
 
 	/**
 	 * Sets a variable value.
-	 * 
+	 *
 	 * @param variable
 	 *            The variable to set.
 	 * @param value
@@ -1590,7 +1602,7 @@ public class Expression {
 
 	/**
 	 * Sets a variable value.
-	 * 
+	 *
 	 * @param variable
 	 *            The variable to set.
 	 * @param value
@@ -1603,7 +1615,7 @@ public class Expression {
 
 	/**
 	 * Sets a variable value.
-	 * 
+	 *
 	 * @param variable
 	 *            The variable to set.
 	 * @param value
@@ -1616,7 +1628,7 @@ public class Expression {
 
 	/**
 	 * Sets a variable value.
-	 * 
+	 *
 	 * @param variable
 	 *            The variable to set.
 	 * @param value
@@ -1629,7 +1641,7 @@ public class Expression {
 
 	/**
 	 * Sets a variable value.
-	 * 
+	 *
 	 * @param variable
 	 *            The variable to set.
 	 * @param value
@@ -1643,7 +1655,7 @@ public class Expression {
 	/**
 	 * Get an iterator for this expression, allows iterating over an expression
 	 * token by token.
-	 * 
+	 *
 	 * @return A new iterator instance for this expression.
 	 */
 	public Iterator<Token> getExpressionTokenizer() {
@@ -1656,7 +1668,7 @@ public class Expression {
 	 * Cached access to the RPN notation of this expression, ensures only one
 	 * calculation of the RPN per expression instance. If no cached instance
 	 * exists, a new one will be created and put to the cache.
-	 * 
+	 *
 	 * @return The cached RPN instance.
 	 */
 	private List<Token> getRPN() {
@@ -1674,9 +1686,9 @@ public class Expression {
 	 */
 	private void validate(List<Token> rpn) {
 		/*-
-		* Thanks to Norman Ramsey:
-		* http://http://stackoverflow.com/questions/789847/postfix-notation-validation
-		*/
+		 * Thanks to Norman Ramsey:
+		 * http://http://stackoverflow.com/questions/789847/postfix-notation-validation
+		 */
 		// each push on to this stack is a new function scope, with the value of
 		// each
 		// layer on the stack being the count of the number of parameters in
@@ -1688,40 +1700,40 @@ public class Expression {
 
 		for (final Token token : rpn) {
 			switch (token.type) {
-			case UNARY_OPERATOR:
-				if (stack.peek() < 1) {
-					throw new ExpressionException("Missing parameter(s) for operator " + token);
-				}
-				break;
-			case OPERATOR:
-				if (stack.peek() < 2) {
-					throw new ExpressionException("Missing parameter(s) for operator " + token);
-				}
-				// pop the operator's 2 parameters and add the result
-				stack.set(stack.size() - 1, stack.peek() - 2 + 1);
-				break;
-			case FUNCTION:
-				com.udojava.evalex.LazyFunction f = functions.get(token.surface.toUpperCase(Locale.ROOT));
-				if (f == null) {
-					throw new ExpressionException("Unknown function '" + token + "' at position " + (token.pos + 1));
-				}
+				case UNARY_OPERATOR:
+					if (stack.peek() < 1) {
+						throw new ExpressionException("Missing parameter(s) for operator " + token);
+					}
+					break;
+				case OPERATOR:
+					if (stack.peek() < 2) {
+						throw new ExpressionException("Missing parameter(s) for operator " + token);
+					}
+					// pop the operator's 2 parameters and add the result
+					stack.set(stack.size() - 1, stack.peek() - 2 + 1);
+					break;
+				case FUNCTION:
+					com.udojava.evalex.LazyFunction f = functions.get(token.surface.toUpperCase(Locale.ROOT));
+					if (f == null) {
+						throw new ExpressionException("Unknown function '" + token + "' at position " + (token.pos + 1));
+					}
 
-				int numParams = stack.pop();
-				if (!f.numParamsVaries() && numParams != f.getNumParams()) {
-					throw new ExpressionException(
-							"Function " + token + " expected " + f.getNumParams() + " parameters, got " + numParams);
-				}
-				if (stack.size() <= 0) {
-					throw new ExpressionException("Too many function calls, maximum scope exceeded");
-				}
-				// push the result of the function
-				stack.set(stack.size() - 1, stack.peek() + 1);
-				break;
-			case OPEN_PAREN:
-				stack.push(0);
-				break;
-			default:
-				stack.set(stack.size() - 1, stack.peek() + 1);
+					int numParams = stack.pop();
+					if (!f.numParamsVaries() && numParams != f.getNumParams()) {
+						throw new ExpressionException(
+								"Function " + token + " expected " + f.getNumParams() + " parameters, got " + numParams);
+					}
+					if (stack.size() <= 0) {
+						throw new ExpressionException("Too many function calls, maximum scope exceeded");
+					}
+					// push the result of the function
+					stack.set(stack.size() - 1, stack.peek() + 1);
+					break;
+				case OPEN_PAREN:
+					stack.push(0);
+					break;
+				default:
+					stack.set(stack.size() - 1, stack.peek() + 1);
 			}
 		}
 
@@ -1737,7 +1749,7 @@ public class Expression {
 	/**
 	 * Get a string representation of the RPN (Reverse Polish Notation) for this
 	 * expression.
-	 * 
+	 *
 	 * @return A string with the RPN representation for this expression.
 	 */
 	public String toRPN() {
@@ -1749,7 +1761,7 @@ public class Expression {
 				LazyNumber innerVariable = variables.get(t.surface);
 				String innerExp = innerVariable.getString();
 				if (isNumber(innerExp)) { // if it is a number, then we don't
-											// expan in the RPN
+					// expan in the RPN
 					result.append(t.toString());
 				} else { // expand the nested variable to its RPN representation
 					Expression exp = createEmbeddedExpression(innerExp);
@@ -1765,7 +1777,7 @@ public class Expression {
 
 	/**
 	 * Exposing declared variables in the expression.
-	 * 
+	 *
 	 * @return All declared variables.
 	 */
 	public Set<String> getDeclaredVariables() {
@@ -1774,7 +1786,7 @@ public class Expression {
 
 	/**
 	 * Exposing declared operators in the expression.
-	 * 
+	 *
 	 * @return All declared operators.
 	 */
 	public Set<String> getDeclaredOperators() {
@@ -1783,7 +1795,7 @@ public class Expression {
 
 	/**
 	 * Exposing declared functions.
-	 * 
+	 *
 	 * @return All declared functions.
 	 */
 	public Set<String> getDeclaredFunctions() {
@@ -1799,7 +1811,7 @@ public class Expression {
 
 	/**
 	 * Returns a list of the variables in the expression.
-	 * 
+	 *
 	 * @return A list of the variable names in this expression.
 	 */
 	public List<String> getUsedVariables() {
@@ -1857,7 +1869,7 @@ public class Expression {
 	 * considered a boolean expression, if the last operator or function is
 	 * boolean. The IF function is handled special. If the third parameter is
 	 * boolean, then the IF is also considered boolean, else non-boolean.
-	 * 
+	 *
 	 * @return <code>true</code> if the last operator/function was a boolean.
 	 */
 	public boolean isBoolean() {

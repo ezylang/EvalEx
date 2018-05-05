@@ -66,14 +66,14 @@ public abstract class AbstractOperator extends AbstractLazyOperator implements O
 		super(oper, precedence, leftAssoc);
 	}
 
-	public LazyNumber eval(LazyNumber v1, LazyNumber v2) {
+	public LazyNumber eval(final LazyNumber v1, final LazyNumber v2) {
 		return new LazyNumber() {
 			public BigDecimal eval() {
-				return AbstractOperator.this.eval(v1.eval(), v2.eval());
+				return AbstractOperator.this.eval(v1.eval(),v2.eval());
 			}
 
 			public String getString() {
-				return String.valueOf(AbstractOperator.this.eval(v1.eval(), v2.eval()));
+				return String.valueOf(AbstractOperator.this.eval(v1.eval(),v2.eval()));
 			}
 		};
 	}
