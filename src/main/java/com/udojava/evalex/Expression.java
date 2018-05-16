@@ -1045,13 +1045,14 @@ public class Expression {
 				int bits = (n.bitLength() + 1) >> 1;
 				BigInteger ix = n.shiftRight(bits);
 				BigInteger ixPrev;
-
+				BigInteger test;
 				do {
 					ixPrev = ix;
 					ix = ix.add(n.divide(ix)).shiftRight(1);
 					// Give other threads a chance to work;
 					Thread.yield();
-				} while (ix.compareTo(ixPrev) != 0);
+					test = ix.subtract(ixPrev).abs();
+				} while (test.compareTo(BigInteger.ZERO) != 0 && test.compareTo(BigInteger.ONE) != 0 );
 
 				return new BigDecimal(ix, mc.getPrecision());
 			}
