@@ -1,9 +1,9 @@
 /*
  * Copyright 2012-2018 Udo Klimaschewski
- * 
+ *
  * http://UdoJava.com/
  * http://about.me/udo.klimaschewski
- * 
+ *
  * Permission is hereby granted, free of charge, to any person obtaining
  * a copy of this software and associated documentation files (the
  * "Software"), to deal in the Software without restriction, including
@@ -11,10 +11,10 @@
  * distribute, sublicense, and/or sell copies of the Software, and to
  * permit persons to whom the Software is furnished to do so, subject to
  * the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be
  * included in all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
  * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
  * MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
@@ -22,7 +22,7 @@
  * LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
  * OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
- * 
+ *
  */
 package com.udojava.evalex;
 
@@ -44,7 +44,7 @@ import com.udojava.evalex.Expression.LazyNumber;
 
 /**
  * <h1>EvalEx - Java Expression Evaluator</h1>
- * 
+ *
  * <h2>Introduction</h2> EvalEx is a handy expression evaluator for Java, that
  * allows to evaluate simple mathematical and boolean expressions. <br>
  * For more information, see:
@@ -61,7 +61,7 @@ import com.udojava.evalex.Expression.LazyNumber;
  * "http://www.amazon.de/Java-Number-Cruncher-Programmers-Numerical/dp/0130460419">The
  * Java Programmers Guide To numerical Computing</a> (Ronald Mak, 2002).</li>
  * </ul>
- * 
+ *
  * @authors Thanks to all who contributed to this project: <a href=
  *          "https://github.com/uklimaschewski/EvalEx/graphs/contributors">Contributors</a>
  * @see <a href="https://github.com/uklimaschewski/EvalEx">GitHub repository</a>
@@ -285,7 +285,7 @@ public class Expression {
 
 		/**
 		 * Creates a new operator.
-		 * 
+		 *
 		 * @param oper
 		 *            The operator name (pattern).
 		 * @param precedence
@@ -302,7 +302,7 @@ public class Expression {
 
 		/**
 		 * Creates a new operator.
-		 * 
+		 *
 		 * @param oper
 		 *            The operator name (pattern).
 		 * @param precedence
@@ -376,7 +376,7 @@ public class Expression {
 
 		/**
 		 * Creates a new tokenizer for an expression.
-		 * 
+		 *
 		 * @param input
 		 *            The expression string.
 		 */
@@ -391,7 +391,7 @@ public class Expression {
 
 		/**
 		 * Peek at the next character, without advancing the iterator.
-		 * 
+		 *
 		 * @return The next character or character 0, if at end of string.
 		 */
 		private char peekNextChar() {
@@ -519,7 +519,7 @@ public class Expression {
 	/**
 	 * Creates a new expression instance from an expression string with a given
 	 * default match context of {@link MathContext#DECIMAL32}.
-	 * 
+	 *
 	 * @param expression
 	 *            The expression. E.g. <code>"2.4*sin(3)/(2-4)"</code> or
 	 *            <code>"sin(y)>0 & max(z, 3)>3"</code>
@@ -531,7 +531,7 @@ public class Expression {
 	/**
 	 * Creates a new expression instance from an expression string with a given
 	 * default match context.
-	 * 
+	 *
 	 * @param expression
 	 *            The expression. E.g. <code>"2.4*sin(3)/(2-4)"</code> or
 	 *            <code>"sin(y)>0 & max(z, 3)>3"</code>
@@ -581,7 +581,7 @@ public class Expression {
 			@Override
 			public BigDecimal eval(BigDecimal v1, BigDecimal v2) {
 				assertNotNull(v1, v2);
-				/*- 
+				/*-
 				 * Thanks to Gene Marin:
 				 * http://stackoverflow.com/questions/3579779/how-to-do-a-fractional-power-on-bigdecimal-in-java
 				 */
@@ -604,13 +604,13 @@ public class Expression {
 			@Override
 			public BigDecimal eval(BigDecimal v1, BigDecimal v2) {
 				assertNotNull(v1, v2);
-				
+
 				boolean b1 = v1.compareTo(BigDecimal.ZERO) != 0;
-				
+
 				if (!b1) {
 					return BigDecimal.ZERO;
 				}
-				
+
 				boolean b2 = v2.compareTo(BigDecimal.ZERO) != 0;
 				return b2 ? BigDecimal.ONE : BigDecimal.ZERO;
 			}
@@ -620,13 +620,13 @@ public class Expression {
 			@Override
 			public BigDecimal eval(BigDecimal v1, BigDecimal v2) {
 				assertNotNull(v1, v2);
-				
+
 				boolean b1 = v1.compareTo(BigDecimal.ZERO) != 0;
-				
+
 				if (b1) {
 					return BigDecimal.ONE;
 				}
-				
+
 				boolean b2 = v2.compareTo(BigDecimal.ZERO) != 0;
 				return b2 ? BigDecimal.ONE : BigDecimal.ZERO;
 			}
@@ -1045,13 +1045,14 @@ public class Expression {
 				int bits = (n.bitLength() + 1) >> 1;
 				BigInteger ix = n.shiftRight(bits);
 				BigInteger ixPrev;
-
+				BigInteger test;
 				do {
 					ixPrev = ix;
 					ix = ix.add(n.divide(ix)).shiftRight(1);
 					// Give other threads a chance to work;
 					Thread.yield();
-				} while (ix.compareTo(ixPrev) != 0);
+					test = ix.subtract(ixPrev).abs();
+				} while (test.compareTo(BigInteger.ZERO) != 0 && test.compareTo(BigInteger.ONE) != 0 );
 
 				return new BigDecimal(ix, mc.getPrecision());
 			}
@@ -1082,7 +1083,7 @@ public class Expression {
 
 	/**
 	 * Is the string a number?
-	 * 
+	 *
 	 * @param st
 	 *            The string.
 	 * @return <code>true</code>, if the input string is a number.
@@ -1107,7 +1108,7 @@ public class Expression {
 	/**
 	 * Implementation of the <i>Shunting Yard</i> algorithm to transform an
 	 * infix expression to a RPN expression.
-	 * 
+	 *
 	 * @param expression
 	 *            The input expression in infx.
 	 * @return A RPN representation of the expression, with each token as a list
@@ -1249,7 +1250,7 @@ public class Expression {
 
 	/**
 	 * Evaluates the expression.
-	 * 
+	 *
 	 * @return The result of the expression. Trailing zeros are stripped.
 	 */
 	public BigDecimal eval() {
@@ -1258,11 +1259,11 @@ public class Expression {
 
 	/**
 	 * Evaluates the expression.
-	 * 
+	 *
 	 * @param stripTrailingZeros
 	 *            If set to <code>true</code> trailing zeros in the result are
 	 *            stripped.
-	 * 
+	 *
 	 * @return The result of the expression.
 	 */
 	public BigDecimal eval(boolean stripTrailingZeros) {
@@ -1384,10 +1385,10 @@ public class Expression {
 
 	/**
 	 * Sets the precision for expression evaluation.
-	 * 
+	 *
 	 * @param precision
 	 *            The new precision.
-	 * 
+	 *
 	 * @return The expression, allows to chain methods.
 	 */
 	public Expression setPrecision(int precision) {
@@ -1397,7 +1398,7 @@ public class Expression {
 
 	/**
 	 * Sets the rounding mode for expression evaluation.
-	 * 
+	 *
 	 * @param roundingMode
 	 *            The new rounding mode.
 	 * @return The expression, allows to chain methods.
@@ -1435,7 +1436,7 @@ public class Expression {
 
 	/**
 	 * Adds an operator to the list of supported operators.
-	 * 
+	 *
 	 * @param operator
 	 *            The operator to add.
 	 * @return The previous operator with that name, or <code>null</code> if
@@ -1451,7 +1452,7 @@ public class Expression {
 
 	/**
 	 * Adds a function to the list of supported functions
-	 * 
+	 *
 	 * @param function
 	 *            The function to add.
 	 * @return The previous operator with that name, or <code>null</code> if
@@ -1475,7 +1476,7 @@ public class Expression {
 
 	/**
 	 * Sets a variable value.
-	 * 
+	 *
 	 * @param variable
 	 *            The variable name.
 	 * @param value
@@ -1488,7 +1489,7 @@ public class Expression {
 
 	/**
 	 * Sets a variable value.
-	 * 
+	 *
 	 * @param variable
 	 *            The variable name.
 	 * @param value
@@ -1502,7 +1503,7 @@ public class Expression {
 
 	/**
 	 * Sets a variable value.
-	 * 
+	 *
 	 * @param variable
 	 *            The variable to set.
 	 * @param value
@@ -1545,7 +1546,7 @@ public class Expression {
 
 	/**
 	 * Creates a new inner expression for nested expression.
-	 * 
+	 *
 	 * @param expression
 	 *            The string expression.
 	 * @return The inner Expression instance.
@@ -1564,7 +1565,7 @@ public class Expression {
 
 	/**
 	 * Sets a variable value.
-	 * 
+	 *
 	 * @param variable
 	 *            The variable to set.
 	 * @param value
@@ -1577,7 +1578,7 @@ public class Expression {
 
 	/**
 	 * Sets a variable value.
-	 * 
+	 *
 	 * @param variable
 	 *            The variable to set.
 	 * @param value
@@ -1590,7 +1591,7 @@ public class Expression {
 
 	/**
 	 * Sets a variable value.
-	 * 
+	 *
 	 * @param variable
 	 *            The variable to set.
 	 * @param value
@@ -1603,7 +1604,7 @@ public class Expression {
 
 	/**
 	 * Sets a variable value.
-	 * 
+	 *
 	 * @param variable
 	 *            The variable to set.
 	 * @param value
@@ -1616,7 +1617,7 @@ public class Expression {
 
 	/**
 	 * Sets a variable value.
-	 * 
+	 *
 	 * @param variable
 	 *            The variable to set.
 	 * @param value
@@ -1629,7 +1630,7 @@ public class Expression {
 
 	/**
 	 * Sets a variable value.
-	 * 
+	 *
 	 * @param variable
 	 *            The variable to set.
 	 * @param value
@@ -1643,7 +1644,7 @@ public class Expression {
 	/**
 	 * Get an iterator for this expression, allows iterating over an expression
 	 * token by token.
-	 * 
+	 *
 	 * @return A new iterator instance for this expression.
 	 */
 	public Iterator<Token> getExpressionTokenizer() {
@@ -1656,7 +1657,7 @@ public class Expression {
 	 * Cached access to the RPN notation of this expression, ensures only one
 	 * calculation of the RPN per expression instance. If no cached instance
 	 * exists, a new one will be created and put to the cache.
-	 * 
+	 *
 	 * @return The cached RPN instance.
 	 */
 	private List<Token> getRPN() {
@@ -1737,7 +1738,7 @@ public class Expression {
 	/**
 	 * Get a string representation of the RPN (Reverse Polish Notation) for this
 	 * expression.
-	 * 
+	 *
 	 * @return A string with the RPN representation for this expression.
 	 */
 	public String toRPN() {
@@ -1765,7 +1766,7 @@ public class Expression {
 
 	/**
 	 * Exposing declared variables in the expression.
-	 * 
+	 *
 	 * @return All declared variables.
 	 */
 	public Set<String> getDeclaredVariables() {
@@ -1774,7 +1775,7 @@ public class Expression {
 
 	/**
 	 * Exposing declared operators in the expression.
-	 * 
+	 *
 	 * @return All declared operators.
 	 */
 	public Set<String> getDeclaredOperators() {
@@ -1783,7 +1784,7 @@ public class Expression {
 
 	/**
 	 * Exposing declared functions.
-	 * 
+	 *
 	 * @return All declared functions.
 	 */
 	public Set<String> getDeclaredFunctions() {
@@ -1799,7 +1800,7 @@ public class Expression {
 
 	/**
 	 * Returns a list of the variables in the expression.
-	 * 
+	 *
 	 * @return A list of the variable names in this expression.
 	 */
 	public List<String> getUsedVariables() {
@@ -1857,7 +1858,7 @@ public class Expression {
 	 * considered a boolean expression, if the last operator or function is
 	 * boolean. The IF function is handled special. If the third parameter is
 	 * boolean, then the IF is also considered boolean, else non-boolean.
-	 * 
+	 *
 	 * @return <code>true</code> if the last operator/function was a boolean.
 	 */
 	public boolean isBoolean() {
