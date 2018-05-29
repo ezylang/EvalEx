@@ -133,6 +133,7 @@ dependencies {
   <tr><td>ATANH(<i>expression</i>)</td><td>Returns the angle of hyperbolic tangens of a value</td></tr>
   <tr><td>RAD(<i>expression</i>)</td><td>Converts an angle measured in degrees to an approximately equivalent angle measured in radians</td></tr>
   <tr><td>DEG(<i>expression</i>)</td><td>Converts an angle measured in radians to an approximately equivalent angle measured in degrees</td></tr>
+  <tr><td>FACT(<i>expression</i>)</td><td>Retuns the factorial value of an integer.  Will return 1 for 0 or a negative number</td></tr>
 </table>
 *Functions names are case insensitive.
 
