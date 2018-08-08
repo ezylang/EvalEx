@@ -49,8 +49,6 @@ public abstract class AbstractUnaryOperator extends AbstractOperator {
 	 * @param leftAssoc
 	 *            <code>true</code> if the operator is left associative,
 	 *            else <code>false</code>.
-	 * @param booleanOperator
-	 *            Whether this operator is boolean.
 	 */
 	protected AbstractUnaryOperator(String oper, int precedence, boolean leftAssoc) {
 		super(oper, precedence, leftAssoc);
