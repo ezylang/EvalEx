@@ -40,7 +40,6 @@ import java.util.Set;
 import java.util.Stack;
 import java.util.TreeMap;
 
-import com.udojava.evalex.Expression.LazyNumber;
 
 /**
  * <h1>EvalEx - Java Expression Evaluator</h1>
