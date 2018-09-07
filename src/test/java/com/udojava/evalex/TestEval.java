@@ -37,7 +37,7 @@ public class TestEval {
 			err = e.getMessage();
 		}
 
-		assertEquals("Too many numbers or variables", err);
+		assertEquals("Missing operator at character position 3", err);
 	}
 
 	@Test
@@ -64,6 +64,20 @@ public class TestEval {
 		}
 
 		assertEquals("Empty expression", err);
+	}
+	
+	@Test
+	public void testInvalidExpressions5() {
+		String err = "";
+		try {
+			Expression expression = new Expression("1 1+2/");
+			expression.toRPN();
+			expression.eval();
+		} catch (ExpressionException e) {
+			err = e.getMessage();
+		}
+
+		assertEquals("Missing operator at character position 2", err);
 	}
 	
 	@Test

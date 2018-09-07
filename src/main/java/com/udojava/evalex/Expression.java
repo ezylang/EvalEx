@@ -1143,6 +1143,9 @@ public class Expression {
 				break;
 			case LITERAL:
 			case HEX_LITERAL:
+				if (previousToken != null && (previousToken.type == TokenType.LITERAL || previousToken.type == TokenType.HEX_LITERAL)) {
+					throw new ExpressionException("Missing operator at character position " + token.pos);
+				}
 				outputQueue.add(token);
 				break;
 			case VARIABLE:
