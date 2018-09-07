@@ -715,6 +715,20 @@ public class Expression {
 			}
 		});
 
+		addFunction(new Function("FACT", 1, false) {
+			@Override
+			public BigDecimal eval(List<BigDecimal> parameters) {
+				assertNotNull(parameters.get(0));
+
+				int number = parameters.get(0).intValue();
+				BigDecimal factorial = BigDecimal.ONE;
+				for (int i = 1; i <= number; i++) {
+					factorial = factorial.multiply(new BigDecimal(i));
+				}
+				return factorial;
+			}
+		});
+
 		addFunction(new Function("NOT", 1, true) {
 			@Override
 			public BigDecimal eval(List<BigDecimal> parameters) {
