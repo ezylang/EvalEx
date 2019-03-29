@@ -498,7 +498,8 @@ public class Expression {
 				}
 
 				if (previousToken == null || previousToken.type == TokenType.OPERATOR
-						|| previousToken.type == TokenType.OPEN_PAREN || previousToken.type == TokenType.COMMA) {
+						|| previousToken.type == TokenType.OPEN_PAREN || previousToken.type == TokenType.COMMA
+					    || previousToken.type == TokenType.UNARY_OPERATOR) {
 					token.surface += "u";
 					token.type = TokenType.UNARY_OPERATOR;
 				} else {
@@ -1189,7 +1190,8 @@ public class Expression {
 			}
 			case UNARY_OPERATOR: {
 				if (previousToken != null && previousToken.type != TokenType.OPERATOR
-						&& previousToken.type != TokenType.COMMA && previousToken.type != TokenType.OPEN_PAREN) {
+						&& previousToken.type != TokenType.COMMA && previousToken.type != TokenType.OPEN_PAREN
+					    && previousToken.type != TokenType.UNARY_OPERATOR) {
 					throw new ExpressionException(
 							"Invalid position for unary operator " + token + " at character position " + token.pos);
 				}
@@ -1897,6 +1899,22 @@ public class Expression {
 			}
 		}
 		return false;
+	}
+
+	public List<String> infixNotation() {
+		final List<String> infix = new ArrayList<String>();
+		Tokenizer tokenizer = new Tokenizer(expression);
+		while (tokenizer.hasNext()) {
+			Token token = tokenizer.next();
+			StringBuilder sb = new StringBuilder();
+			sb.append("{")
+				.append(token.type)
+				.append(":")
+				.append(token.surface)
+				.append("}");
+			infix.add(sb.toString());
+		}
+		return infix;
 	}
 
 }
