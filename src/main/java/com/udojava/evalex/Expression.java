@@ -1906,13 +1906,8 @@ public class Expression {
 		Tokenizer tokenizer = new Tokenizer(expression);
 		while (tokenizer.hasNext()) {
 			Token token = tokenizer.next();
-			StringBuilder sb = new StringBuilder();
-			sb.append("{")
-				.append(token.type)
-				.append(":")
-				.append(token.surface)
-				.append("}");
-			infix.add(sb.toString());
+			String infixNotation = "{" + token.type + ":" + token.surface + "}";
+			infix.add(infixNotation);
 		}
 		return infix;
 	}

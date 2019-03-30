@@ -15,19 +15,25 @@ public class TestContinuousUnary {
     public void testContinuousUnary() {
 
         Expression expression = new Expression("++1");
-        Assert.assertEquals(expression.eval().intValue(), 1);
+        Assert.assertEquals(1, expression.eval().intValue());
 
         expression = new Expression("--1");
-        Assert.assertEquals(expression.eval().intValue(), 1);
+        Assert.assertEquals(1, expression.eval().intValue());
 
         expression = new Expression("+-1");
-        Assert.assertEquals(expression.eval().intValue(), -1);
+        Assert.assertEquals(-1, expression.eval().intValue());
 
         expression = new Expression("-+1");
-        Assert.assertEquals(expression.eval().intValue(), -1);
+        Assert.assertEquals(-1, expression.eval().intValue());
 
         expression = new Expression("1-+1");
-        Assert.assertEquals(expression.eval().intValue(), 0);
+        Assert.assertEquals(0, expression.eval().intValue());
+
+        expression = new Expression("-+---+++--++-1");
+        Assert.assertEquals(-1, expression.eval().intValue());
+
+        expression = new Expression("1--++++---2+-+----1");
+        Assert.assertEquals(-2, expression.eval().intValue());
 
 
 
