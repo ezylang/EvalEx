@@ -600,7 +600,7 @@ public class Expression {
 				return result;
 			}
 		});
-		addOperator(new Operator("&&", OPERATOR_PRECEDENCE_AND, false, true) {
+		addOperator(new Operator("&&", OPERATOR_PRECEDENCE_AND, true, true) {
 			@Override
 			public BigDecimal eval(BigDecimal v1, BigDecimal v2) {
 				assertNotNull(v1, v2);
@@ -616,7 +616,7 @@ public class Expression {
 			}
 		});
 
-		addOperator(new Operator("||", OPERATOR_PRECEDENCE_OR, false, true) {
+		addOperator(new Operator("||", OPERATOR_PRECEDENCE_OR, true, true) {
 			@Override
 			public BigDecimal eval(BigDecimal v1, BigDecimal v2) {
 				assertNotNull(v1, v2);
@@ -632,7 +632,7 @@ public class Expression {
 			}
 		});
 
-		addOperator(new Operator(">", OPERATOR_PRECEDENCE_COMPARISON, false, true) {
+		addOperator(new Operator(">", OPERATOR_PRECEDENCE_COMPARISON, true, true) {
 			@Override
 			public BigDecimal eval(BigDecimal v1, BigDecimal v2) {
 				assertNotNull(v1, v2);
@@ -640,7 +640,7 @@ public class Expression {
 			}
 		});
 
-		addOperator(new Operator(">=", OPERATOR_PRECEDENCE_COMPARISON, false, true) {
+		addOperator(new Operator(">=", OPERATOR_PRECEDENCE_COMPARISON, true, true) {
 			@Override
 			public BigDecimal eval(BigDecimal v1, BigDecimal v2) {
 				assertNotNull(v1, v2);
@@ -648,7 +648,7 @@ public class Expression {
 			}
 		});
 
-		addOperator(new Operator("<", OPERATOR_PRECEDENCE_COMPARISON, false, true) {
+		addOperator(new Operator("<", OPERATOR_PRECEDENCE_COMPARISON, true, true) {
 			@Override
 			public BigDecimal eval(BigDecimal v1, BigDecimal v2) {
 				assertNotNull(v1, v2);
@@ -656,7 +656,7 @@ public class Expression {
 			}
 		});
 
-		addOperator(new Operator("<=", OPERATOR_PRECEDENCE_COMPARISON, false, true) {
+		addOperator(new Operator("<=", OPERATOR_PRECEDENCE_COMPARISON, true, true) {
 			@Override
 			public BigDecimal eval(BigDecimal v1, BigDecimal v2) {
 				assertNotNull(v1, v2);
@@ -664,7 +664,7 @@ public class Expression {
 			}
 		});
 
-		addOperator(new Operator("=", OPERATOR_PRECEDENCE_EQUALITY, false, true) {
+		addOperator(new Operator("=", OPERATOR_PRECEDENCE_EQUALITY, true, true) {
 			@Override
 			public BigDecimal eval(BigDecimal v1, BigDecimal v2) {
 				if (v1 == v2) {
@@ -676,14 +676,14 @@ public class Expression {
 				return v1.compareTo(v2) == 0 ? BigDecimal.ONE : BigDecimal.ZERO;
 			}
 		});
-		addOperator(new Operator("==", OPERATOR_PRECEDENCE_EQUALITY, false, true) {
+		addOperator(new Operator("==", OPERATOR_PRECEDENCE_EQUALITY, true, true) {
 			@Override
 			public BigDecimal eval(BigDecimal v1, BigDecimal v2) {
 				return ((Operator)operators.get("=")).eval(v1, v2);
 			}
 		});
 
-		addOperator(new Operator("!=", OPERATOR_PRECEDENCE_EQUALITY, false, true) {
+		addOperator(new Operator("!=", OPERATOR_PRECEDENCE_EQUALITY, true, true) {
 			@Override
 			public BigDecimal eval(BigDecimal v1, BigDecimal v2) {
 				if (v1 == v2) {
@@ -695,7 +695,7 @@ public class Expression {
 				return v1.compareTo(v2) != 0 ? BigDecimal.ONE : BigDecimal.ZERO;
 			}
 		});
-		addOperator(new Operator("<>", OPERATOR_PRECEDENCE_EQUALITY, false, true) {
+		addOperator(new Operator("<>", OPERATOR_PRECEDENCE_EQUALITY, true, true) {
 			@Override
 			public BigDecimal eval(BigDecimal v1, BigDecimal v2) {
 				assertNotNull(v1, v2);
