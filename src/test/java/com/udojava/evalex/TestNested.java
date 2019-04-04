@@ -70,7 +70,7 @@ public class TestNested {
 		} catch (ExpressionException e) {
 			err = e.getMessage();
 		}
-		assertEquals("circular reference var : z", err);
+		assertEquals("circular reference var : y", err);
 
 		try {
 			String a = "2*x + 4*z + y";
@@ -81,8 +81,48 @@ public class TestNested {
 			assertEquals("15", e.eval().toString());
 		} catch (ExpressionException e) {
 			err = e.getMessage();
-			System.out.println(err);
 		}
+
+		try {
+			String a = "a + b + c + d + e + f";
+			Expression e = new Expression(a);
+			e.with("a", "b");
+			e.with("b", "c");
+			e.with("c", "d");
+			e.with("d", "e");
+			e.with("e", "f");
+			e.with("f", "1");
+			assertEquals("6", e.eval().toString());
+		} catch (ExpressionException e) {
+			err = e.getMessage();
+		}
+
+		try {
+			String a = "a + b + c + d + e + f";
+			Expression e = new Expression(a);
+			e.with("a", "b");
+			e.with("b", "c");
+			e.with("c", "d");
+			e.with("d", "e");
+			e.with("e", "f");
+			e.with("f", "a");
+			e.eval();
+		} catch (ExpressionException e) {
+			err = e.getMessage();
+		}
+		assertEquals("circular reference var : a", err);
+
+		try {
+			String a = "a + b";
+			Expression e = new Expression(a);
+			e.with("a", "a + b");
+			e.with("b", "0");
+			e.eval();
+		} catch (ExpressionException e) {
+			err = e.getMessage();
+		}
+		assertEquals("circular reference var : a", err);
+
 	}
 
 	@Test

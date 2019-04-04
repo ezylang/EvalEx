@@ -1846,21 +1846,21 @@ public class Expression {
 	 */
 	public void varDefValidation() {
 		final Set<String> varWithValue = new HashSet<String>();
-		final Set<String> circularRef = new HashSet<String>();
 		Queue<String> checks = new LinkedList<String>(new HashSet<String>(getUsedVariables()));
+		Queue<String> circular = new LinkedList<String>();
 		while (!checks.isEmpty()) {
 			String check = checks.peek();
 			if (!variables.containsKey(check)) {
 				throw new ExpressionException("unknown var : " + check);
 			}
-			if (circularRef.contains(check) && !varWithValue.contains(check)) {
+			if (check.equals(circular.peek())) {
 				throw new ExpressionException("circular reference var : " + check);
-			} else {
-				circularRef.add(check);
 			}
 			LazyNumber innerVariable = variables.get(check);
 			String innerExp = innerVariable.getString();
-			if (!isNumber(innerExp)) {
+			if (isNumber(innerExp)) {
+				varWithValue.add(check);
+			} else {
 				Expression exp = createEmbeddedExpression(innerExp);
 				Set<String> tocheck = new HashSet<String>(exp.getUsedVariables());
 				tocheck.removeAll(varWithValue);
@@ -1869,12 +1869,12 @@ public class Expression {
 				} else {
 					checks.addAll(tocheck);
 				}
-			} else {
-				varWithValue.add(check);
+			}
+			if (!varWithValue.contains(check)) {
+				circular.add(check);
 			}
 			checks.poll();
 		}
-		return;
 	}
 
 	/**
