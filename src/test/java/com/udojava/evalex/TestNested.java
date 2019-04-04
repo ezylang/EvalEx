@@ -1,13 +1,14 @@
 package com.udojava.evalex;
 
-import static org.junit.Assert.assertEquals;
-
 import java.math.BigDecimal;
 import java.math.MathContext;
 import java.math.RoundingMode;
 import java.util.List;
 
+import com.udojava.evalex.Expression.ExpressionException;
 import org.junit.Test;
+
+import static org.junit.Assert.assertEquals;
 
 public class TestNested {
 
@@ -24,6 +25,64 @@ public class TestNested {
 		e.with("z", z);
 
 		assertEquals("34", e.eval().toString());
+	}
+
+	@Test
+	public void testvarDefValidation() {
+		String err = "";
+		try {
+			String a = "2*x + 4*z";
+			Expression e = new Expression(a);
+			e.eval();
+		} catch (ExpressionException e) {
+			err = e.getMessage();
+		}
+		assertEquals("unknown var : x", err);
+
+		try {
+			String a = "2*x + 4*z";
+			Expression e = new Expression(a);
+			e.with("x", "1");
+			e.eval();
+		} catch (ExpressionException e) {
+			err = e.getMessage();
+		}
+		assertEquals("unknown var : z", err);
+
+		try {
+			String a = "2*x + 4*z";
+			Expression e = new Expression(a);
+			e.with("x", "1");
+			e.with("z", "2 * x + z");
+			e.eval();
+		} catch (ExpressionException e) {
+			err = e.getMessage();
+		}
+		assertEquals("circular reference var : z", err);
+
+		try {
+			String a = "2*x + 4*z + y";
+			Expression e = new Expression(a);
+			e.with("x", "1");
+			e.with("y", "x * z");
+			e.with("z", "2 * x + y");
+			e.eval();
+		} catch (ExpressionException e) {
+			err = e.getMessage();
+		}
+		assertEquals("circular reference var : z", err);
+
+		try {
+			String a = "2*x + 4*z + y";
+			Expression e = new Expression(a);
+			e.with("x", "1");
+			e.with("y", "x * 1");
+			e.with("z", "2 * x + y");
+			assertEquals("15", e.eval().toString());
+		} catch (ExpressionException e) {
+			err = e.getMessage();
+			System.out.println(err);
+		}
 	}
 
 	@Test

@@ -32,10 +32,13 @@ import java.math.MathContext;
 import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Queue;
 import java.util.Set;
 import java.util.Stack;
 import java.util.TreeMap;
@@ -1272,6 +1275,7 @@ public class Expression {
 	 * @return The result of the expression. Trailing zeros are stripped.
 	 */
 	public BigDecimal eval() {
+		varDefValidation();
 		return eval(true);
 	}
 
@@ -1834,6 +1838,43 @@ public class Expression {
 			result.add(token);
 		}
 		return result;
+	}
+
+	/**
+	 * Verify the validity of the variables
+	 * @return if expression has undefined vars or circular reference vars throw ExpressionException
+	 */
+	public void varDefValidation() {
+		final Set<String> varWithValue = new HashSet<String>();
+		final Set<String> circularRef = new HashSet<String>();
+		Queue<String> checks = new LinkedList<String>(new HashSet<String>(getUsedVariables()));
+		while (!checks.isEmpty()) {
+			String check = checks.peek();
+			if (!variables.containsKey(check)) {
+				throw new ExpressionException("unknown var : " + check);
+			}
+			if (circularRef.contains(check) && !varWithValue.contains(check)) {
+				throw new ExpressionException("circular reference var : " + check);
+			} else {
+				circularRef.add(check);
+			}
+			LazyNumber innerVariable = variables.get(check);
+			String innerExp = innerVariable.getString();
+			if (!isNumber(innerExp)) {
+				Expression exp = createEmbeddedExpression(innerExp);
+				Set<String> tocheck = new HashSet<String>(exp.getUsedVariables());
+				tocheck.removeAll(varWithValue);
+				if (tocheck.isEmpty()) {
+					varWithValue.add(check);
+				} else {
+					checks.addAll(tocheck);
+				}
+			} else {
+				varWithValue.add(check);
+			}
+			checks.poll();
+		}
+		return;
 	}
 
 	/**
