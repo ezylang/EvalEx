@@ -1842,36 +1842,42 @@ public class Expression {
 
 	/**
 	 * Verify the validity of the variables
-	 * @return if expression has undefined vars or circular reference vars throw ExpressionException
+	 * if expression has undefined vars or circular reference vars throw ExpressionException
+	 * @return void
 	 */
 	public void varDefValidation() {
+		final String mark = "+";
+		Queue<String> checks = new LinkedList<String>(getUsedVariables());
+		checks.offer(mark);
 		final Set<String> varWithValue = new HashSet<String>();
-		Queue<String> checks = new LinkedList<String>(new HashSet<String>(getUsedVariables()));
-		Queue<String> circular = new LinkedList<String>();
+		int lastvarWithValueCnt = varWithValue.size();
 		while (!checks.isEmpty()) {
 			String check = checks.peek();
-			if (!variables.containsKey(check)) {
-				throw new ExpressionException("unknown var : " + check);
-			}
-			if (check.equals(circular.peek())) {
-				throw new ExpressionException("circular reference var : " + check);
-			}
-			LazyNumber innerVariable = variables.get(check);
-			String innerExp = innerVariable.getString();
-			if (isNumber(innerExp)) {
-				varWithValue.add(check);
+			if (mark.equals(check)) {
+				if (varWithValue.size() <= lastvarWithValueCnt) {
+					throw new ExpressionException("circular reference var");
+				} else {
+					lastvarWithValueCnt = varWithValue.size();
+					checks.add(mark);
+				}
 			} else {
-				Expression exp = createEmbeddedExpression(innerExp);
-				Set<String> tocheck = new HashSet<String>(exp.getUsedVariables());
-				tocheck.removeAll(varWithValue);
-				if (tocheck.isEmpty()) {
+				if (!variables.containsKey(check)) {
+					throw new ExpressionException("unknown var : " + check);
+				}
+				LazyNumber innerVariable = variables.get(check);
+				String innerExp = innerVariable.getString();
+				if (isNumber(innerExp)) {
 					varWithValue.add(check);
 				} else {
-					checks.addAll(tocheck);
+					Expression exp = createEmbeddedExpression(innerExp);
+					Set<String> tocheck = new HashSet<String>(exp.getUsedVariables());
+					tocheck.removeAll(varWithValue);
+					if (tocheck.isEmpty()) {
+						varWithValue.add(check);
+					} else {
+						checks.addAll(tocheck);
+					}
 				}
-			}
-			if (!varWithValue.contains(check)) {
-				circular.add(check);
 			}
 			checks.poll();
 		}
