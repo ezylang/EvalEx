@@ -1858,7 +1858,9 @@ public class Expression {
 					throw new ExpressionException("circular reference var");
 				} else {
 					lastvarWithValueCnt = varWithValue.size();
-					checks.add(mark);
+					if (checks.size() > 1) {
+						checks.add(mark);
+					}
 				}
 			} else {
 				if (!variables.containsKey(check)) {
