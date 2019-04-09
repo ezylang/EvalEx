@@ -1851,12 +1851,16 @@ public class Expression {
 		checks.offer(mark);
 		final Set<String> varWithValue = new HashSet<String>();
 		int lastvarWithValueCnt = varWithValue.size();
+        String lastCheck = "";
+        final Set<String> lasttodocheck = new HashSet<String>();
 		while (!checks.isEmpty()) {
 			String check = checks.peek();
 			if (mark.equals(check)) {
-				if (varWithValue.size() <= lastvarWithValueCnt) {
+				if (varWithValue.size() < lastvarWithValueCnt ) {
 					throw new ExpressionException("circular reference var");
-				} else {
+				} else if (varWithValue.size() == lastvarWithValueCnt && lasttodocheck.contains(lastCheck)){
+                    throw new ExpressionException("circular reference var");
+                } else {
 					lastvarWithValueCnt = varWithValue.size();
 					if (checks.size() > 1) {
 						checks.add(mark);
@@ -1866,6 +1870,7 @@ public class Expression {
 				if (!variables.containsKey(check)) {
 					throw new ExpressionException("unknown var : " + check);
 				}
+                lastCheck = check;
 				LazyNumber innerVariable = variables.get(check);
 				String innerExp = innerVariable.getString();
 				if (isNumber(innerExp)) {
@@ -1877,6 +1882,7 @@ public class Expression {
 					if (tocheck.isEmpty()) {
 						varWithValue.add(check);
 					} else {
+                        lasttodocheck.addAll(tocheck);
 						checks.addAll(tocheck);
 					}
 				}

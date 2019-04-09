@@ -137,6 +137,20 @@ public class TestNested {
 		}
 		assertEquals("circular reference var", err);
 
+		try {
+			String a = "a";
+			Expression e = new Expression(a);
+			e.with("a", "b");
+			e.with("b", "c");
+			e.with("c", "d");
+			e.with("d", "e");
+			e.with("e", "f");
+			e.with("f", "1");
+			assertEquals("1", e.eval().toString());
+		} catch (ExpressionException e) {
+			err = e.getMessage();
+		}
+
 	}
 
 	@Test
