@@ -84,13 +84,13 @@ public class TestNested {
         }
 
         try {
-			String a = "a + b + c + d + e + f";
+			String a = "a + b + c + d + f + g";
 			Expression e = new Expression(a);
 			e.with("a", "b");
 			e.with("b", "c");
 			e.with("c", "d");
-			e.with("d", "e");
-			e.with("e", "f");
+			e.with("d", "f");
+			e.with("f", "g");
 			e.with("f", "1");
 			assertEquals("6", e.eval().toString());
         } catch (ExpressionException e) {
@@ -111,7 +111,7 @@ public class TestNested {
         }
         assertEquals("circular reference var : f", err);
 
-		try {
+        try {
 			String a = "a + b + c + d + f + g";
 			Expression e = new Expression(a);
 			e.with("a", "b");
@@ -121,35 +121,46 @@ public class TestNested {
 			e.with("f", "g");
 			e.with("g", "a");
 			e.eval();
-		} catch (ExpressionException e) {
+        } catch (ExpressionException e) {
 			err = e.getMessage();
-		}
-		assertEquals("circular reference var : g", err);
+        }
+        assertEquals("circular reference var : g", err);
 
-		try {
+        try {
 			String a = "a + b";
 			Expression e = new Expression(a);
 			e.with("a", "a + b");
 			e.with("b", "0");
 			e.eval();
-		} catch (ExpressionException e) {
+        } catch (ExpressionException e) {
 			err = e.getMessage();
-		}
-		assertEquals("circular reference var : a", err);
+        }
+        assertEquals("circular reference var : a", err);
 
-		try {
+        try {
 			String a = "a";
 			Expression e = new Expression(a);
 			e.with("a", "b");
 			e.with("b", "c");
 			e.with("c", "d");
-			e.with("d", "e");
-			e.with("e", "f");
-			e.with("f", "1");
+			e.with("d", "f");
+			e.with("f", "g");
+			e.with("g", "1");
 			assertEquals("1", e.eval().toString());
-		} catch (ExpressionException e) {
+        } catch (ExpressionException e) {
 			err = e.getMessage();
-		}
+        }
+
+        try {
+            String a = "math3";
+            Expression e = new Expression(a);
+            e.with("math3", "math2 + 100");
+            e.with("math2", "math1 + 100");
+            e.with("math1", "1");
+            assertEquals("201", e.eval().toString());
+        } catch (ExpressionException e) {
+            err = e.getMessage();
+        }
 
 	}
 
