@@ -26,6 +26,22 @@ public class TestLazyIf {
         expression.setVariable("a", new BigDecimal(0));
         Assert.assertEquals(expression.eval(),new BigDecimal(0));
     }
+
+  @Test
+  public void testLazyIfWithNested() {
+    Expression expression = new Expression("if(a=0,0,if(5/a>3,2,4))");
+    expression.setVariable("a", new BigDecimal(0));
+    Assert.assertEquals(expression.eval(),new BigDecimal(0));
+  }
+
+  @Test(expected = ArithmeticException.class)
+  public void testLazyIfWithNested2() {
+    Expression expression = new Expression("if(a=0,if(5/a>3,2,4),0)");
+    expression.setVariable("a", new BigDecimal(0));
+    Assert.assertEquals(expression.eval(),new BigDecimal(0));
+  }
+
+
     
     @Test
     public void testLazyIfWithNull() {

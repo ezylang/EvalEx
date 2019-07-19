@@ -213,6 +213,25 @@ public class Expression {
 		String getString();
 	}
 
+	public class LazyNumberException implements LazyNumber{
+
+		private RuntimeException throwable;
+
+		public LazyNumberException(String msg) {
+			this.throwable = new ArithmeticException(msg);
+		}
+
+		@Override
+		public BigDecimal eval() {
+			throw throwable;
+		}
+
+		@Override
+		public String getString() {
+			return null;
+		}
+	}
+
 	/**
 	 * Construct a LazyNumber from a BigDecimal
 	 */
@@ -741,10 +760,15 @@ public class Expression {
 		addLazyFunction(new LazyFunction("IF", 3) {
 			@Override
 			public LazyNumber lazyEval(List<LazyNumber> lazyParams) {
-				BigDecimal result = lazyParams.get(0).eval();
-				assertNotNull(result);
-				boolean isTrue = result.compareTo(BigDecimal.ZERO) != 0;
-				return isTrue ? lazyParams.get(1) : lazyParams.get(2);
+				try {
+					BigDecimal result = lazyParams.get(0).eval();
+					assertNotNull(result);
+					boolean isTrue = result.compareTo(BigDecimal.ZERO) != 0;
+					return isTrue ? lazyParams.get(1) : lazyParams.get(2);
+				}catch(Throwable ex){
+					return new LazyNumberException(ex.getMessage());
+				}
+
 			}
 		});
 
