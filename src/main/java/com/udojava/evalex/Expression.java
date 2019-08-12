@@ -741,10 +741,7 @@ public class Expression {
 		addLazyFunction(new LazyFunction("IF", 3) {
 			@Override
 			public LazyNumber lazyEval(List<LazyNumber> lazyParams) {
-				BigDecimal result = lazyParams.get(0).eval();
-				assertNotNull(result);
-				boolean isTrue = result.compareTo(BigDecimal.ZERO) != 0;
-				return isTrue ? lazyParams.get(1) : lazyParams.get(2);
+				return new LazyIfNumber(lazyParams);
 			}
 		});
 
