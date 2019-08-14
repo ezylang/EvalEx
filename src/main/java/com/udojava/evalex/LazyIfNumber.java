@@ -30,11 +30,14 @@ import com.udojava.evalex.Expression.LazyNumber;
 import java.math.BigDecimal;
 import java.util.List;
 
+/**
+ * Lazy Number for IF function created for lazily evaluated IF condition
+ */
 public class LazyIfNumber implements LazyNumber {
 
   private List<LazyNumber> lazyParams;
 
-  LazyIfNumber(List<LazyNumber> lazyParams) {
+  public LazyIfNumber(List<LazyNumber> lazyParams) {
     this.lazyParams = lazyParams;
   }
 
