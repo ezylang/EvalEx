@@ -1,0 +1,6 @@
+language: java
+install: true
+script: mvn clean test
+cache:
+  directories:
+    - $HOME/.m2

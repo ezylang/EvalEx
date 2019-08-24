@@ -1,5 +1,6 @@
 EvalEx - Java Expression Evaluator
 ==========
+[![Build Status](https://travis-ci.com/uklimaschewski/EvalEx.svg?branch=master)](https://travis-ci.com/uklimaschewski/EvalEx)
 
 ### Introduction
 
