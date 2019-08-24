@@ -20,12 +20,28 @@ public class TestTokenizer {
 	public void testSpacesFunctions() {
 		Expression e;
 		Iterator<Token> i;
-		
+
 		e = new Expression("sin (30)");
 		i = e.getExpressionTokenizer();
 		assertToken("sin", TokenType.FUNCTION, i.next());
 		assertToken("(", TokenType.OPEN_PAREN, i.next());
 		assertToken("30", TokenType.LITERAL, i.next());
+		assertToken(")", TokenType.CLOSE_PAREN, i.next());
+		assertFalse(i.hasNext());
+	}
+
+	@Test
+	public void testSpacesFunctionsVariablesOperators() {
+		Expression e;
+		Iterator<Token> i;
+
+		e = new Expression("   sin   (   30   +   x   )   ");
+		i = e.getExpressionTokenizer();
+		assertToken("sin", TokenType.FUNCTION, i.next());
+		assertToken("(", TokenType.OPEN_PAREN, i.next());
+		assertToken("30", TokenType.LITERAL, i.next());
+		assertToken("+", TokenType.OPERATOR, i.next());
+		assertToken("x", TokenType.VARIABLE, i.next());
 		assertToken(")", TokenType.CLOSE_PAREN, i.next());
 		assertFalse(i.hasNext());
 	}

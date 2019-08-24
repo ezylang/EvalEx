@@ -34,8 +34,5 @@ public class TestContinuousUnary {
 
         expression = new Expression("1--++++---2+-+----1");
         Assert.assertEquals(-2, expression.eval().intValue());
-
-
-
     }
 }
