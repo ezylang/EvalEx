@@ -489,6 +489,18 @@ public class TestEval {
 	}
 
 	@Test
+	public void hexMinus() throws Exception {
+		BigDecimal result = new Expression("-0XCAFE").eval();
+		assertEquals("-51966", result.toPlainString());
+	}
+
+	@Test
+	public void hexMinusBlanks() throws Exception {
+		BigDecimal result = new Expression("  0xa + -0XCAFE  ").eval();
+		assertEquals("-51956", result.toPlainString());
+	}
+
+	@Test
 	public void longHexExpressionWorks() throws Exception {
 		BigDecimal result = new Expression("0xcafebabe", MathContext.DECIMAL128).eval();
 		assertEquals("3405691582", result.toPlainString());
