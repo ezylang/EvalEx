@@ -183,11 +183,11 @@ public class Expression {
      */
     private static final LazyNumber PARAMS_START = new LazyNumber() {
         public BigDecimal eval() {
-            return null;
+            return null; // NOSONAR - do not use for code coverage
         }
 
         public String getString() {
-            return null;
+            return null; // NOSONAR - do not use for code coverage
         }
     };
 
