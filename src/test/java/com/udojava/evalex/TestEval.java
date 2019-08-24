@@ -50,7 +50,7 @@ public class TestEval {
 			err = e.getMessage();
 		}
 
-		assertEquals("Unknown unary operator '*' at position 6", err);
+		assertEquals("Unknown unary operator * at character position 6", err);
 	}
 
 	@Test
@@ -113,7 +113,7 @@ public class TestEval {
 	}
 	
 	@Test
-	public void testUnaryMinus() throws Exception {
+	public void testUnaryMinus() {
 		assertEquals("-3", new Expression("-3").eval().toPlainString());
 		assertEquals("-2", new Expression("-SQRT(4)").eval().toPlainString());
 		assertEquals("-12", new Expression("-(5*3+(+10-13))").eval().toPlainString());
@@ -209,7 +209,7 @@ public class TestEval {
 		} catch (ExpressionException e) {
 			err = e.getMessage();
 		}
-		assertEquals("Unknown unary operator '/' at position 1", err);
+		assertEquals("Unknown unary operator / at character position 1", err);
 
 		err = "";
 		try {
@@ -225,7 +225,7 @@ public class TestEval {
 		} catch (ExpressionException e) {
 			err = e.getMessage();
 		}
-		assertEquals("Unknown unary operator '/' at position 1", err);
+		assertEquals("Unknown unary operator / at character position 1", err);
 
 		err = "";
 		try {
@@ -250,7 +250,7 @@ public class TestEval {
 		} catch (ExpressionException e) {
 			err = e.getMessage();
 		}
-		assertEquals("Unknown unary operator '/' at position 5", err);
+		assertEquals("Unknown unary operator / at character position 5", err);
 
 		err = "";
 		try {
@@ -266,7 +266,7 @@ public class TestEval {
 		} catch (ExpressionException e) {
 			err = e.getMessage();
 		}
-		assertEquals("Unknown unary operator '/' at position 5", err);
+		assertEquals("Unknown unary operator / at character position 5", err);
 
 		err = "";
 		try {
@@ -290,7 +290,7 @@ public class TestEval {
 		} catch (ExpressionException e) {
 			err = e.getMessage();
 		}
-		assertEquals("Unknown unary operator '>=' at position 15", err);
+		assertEquals("Unknown unary operator >= at character position 15", err);
 
 		err = "";
 		try {
@@ -298,7 +298,7 @@ public class TestEval {
 		} catch (ExpressionException e) {
 			err = e.getMessage();
 		}
-		assertEquals("Unknown unary operator '>=' at position 9", err);
+		assertEquals("Unknown unary operator >= at character position 9", err);
 	}
 
 	@Test
@@ -419,7 +419,7 @@ public class TestEval {
 			err = e.getMessage();
 		}
 
-		assertEquals("Unknown function 'unk' at position 1", err);
+		assertEquals("Unknown function unk at character position 1", err);
 	}
 
 	@Test
@@ -431,7 +431,7 @@ public class TestEval {
 			err = e.getMessage();
 		}
 
-		assertEquals("Unknown operator '|*|' at position 3", err);
+		assertEquals("Unknown operator |*| at character position 3", err);
 	}
 
 	@Test

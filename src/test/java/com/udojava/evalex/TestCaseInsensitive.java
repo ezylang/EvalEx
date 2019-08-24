@@ -16,19 +16,19 @@ public class TestCaseInsensitive {
 
         Expression expression = new Expression("a");
         expression.setVariable("A", new BigDecimal(20));
-        Assert.assertEquals(expression.eval().intValue(), 20);
+        Assert.assertEquals(20, expression.eval().intValue());
 
         expression = new Expression("a + B");
         expression.setVariable("A", new BigDecimal(10));
         expression.setVariable("b", new BigDecimal(10));
-        Assert.assertEquals(expression.eval().intValue(), 20);
+        Assert.assertEquals(20, expression.eval().intValue());
 
         expression = new Expression("a+B");
         expression.setVariable("A", "c+d");
         expression.setVariable("b", new BigDecimal(10));
         expression.setVariable("C", new BigDecimal(5));
         expression.setVariable("d", new BigDecimal(5));
-        Assert.assertEquals(expression.eval().intValue(), 20);
+        Assert.assertEquals(20, expression.eval().intValue());
     }
 
     @Test
@@ -36,10 +36,10 @@ public class TestCaseInsensitive {
 
         Expression expression = new Expression("a+testsum(1,3)");
         expression.setVariable("A", new BigDecimal(1));
-        expression.addFunction(expression.new Function("testSum",-1){
+        expression.addFunction(expression.new Function("testSum", -1) {
             @Override
             public BigDecimal eval(List<BigDecimal> parameters) {
-                BigDecimal value =null;
+                BigDecimal value = null;
                 for (BigDecimal d : parameters) {
                     value = value == null ? d : value.add(d);
                 }
@@ -47,7 +47,7 @@ public class TestCaseInsensitive {
             }
         });
 
-        Assert.assertEquals(expression.eval(), new BigDecimal(5) );
+        Assert.assertEquals(expression.eval(), new BigDecimal(5));
 
     }
 }

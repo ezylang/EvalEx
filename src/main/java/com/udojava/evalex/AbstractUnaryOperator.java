@@ -54,6 +54,7 @@ public abstract class AbstractUnaryOperator extends AbstractOperator {
 		super(oper, precedence, leftAssoc);
 	}
 
+	@Override
 	public LazyNumber eval(final LazyNumber v1, final LazyNumber v2) {
 		if (v2 != null) {
 			throw new ExpressionException("Did not expect a second parameter for unary operator");
