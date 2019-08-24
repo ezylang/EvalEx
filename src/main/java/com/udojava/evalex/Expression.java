@@ -454,7 +454,13 @@ public class Expression {
                     }
                     pos--;
                 }
-                token.type = ch == '(' ? TokenType.FUNCTION : TokenType.VARIABLE;
+                if (ch == '(') {
+                    token.type = TokenType.FUNCTION;
+                } else if (operators.containsKey(token.surface)) {
+                    token.type = TokenType.OPERATOR;
+                } else {
+                    token.type = TokenType.VARIABLE;
+                }
             } else if (ch == '(' || ch == ')' || ch == ',') {
                 if (ch == '(') {
                     token.type = TokenType.OPEN_PAREN;
