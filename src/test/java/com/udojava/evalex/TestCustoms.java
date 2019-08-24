@@ -1,14 +1,13 @@
 package com.udojava.evalex;
 
-import static org.junit.Assert.assertEquals;
+import com.udojava.evalex.Expression.LazyNumber;
+import org.junit.Test;
 
 import java.math.BigDecimal;
 import java.util.List;
 
-import org.junit.Test;
-
-import com.udojava.evalex.Expression.LazyNumber;
-import com.udojava.evalex.Expression.UnaryOperator;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 public class TestCustoms {
 
@@ -158,6 +157,43 @@ public class TestCustoms {
 		});
 
 		assertEquals("1", e.eval().toPlainString());
+	}
+
+	@Test
+	public void testCustomFunctionBoolean() {
+		Expression e = new Expression("STREQ(\"test\", \"test2\")");
+		e.addLazyFunction(e.new LazyFunction("STREQ", 2, true) {
+			private LazyNumber ZERO = new LazyNumber() {
+				public BigDecimal eval() {
+					return BigDecimal.ZERO;
+				}
+
+				public String getString() {
+					return "0";
+				}
+			};
+
+			private LazyNumber ONE = new LazyNumber() {
+				public BigDecimal eval() {
+					return BigDecimal.ONE;
+				}
+
+				public String getString() {
+					return null;
+				}
+			};
+
+			@Override
+			public LazyNumber lazyEval(List<LazyNumber> lazyParams) {
+				if (lazyParams.get(0).getString().equals(lazyParams.get(1).getString())) {
+					return ZERO;
+				}
+				return ONE;
+			}
+		});
+
+		assertEquals("1", e.eval().toPlainString());
+		assertTrue(e.isBoolean());
 	}
 
 	@Test
