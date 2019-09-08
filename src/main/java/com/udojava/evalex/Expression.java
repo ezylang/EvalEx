@@ -454,10 +454,10 @@ public class Expression {
                     }
                     pos--;
                 }
-                if (ch == '(') {
-                    token.type = TokenType.FUNCTION;
-                } else if (operators.containsKey(token.surface)) {
+                if (operators.containsKey(token.surface)) {
                     token.type = TokenType.OPERATOR;
+                } else if (ch == '(') {
+                    token.type = TokenType.FUNCTION;
                 } else {
                     token.type = TokenType.VARIABLE;
                 }
