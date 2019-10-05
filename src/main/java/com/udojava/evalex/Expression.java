@@ -153,7 +153,7 @@ public class Expression {
     /**
      * All defined operators with name and implementation.
      */
-    private Map<String, LazyOperator> operators = new TreeMap<String, LazyOperator>(
+    protected Map<String, LazyOperator> operators = new TreeMap<String, LazyOperator>(
             String.CASE_INSENSITIVE_ORDER);
 
     /**
