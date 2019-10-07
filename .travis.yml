@@ -1,12 +1,18 @@
 language: java
+sudo: false
 install: true
+
 addons:
-    sonarcloud:
-      organization: "uklimaschewski"
-      token:
-        secure: "5add0ba264fa6733c4acdb84c5af69096f0c69ae"
+  sonarcloud:
+    organization: "uklimaschewski"
+    token:
+      secure: "5add0ba264fa6733c4acdb84c5af69096f0c69ae"
+
 script:
-    - mvn clean org.jacoco:jacoco-maven-plugin:prepare-agent test sonar:sonar -Dsonar.projectKey=uklimaschewski_EvalEx
+  # JaCoCo is used to have code coverage, "-Pcoverage" activates the maven profile in the pom.xml
+  - mvn clean org.jacoco:jacoco-maven-plugin:prepare-agent test sonar:sonar -Dsonar.projectKey=uklimaschewski_EvalEx -Pcoverage
+
 cache:
   directories:
-    - $HOME/.m2
+    - '$HOME/.m2/repository'
+    - '$HOME/.sonar/cache'
