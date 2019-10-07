@@ -159,13 +159,13 @@ public class Expression {
     /**
      * All defined functions with name and implementation.
      */
-    private Map<String, com.udojava.evalex.LazyFunction> functions = new TreeMap<String, com.udojava.evalex.LazyFunction>(
+    protected Map<String, com.udojava.evalex.LazyFunction> functions = new TreeMap<String, com.udojava.evalex.LazyFunction>(
             String.CASE_INSENSITIVE_ORDER);
 
     /**
      * All defined variables with name and value.
      */
-    private Map<String, LazyNumber> variables = new TreeMap<String, LazyNumber>(String.CASE_INSENSITIVE_ORDER);
+    protected Map<String, LazyNumber> variables = new TreeMap<String, LazyNumber>(String.CASE_INSENSITIVE_ORDER);
 
     /**
      * What character to use for decimal separators.
@@ -218,7 +218,7 @@ public class Expression {
     /**
      * Construct a LazyNumber from a BigDecimal
      */
-    private LazyNumber createLazyNumber(final BigDecimal bigDecimal) {
+    protected LazyNumber createLazyNumber(final BigDecimal bigDecimal) {
         return new LazyNumber() {
             @Override
             public String getString() {
@@ -1071,13 +1071,13 @@ public class Expression {
 
     }
 
-    private void assertNotNull(BigDecimal v1) {
+    protected void assertNotNull(BigDecimal v1) {
         if (v1 == null) {
             throw new ArithmeticException("Operand may not be null");
         }
     }
 
-    private void assertNotNull(BigDecimal v1, BigDecimal v2) {
+    protected void assertNotNull(BigDecimal v1, BigDecimal v2) {
         if (v1 == null) {
             throw new ArithmeticException("First operand may not be null");
         }
@@ -1092,7 +1092,7 @@ public class Expression {
      * @param st The string.
      * @return <code>true</code>, if the input string is a number.
      */
-    private boolean isNumber(String st) {
+    protected boolean isNumber(String st) {
         if (st.charAt(0) == MINUS_SIGN && st.length() == 1)
             return false;
         if (st.charAt(0) == '+' && st.length() == 1)
