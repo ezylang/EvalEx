@@ -316,7 +316,7 @@ public class Expression {
         VARIABLE, FUNCTION, LITERAL, OPERATOR, UNARY_OPERATOR, OPEN_PAREN, COMMA, CLOSE_PAREN, HEX_LITERAL, STRINGPARAM
     }
 
-    class Token {
+   public class Token {
         public String surface = "";
         public TokenType type;
         public int pos;
