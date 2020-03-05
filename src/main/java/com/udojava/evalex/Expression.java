@@ -769,6 +769,60 @@ public class Expression {
                 return new BigDecimal(d, mc); // NOSONAR - false positive, mc is passed
             }
         });
+        addFunction(new Function("SINR", 1) {
+            @Override
+            public BigDecimal eval(List<BigDecimal> parameters) {
+                assertNotNull(parameters.get(0));
+                double d = Math.sin(parameters.get(0).doubleValue());
+                return new BigDecimal(d, mc); // NOSONAR - false positive, mc is passed
+            }
+        });
+        addFunction(new Function("COSR", 1) {
+            @Override
+            public BigDecimal eval(List<BigDecimal> parameters) {
+                assertNotNull(parameters.get(0));
+                double d = Math.cos(parameters.get(0).doubleValue());
+                return new BigDecimal(d, mc); // NOSONAR - false positive, mc is passed
+            }
+        });
+        addFunction(new Function("TANR", 1) {
+            @Override
+            public BigDecimal eval(List<BigDecimal> parameters) {
+                assertNotNull(parameters.get(0));
+                double d = Math.tan(parameters.get(0).doubleValue());
+                return new BigDecimal(d, mc); // NOSONAR - false positive, mc is passed
+            }
+        });
+        addFunction(new Function("COTR", 1) {
+            @Override
+            public BigDecimal eval(List<BigDecimal> parameters) {
+                assertNotNull(parameters.get(0));
+                /** Formula: cot(x) = cos(x) / sin(x) = 1 / tan(x) */
+                double one = 1;
+                double d = Math.tan(parameters.get(0).doubleValue());
+                return new BigDecimal((one / d), mc); // NOSONAR - false positive, mc is passed
+            }
+        });
+        addFunction(new Function("SECR", 1) {
+            @Override
+            public BigDecimal eval(List<BigDecimal> parameters) {
+                assertNotNull(parameters.get(0));
+                /** Formula: sec(x) = 1 / cos(x) */
+                double one = 1;
+                double d = Math.cos(parameters.get(0).doubleValue());
+                return new BigDecimal((one / d), mc); // NOSONAR - false positive, mc is passed
+            }
+        });
+        addFunction(new Function("CSCR", 1) {
+            @Override
+            public BigDecimal eval(List<BigDecimal> parameters) {
+                assertNotNull(parameters.get(0));
+                /** Formula: csc(x) = 1 / sin(x) */
+                double one = 1;
+                double d = Math.sin(parameters.get(0).doubleValue());
+                return new BigDecimal((one / d), mc); // NOSONAR - false positive, mc is passed
+            }
+        });
         addFunction(new Function("SIN", 1) {
             @Override
             public BigDecimal eval(List<BigDecimal> parameters) {
@@ -790,6 +844,80 @@ public class Expression {
             public BigDecimal eval(List<BigDecimal> parameters) {
                 assertNotNull(parameters.get(0));
                 double d = Math.tan(Math.toRadians(parameters.get(0).doubleValue()));
+                return new BigDecimal(d, mc); // NOSONAR - false positive, mc is passed
+            }
+        });
+        addFunction(new Function("COT", 1) {
+            @Override
+            public BigDecimal eval(List<BigDecimal> parameters) {
+                assertNotNull(parameters.get(0));
+                /** Formula: cot(x) = cos(x) / sin(x) = 1 / tan(x) */
+                double one = 1;
+                double d = Math.tan(Math.toRadians(parameters.get(0).doubleValue()));
+                return new BigDecimal((one / d), mc); // NOSONAR - false positive, mc is passed
+            }
+        });
+        addFunction(new Function("SEC", 1) {
+            @Override
+            public BigDecimal eval(List<BigDecimal> parameters) {
+                assertNotNull(parameters.get(0));
+                /** Formula: sec(x) = 1 / cos(x) */
+                double one = 1;
+                double d = Math.cos(Math.toRadians(parameters.get(0).doubleValue()));
+                return new BigDecimal((one / d), mc); // NOSONAR - false positive, mc is passed
+            }
+        });
+        addFunction(new Function("CSC", 1) {
+            @Override
+            public BigDecimal eval(List<BigDecimal> parameters) {
+                assertNotNull(parameters.get(0));
+                /** Formula: csc(x) = 1 / sin(x) */
+                double one = 1;
+                double d = Math.sin(Math.toRadians(parameters.get(0).doubleValue()));
+                return new BigDecimal((one / d), mc); // NOSONAR - false positive, mc is passed
+            }
+        });
+        addFunction(new Function("ASINR", 1) {
+            @Override
+            public BigDecimal eval(List<BigDecimal> parameters) {
+                assertNotNull(parameters.get(0));
+                double d = Math.asin(parameters.get(0).doubleValue());
+                return new BigDecimal(d, mc); // NOSONAR - false positive, mc is passed
+            }
+        });
+        addFunction(new Function("ACOSR", 1) {
+            @Override
+            public BigDecimal eval(List<BigDecimal> parameters) {
+                assertNotNull(parameters.get(0));
+                double d = Math.acos(parameters.get(0).doubleValue());
+                return new BigDecimal(d, mc); // NOSONAR - false positive, mc is passed
+            }
+        });
+        addFunction(new Function("ATANR", 1) {
+            @Override
+            public BigDecimal eval(List<BigDecimal> parameters) {
+                assertNotNull(parameters.get(0));
+                double d = Math.atan(parameters.get(0).doubleValue());
+                return new BigDecimal(d, mc); // NOSONAR - false positive, mc is passed
+            }
+        });
+        addFunction(new Function("ACOTR", 1) {
+            @Override
+            public BigDecimal eval(List<BigDecimal> parameters) {
+                assertNotNull(parameters.get(0));
+                /** Formula: acot(x) = atan(1/x) */
+                if (parameters.get(0).doubleValue() == 0) {
+                    throw new ExpressionException("Number must not be 0");
+                }
+                double d = Math.atan(1 / parameters.get(0).doubleValue());
+                return new BigDecimal(d, mc); // NOSONAR - false positive, mc is passed
+            }
+        });
+        addFunction(new Function("ATAN2R", 2) {
+            @Override
+            public BigDecimal eval(List<BigDecimal> parameters) {
+                assertNotNull(parameters.get(0), parameters.get(1));
+                double d = Math.atan2(parameters.get(0).doubleValue(), parameters.get(1).doubleValue());
                 return new BigDecimal(d, mc); // NOSONAR - false positive, mc is passed
             }
         });
@@ -817,12 +945,23 @@ public class Expression {
                 return new BigDecimal(d, mc); // NOSONAR - false positive, mc is passed
             }
         });
+        addFunction(new Function("ACOT", 1) {
+            @Override
+            public BigDecimal eval(List<BigDecimal> parameters) {
+                assertNotNull(parameters.get(0));
+                /** Formula: acot(x) = atan(1/x) */
+                if (parameters.get(0).doubleValue() == 0) {
+                    throw new ExpressionException("Number must not be 0");
+                }
+                double d = Math.toDegrees(Math.atan(1 / parameters.get(0).doubleValue()));
+                return new BigDecimal(d, mc); // NOSONAR - false positive, mc is passed
+            }
+        });
         addFunction(new Function("ATAN2", 2) {
             @Override
             public BigDecimal eval(List<BigDecimal> parameters) {
                 assertNotNull(parameters.get(0), parameters.get(1));
-                double d = Math.toDegrees(
-                        Math.atan2(parameters.get(0).doubleValue(), parameters.get(1).doubleValue()));
+                double d = Math.toDegrees(Math.atan2(parameters.get(0).doubleValue(), parameters.get(1).doubleValue()));
                 return new BigDecimal(d, mc); // NOSONAR - false positive, mc is passed
             }
         });
@@ -850,26 +989,6 @@ public class Expression {
                 return new BigDecimal(d, mc); // NOSONAR - false positive, mc is passed
             }
         });
-        addFunction(new Function("SEC", 1) {
-            @Override
-            public BigDecimal eval(List<BigDecimal> parameters) {
-                assertNotNull(parameters.get(0));
-                /** Formula: sec(x) = 1 / cos(x) */
-                double one = 1;
-                double d = Math.cos(Math.toRadians(parameters.get(0).doubleValue()));
-                return new BigDecimal((one / d), mc); // NOSONAR - false positive, mc is passed
-            }
-        });
-        addFunction(new Function("CSC", 1) {
-            @Override
-            public BigDecimal eval(List<BigDecimal> parameters) {
-                assertNotNull(parameters.get(0));
-                /** Formula: csc(x) = 1 / sin(x) */
-                double one = 1;
-                double d = Math.sin(Math.toRadians(parameters.get(0).doubleValue()));
-                return new BigDecimal((one / d), mc); // NOSONAR - false positive, mc is passed
-            }
-        });
         addFunction(new Function("SECH", 1) {
             @Override
             public BigDecimal eval(List<BigDecimal> parameters) {
@@ -888,28 +1007,6 @@ public class Expression {
                 double one = 1;
                 double d = Math.sinh(parameters.get(0).doubleValue());
                 return new BigDecimal((one / d), mc); // NOSONAR - false positive, mc is passed
-            }
-        });
-        addFunction(new Function("COT", 1) {
-            @Override
-            public BigDecimal eval(List<BigDecimal> parameters) {
-                assertNotNull(parameters.get(0));
-                /** Formula: cot(x) = cos(x) / sin(x) = 1 / tan(x) */
-                double one = 1;
-                double d = Math.tan(Math.toRadians(parameters.get(0).doubleValue()));
-                return new BigDecimal((one / d), mc); // NOSONAR - false positive, mc is passed
-            }
-        });
-        addFunction(new Function("ACOT", 1) {
-            @Override
-            public BigDecimal eval(List<BigDecimal> parameters) {
-                assertNotNull(parameters.get(0));
-                /** Formula: acot(x) = atan(1/x) */
-                if (parameters.get(0).doubleValue() == 0) {
-                    throw new ExpressionException("Number must not be 0");
-                }
-                double d = Math.toDegrees(Math.atan(1 / parameters.get(0).doubleValue()));
-                return new BigDecimal(d, mc); // NOSONAR - false positive, mc is passed
             }
         });
         addFunction(new Function("COTH", 1) {
