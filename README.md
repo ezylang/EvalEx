@@ -172,10 +172,23 @@ new Expression("-2^2", settings).eval();
   <tr><td>LOG(<i>expression</i>)</td><td>Returns the natural logarithm (base e) of an expression</td></tr>
   <tr><td>LOG10(<i>expression</i>)</td><td>Returns the common logarithm (base 10) of an expression</td></tr>
   <tr><td>SQRT(<i>expression</i>)</td><td>Returns the square root of an expression</td></tr>
+  <tr><td>SINR(<i>expression</i>)</td><td>Returns the trigonometric sine of an angle (in radians)</td></tr>
+  <tr><td>COSR(<i>expression</i>)</td><td>Returns the trigonometric cosine of an angle (in radians)</td></tr>
+  <tr><td>TANR(<i>expression</i>)</td><td>Returns the trigonometric tangensuiju of an angle (in radians)</td></tr>
+  <tr><td>COTR(<i>expression</i>)</td><td>Returns the trigonometric cotangens of an angle (in radians)</td></tr>
+  <tr><td>SECR(<i>expression</i>)</td><td>Returns the secant (in radians)</td></tr>
+  <tr><td>CSCR(<i>expression</i>)</td><td>Returns the cosecant (in radians)</td></tr>
+  <tr><td>ASINR(<i>expression</i>)</td><td>Returns the angle of asin (in radians)</td></tr>
+  <tr><td>ACOSR(<i>expression</i>)</td><td>Returns the angle of acos (in radians)</td></tr>
+  <tr><td>ATANR(<i>expression</i>)</td><td>Returns the angle of atan (in radians)</td></tr>
+  <tr><td>ACOTR(<i>expression</i>)</td><td>Returns the angle of acot (in radians)</td></tr>
+  <tr><td>ATAN2R(<i>y</i>,<i>x</i>)</td><td>Returns the angle of atan2 (in radians)</td></tr>
   <tr><td>SIN(<i>expression</i>)</td><td>Returns the trigonometric sine of an angle (in degrees)</td></tr>
   <tr><td>COS(<i>expression</i>)</td><td>Returns the trigonometric cosine of an angle (in degrees)</td></tr>
   <tr><td>TAN(<i>expression</i>)</td><td>Returns the trigonometric tangens of an angle (in degrees)</td></tr>
   <tr><td>COT(<i>expression</i>)</td><td>Returns the trigonometric cotangens of an angle (in degrees)</td></tr>
+  <tr><td>SEC(<i>expression</i>)</td><td>Returns the secant (in degrees)</td></tr>
+  <tr><td>CSC(<i>expression</i>)</td><td>Returns the cosecant (in degrees)</td></tr>
   <tr><td>ASIN(<i>expression</i>)</td><td>Returns the angle of asin (in degrees)</td></tr>
   <tr><td>ACOS(<i>expression</i>)</td><td>Returns the angle of acos (in degrees)</td></tr>
   <tr><td>ATAN(<i>expression</i>)</td><td>Returns the angle of atan (in degrees)</td></tr>
@@ -185,8 +198,6 @@ new Expression("-2^2", settings).eval();
   <tr><td>COSH(<i>expression</i>)</td><td>Returns the hyperbolic cosine of a value</td></tr>
   <tr><td>TANH(<i>expression</i>)</td><td>Returns the hyperbolic tangens of a value</td></tr>
   <tr><td>COTH(<i>expression</i>)</td><td>Returns the hyperbolic cotangens of a value</td></tr>
-  <tr><td>SEC(<i>expression</i>)</td><td>Returns the secant (in degrees)</td></tr>
-  <tr><td>CSC(<i>expression</i>)</td><td>Returns the cosecant (in degrees)</td></tr>
   <tr><td>SECH(<i>expression</i>)</td><td>Returns the hyperbolic secant (in degrees)</td></tr>
   <tr><td>CSCH(<i>expression</i>)</td><td>Returns the hyperbolic cosecant (in degrees)</td></tr>
   <tr><td>ASINH(<i>expression</i>)</td><td>Returns the angle of hyperbolic sine (in degrees)</td></tr>
