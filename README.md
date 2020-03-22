@@ -30,7 +30,7 @@ To include it in your Maven project, refer to the artifact in your pom. For exam
     <dependency>
         <groupId>com.udojava</groupId>
         <artifactId>EvalEx</artifactId>
-        <version>2.1</version>
+        <version>2.5</version>
     </dependency>
 </dependencies>
 ````
@@ -39,9 +39,12 @@ If you're using gradle add to your project's app build.gradle:
 ````gradle
 dependencies {
     ...
-    compile 'com.udojava:EvalEx:2.1'
+    compile 'com.udojava:EvalEx:2.5'
 }
 ````
+
+### FAQ
+A list of frequently asked questions (and answers) can be found here: [FAQ](https://github.com/uklimaschewski/EvalEx/blob/master/FAQ.md)
 
 ### Usage Examples
 
@@ -115,6 +118,17 @@ If you do not increase the precision as needed, you will get inaccurate results:
          .setPrecision(12)
          .eval(); // 246913578
 ```
+
+### Default Settings
+The default settings for an expression can be set on creation through an `ExpressionSettings` object.
+It can be created using a builder pattern:
+````java
+ExpressionSettings settings = ExpressionSettings.builder()
+         .mathContext(MathContext.DECIMAL128)
+         .powerOperatorPrecedenceHigher()
+         .build();
+new Expression("-2^2", settings).eval();
+````
 
 ### Supported Operators
 <table>
@@ -283,16 +297,9 @@ e.addLazyFunction(new AbstractLazyFunction("STREQ", 2) {
 e.eval(); // returns 1
 ````
 
-### Project Layout
-
-The software was created and tested using Java 1.6.0.
-
-    src/   The Java sources
-    test/  JUnit tests
-  
 ### Author and License
 
-Copyright 2012-2018 by Udo Klimaschewski
+Copyright 2012-2020 by Udo Klimaschewski
 
 http://about.me/udo.klimaschewski
 
