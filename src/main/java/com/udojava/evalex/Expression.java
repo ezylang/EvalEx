@@ -137,8 +137,7 @@ public class Expression {
     private String firstVarChars = "_";
 
     /**
-     * The characters (other than letters and digits) allowed as the second or subsequent characters
-     * in a variable.
+     * The characters (other than letters and digits) allowed as the second or subsequent characters in a variable.
      */
     private String varChars = "_";
 
@@ -166,14 +165,12 @@ public class Expression {
     /**
      * All defined functions with name and implementation.
      */
-    protected Map<String, com.udojava.evalex.LazyFunction> functions = new TreeMap<String, com.udojava.evalex.LazyFunction>(
-            String.CASE_INSENSITIVE_ORDER);
+    protected Map<String, com.udojava.evalex.LazyFunction> functions = new TreeMap<String, com.udojava.evalex.LazyFunction>(String.CASE_INSENSITIVE_ORDER);
 
     /**
      * All defined variables with name and value.
      */
-    protected Map<String, LazyNumber> variables = new TreeMap<String, LazyNumber>(
-            String.CASE_INSENSITIVE_ORDER);
+    protected Map<String, LazyNumber> variables = new TreeMap<String, LazyNumber>(String.CASE_INSENSITIVE_ORDER);
 
     /**
      * What character to use for decimal separators.
@@ -186,8 +183,7 @@ public class Expression {
     private static final char MINUS_SIGN = '-';
 
     /**
-     * The BigDecimal representation of the left parenthesis, used for parsing varying numbers of
-     * function parameters.
+     * The BigDecimal representation of the left parenthesis, used for parsing varying numbers of function parameters.
      */
     private static final LazyNumber PARAMS_START = new LazyNumber() {
         public BigDecimal eval() {
@@ -558,7 +554,7 @@ public class Expression {
      *                           <code>"sin(y)>0 & max(z, 3)>3"</code>
      * @param expressionSettings The {@link ExpressionSettings} to use by default.
      */
-    public Expression(String expression, ExpressionSettings expressionSettings) {
+    public Expression(String expression, ExpressionSettings expressionSettings) { // NOSONAR- cognitive complexity
         this.mc = expressionSettings.getMathContext();
         this.powerOperatorPrecedence = expressionSettings.getPowerOperatorPrecedence();
         this.expressionString = expression;
@@ -1282,8 +1278,7 @@ public class Expression {
         return outputQueue;
     }
 
-    private void shuntOperators(List<Token> outputQueue, Stack<Token> stack,
-                                LazyOperator o1) { // NOSONAR - Stack is needed here
+    private void shuntOperators(List<Token> outputQueue, Stack<Token> stack, LazyOperator o1) { // NOSONAR - Stack is needed here
         Expression.Token nextToken = stack.isEmpty() ? null : stack.peek();
         while (nextToken != null
                 && (nextToken.type == Expression.TokenType.OPERATOR

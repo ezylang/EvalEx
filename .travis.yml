@@ -5,8 +5,7 @@ install: true
 addons:
   sonarcloud:
     organization: "uklimaschewski"
-    token:
-      secure: "5add0ba264fa6733c4acdb84c5af69096f0c69ae"
+    token: $SONAR_TOKEN
 
 script:
   # JaCoCo is used to have code coverage, "-Pcoverage" activates the maven profile in the pom.xml
@@ -15,4 +14,3 @@ script:
 cache:
   directories:
     - '$HOME/.m2/repository'
-    - '$HOME/.sonar/cache'
