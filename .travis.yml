@@ -9,7 +9,7 @@ addons:
 
 script:
   # JaCoCo is used to have code coverage, "-Pcoverage" activates the maven profile in the pom.xml
-  - mvn clean org.jacoco:jacoco-maven-plugin:prepare-agent test sonar:sonar -Dsonar.projectKey=uklimaschewski_EvalEx -Pcoverage
+  - mvn clean org.jacoco:jacoco-maven-plugin:prepare-agent test sonar:sonar -Dsonar.host.url=https://sonarcloud.io -Dsonar.projectKey=uklimaschewski_EvalEx -Pcoverage
 
 cache:
   directories:
