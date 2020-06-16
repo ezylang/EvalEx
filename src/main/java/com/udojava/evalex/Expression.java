@@ -1153,6 +1153,33 @@ public class Expression {
                 return toRound.setScale(0, RoundingMode.CEILING);
             }
         });
+        addLazyFunction(new AbstractLazyFunction("SUM", 4) {
+            @Override
+            public LazyNumber lazyEval(List<LazyNumber> lazyParams) {
+                String var = lazyParams.get(0).getString();
+                BigDecimal min = lazyParams.get(1).eval();
+                BigDecimal max = lazyParams.get(2).eval();
+                String formula = lazyParams.get(3).getString();
+                BigDecimal last = BigDecimal.ZERO;
+                for(int i = min.intValue(); i <= max.intValue(); i++) {
+                    BigDecimal result = new Expression(formula).with(var, i + "").eval();
+                    last = last.add(result);
+                }
+                final BigDecimal finalLast = last;
+                return new LazyNumber() {
+                    @Override
+                    public BigDecimal eval() {
+                        return finalLast;
+                    }
+
+                    @Override
+                    public String getString() {
+                        return finalLast.toString();
+                    }
+                };
+            }
+
+        });
         addFunction(new Function("SQRT", 1) {
             @Override
             public BigDecimal eval(List<BigDecimal> parameters) {

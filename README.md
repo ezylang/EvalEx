@@ -165,6 +165,7 @@ new Expression("-2^2", settings).eval();
   <tr><td>RANDOM()</td><td>Produces a random number between 0 and 1</td></tr>
   <tr><td>MIN(<i>e1</i>,<i>e2</i>, <i>...</i>)</td><td>Returns the smallest of the given expressions</td></tr>
   <tr><td>MAX(<i>e1</i>,<i>e2</i>, <i>...</i>)</td><td>Returns the biggest of the given expressions</td></tr>
+  <tr><td>SUM(<i>variable</i>,<i>min</i>,<i>max</i>,<i>expression</i>)</td><td>Returns the summation</td></tr>
   <tr><td>ABS(<i>expression</i>)</td><td>Returns the absolute (non-negative) value of the expression</td></tr>
   <tr><td>ROUND(<i>expression</i>,precision)</td><td>Rounds a value to a certain number of digits, uses the current rounding mode</td></tr>
   <tr><td>FLOOR(<i>expression</i>)</td><td>Rounds the value down to the nearest integer</td></tr>
