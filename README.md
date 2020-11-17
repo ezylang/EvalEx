@@ -323,3 +323,8 @@ The software is licensed under the MIT Open Source license (see [LICENSE](https:
 * The *power of* operator (^) implementation was copied from [Stack Overflow](http://stackoverflow.com/questions/3579779/how-to-do-a-fractional-power-on-bigdecimal-in-java) Thanks to Gene Marin
 * The SQRT() function implementation was taken from the book [The Java Programmers Guide To numerical Computing](http://www.amazon.de/Java-Number-Cruncher-Programmers-Numerical/dp/0130460419) (Ronald Mak, 2002)
 * Varargs implementation based on "David's method" outlined in Gene Pavlovsky's comment from  [here](http://www.kallisti.net.nz/blog/2008/02/extension-to-the-shunting-yard-algorithm-to-allow-variable-numbers-of-arguments-to-functions/#comment-125789)
+
+### Similar Projects
+
+ * [A port of EvalEx to Dart](https://github.com/RobluScouting/EvalEx)
+ * [exp4j](https://github.com/fasseg/exp4j), a mathematical expression evaluator for Java using doubles.
