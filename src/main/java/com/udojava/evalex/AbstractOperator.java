@@ -34,6 +34,9 @@ import com.udojava.evalex.Expression.LazyNumber;
  * Abstract implementation of an operator.
  */
 public abstract class AbstractOperator extends AbstractLazyOperator implements Operator {
+	
+	
+	
 	/**
 	 * Creates a new operator.
 	 * 
@@ -44,15 +47,19 @@ public abstract class AbstractOperator extends AbstractLazyOperator implements O
 	 * @param leftAssoc
 	 *            <code>true</code> if the operator is left associative,
 	 *            else <code>false</code>.
+ 	 * @param numberOperands
+	 *            The number of operands that are expected for this operator. Added for required conditionals.
 	 * @param booleanOperator
 	 *            Whether this operator is boolean.
 	 */
-	protected AbstractOperator(String oper, int precedence, boolean leftAssoc, boolean booleanOperator) {
-		super(oper, precedence, leftAssoc, booleanOperator);
+	protected AbstractOperator(String oper, int precedence, boolean leftAssoc, int numberOperands, boolean booleanOperator) {
+		super(oper, precedence, leftAssoc, numberOperands, booleanOperator);
 	}
 
+	
+	
 	/**
-	 * Creates a new operator.
+	 * Creates a new boolean operator.
 	 * 
 	 * @param oper
 	 *            The operator name (pattern).
@@ -61,20 +68,48 @@ public abstract class AbstractOperator extends AbstractLazyOperator implements O
 	 * @param leftAssoc
 	 *            <code>true</code> if the operator is left associative,
 	 *            else <code>false</code>.
+ 	 * @param numberOperands
+	 *            The number of operands that are expected for this operator. Added for required conditionals.
 	 */
-	protected AbstractOperator(String oper, int precedence, boolean leftAssoc) {
-		super(oper, precedence, leftAssoc);
+	protected AbstractOperator(String oper, int precedence, boolean leftAssoc, int numberOperands) {
+		super(oper, precedence, leftAssoc, numberOperands);
 	}
+	
 
+	
+	/**
+	 * Implementation of this operator supporting either 1 or 2 operands.
+	 * 
+	 * @param v1
+	 * 			The first operand expected for the operation.
+	 * @param v2
+	 * 			The second operand expected for the operation. For postfix unary operators, v2=null condition was added.
+	 * @return
+	 * 			LazyNumber object. The result of the operation.
+	 */
 	public LazyNumber eval(final LazyNumber v1, final LazyNumber v2) {
-		return new LazyNumber() {
-			public BigDecimal eval() {
-				return AbstractOperator.this.eval(v1.eval(), v2.eval());
-			}
-
-			public String getString() {
-				return String.valueOf(AbstractOperator.this.eval(v1.eval(), v2.eval()));
-			}
-		};
+		if(v2 == null) {  // Condition to accept postfix unary operators (e.g. factorial operator '!')
+			return new LazyNumber() {
+				public BigDecimal eval() {
+					return AbstractOperator.this.eval(v1.eval(), null);
+				}
+	
+				public String getString() {
+					return String.valueOf(AbstractOperator.this.eval(v1.eval(), null));
+				}
+			};
+		}
+		else {
+			return new LazyNumber() {
+				public BigDecimal eval() {
+					return AbstractOperator.this.eval(v1.eval(), v2.eval());
+				}
+	
+				public String getString() {
+					return String.valueOf(AbstractOperator.this.eval(v1.eval(), v2.eval()));
+				}
+			};
+		}
 	}
+	
 }
