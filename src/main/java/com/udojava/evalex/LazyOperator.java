@@ -33,6 +33,8 @@ import com.udojava.evalex.Expression.LazyNumber;
  */
 public interface LazyOperator {
 
+	
+	
 	/**
 	 * Gets the String that is used to denote the operator in the expression.
 	 * 
@@ -40,6 +42,8 @@ public interface LazyOperator {
 	 */
 	public abstract String getOper();
 
+	
+	
 	/**
 	 * Gets the precedence value of this operator.
 	 * 
@@ -47,6 +51,8 @@ public interface LazyOperator {
 	 */
 	public abstract int getPrecedence();
 
+	
+	
 	/**
 	 * Gets whether this operator is left associative (<code>true</code>) or if
 	 * this operator is right associative (<code>false</code>).
@@ -55,13 +61,26 @@ public interface LazyOperator {
 	 */
 	public abstract boolean isLeftAssoc();
 	
+	
+	
 	/**
 	 * Gets whether this operator evaluates to a boolean expression.
 	 * @return <code>true</code> if this operator evaluates to a boolean
 	 *         expression.
 	 */
 	public abstract boolean isBooleanOperator();
+	
+	
+	
+	/**
+	 * Gets the number of operands expected for this operator.
+	 * 
+	 * @return the number of operands for this operator.
+	 */
+	public abstract int getNumberOperands();
 
+	
+	
 	/**
 	 * Implementation for this operator.
 	 * 
