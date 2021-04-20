@@ -135,9 +135,9 @@ public abstract class AbstractLazyOperator implements LazyOperator {
 	
 	
 	/**
-	 * @return the number of operands for this operator.
+	 * @return the number of operands for this operator. Either 1 or 2.
 	 */
-	public int getNumberOperands() {
+	public int getNumberOfOperands() {
 		return numberOperands;
 	}
 
