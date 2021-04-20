@@ -282,14 +282,14 @@ Expression e = new Expression("2 * average(12,4,8)");
 e.addFunction(new AbstractFunction("average", -1) {
     @Override
     public BigDecimal eval(List<BigDecimal> parameters) {
-				if (parameters.size() == 0) {
-					throw new ExpressionException("average requires at least one parameter");
-				}
-				BigDecimal avg = new BigDecimal(0);
-				for (BigDecimal parameter : parameters) {
-						avg = avg.add(parameter);
-				}
-				return avg.divide(new BigDecimal(parameters.size()));
+        if (parameters.size() == 0) {
+            throw new ExpressionException("average requires at least one parameter");
+        }
+        BigDecimal avg = new BigDecimal(0);
+        for (BigDecimal parameter : parameters) {
+            avg = avg.add(parameter);
+        }
+        return avg.divide(new BigDecimal(parameters.size()));
     }
 });
 
@@ -314,7 +314,7 @@ e.addLazyFunction(new AbstractLazyFunction("STREQ", 2) {
         public String getString() {
             return "0";
         }
-     };
+    };
     private LazyNumber ONE = new LazyNumber() {
         public BigDecimal eval() {
             return BigDecimal.ONE;
