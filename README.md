@@ -252,7 +252,6 @@ e.addOperator(new AbstractOperator("!", Expression.OPERATOR_PRECEDENCE_POWER_HIG
 	public BigDecimal eval(BigDecimal v1, BigDecimal v2) {
 		Expression.assertNotNull(v1);
 		BigDecimal fact = v1.subtract(BigDecimal.ONE);
-		BigDecimal counter = 
 		if(v1.compareTo(BigDecimal.ZERO) == 0 || v1.compareTo(BigDecimal.ONE) == 0) {
 	    		return new BigDecimal(BigDecimal.ONE);
 		}
