@@ -208,6 +208,32 @@ public class TestCustoms {
         });
         assertEquals("23", exp.eval().toPlainString());
     }
+    
+    @Test
+    public void testUnaryPostfix() {
+        Expression exp = new Expression("1+4!");
+
+        exp.addOperator(new AbstractOperator("!", 61, true, false, true) {
+            @Override
+            public BigDecimal eval(BigDecimal v1, BigDecimal v2) {
+		        if(v1.remainder(BigDecimal.ONE) != BigDecimal.ZERO) {
+		            throw new ArithmeticException("Operand must be an integer");
+		        }
+		        BigDecimal factorial = v1;
+		        v1 = v1.subtract(BigDecimal.ONE);
+		        if (factorial.compareTo(BigDecimal.ZERO) == 0 || factorial.compareTo(BigDecimal.ONE) == 0) {
+		            return BigDecimal.ONE;
+		        } else {
+		            while (v1.compareTo(BigDecimal.ONE) > 0) {
+		                factorial = factorial.multiply(v1);
+		                v1 = v1.subtract(BigDecimal.ONE);
+		            }
+		            return factorial;
+		        }
+		    }
+        });
+        assertEquals("25", exp.eval().toPlainString());
+    }
 
     @Test
     public void testCustomOperatorAnd() {
@@ -229,4 +255,39 @@ public class TestCustoms {
 
         assertEquals("1", e.eval().toPlainString());
     }
-}
+
+    @Test
+    public void testCustomFunctionWithStringParams() {
+        Expression e = new Expression("INDEXOF(STRING1, STRING2)");
+        e.addLazyFunction(new AbstractLazyFunction("INDEXOF", 2) {
+            @Override
+            public LazyNumber lazyEval(List<LazyNumber> lazyParams) {
+                String st1 = lazyParams.get(0).getString();
+                String st2 = lazyParams.get(1).getString();
+                final int index = st1.indexOf(st2);
+
+                return new LazyNumber() {
+                    @Override
+                    public BigDecimal eval() {
+                        return new BigDecimal(index);
+                    }
+
+                    @Override
+                    public String getString() {
+                        return Integer.toString(index);
+                    }
+                };
+            }
+        });
+
+        e.setVariable("STRING1", "The quick brown fox");
+        e.setVariable("STRING2", "The");
+
+        assertEquals("0", e.eval().toPlainString());
+
+        e.setVariable("STRING1", "The quick brown fox");
+        e.setVariable("STRING2", "brown");
+
+        assertEquals("10", e.eval().toPlainString());
+    }
+}   
