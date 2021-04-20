@@ -39,6 +39,7 @@ import com.udojava.evalex.Expression.LazyNumber;
  */
 public abstract class AbstractUnaryOperator extends AbstractOperator {
 
+
 	/**
 	 * Creates a new operator.
 	 * 
@@ -50,9 +51,10 @@ public abstract class AbstractUnaryOperator extends AbstractOperator {
 	 *            <code>true</code> if the operator is left associative,
 	 *            else <code>false</code>.
 	 */
-	protected AbstractUnaryOperator(String oper, int precedence, boolean leftAssoc) {
-		super(oper, precedence, leftAssoc);
+	protected AbstractUnaryOperator(String oper, int precedence, boolean leftAssoc, int numberOperands) {
+		super(oper, precedence, leftAssoc, numberOperands);
 	}
+
 
 	@Override
 	public LazyNumber eval(final LazyNumber v1, final LazyNumber v2) {
@@ -72,6 +74,16 @@ public abstract class AbstractUnaryOperator extends AbstractOperator {
 		};
 	}
 
+
+	/**
+	 * Implementation of this operator calling unary operator evaluation method..
+	 * 
+	 * @param v1
+	 *            The first parameter.
+	 * @param v2
+	 *            The second parameter. Expected to be null
+	 * @return The result of the operation.
+	 */
 	public BigDecimal eval(BigDecimal v1, BigDecimal v2) {
 		if (v2 != null) {
 			throw new ExpressionException("Did not expect a second parameter for unary operator");
@@ -79,8 +91,9 @@ public abstract class AbstractUnaryOperator extends AbstractOperator {
 		return evalUnary(v1);
 	}
 
+
 	/**
-	 * Implementation of this unary operator.
+	 * Implementation of this prefix unary operator.
 	 * 
 	 * @param v1
 	 *            The parameter.
