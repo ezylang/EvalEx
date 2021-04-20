@@ -30,25 +30,38 @@ package com.udojava.evalex;
  * Abstract implementation of an operator.
  */
 public abstract class AbstractLazyOperator implements LazyOperator {
+	
+	
+	
 	/**
 	 * This operators name (pattern).
 	 */
 	protected String oper;
+	
 	/**
 	 * Operators precedence.
 	 */
 	protected int precedence;
+	
 	/**
 	 * Operator is left associative.
 	 */
 	protected boolean leftAssoc;
+	
 	/**
-	 * Whether this operator is boolean or not.
+	 * Operator is boolean.
 	 */
 	protected boolean booleanOperator = false;
-
+	
 	/**
-	 * Creates a new operator.
+	 * Operator is unary, i.e. 1 or 2 operands expected for this operator.
+	 */
+	protected boolean unaryOperator;
+	
+	
+	
+	/**
+	 * Creates a new unary operator. This constructor allows the use of postfix unary operators.
 	 * 
 	 * @param oper
 	 *            The operator name (pattern).
@@ -56,7 +69,33 @@ public abstract class AbstractLazyOperator implements LazyOperator {
 	 *            The operators precedence.
 	 * @param leftAssoc
 	 *            <code>true</code> if the operator is left associative,
-	 *            else <code>false</code>.
+ 	 *            else <code>false</code>.
+	 * @param booleanOperator
+	 *            Whether this operator is boolean.
+	 * @param unaryOperator
+	 *            <code>true</code> if the expected number of operands is 1,
+ 	 *            <code>false</code> if the expected number of operands is 2.
+	 */
+	protected AbstractLazyOperator(String oper, int precedence, boolean leftAssoc, boolean booleanOperator, boolean unaryOperator) {
+		this.oper = oper;
+		this.precedence = precedence;
+		this.leftAssoc = leftAssoc;
+		this.booleanOperator = booleanOperator;
+		this.unaryOperator = unaryOperator;
+	}
+
+	
+	
+	/**
+	 * Creates a new boolean operator.
+	 * 
+	 * @param oper
+	 *            The operator name (pattern).
+	 * @param precedence
+	 *            The operators precedence.
+	 * @param leftAssoc
+	 *            <code>true</code> if the operator is left associative,
+ 	 *            else <code>false</code>.
 	 * @param booleanOperator
 	 *            Whether this operator is boolean.
 	 */
@@ -65,7 +104,10 @@ public abstract class AbstractLazyOperator implements LazyOperator {
 		this.precedence = precedence;
 		this.leftAssoc = leftAssoc;
 		this.booleanOperator = booleanOperator;
+		this.unaryOperator = false;
 	}
+	
+	
 
 	/**
 	 * Creates a new operator.
@@ -82,21 +124,54 @@ public abstract class AbstractLazyOperator implements LazyOperator {
 		this.oper = oper;
 		this.precedence = precedence;
 		this.leftAssoc = leftAssoc;
+		this.unaryOperator = false;
 	}
 
+	
+	
+	/**
+	 * @return The String that is used to denote the operator in the expression.
+	 */
 	public String getOper() {
 		return oper;
 	}
 
+	
+	
+	/**
+	 * @return the precedence value of this operator.
+	 */
 	public int getPrecedence() {
 		return precedence;
 	}
 
+	
+	
+	/**
+	 * @return <code>true</code> if this operator is left associative.
+	 */
 	public boolean isLeftAssoc() {
 		return leftAssoc;
 	}
 
+
+		
+	/**
+	 * @return <code>true</code> if this operator evaluates to a boolean
+	 *         expression.
+	 */
 	public boolean isBooleanOperator() {
 		return booleanOperator;
 	}
+	
+	
+	
+	/**
+	 * @return <code>true</code> if the number of operands for this operator is 1,
+	 * 			or <code>false</code> if the number of operands is 2.
+	 */
+	public boolean isUnaryOperator() {
+		return unaryOperator;
+	}
+	
 }

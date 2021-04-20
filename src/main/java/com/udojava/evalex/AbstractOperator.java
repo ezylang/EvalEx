@@ -34,8 +34,32 @@ import com.udojava.evalex.Expression.LazyNumber;
  * Abstract implementation of an operator.
  */
 public abstract class AbstractOperator extends AbstractLazyOperator implements Operator {
+	
+	
+	
 	/**
-	 * Creates a new operator.
+	 * Creates a new unary operator.
+	 * 
+	 * @param oper
+	 *            The operator name (pattern).
+	 * @param precedence
+	 *            The operators precedence.
+	 * @param leftAssoc
+	 *            <code>true</code> if the operator is left associative,
+	 *            else <code>false</code>.
+	 * @param booleanOperator
+	 *            Whether this operator is boolean.
+	 * @param unaryOperator
+	 *            Whether the operator is unary (<code>true</code>) or not (<code>false</code>).
+	 */
+	protected AbstractOperator(String oper, int precedence, boolean leftAssoc, boolean booleanOperator, boolean unaryOperator) {
+		super(oper, precedence, leftAssoc, booleanOperator, unaryOperator);
+	}
+	
+	
+	
+	/**
+	 * Creates a new boolean operator.
 	 * 
 	 * @param oper
 	 *            The operator name (pattern).
@@ -51,6 +75,8 @@ public abstract class AbstractOperator extends AbstractLazyOperator implements O
 		super(oper, precedence, leftAssoc, booleanOperator);
 	}
 
+	
+	
 	/**
 	 * Creates a new operator.
 	 * 
@@ -65,16 +91,42 @@ public abstract class AbstractOperator extends AbstractLazyOperator implements O
 	protected AbstractOperator(String oper, int precedence, boolean leftAssoc) {
 		super(oper, precedence, leftAssoc);
 	}
+	
 
+	
+	/**
+	 * Implementation of this operator supporting either 1 or 2 operands.
+	 * 
+	 * @param v1
+	 * 			The first operand expected for the operation.
+	 * @param v2
+	 * 			The second operand expected for the operation. For postfix unary operators, v2=null condition was added.
+	 * @return
+	 * 			LazyNumber object. The result of the operation.
+	 */
 	public LazyNumber eval(final LazyNumber v1, final LazyNumber v2) {
-		return new LazyNumber() {
-			public BigDecimal eval() {
-				return AbstractOperator.this.eval(v1.eval(), v2.eval());
-			}
-
-			public String getString() {
-				return String.valueOf(AbstractOperator.this.eval(v1.eval(), v2.eval()));
-			}
-		};
+		if(v2 == null) {  // Condition to accept postfix unary operators (e.g. factorial operator '!')
+			return new LazyNumber() {
+				public BigDecimal eval() {
+					return AbstractOperator.this.eval(v1.eval(), null);
+				}
+	
+				public String getString() {
+					return String.valueOf(AbstractOperator.this.eval(v1.eval(), null));
+				}
+			};
+		}
+		else {
+			return new LazyNumber() {
+				public BigDecimal eval() {
+					return AbstractOperator.this.eval(v1.eval(), v2.eval());
+				}
+	
+				public String getString() {
+					return String.valueOf(AbstractOperator.this.eval(v1.eval(), v2.eval()));
+				}
+			};
+		}
 	}
+	
 }
