@@ -159,8 +159,7 @@ public class Expression {
     /**
      * All defined operators with name and implementation.
      */
-    protected Map<String, LazyOperator> operators = new TreeMap<String, LazyOperator>(
-            String.CASE_INSENSITIVE_ORDER);
+    protected Map<String, LazyOperator> operators = new TreeMap<String, LazyOperator>(String.CASE_INSENSITIVE_ORDER);
 
     /**
      * All defined functions with name and implementation.
@@ -182,6 +181,7 @@ public class Expression {
      */
     private static final char MINUS_SIGN = '-';
 
+    
     /**
      * The BigDecimal representation of the left parenthesis, used for parsing varying numbers of function parameters.
      */
@@ -195,6 +195,7 @@ public class Expression {
         }
     };
 
+    
     /**
      * The expression evaluators exception class.
      */
@@ -211,6 +212,7 @@ public class Expression {
         }
     }
 
+    
     /**
      * LazyNumber interface created for lazily evaluated functions
      */
@@ -221,6 +223,7 @@ public class Expression {
         String getString();
     }
 
+    
     /**
      * Construct a LazyNumber from a BigDecimal
      */
@@ -238,6 +241,10 @@ public class Expression {
         };
     }
 
+    
+    /**
+     * LazyFunction class
+     */
     public abstract class LazyFunction extends AbstractLazyFunction {
 
         /**
@@ -264,6 +271,7 @@ public class Expression {
         }
     }
 
+    
     /**
      * Abstract definition of a supported expression function. A function is defined by a name, the
      * number of parameters and the actual processing implementation.
@@ -279,49 +287,66 @@ public class Expression {
         }
     }
 
+    
     /**
      * Abstract definition of a supported operator. An operator is defined by its name (pattern),
-     * precedence and if it is left- or right associative.
+     * precedence, if it is left- or right-associative and the number of operands expected for the operation.
+     * It can also be boolean or not.
      */
     public abstract class Operator extends AbstractOperator {
 
         /**
-         * Creates a new operator.
+         * Creates a new boolean operator.
          *
-         * @param oper            The operator name (pattern).
-         * @param precedence      The operators precedence.
-         * @param leftAssoc       <code>true</code> if the operator is left associative,
-         *                        else <code>false</code>.
-         * @param booleanOperator Whether this operator is boolean.
+         * @param oper				The operator name (pattern).
+         * @param precedence		The operators precedence.
+         * @param leftAssoc			<code>true</code> if the operator is left associative,
+         *                   		else <code>false</code>.
+         * @param numberOperands	The number of operands that are expected for this operator.
+         * @param booleanOperator 	Whether this operator is boolean.
          */
-        public Operator(String oper, int precedence, boolean leftAssoc, boolean booleanOperator) {
-            super(oper, precedence, leftAssoc, booleanOperator);
+        public Operator(String oper, int precedence, boolean leftAssoc, int numberOperands, boolean booleanOperator) {
+            super(oper, precedence, leftAssoc, numberOperands, booleanOperator);
         }
 
+        
         /**
          * Creates a new operator.
          *
-         * @param oper       The operator name (pattern).
-         * @param precedence The operators precedence.
-         * @param leftAssoc  <code>true</code> if the operator is left associative,
-         *                   else <code>false</code>.
+         * @param oper				The operator name (pattern).
+         * @param precedence		The operators precedence.
+         * @param leftAssoc			<code>true</code> if the operator is left associative,
+         *                   		else <code>false</code>.
+         * @param numberOperands	The number of operands that are expected for this operator.
          */
-        public Operator(String oper, int precedence, boolean leftAssoc) {
-            super(oper, precedence, leftAssoc);
+        public Operator(String oper, int precedence, boolean leftAssoc, int numberOperands) {
+            super(oper, precedence, leftAssoc, numberOperands);
         }
     }
 
+    
+    /**
+     * Abstract definition of a prefix unary operator with right-side operand. It is defined by its name (pattern),
+     * precedence, if it is left- or right-associative and the number of operands expected for the operation,
+     * which in this case is expected to be 1. For this class, the operator is expected to have the single
+     * operand to its right.
+     */
     public abstract class UnaryOperator extends AbstractUnaryOperator {
 
-        public UnaryOperator(String oper, int precedence, boolean leftAssoc) {
-            super(oper, precedence, leftAssoc);
+        public UnaryOperator(String oper, int precedence, boolean leftAssoc, int numberOperands) {
+            super(oper, precedence, leftAssoc, numberOperands);
         }
     }
+    
+    
 
     enum TokenType {
         VARIABLE, FUNCTION, LITERAL, OPERATOR, UNARY_OPERATOR, OPEN_PAREN, COMMA, CLOSE_PAREN, HEX_LITERAL, STRINGPARAM
     }
-
+    
+    /**
+     * Token class
+     */
     public class Token {
 
         public String surface = "";
@@ -350,6 +375,7 @@ public class Expression {
         }
     }
 
+    
     /**
      * Expression tokenizer that allows to iterate over a {@link String} expression token by token.
      * Blank characters will be skipped.
@@ -369,6 +395,11 @@ public class Expression {
          * The previous token or <code>null</code> if none.
          */
         private Token previousToken;
+        
+        /**
+         * The next token or <code>null</code> if none.
+         */
+        private Token nextToken = new Token();
 
         /**
          * Creates a new tokenizer for an expression.
@@ -405,9 +436,10 @@ public class Expression {
         @Override
         public Token next() {
             Token token = new Token();
-
+            
             if (pos >= input.length()) {
                 previousToken = null;
+                //nextToken = null;
                 return null;
             }
             char ch = input.charAt(pos);
@@ -415,6 +447,13 @@ public class Expression {
                 ch = input.charAt(++pos);
             }
             token.pos = pos;
+            
+	        if(pos < input.length() - 1) {
+	        	nextToken.pos = pos + 1;
+	        }
+	        else {
+	        	nextToken = null;
+	        }
 
             boolean isHex = false;
 
@@ -500,8 +539,12 @@ public class Expression {
                 } else {
                     token.append(greedyMatch);
                 }
-
-                if (previousToken == null || previousToken.type == TokenType.OPERATOR
+                /* CODE MODIFICATION:
+                 * Added the condition stating that, if the previousToken is of TokenType.OPERATOR, its associated
+                 * numberOperands must be greater than 1 in order to accept TokenType.UNARY_OPERATOR for the current
+                 * token, which allows postfix unary operators (e.g. factorial operator '!') with TokenType.OPERATOR
+                 */
+                if (previousToken == null || (previousToken.type == TokenType.OPERATOR && operators.get(previousToken.surface).getNumberOperands() > 1)
                         || previousToken.type == TokenType.OPEN_PAREN || previousToken.type == TokenType.COMMA
                         || previousToken.type == TokenType.UNARY_OPERATOR) {
                     token.surface += "u";
@@ -521,6 +564,7 @@ public class Expression {
 
     }
 
+    
     /**
      * Creates a new expression instance from an expression string with a given default match context
      * of {@link MathContext#DECIMAL32}.
@@ -532,6 +576,7 @@ public class Expression {
         this(expression, MathContext.DECIMAL32);
     }
 
+    
     /**
      * Creates a new expression instance from an expression string with a given default match
      * context.
@@ -547,6 +592,9 @@ public class Expression {
                 .build());
     }
 
+    /* CODE MODIFICATION:
+     * The number of operands was added to all predefined operators following AbstractOperator class modification.
+     */
     /**
      * Creates a new expression instance from an expression string with given settings.
      *
@@ -559,42 +607,42 @@ public class Expression {
         this.powerOperatorPrecedence = expressionSettings.getPowerOperatorPrecedence();
         this.expressionString = expression;
         this.originalExpression = expression;
-        addOperator(new Operator("+", OPERATOR_PRECEDENCE_ADDITIVE, true) {
+        addOperator(new Operator("+", OPERATOR_PRECEDENCE_ADDITIVE, true, 2) {
             @Override
             public BigDecimal eval(BigDecimal v1, BigDecimal v2) {
                 assertNotNull(v1, v2);
                 return v1.add(v2, mc);
             }
         });
-        addOperator(new Operator("-", OPERATOR_PRECEDENCE_ADDITIVE, true) {
+        addOperator(new Operator("-", OPERATOR_PRECEDENCE_ADDITIVE, true, 2) {
             @Override
             public BigDecimal eval(BigDecimal v1, BigDecimal v2) {
                 assertNotNull(v1, v2);
                 return v1.subtract(v2, mc);
             }
         });
-        addOperator(new Operator("*", OPERATOR_PRECEDENCE_MULTIPLICATIVE, true) {
+        addOperator(new Operator("*", OPERATOR_PRECEDENCE_MULTIPLICATIVE, true, 2) {
             @Override
             public BigDecimal eval(BigDecimal v1, BigDecimal v2) {
                 assertNotNull(v1, v2);
                 return v1.multiply(v2, mc);
             }
         });
-        addOperator(new Operator("/", OPERATOR_PRECEDENCE_MULTIPLICATIVE, true) {
+        addOperator(new Operator("/", OPERATOR_PRECEDENCE_MULTIPLICATIVE, true, 2) {
             @Override
             public BigDecimal eval(BigDecimal v1, BigDecimal v2) {
                 assertNotNull(v1, v2);
                 return v1.divide(v2, mc);
             }
         });
-        addOperator(new Operator("%", OPERATOR_PRECEDENCE_MULTIPLICATIVE, true) {
+        addOperator(new Operator("%", OPERATOR_PRECEDENCE_MULTIPLICATIVE, true, 2) {
             @Override
             public BigDecimal eval(BigDecimal v1, BigDecimal v2) {
                 assertNotNull(v1, v2);
                 return v1.remainder(v2, mc);
             }
         });
-        addOperator(new Operator("^", powerOperatorPrecedence, false) {
+        addOperator(new Operator("^", powerOperatorPrecedence, false, 2) {
             @Override
             public BigDecimal eval(BigDecimal v1, BigDecimal v2) {
                 assertNotNull(v1, v2);
@@ -617,7 +665,7 @@ public class Expression {
                 return result;
             }
         });
-        addOperator(new Operator("&&", OPERATOR_PRECEDENCE_AND, false, true) {
+        addOperator(new Operator("&&", OPERATOR_PRECEDENCE_AND, false, 2, true) {
             @Override
             public BigDecimal eval(BigDecimal v1, BigDecimal v2) {
                 assertNotNull(v1, v2);
@@ -633,7 +681,7 @@ public class Expression {
             }
         });
 
-        addOperator(new Operator("||", OPERATOR_PRECEDENCE_OR, false, true) {
+        addOperator(new Operator("||", OPERATOR_PRECEDENCE_OR, false, 2, true) {
             @Override
             public BigDecimal eval(BigDecimal v1, BigDecimal v2) {
                 assertNotNull(v1, v2);
@@ -649,7 +697,7 @@ public class Expression {
             }
         });
 
-        addOperator(new Operator(">", OPERATOR_PRECEDENCE_COMPARISON, false, true) {
+        addOperator(new Operator(">", OPERATOR_PRECEDENCE_COMPARISON, false, 2, true) {
             @Override
             public BigDecimal eval(BigDecimal v1, BigDecimal v2) {
                 assertNotNull(v1, v2);
@@ -657,7 +705,7 @@ public class Expression {
             }
         });
 
-        addOperator(new Operator(">=", OPERATOR_PRECEDENCE_COMPARISON, false, true) {
+        addOperator(new Operator(">=", OPERATOR_PRECEDENCE_COMPARISON, false, 2, true) {
             @Override
             public BigDecimal eval(BigDecimal v1, BigDecimal v2) {
                 assertNotNull(v1, v2);
@@ -665,7 +713,7 @@ public class Expression {
             }
         });
 
-        addOperator(new Operator("<", OPERATOR_PRECEDENCE_COMPARISON, false, true) {
+        addOperator(new Operator("<", OPERATOR_PRECEDENCE_COMPARISON, false, 2, true) {
             @Override
             public BigDecimal eval(BigDecimal v1, BigDecimal v2) {
                 assertNotNull(v1, v2);
@@ -673,7 +721,7 @@ public class Expression {
             }
         });
 
-        addOperator(new Operator("<=", OPERATOR_PRECEDENCE_COMPARISON, false, true) {
+        addOperator(new Operator("<=", OPERATOR_PRECEDENCE_COMPARISON, false, 2, true) {
             @Override
             public BigDecimal eval(BigDecimal v1, BigDecimal v2) {
                 assertNotNull(v1, v2);
@@ -681,7 +729,7 @@ public class Expression {
             }
         });
 
-        addOperator(new Operator("=", OPERATOR_PRECEDENCE_EQUALITY, false, true) {
+        addOperator(new Operator("=", OPERATOR_PRECEDENCE_EQUALITY, false, 2, true) {
             @Override
             public BigDecimal eval(BigDecimal v1, BigDecimal v2) {
                 if (v1 == v2) {
@@ -693,14 +741,14 @@ public class Expression {
                 return v1.compareTo(v2) == 0 ? BigDecimal.ONE : BigDecimal.ZERO;
             }
         });
-        addOperator(new Operator("==", OPERATOR_PRECEDENCE_EQUALITY, false, true) {
+        addOperator(new Operator("==", OPERATOR_PRECEDENCE_EQUALITY, false, 2, true) {
             @Override
             public BigDecimal eval(BigDecimal v1, BigDecimal v2) {
                 return ((Operator) operators.get("=")).eval(v1, v2);
             }
         });
 
-        addOperator(new Operator("!=", OPERATOR_PRECEDENCE_EQUALITY, false, true) {
+        addOperator(new Operator("!=", OPERATOR_PRECEDENCE_EQUALITY, false, 2, true) {
             @Override
             public BigDecimal eval(BigDecimal v1, BigDecimal v2) {
                 if (v1 == v2) {
@@ -712,20 +760,21 @@ public class Expression {
                 return v1.compareTo(v2) != 0 ? BigDecimal.ONE : BigDecimal.ZERO;
             }
         });
-        addOperator(new Operator("<>", OPERATOR_PRECEDENCE_EQUALITY, false, true) {
+        addOperator(new Operator("<>", OPERATOR_PRECEDENCE_EQUALITY, false, 2, true) {
             @Override
             public BigDecimal eval(BigDecimal v1, BigDecimal v2) {
                 assertNotNull(v1, v2);
                 return ((Operator) operators.get("!=")).eval(v1, v2);
             }
         });
-        addOperator(new UnaryOperator("-", OPERATOR_PRECEDENCE_UNARY, false) {
+        
+        addOperator(new UnaryOperator("-", OPERATOR_PRECEDENCE_UNARY, false, 1) {
             @Override
             public BigDecimal evalUnary(BigDecimal v1) {
                 return v1.multiply(new BigDecimal(-1));
-            }
+			}
         });
-        addOperator(new UnaryOperator("+", OPERATOR_PRECEDENCE_UNARY, false) {
+        addOperator(new UnaryOperator("+", OPERATOR_PRECEDENCE_UNARY, false, 1) {
             @Override
             public BigDecimal evalUnary(BigDecimal v1) {
                 return v1.multiply(BigDecimal.ONE);
@@ -1194,13 +1243,21 @@ public class Expression {
 
     }
 
-    protected void assertNotNull(BigDecimal v1) {
+
+    /**
+     * Assert the single expected operand is not null.
+     */
+    public static void assertNotNull(BigDecimal v1) {
         if (v1 == null) {
             throw new ArithmeticException("Operand may not be null");
         }
     }
 
-    protected void assertNotNull(BigDecimal v1, BigDecimal v2) {
+
+    /**
+     * Assert the two expected operands are not null.
+     */
+    public static void assertNotNull(BigDecimal v1, BigDecimal v2) {
         if (v1 == null) {
             throw new ArithmeticException("First operand may not be null");
         }
@@ -1209,6 +1266,7 @@ public class Expression {
         }
     }
 
+    
     /**
      * Is the string a number?
      *
@@ -1239,6 +1297,7 @@ public class Expression {
         return true;
     }
 
+
     /**
      * Implementation of the <i>Shunting Yard</i> algorithm to transform an infix expression to a RPN
      * expression.
@@ -1246,7 +1305,8 @@ public class Expression {
      * @param expression The input expression in infx.
      * @return A RPN representation of the expression, with each token as a list member.
      */
-    private List<Token> shuntingYard(String expression) {
+    @SuppressWarnings("incomplete-switch")
+	private List<Token> shuntingYard(String expression) {
         List<Token> outputQueue = new ArrayList<Token>();
         Stack<Token> stack = new Stack<Token>(); // NOSONAR - Stack is needed here
 
@@ -1293,7 +1353,12 @@ public class Expression {
                     }
                     break;
                 case OPERATOR: {
-                    if (previousToken != null
+                	/* CODE MODIFICATION:
+                	 * Added condition to throw ExpressionException only for operator whose number of
+                     * operands is greater than 1. This allows postfix unary operators without throwing
+                     * "MISSING_PARAMETERS_FOR_OPERATOR" exception.
+                	 */
+                    if (previousToken != null && operators.get(token.surface).getNumberOperands() > 1
                             && (previousToken.type == TokenType.COMMA
                             || previousToken.type == TokenType.OPEN_PAREN)) {
                         throw new ExpressionException(
@@ -1347,7 +1412,12 @@ public class Expression {
                     stack.push(token);
                     break;
                 case CLOSE_PAREN:
-                    if (previousToken != null && previousToken.type == TokenType.OPERATOR) {
+                	/* CODE MODIFICATION:
+                	 * Added condition the handle "MISSING_PARAMETERS_FOR_OPERATOR", which is thrown only for
+                     * operators whose number of operands is greater than 1. This allows for postfix unary
+                     * operators to be followed by closed parentheses.
+                	 */
+                    if (previousToken != null && previousToken.type == TokenType.OPERATOR  && operators.get(previousToken.surface).getNumberOperands() > 1) {
                         throw new ExpressionException(MISSING_PARAMETERS_FOR_OPERATOR + previousToken,
                                 previousToken.pos);
                     }
@@ -1375,6 +1445,7 @@ public class Expression {
         return outputQueue;
     }
 
+
     private void shuntOperators(List<Token> outputQueue, Stack<Token> stack, LazyOperator o1) { // NOSONAR - Stack is needed here
         Expression.Token nextToken = stack.isEmpty() ? null : stack.peek();
         while (nextToken != null
@@ -1383,10 +1454,11 @@ public class Expression {
                 && (
                 (o1.isLeftAssoc() && o1.getPrecedence() <= operators.get(nextToken.surface).getPrecedence())
                         || (o1.getPrecedence() < operators.get(nextToken.surface).getPrecedence()))) {
-            outputQueue.add(stack.pop());
+        	outputQueue.add(stack.pop());
             nextToken = stack.isEmpty() ? null : stack.peek();
         }
     }
+
 
     /**
      * Evaluates the expression.
@@ -1396,6 +1468,7 @@ public class Expression {
     public BigDecimal eval() {
         return eval(true);
     }
+
 
     /**
      * Evaluates the expression.
@@ -1408,8 +1481,8 @@ public class Expression {
 
         Deque<LazyNumber> stack = new ArrayDeque<LazyNumber>();
 
-        for (final Token token : getRPN()) {
-            switch (token.type) {
+        for(final Token token : getRPN()) {
+            switch(token.type) {
                 case UNARY_OPERATOR: {
                     final LazyNumber value = stack.pop();
                     LazyNumber result = new LazyNumber() {
@@ -1426,19 +1499,40 @@ public class Expression {
                     break;
                 }
                 case OPERATOR:
-                    final LazyNumber v1 = stack.pop();
-                    final LazyNumber v2 = stack.pop();
-                    LazyNumber result = new LazyNumber() {
-                        public BigDecimal eval() {
-                            return operators.get(token.surface).eval(v2, v1).eval();
-                        }
+                	/* CODE MODIFICATION:
+                	 * IF-ELSE block added to handle operators with 1 or 2 operands required,
+                     * allowing for the second operand v2=null in operators which numberOperands=1.
+                	 */
+                	if(operators.get(token.surface).getNumberOperands() < 2) {
+                		final LazyNumber value = stack.pop();
+                        LazyNumber result = new LazyNumber() {
+                            public BigDecimal eval() {
+                                return operators.get(token.surface).eval(value, null).eval();
+                            }
 
-                        public String getString() {
-                            return String.valueOf(operators.get(token.surface).eval(v2, v1).eval());
-                        }
-                    };
-                    stack.push(result);
-                    break;
+                            @Override
+                            public String getString() {
+                                return String.valueOf(operators.get(token.surface).eval(value, null).eval());
+                            }
+                        };
+                        stack.push(result);
+                        break;
+                	}
+                	else {
+	                    final LazyNumber v1 = stack.pop();
+	                    final LazyNumber v2 = stack.pop();
+	                    LazyNumber result = new LazyNumber() {
+	                        public BigDecimal eval() {
+	                            return operators.get(token.surface).eval(v2, v1).eval();
+	                        }
+	
+	                        public String getString() {
+	                            return String.valueOf(operators.get(token.surface).eval(v2, v1).eval());
+	                        }
+	                    };
+	                    stack.push(result);
+	                    break;
+                	}
                 case VARIABLE:
                     if (!variables.containsKey(token.surface)) {
                         throw new ExpressionException("Unknown operator or function: " + token);
@@ -1528,6 +1622,7 @@ public class Expression {
         return result;
     }
 
+    
     /**
      * Sets the precision for expression evaluation.
      *
@@ -1539,6 +1634,7 @@ public class Expression {
         return this;
     }
 
+    
     /**
      * Sets the rounding mode for expression evaluation.
      *
@@ -1550,6 +1646,7 @@ public class Expression {
         return this;
     }
 
+    
     /**
      * Sets the characters other than letters and digits that are valid as the first character of a
      * variable.
@@ -1562,6 +1659,7 @@ public class Expression {
         return this;
     }
 
+    
     /**
      * Sets the characters other than letters and digits that are valid as the second and subsequent
      * characters of a variable.
@@ -1574,13 +1672,15 @@ public class Expression {
         return this;
     }
 
+    
     /**
      * Adds an operator to the list of supported operators.
      *
      * @param operator The operator to add.
      * @return The previous operator with that name, or <code>null</code> if there was none.
      */
-    public <OPERATOR extends LazyOperator> OPERATOR addOperator(OPERATOR operator) {
+    @SuppressWarnings("unchecked")
+	public <OPERATOR extends LazyOperator> OPERATOR addOperator(OPERATOR operator) {
         String key = operator.getOper();
         if (operator instanceof AbstractUnaryOperator) {
             key += "u";
@@ -1588,6 +1688,7 @@ public class Expression {
         return (OPERATOR) operators.put(key, operator);
     }
 
+    
     /**
      * Adds a function to the list of supported functions
      *
@@ -1598,6 +1699,7 @@ public class Expression {
         return (com.udojava.evalex.Function) functions.put(function.getName(), function);
     }
 
+    
     /**
      * Adds a lazy function function to the list of supported functions
      *
@@ -1608,6 +1710,7 @@ public class Expression {
         return functions.put(function.getName(), function);
     }
 
+    
     /**
      * Sets a variable value.
      *
@@ -1619,6 +1722,7 @@ public class Expression {
         return setVariable(variable, createLazyNumber(value));
     }
 
+    
     /**
      * Sets a variable value.
      *
@@ -1631,6 +1735,7 @@ public class Expression {
         return this;
     }
 
+    
     /**
      * Sets a variable value.
      *
@@ -1672,6 +1777,7 @@ public class Expression {
         return this;
     }
 
+    
     /**
      * Creates a new inner expression for nested expression.
      *
@@ -1690,6 +1796,7 @@ public class Expression {
         return exp;
     }
 
+    
     /**
      * Sets a variable value.
      *
@@ -1701,6 +1808,7 @@ public class Expression {
         return setVariable(variable, value);
     }
 
+    
     /**
      * Sets a variable value.
      *
@@ -1712,6 +1820,7 @@ public class Expression {
         return setVariable(variable, value);
     }
 
+    
     /**
      * Sets a variable value.
      *
@@ -1723,6 +1832,7 @@ public class Expression {
         return setVariable(variable, value);
     }
 
+    
     /**
      * Sets a variable value.
      *
@@ -1734,6 +1844,7 @@ public class Expression {
         return setVariable(variable, value);
     }
 
+    
     /**
      * Sets a variable value.
      *
@@ -1745,6 +1856,7 @@ public class Expression {
         return setVariable(variable, value);
     }
 
+    
     /**
      * Sets a variable value.
      *
@@ -1756,6 +1868,7 @@ public class Expression {
         return setVariable(variable, value);
     }
 
+    
     /**
      * Get an iterator for this expression, allows iterating over an expression token by token.
      *
@@ -1766,6 +1879,7 @@ public class Expression {
 
         return new Tokenizer(expression);
     }
+    
 
     /**
      * Cached access to the RPN notation of this expression, ensures only one calculation of the RPN
@@ -1781,6 +1895,7 @@ public class Expression {
         }
         return rpn;
     }
+    
 
     /**
      * Check that the expression has enough numbers and variables to fit the requirements of the
@@ -1808,11 +1923,24 @@ public class Expression {
                     }
                     break;
                 case OPERATOR:
-                    if (stack.peek() < 2) {
+                	LazyOperator op = operators.get(token.surface);
+                	/* CODE MODIFICATION:
+                     * IF condition changed to throw "MISSING_PARAMETERS_FOR_OPERATOR" exception
+                     * only if the stack.peek() is less than the expected number of operands for
+                     * this operator, allowing for single-operand operators without exception.
+                     * PREVIOUS: hard-coded 'stack.peek() < 2'
+                     */
+                    if (stack.peek() < op.getNumberOperands()) {
                         throw new ExpressionException(MISSING_PARAMETERS_FOR_OPERATOR + token);
                     }
-                    // pop the operator's 2 parameters and add the result
-                    stack.set(stack.size() - 1, stack.peek() - 2 + 1);
+                    /* CODE MODIFICATION:
+                     * Added IF condition to modify stack popping 2 parameters and adding to result
+                     * only for operators whose numberOperands > 1.
+                     * PREVIOUS: hard-coded 'stack.set(stack.size() - 1, stack.peek() - 2 + 1)'
+                     */
+                    if(op.getNumberOperands() > 1) {
+                    	stack.set(stack.size() - 1, stack.peek() - op.getNumberOperands() + 1);
+                    }
                     break;
                 case FUNCTION:
                     com.udojava.evalex.LazyFunction f = functions.get(token.surface.toUpperCase(Locale.ROOT));
@@ -1839,7 +1967,7 @@ public class Expression {
                     stack.set(stack.size() - 1, stack.peek() + 1);
             }
         }
-
+        
         if (stack.size() > 1) {
             throw new ExpressionException("Too many unhandled function parameter lists");
         } else if (stack.peek() > 1) {
@@ -1849,6 +1977,7 @@ public class Expression {
         }
     }
 
+    
     /**
      * Get a string representation of the RPN (Reverse Polish Notation) for this expression.
      *
@@ -1878,6 +2007,7 @@ public class Expression {
         return result.toString();
     }
 
+    
     /**
      * Exposing declared variables in the expression.
      *
@@ -1887,6 +2017,7 @@ public class Expression {
         return Collections.unmodifiableSet(variables.keySet());
     }
 
+    
     /**
      * Exposing declared operators in the expression.
      *
@@ -1896,6 +2027,7 @@ public class Expression {
         return Collections.unmodifiableSet(operators.keySet());
     }
 
+    
     /**
      * Exposing declared functions.
      *
@@ -1905,6 +2037,7 @@ public class Expression {
         return Collections.unmodifiableSet(functions.keySet());
     }
 
+    
     /**
      * @return The original expression string
      */
@@ -1912,6 +2045,7 @@ public class Expression {
         return expressionString;
     }
 
+    
     /**
      * Returns a list of the variables in the expression.
      *
@@ -1933,6 +2067,7 @@ public class Expression {
         return result;
     }
 
+    
     /**
      * The original expression used to construct this expression, without variables substituted.
      */
@@ -1940,6 +2075,7 @@ public class Expression {
         return this.originalExpression;
     }
 
+    
     /**
      * {@inheritDoc}
      */
@@ -1959,6 +2095,7 @@ public class Expression {
         }
     }
 
+    
     /**
      * {@inheritDoc}
      */
@@ -1967,6 +2104,7 @@ public class Expression {
         return this.expressionString == null ? 0 : this.expressionString.hashCode();
     }
 
+    
     /**
      * {@inheritDoc}
      */
@@ -1975,6 +2113,7 @@ public class Expression {
         return this.expressionString;
     }
 
+    
     /**
      * Checks whether the expression is a boolean expression. An expression is considered a boolean
      * expression, if the last operator or function is boolean. The IF function is handled special. If
@@ -2005,6 +2144,7 @@ public class Expression {
         return false;
     }
 
+    
     public List<String> infixNotation() {
         final List<String> infix = new ArrayList<String>();
         Tokenizer tokenizer = new Tokenizer(expressionString);
