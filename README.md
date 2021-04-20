@@ -246,22 +246,22 @@ Or another example, add an operator `n!`, that calculates the factorial of n:
 Expression e = new Expression("4!");
 
 e.addOperator(new AbstractOperator("!", Expression.OPERATOR_PRECEDENCE_POWER_HIGHER + 1, true, 1) {
-	@Override
-	public BigDecimal eval(BigDecimal v1, BigDecimal v2) {
-		if (v1 == null) {
-			throw new ArithmeticException("Operand may not be null");
-		}
-		BigDecimal fact = v1.subtract(BigDecimal.ONE);
-		if(v1.compareTo(BigDecimal.ZERO) == 0 || v1.compareTo(BigDecimal.ONE) == 0) {
-			return BigDecimal.ONE;
-		} else {
-			while(fact.compareTo(BigDecimal.ONE) > 0) {
-				v1 = v1.multiply(fact);
-				fact = fact.subtract(BigDecimal.ONE);
-			}
-			return v1;
-		}
-	}
+    @Override
+    public BigDecimal eval(BigDecimal v1, BigDecimal v2) {
+        if (v1 == null) {
+            throw new ArithmeticException("Operand may not be null");
+        }
+        BigDecimal fact = v1.subtract(BigDecimal.ONE);
+        if(v1.compareTo(BigDecimal.ZERO) == 0 || v1.compareTo(BigDecimal.ONE) == 0) {
+            return BigDecimal.ONE;
+        } else {
+            while(fact.compareTo(BigDecimal.ONE) > 0) {
+                v1 = v1.multiply(fact);
+                fact = fact.subtract(BigDecimal.ONE);
+            }
+            return v1;
+        }
+    }
 });
 
 e.eval(); // returns 24
