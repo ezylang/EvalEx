@@ -222,7 +222,7 @@ new Expression("-2^2", settings).eval();
 ### Add Custom Operators
 
 Custom operators can be added easily, simply create an instance of `Expression.Operator` and add it to the expression.
-Parameters are the operator string, its precedence and if it is left associative. The operators `eval()` method will be called with the BigDecimal values of the operands.
+Parameters are the operator string, its precedence, if it is left associative and the number of operands expected (1 or 2). The operators `eval()` method will be called with the BigDecimal values of the operands.
 All existing operators can also be overridden.
 
 For example, add an operator `x >> n`, that moves the decimal point of _x_ _n_ digits to the right:
@@ -230,7 +230,7 @@ For example, add an operator `x >> n`, that moves the decimal point of _x_ _n_ d
 ````java
 Expression e = new Expression("2.1234 >> 2");
 
-e.addOperator(new AbstractOperator(">>", 30, true) {
+e.addOperator(new AbstractOperator(">>", 30, true, 2) {
     @Override
     public BigDecimal eval(BigDecimal v1, BigDecimal v2) {
         return v1.movePointRight(v2.toBigInteger().intValue());
@@ -238,6 +238,36 @@ e.addOperator(new AbstractOperator(">>", 30, true) {
 });
 
 e.eval(); // returns 212.34
+````
+
+Or another example, add an operator `n!`, that calculates the factorial of n:
+
+````java
+Expression e = new Expression("4!");
+
+e.addOperator(new AbstractOperator("!", Expression.OPERATOR_PRECEDENCE_POWER_HIGHER + 1, true, 1) {
+    @Override
+    public BigDecimal eval(BigDecimal v1, BigDecimal v2) {
+        @Override
+	public BigDecimal eval(BigDecimal v1, BigDecimal v2) {
+		Expression.assertNotNull(v1);
+		BigDecimal fact = v1.subtract(BigDecimal.ONE);
+		BigDecimal counter = 
+		if(v1.compareTo(BigDecimal.ZERO) == 0 || v1.compareTo(BigDecimal.ONE) == 0) {
+	    		return new BigDecimal(BigDecimal.ONE);
+		}
+		else {
+	    		while(fact.compareTo(BigDecimal.ONE) > 0) {
+				v1 = v1.multiply(fact);
+				fact = fact.subtract(BigDecimal.ONE);
+	    		}
+	    		return v1;
+		}
+	}
+    }
+});
+
+e.eval(); // returns 24
 ````
 
 ### Add Custom Functions
