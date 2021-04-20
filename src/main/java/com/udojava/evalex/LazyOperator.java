@@ -64,22 +64,22 @@ public interface LazyOperator {
 	
 	
 	/**
+	 * Gets the number of operands expected for this operator.
+	 * 
+	 * @return the number of operands for this operator. Expect return either 1 or 2.
+	 */
+	public abstract int getNumberOfOperands();	
+	
+	
+	
+	/**
 	 * Gets whether this operator evaluates to a boolean expression.
 	 * @return <code>true</code> if this operator evaluates to a boolean
 	 *         expression.
 	 */
 	public abstract boolean isBooleanOperator();
-	
-	
-	
-	/**
-	 * Gets the number of operands expected for this operator.
-	 * 
-	 * @return the number of operands for this operator.
-	 */
-	public abstract int getNumberOperands();
 
-	
+
 	
 	/**
 	 * Implementation for this operator.
