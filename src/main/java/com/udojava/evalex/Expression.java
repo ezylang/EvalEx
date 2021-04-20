@@ -544,7 +544,7 @@ public class Expression {
                  * numberOperands must be greater than 1 in order to accept TokenType.UNARY_OPERATOR for the current
                  * token, which allows postfix unary operators (e.g. factorial operator '!') with TokenType.OPERATOR
                  */
-                if (previousToken == null || (previousToken.type == TokenType.OPERATOR && operators.get(previousToken.surface).getNumberOperands() > 1)
+                if (previousToken == null || (previousToken.type == TokenType.OPERATOR && operators.get(previousToken.surface).getNumberOfOperands() > 1)
                         || previousToken.type == TokenType.OPEN_PAREN || previousToken.type == TokenType.COMMA
                         || previousToken.type == TokenType.UNARY_OPERATOR) {
                     token.surface += "u";
@@ -1358,7 +1358,7 @@ public class Expression {
                      * operands is greater than 1. This allows postfix unary operators without throwing
                      * "MISSING_PARAMETERS_FOR_OPERATOR" exception.
                 	 */
-                    if (previousToken != null && operators.get(token.surface).getNumberOperands() > 1
+                    if (previousToken != null && operators.get(token.surface).getNumberOfOperands() > 1
                             && (previousToken.type == TokenType.COMMA
                             || previousToken.type == TokenType.OPEN_PAREN)) {
                         throw new ExpressionException(
@@ -1417,7 +1417,7 @@ public class Expression {
                      * operators whose number of operands is greater than 1. This allows for postfix unary
                      * operators to be followed by closed parentheses.
                 	 */
-                    if (previousToken != null && previousToken.type == TokenType.OPERATOR  && operators.get(previousToken.surface).getNumberOperands() > 1) {
+                    if (previousToken != null && previousToken.type == TokenType.OPERATOR  && operators.get(previousToken.surface).getNumberOfOperands() > 1) {
                         throw new ExpressionException(MISSING_PARAMETERS_FOR_OPERATOR + previousToken,
                                 previousToken.pos);
                     }
@@ -1503,7 +1503,7 @@ public class Expression {
                 	 * IF-ELSE block added to handle operators with 1 or 2 operands required,
                      * allowing for the second operand v2=null in operators which numberOperands=1.
                 	 */
-                	if(operators.get(token.surface).getNumberOperands() < 2) {
+                	if(operators.get(token.surface).getNumberOfOperands() < 2) {
                 		final LazyNumber value = stack.pop();
                         LazyNumber result = new LazyNumber() {
                             public BigDecimal eval() {
@@ -1930,7 +1930,7 @@ public class Expression {
                      * this operator, allowing for single-operand operators without exception.
                      * PREVIOUS: hard-coded 'stack.peek() < 2'
                      */
-                    if (stack.peek() < op.getNumberOperands()) {
+                    if (stack.peek() < op.getNumberOfOperands()) {
                         throw new ExpressionException(MISSING_PARAMETERS_FOR_OPERATOR + token);
                     }
                     /* CODE MODIFICATION:
@@ -1938,8 +1938,8 @@ public class Expression {
                      * only for operators whose numberOperands > 1.
                      * PREVIOUS: hard-coded 'stack.set(stack.size() - 1, stack.peek() - 2 + 1)'
                      */
-                    if(op.getNumberOperands() > 1) {
-                    	stack.set(stack.size() - 1, stack.peek() - op.getNumberOperands() + 1);
+                    if(op.getNumberOfOperands() > 1) {
+                    	stack.set(stack.size() - 1, stack.peek() - op.getNumberOfOperands() + 1);
                     }
                     break;
                 case FUNCTION:
