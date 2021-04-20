@@ -248,18 +248,22 @@ Expression e = new Expression("4!");
 e.addOperator(new AbstractOperator("!", Expression.OPERATOR_PRECEDENCE_POWER_HIGHER + 1, true, 1) {
     @Override
     public BigDecimal eval(BigDecimal v1, BigDecimal v2) {
-        if (v1 == null) {
+        if(v1 == null) {
             throw new ArithmeticException("Operand may not be null");
         }
-        BigDecimal fact = v1.subtract(BigDecimal.ONE);
-        if(v1.compareTo(BigDecimal.ZERO) == 0 || v1.compareTo(BigDecimal.ONE) == 0) {
+        if(v1.remainder(BigDecimal.ONE) != BigDecimal.ZERO) {
+            throw new ArithmeticException("Operand must be an integer");
+        }
+        BigDecimal factorial = v1;
+        v1 = v1.subtract(BigDecimal.ONE);
+        if (factorial.compareTo(BigDecimal.ZERO) == 0 || factorial.compareTo(BigDecimal.ONE) == 0) {
             return BigDecimal.ONE;
         } else {
-            while(fact.compareTo(BigDecimal.ONE) > 0) {
-                v1 = v1.multiply(fact);
-                fact = fact.subtract(BigDecimal.ONE);
+            while (v1.compareTo(BigDecimal.ONE) > 0) {
+                factorial = factorial.multiply(v1);
+                v1 = v1.subtract(BigDecimal.ONE);
             }
-            return v1;
+            return factorial;
         }
     }
 });
