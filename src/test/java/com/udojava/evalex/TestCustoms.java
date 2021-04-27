@@ -229,4 +229,39 @@ public class TestCustoms {
 
         assertEquals("1", e.eval().toPlainString());
     }
-}
+
+    @Test
+    public void testCustomFunctionWithStringParams() {
+        Expression e = new Expression("INDEXOF(STRING1, STRING2)");
+        e.addLazyFunction(new AbstractLazyFunction("INDEXOF", 2) {
+            @Override
+            public LazyNumber lazyEval(List<LazyNumber> lazyParams) {
+                String st1 = lazyParams.get(0).getString();
+                String st2 = lazyParams.get(1).getString();
+                final int index = st1.indexOf(st2);
+
+                return new LazyNumber() {
+                    @Override
+                    public BigDecimal eval() {
+                        return new BigDecimal(index);
+                    }
+
+                    @Override
+                    public String getString() {
+                        return Integer.toString(index);
+                    }
+                };
+            }
+        });
+
+        e.setVariable("STRING1", "The quick brown fox");
+        e.setVariable("STRING2", "The");
+
+        assertEquals("0", e.eval().toPlainString());
+
+        e.setVariable("STRING1", "The quick brown fox");
+        e.setVariable("STRING2", "brown");
+
+        assertEquals("10", e.eval().toPlainString());
+    }
+}   
