@@ -162,7 +162,7 @@ public class TestCustoms {
 
         assertEquals("1", e.eval().toPlainString());
     }
-    
+ 
     @Test
     public void testCustomFunctionBoolean() {
         Expression e = new Expression("STREQ(\"test\", \"test2\")");
