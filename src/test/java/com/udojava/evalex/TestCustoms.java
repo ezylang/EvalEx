@@ -28,7 +28,7 @@ public class TestCustoms {
 
         assertEquals("212.34", e.eval().toPlainString());
     }
-    
+
     @Test
     public void testCustomFunction() {
         Expression e = new Expression("2 * average(12,4,8)");
@@ -73,7 +73,7 @@ public class TestCustoms {
 
         assertEquals("14", e.eval().toPlainString());
     }
-    
+
     @Test
     public void testCustomFunctionVariableParametersInstanceClass() {
         Expression e = new Expression("2 * average(12,4,8,2,9)");
@@ -126,7 +126,7 @@ public class TestCustoms {
 
         assertEquals("1", e.eval().toPlainString());
     }
-    
+
     @Test
     public void testCustomFunctionStringParametersInstanceClass() {
         Expression e = new Expression("STREQ(\"test\", \"test2\")");
@@ -199,7 +199,7 @@ public class TestCustoms {
         assertEquals("1", e.eval().toPlainString());
         assertTrue(e.isBoolean());
     }
-    
+
     @Test
     public void testUnary() {
         Expression exp = new Expression("~23");
