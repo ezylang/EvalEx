@@ -208,6 +208,32 @@ public class TestCustoms {
         });
         assertEquals("23", exp.eval().toPlainString());
     }
+    
+    @Test
+    public void testUnaryPostfix() {
+        Expression exp = new Expression("1+4!");
+
+        exp.addOperator(new AbstractOperator("!", 61, true, false, true) {
+            @Override
+            public BigDecimal eval(BigDecimal v1, BigDecimal v2) {
+		        if(v1.remainder(BigDecimal.ONE) != BigDecimal.ZERO) {
+		            throw new ArithmeticException("Operand must be an integer");
+		        }
+		        BigDecimal factorial = v1;
+		        v1 = v1.subtract(BigDecimal.ONE);
+		        if (factorial.compareTo(BigDecimal.ZERO) == 0 || factorial.compareTo(BigDecimal.ONE) == 0) {
+		            return BigDecimal.ONE;
+		        } else {
+		            while (v1.compareTo(BigDecimal.ONE) > 0) {
+		                factorial = factorial.multiply(v1);
+		                v1 = v1.subtract(BigDecimal.ONE);
+		            }
+		            return factorial;
+		        }
+		    }
+        });
+        assertEquals("25", exp.eval().toPlainString());
+    }
 
     @Test
     public void testCustomOperatorAnd() {

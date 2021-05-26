@@ -69,4 +69,3 @@ public class TestExposedComponents {
         expression.getDeclaredVariables().add("$$$");
     }
 }
-

@@ -240,6 +240,37 @@ e.addOperator(new AbstractOperator(">>", 30, true) {
 e.eval(); // returns 212.34
 ````
 
+Or another example, add a postfix unary operator `n!`, that calculates the factorial of n. The parameters for postfix unary operators are the operator's string, its precedence, if it is left associative, is it is boolean and if it is unary (<code>true</code>).
+
+````java
+Expression e = new Expression("4!");
+
+e.addOperator(new AbstractOperator("!", Expression.OPERATOR_PRECEDENCE_POWER_HIGHER + 1, true, false, true) {
+    @Override
+    public BigDecimal eval(BigDecimal v1, BigDecimal v2) {
+        if(v1 == null) {
+            throw new ArithmeticException("Operand may not be null");
+        }
+        if(v1.remainder(BigDecimal.ONE) != BigDecimal.ZERO) {
+            throw new ArithmeticException("Operand must be an integer");
+        }
+        BigDecimal factorial = v1;
+        v1 = v1.subtract(BigDecimal.ONE);
+        if (factorial.compareTo(BigDecimal.ZERO) == 0 || factorial.compareTo(BigDecimal.ONE) == 0) {
+            return BigDecimal.ONE;
+        } else {
+            while (v1.compareTo(BigDecimal.ONE) > 0) {
+                factorial = factorial.multiply(v1);
+                v1 = v1.subtract(BigDecimal.ONE);
+            }
+            return factorial;
+        }
+    }
+});
+
+e.eval(); // returns 24
+````
+
 ### Add Custom Functions
 
 Adding custom functions is as easy as adding custom operators. Create an instance of `Expression.Function`and add it to the expression.
@@ -255,14 +286,14 @@ Expression e = new Expression("2 * average(12,4,8)");
 e.addFunction(new AbstractFunction("average", -1) {
     @Override
     public BigDecimal eval(List<BigDecimal> parameters) {
-				if (parameters.size() == 0) {
-					throw new ExpressionException("average requires at least one parameter");
-				}
-				BigDecimal avg = new BigDecimal(0);
-				for (BigDecimal parameter : parameters) {
-						avg = avg.add(parameter);
-				}
-				return avg.divide(new BigDecimal(parameters.size()));
+        if (parameters.size() == 0) {
+            throw new ExpressionException("average requires at least one parameter");
+        }
+        BigDecimal avg = new BigDecimal(0);
+        for (BigDecimal parameter : parameters) {
+            avg = avg.add(parameter);
+        }
+        return avg.divide(new BigDecimal(parameters.size()));
     }
 });
 
@@ -287,7 +318,7 @@ e.addLazyFunction(new AbstractLazyFunction("STREQ", 2) {
         public String getString() {
             return "0";
         }
-     };
+    };
     private LazyNumber ONE = new LazyNumber() {
         public BigDecimal eval() {
             return BigDecimal.ONE;

@@ -29,16 +29,20 @@ package com.udojava.evalex;
 import java.math.BigDecimal;
 
 /**
- * Base interface which is required for all operators.
+ * Base interface which is required for all operators. Abstract class AbstractOperator accepts
+ * postfix unary operators with the second operand v2=null.
  */
 public interface Operator extends LazyOperator {
+	
+	
+	
 	/**
 	 * Implementation for this operator.
 	 * 
 	 * @param v1
 	 *            Operand 1.
 	 * @param v2
-	 *            Operand 2.
+	 *            Operand 2. Null for postfix unary operators.
 	 * @return The result of the operation.
 	 */
 	public abstract BigDecimal eval(BigDecimal v1, BigDecimal v2);
