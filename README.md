@@ -4,9 +4,11 @@ EvalEx - Java Expression Evaluator
 
 ### Introduction
 
-EvalEx is a handy expression evaluator for Java, that allows to evaluate simple mathematical and boolean expressions.
+EvalEx is a handy expression evaluator for Java, that allows to evaluate simple mathematical and
+boolean expressions.
 
 Key Features:
+
 - Uses BigDecimal for calculation and result
 - No dependencies to external libraries
 - Precision and rounding mode can be set
@@ -17,25 +19,33 @@ Key Features:
 - Functions can be defined with a variable number of arguments (see MIN and MAX functions)
 - Supports for hexadecimal numbers and scientific notations of numbers
 - Supports string literals in functions
-- Supports implicit multiplication, e.g. (a+b)(a-b) or 2(x-y) which equals to (a+b)\*(a-b) or 2\*(x-y)
+- Supports implicit multiplication, e.g. (a+b)(a-b) or 2(x-y) which equals to (a+b)\*(a-b) or 2\*(
+  x-y)
 
 ### Download / Maven
-You can download the binaries, source code and JavaDoc jars from [Maven Central](http://search.maven.org/#search%7Cga%7C1%7Ca%3A%22EvalEx%22%20g%3A%22com.udojava%22).
 
-The project and source code in `zip` and `tar.gz` format can also be downloaded from the projects [release area](https://github.com/uklimaschewski/EvalEx/releases).
+You can download the binaries, source code and JavaDoc jars
+from [Maven Central](http://search.maven.org/#search%7Cga%7C1%7Ca%3A%22EvalEx%22%20g%3A%22com.udojava%22)
+.
+
+The project and source code in `zip` and `tar.gz` format can also be downloaded from the
+projects [release area](https://github.com/uklimaschewski/EvalEx/releases).
 
 To include it in your Maven project, refer to the artifact in your pom. For example:
+
 ````xml
-</dependencies>
+<dependencies>
     <dependency>
         <groupId>com.udojava</groupId>
         <artifactId>EvalEx</artifactId>
+        <!-- change to desired version -->
         <version>2.5</version>
     </dependency>
 </dependencies>
 ````
 
 If you're using gradle add to your project's app build.gradle:
+
 ````gradle
 dependencies {
     ...
@@ -44,7 +54,9 @@ dependencies {
 ````
 
 ### FAQ
-A list of frequently asked questions (and answers) can be found here: [FAQ](https://github.com/uklimaschewski/EvalEx/blob/master/FAQ.md)
+
+A list of frequently asked questions (and answers) can be found
+here: [FAQ](https://github.com/uklimaschewski/EvalEx/blob/master/FAQ.md)
 
 ### Usage Examples
 
@@ -95,9 +107,8 @@ A list of frequently asked questions (and answers) can be found here: [FAQ](http
 
 ### Precision
 
-The default precision is set to 7 digits (`MathContext.DECIMAL32`). Depending on
-your use-case you will want to set a different precision to get accurate
-results:
+The default precision is set to 7 digits (`MathContext.DECIMAL32`). Depending on your use-case you
+will want to set a different precision to get accurate results:
 
 ```java
  new Expression("1/3")
@@ -120,8 +131,10 @@ If you do not increase the precision as needed, you will get inaccurate results:
 ```
 
 ### Default Settings
-The default settings for an expression can be set on creation through an `ExpressionSettings` object.
-It can be created using a builder pattern:
+
+The default settings for an expression can be set on creation through an `ExpressionSettings`
+object. It can be created using a builder pattern:
+
 ````java
 ExpressionSettings settings = ExpressionSettings.builder()
          .mathContext(MathContext.DECIMAL128)
@@ -131,6 +144,7 @@ new Expression("-2^2", settings).eval();
 ````
 
 ### Supported Operators
+
 <table>
   <tr><th>Mathematical Operators</th></tr>
   <tr><th>Operator</th><th>Description</th></tr>
@@ -158,6 +172,7 @@ new Expression("-2^2", settings).eval();
 *Boolean operators result always in a BigDecimal value of 1 or 0 (zero). Any non-zero value is treated as a _true_ value. Boolean _not_ is implemented by a function.
 
 ### Supported Functions
+
 <table>
   <tr><th>Function<sup>*</sup></th><th>Description</th></tr>
   <tr><td>NOT(<i>expression</i>)</td><td>Boolean negation, 1 (means true) if the expression is not zero</td></tr>
@@ -210,6 +225,7 @@ new Expression("-2^2", settings).eval();
 *Functions names are case insensitive.
 
 ### Supported Constants
+
 <table>
   <tr><th>Constant</th><th>Description</th></tr>
   <tr><td>e</td><td>The value of <i>e</i>, exact to 70 digits</td></tr>
@@ -221,9 +237,10 @@ new Expression("-2^2", settings).eval();
 
 ### Add Custom Operators
 
-Custom operators can be added easily, simply create an instance of `Expression.Operator` and add it to the expression.
-Parameters are the operator string, its precedence and if it is left associative. The operators `eval()` method will be called with the BigDecimal values of the operands.
-All existing operators can also be overridden.
+Custom operators can be added easily, simply create an instance of `Expression.Operator` and add it
+to the expression. Parameters are the operator string, its precedence and if it is left associative.
+The operators `eval()` method will be called with the BigDecimal values of the operands. All
+existing operators can also be overridden.
 
 For example, add an operator `x >> n`, that moves the decimal point of _x_ _n_ digits to the right:
 
@@ -240,7 +257,9 @@ e.addOperator(new AbstractOperator(">>", 30, true) {
 e.eval(); // returns 212.34
 ````
 
-Or another example, add a postfix unary operator `n!`, that calculates the factorial of n. The parameters for postfix unary operators are the operator's string, its precedence, if it is left associative, is it is boolean and if it is unary (<code>true</code>).
+Or another example, add a postfix unary operator `n!`, that calculates the factorial of n. The
+parameters for postfix unary operators are the operator's string, its precedence, if it is left
+associative, is it is boolean and if it is unary (<code>true</code>).
 
 ````java
 Expression e = new Expression("4!");
@@ -273,10 +292,11 @@ e.eval(); // returns 24
 
 ### Add Custom Functions
 
-Adding custom functions is as easy as adding custom operators. Create an instance of `Expression.Function`and add it to the expression.
-Parameters are the function name and the count of required parameters. The functions `eval()` method will be called with a list of the BigDecimal parameters.
-A `-1` as the number of parameters denotes a variable number of arguments.
-All existing functions can also be overridden.
+Adding custom functions is as easy as adding custom operators. Create an instance
+of `Expression.Function`and add it to the expression. Parameters are the function name and the count
+of required parameters. The functions `eval()` method will be called with a list of the BigDecimal
+parameters. A `-1` as the number of parameters denotes a variable number of arguments. All existing
+functions can also be overridden.
 
 For example, add a function `average(a,b,c)`, that will calculate the average value of a, b and c:
 
@@ -302,11 +322,14 @@ e.eval(); // returns 16
 
 #### Custom Functions With String Parameters
 
-You can create a custom function with string parameters. Create an instance of `Expression.LazyFunction`and add it to the expression.
-Parameters are the function name and the count of required parameters. The functions `lazyEval()` method will be called with a list of the LazyNumber parameters.
-A `-1` as the number of parameters denotes a variable number of arguments. String parameters needs to be surrounded by `"`.
+You can create a custom function with string parameters. Create an instance
+of `Expression.LazyFunction`and add it to the expression. Parameters are the function name and the
+count of required parameters. The functions `lazyEval()` method will be called with a list of the
+LazyNumber parameters. A `-1` as the number of parameters denotes a variable number of arguments.
+String parameters needs to be surrounded by `"`.
 
-For example, add a function `STREQ("string1","string2")`, that will compare whether string1 and string2 are equal:
+For example, add a function `STREQ("string1","string2")`, that will compare whether string1 and
+string2 are equal:
 
 ````java
 Expression e = new Expression("STREQ(\"test\", \"test2\")");
@@ -339,23 +362,52 @@ e.addLazyFunction(new AbstractLazyFunction("STREQ", 2) {
 e.eval(); // returns 1
 ````
 
+### How to contribute
+
+#### How to make a clean pull request
+
+- Create a personal fork of EvalEx on GitHub.
+- Clone the fork on your local machine. Your remote repo on GitHub is called origin.
+- Add the original repository as a remote called upstream.
+- If you created your fork a while ago be sure to pull upstream changes into your local repository.
+- Create a new branch to work on. Branch from master.
+- Implement/fix your feature, comment your code.
+- Follow the code style of EvalEx (Google code style), including indentation.
+- If the project has tests run them!
+- Add unit tests that test your new code.
+- In general, avoid changing existing tests, as they also make sure the existing public API is unchanged.
+- Add or change the documentation as needed.
+- Squash your commits into a single commit with git's interactive rebase.
+- Push your branch to your fork on GitHub, the remote origin.
+- From your fork open a pull request in the correct branch. Target the EvalEx's master branch.
+- Once the pull request is approved and merged you can pull the changes from upstream to your local repo and delete your branch.
+- And last but not least: Always write your commit messages in the present tense. Your commit message should describe what the commit, when applied, does to the code – not what you did to the code.
+
 ### Author and License
 
-Copyright 2012-2020 by Udo Klimaschewski
+Copyright 2012 by Udo Klimaschewski
 
 http://about.me/udo.klimaschewski
 
 http://UdoJava.com
 
-**Thanks to all who contributed to this project: [Contributors](https://github.com/uklimaschewski/EvalEx/graphs/contributors)**
+**Thanks to all who contributed to this
+project: [Contributors](https://github.com/uklimaschewski/EvalEx/graphs/contributors)**
 
-The software is licensed under the MIT Open Source license (see [LICENSE](https://raw.githubusercontent.com/uklimaschewski/EvalEx/master/LICENSE) file).
+The software is licensed under the MIT Open Source license (
+see [LICENSE](https://raw.githubusercontent.com/uklimaschewski/EvalEx/master/LICENSE) file).
 
-* The *power of* operator (^) implementation was copied from [Stack Overflow](http://stackoverflow.com/questions/3579779/how-to-do-a-fractional-power-on-bigdecimal-in-java) Thanks to Gene Marin
-* The SQRT() function implementation was taken from the book [The Java Programmers Guide To numerical Computing](http://www.amazon.de/Java-Number-Cruncher-Programmers-Numerical/dp/0130460419) (Ronald Mak, 2002)
-* Varargs implementation based on "David's method" outlined in Gene Pavlovsky's comment from  [here](http://www.kallisti.net.nz/blog/2008/02/extension-to-the-shunting-yard-algorithm-to-allow-variable-numbers-of-arguments-to-functions/#comment-125789)
+* The *power of* operator (^) implementation was copied
+  from [Stack Overflow](http://stackoverflow.com/questions/3579779/how-to-do-a-fractional-power-on-bigdecimal-in-java)
+  Thanks to Gene Marin
+* The SQRT() function implementation was taken from the
+  book [The Java Programmers Guide To numerical Computing](http://www.amazon.de/Java-Number-Cruncher-Programmers-Numerical/dp/0130460419) (
+  Ronald Mak, 2002)
+* Varargs implementation based on "David's method" outlined in Gene Pavlovsky's comment
+  from  [here](http://www.kallisti.net.nz/blog/2008/02/extension-to-the-shunting-yard-algorithm-to-allow-variable-numbers-of-arguments-to-functions/#comment-125789)
 
 ### Similar Projects
 
- * [A port of EvalEx to Dart](https://github.com/RobluScouting/EvalEx)
- * [exp4j](https://github.com/fasseg/exp4j), a mathematical expression evaluator for Java using doubles.
+* [A port of EvalEx to Dart](https://github.com/RobluScouting/EvalEx)
+* [exp4j](https://github.com/fasseg/exp4j), a mathematical expression evaluator for Java using
+  doubles.
