@@ -1,16 +1,31 @@
 language: java
 sudo: false
 install: true
-
 addons:
   sonarcloud:
-    organization: "uklimaschewski"
-    token: $SONAR_TOKEN
-
+    organization: uklimaschewski
+    token: "$SONAR_TOKEN"
 script:
-  # JaCoCo is used to have code coverage, "-Pcoverage" activates the maven profile in the pom.xml
-  - mvn clean org.jacoco:jacoco-maven-plugin:prepare-agent test sonar:sonar -Dsonar.host.url=https://sonarcloud.io -Dsonar.projectKey=uklimaschewski_EvalEx -Pcoverage
-
+  - mvn clean org.jacoco:jacoco-maven-plugin:prepare-agent install sonar:sonar -Dsonar.host.url=https://sonarcloud.io -Dsonar.projectKey=uklimaschewski_EvalEx -Pcoverage
 cache:
   directories:
-    - '$HOME/.m2/repository'
+    - "$HOME/.m2/repository"
+env:
+  global:
+    - secure: c4WFdvEdmUmU9dF3YGTvS1Xpzy3mnAzWqQ3UVya/KMt10zgmFjfVEuClp8lnfYxeT8JONabutI2Q99zvI+VadVea7ZRivAw5B4b0oq7acqIbDlwEryeRRorLRJyQbHST09cf25xxzg3bGQKrgaUFl6jrbltzOqpFG492tR0cEipth5/hlLVdE8iBiG7RRLBLNu2KQNPD8xBOcbK3wpZA8SL89+TM05Qa1VZ/IpgeXvvoUtdt3Tzvvd3NCi+gEodxdsGuQYeaH4NJJW58QueLamv4QcQDli0ooccbaAXOh0fPCh3PITDCO4VeEtVHX2L7ZjbaiLFbbRRF1BfKlop5PQfaKymUcoRbzINkXGLJrblRuwaKms4Au2DBpw7YkzSWlRgPZwAp8dbEFaIBq9oAzEaHWu+vfsxrSIYBaJo9MXpHfTyhJHi2Jug4fUWK1GsETrqtLWTPL81oVtDmdtQzJJKAYDi+49Hs5zWTZRXcjl61tp1Q3T28jhl8cbHOS4OxeS7HAyMVhqc/Sq0vhGsUqugDLg9BIwwC+qIFdYMBHSvLSjV3azqHxjsOD62qqUTkP3BQBnb9kysdw1LJnLnH8UWzI/Q1S7Zo6pa7p/J5um/NcGlaT4gfeHhAdIfC5Kf1kR1K5KFiUXp5TYWxmwiMnHmHDtktB0NW+mmh0bAiefI=
+    - secure: QZucF1MTR67t2OemeuMSRSNJpXRH//DHiwlhxYgyY+ju8/txxY9xJqV5WAaQPC8TCnshSK6X8OKdWJaHLDh7z5+50OdLjzrIjaVHpMMHiAmzj9oTcbs7CF8SY6Ykv9SN/AqRqKkgYikG0WRUFdn4CY0p6fyYP+Gp2aEL0J3mC7M+UZp0a244CpUz0MqheBGjl5+5kKP6n2Hr+Cu0ZMgT5PMB5KVOqdxKptVVkHfcRRlem6nGFRXDHOQTJNTWSonslbS6BQKaD0NwcaXDBk4tx6ktRlk53b90ejicbSJkivqkP45F4tfnUFadx2p4Rwp3FkBGU0yVgkIf1mMWyauG04AGW4H9Bqf3Xk2q3thGyadnoBmtzMu7OtJg0upEmLqeAl+MTg44Ecysu6U3bjoSJ2HH2b3V/musI8bZFPp9FldfGfDKI7IoE0canJwz+lT0jD/3wPtRtRDetSqm5mNsyAMBaSFU2p2wSa7vH/fs3Sm70eX0oFENmOfkdcqxU3QrKYg/ofZLTcTJgs47OLZLxT+2HYljNoS8w6V7v5919Ax7VTIHeiQrb4u6dJyjfwXk0mc/CsBWwlKWt+tO52vRVQ91KVsF19/0NK6ENKDcY8heiXY7VOCz32R7tRKXMjV/w+GwUt3KHqRP44FA/iBupTKLqyizGuphNZBBBj7FH2I=
+    - secure: lSeHlhewb7q+QMpKsHaGNCPgkDO/9dxg0AlDwenYAOk2FZkKNcutK7xzlQKZs4J+JWvQCUV+hRHH6LvpDUqHaOvfjayZRauBLLpK/31WZa4mAIXkOB7ftojGzPlUIv4eHj5vflYu+KXNSDxXELsFNjwJXTWByGpak0qq1gd3j43ET+81tvEqTWiaKW5jMWJK8lnhwDZXPvziakwZPGElooQTntfDUHbJlSB6UB3KIqKmARV8nZKKZbfTfyD6O9mL9SKLYiSngmhUCm3jZO/5tOdczBLtd9zK3Xi72vpbmDK7dGMvY1AsK15O5XTcXobn0uwXTLCmllklss/qO0kHhMSuGNUxMNKR891WTKQgH6jGW5p7eyDhW6i8Wc32ASXny3c1qoHjuyERn9R4n1c6cqKi/fzcw/65U5lroaO2M+jvflENqWRrigBwTQBDJ3mQL6OSJdS3kFr77PmmwatajUynqLm7NK0CmdyQvg96KODH3or5LXWkJG1twqrAlKk8lZI72KU8HFVE7ROO/fkycl20DwM5kw5IUGGpnuX6ULcArVggCLqyi1M+k9HhQ4exav9X/cqpacB3pPbcp4Js2ZVdrrllFXB8vIKa7cOuWJJK5CPRLYbCFnLgCwO8jhcCiABRw04CfpqgGZb1cRg6JTF784DTSrTEQNb7UHuG4O4=
+    - secure: JuXiFp4F5nPUIGBR+wR3iFhusZjfYJ+t/w44Zkdbh7EionCOGsbVq4cVI5956CYAOm8EtBkpoPJM+sziA3cH52KwDKkVi+94opWO/tc1QIyM4tw1tZ2jP2uKFZG+6VnPFNTyCdNb6EDmqh/n8rRixFuKrVrtXTzTnSyjM4gjuINb7KkteUqRGIk2WSi4HEpYUjiytoYnyqxhhbZNbByJBgbmld8/uvXIe+71n0AReGAoAR0x/zTbXHpW4Qx+2r9kQYfmsbFIlYtSvVcOQWZxphOqfrR17hWd3G5xvE3jJns2JNTVVarFuEDRxlwDWOOcy2CnP6mQgM0j2meeKAKyhmXMuTaLghEkR22BHpdidSUFv4JMs54xi4G/02btZs63wPfxqlw2naLu1yXaca5FuCmQ/fc8voV7q8yykiaEpinRmlPjOAJiwYI+plpwEgnyo7kWj/u8IkroPNTxNrQym0HElSGckHIWpBJzGj1QG6Ehn7Fwcmm1voT5iH9VbNM7Z9cIlIW5KQWBJiObrpBQLqoUfH8s/YnBH7FDVgJIA62cUHtaT8bzgpJGfFUOOIybyt7k6DMzHpvdCosfsEZwVZHDC/2UhKK+E8elyWabgAYEYuRM6Q7b0fCq50yP2YzxZy9LwDUm85A/otNYG+F0qStRg2qWz3SSgMhG7bBBms0=
+before_deploy:
+  - openssl aes-256-cbc -K $encrypted_4f0d00631887_key -iv $encrypted_4f0d00631887_iv -in .travis/gpg.asc.enc -out .travis/gpg.asc -d
+deploy:
+  - skip_cleanup: true
+    provider: script
+    script: ./deploy.sh
+    on:
+      branch: master
+  - skip_cleanup: true
+    provider: script
+    script: ./deploy.sh
+    on:
+      tags: true
