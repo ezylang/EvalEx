@@ -35,21 +35,8 @@
   <scm>
     <connection>scm:git:git@github.com:uklimaschewski/EvalEx.git</connection>
     <developerConnection>scm:git:git@github.com:uklimaschewski/EvalEx.git</developerConnection>
-    <url>git@github.com:uklimaschewski/EvalEx.git</url>
+    <url>https://github.com/uklimaschewski/EvalEx</url>
   </scm>
-
-  <properties>
-    <maven.compiler.source>1.6</maven.compiler.source>
-    <maven.compiler.target>1.6</maven.compiler.target>
-    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-
-
-    <versionMavenGPG>1.6</versionMavenGPG>
-    <versionMavenDocs>3.0.0-M1</versionMavenDocs>
-    <versionMavenSources>3.0.1</versionMavenSources>
-
-    <versionSonatypeStage>1.6.8</versionSonatypeStage>
-  </properties>
 
   <issueManagement>
     <system>github</system>
@@ -58,14 +45,18 @@
 
   <distributionManagement>
     <repository>
-      <id>oss.sonatype.org</id>
+      <id>ossrh</id>
       <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
     </repository>
     <snapshotRepository>
-      <id>oss.sonatype.org</id>
+      <id>ossrh</id>
       <url>https://oss.sonatype.org/content/repositories/snapshots</url>
     </snapshotRepository>
   </distributionManagement>
+
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+  </properties>
 
   <dependencies>
     <dependency>
@@ -78,72 +69,14 @@
 
   <build>
     <plugins>
-      <!--Attach sources and javadocs-->
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-source-plugin</artifactId>
-        <version>${versionMavenSources}</version>
-        <executions>
-          <execution>
-            <phase>package</phase>
-            <goals>
-              <goal>jar</goal>
-            </goals>
-          </execution>
-        </executions>
-      </plugin>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-javadoc-plugin</artifactId>
-        <version>${versionMavenDocs}</version>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <version>3.8.1</version>
         <configuration>
-          <doclint>none</doclint>
+          <source>1.6</source>
+          <target>1.6</target>
         </configuration>
-        <executions>
-          <execution>
-            <phase>package</phase>
-            <goals>
-              <goal>jar</goal>
-            </goals>
-          </execution>
-        </executions>
-      </plugin>
-
-      <!--GPG Sign-->
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-gpg-plugin</artifactId>
-        <version>${versionMavenGPG}</version>
-        <executions>
-          <execution>
-            <id>sign-artifacts</id>
-            <phase>verify</phase>
-            <goals>
-              <goal>sign</goal>
-            </goals>
-          </execution>
-        </executions>
-      </plugin>
-
-      <!--Sonatype Stage-->
-      <plugin>
-        <groupId>org.sonatype.plugins</groupId>
-        <artifactId>nexus-staging-maven-plugin</artifactId>
-        <version>${versionSonatypeStage}</version>
-        <extensions>true</extensions>
-        <configuration>
-          <serverId>oss.sonatype.org</serverId>
-          <nexusUrl>https://oss.sonatype.org/</nexusUrl>
-        </configuration>
-        <executions>
-          <execution>
-            <phase>deploy</phase>
-            <goals>
-              <goal>deploy</goal>
-              <goal>release</goal>
-            </goals>
-          </execution>
-        </executions>
       </plugin>
     </plugins>
   </build>
@@ -173,6 +106,74 @@
               </execution>
             </executions>
           </plugin>
+        </plugins>
+      </build>
+    </profile>
+
+    <profile>
+      <id>publish</id>
+      <build>
+        <plugins>
+
+          <plugin>
+            <artifactId>maven-source-plugin</artifactId>
+            <version>3.0.1</version>
+            <executions>
+              <execution>
+                <id>attach-sources</id>
+                <phase>package</phase>
+                <goals>
+                  <goal>jar-no-fork</goal>
+                </goals>
+              </execution>
+            </executions>
+          </plugin>
+
+          <plugin>
+            <artifactId>maven-javadoc-plugin</artifactId>
+            <version>3.0.0-M1</version>
+            <configuration>
+              <doclint>none</doclint>
+              <detectJavaApiLink>false</detectJavaApiLink>
+            </configuration>
+            <executions>
+              <execution>
+                <id>attach-javadocs</id>
+                <phase>package</phase>
+                <goals>
+                  <goal>jar</goal>
+                </goals>
+              </execution>
+            </executions>
+          </plugin>
+
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-gpg-plugin</artifactId>
+            <version>1.6</version>
+            <executions>
+              <execution>
+                <id>sign-artifacts</id>
+                <phase>verify</phase>
+                <goals>
+                  <goal>sign</goal>
+                </goals>
+              </execution>
+            </executions>
+          </plugin>
+
+          <plugin>
+            <groupId>org.sonatype.plugins</groupId>
+            <artifactId>nexus-staging-maven-plugin</artifactId>
+            <version>1.6.8</version>
+            <extensions>true</extensions>
+            <configuration>
+              <serverId>ossrh</serverId>
+              <nexusUrl>https://oss.sonatype.org/</nexusUrl>
+              <autoReleaseAfterClose>true</autoReleaseAfterClose>
+            </configuration>
+          </plugin>
+
         </plugins>
       </build>
     </profile>
