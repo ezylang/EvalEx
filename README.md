@@ -39,7 +39,7 @@ To include it in your Maven project, refer to the artifact in your pom. For exam
         <groupId>com.udojava</groupId>
         <artifactId>EvalEx</artifactId>
         <!-- change to desired version -->
-        <version>2.5</version>
+        <version>2.6</version>
     </dependency>
 </dependencies>
 ````
@@ -49,7 +49,7 @@ If you're using gradle add to your project's app build.gradle:
 ````gradle
 dependencies {
     ...
-    compile 'com.udojava:EvalEx:2.5'
+    compile 'com.udojava:EvalEx:2.6'
 }
 ````
 
