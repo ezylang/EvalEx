@@ -9,6 +9,8 @@
 
 set -e
 
+echo "starting deploy script deploy.sh ..."
+
 # Check the variables are set
 if [ -z "$OSSRH_USERNAME" ]; then
   echo "missing environment value: OSSRH_USERNAME" >&2
@@ -32,14 +34,15 @@ fi
 
 # Prepare the local keyring (requires travis to have decrypted the file
 # beforehand)
-gpg --fast-import .travis/gpg.asc
+echo "importing gpg keys"
+gpg -v --fast-import .travis/gpg.asc
 
 if [ -n "$TRAVIS_TAG" ]
 then
     echo "on a tag -> set pom.xml <version> to $TRAVIS_TAG"
     mvn --settings "${TRAVIS_BUILD_DIR}/.travis/mvn-settings.xml" org.codehaus.mojo:versions-maven-plugin:2.1:set -DnewVersion="$TRAVIS_TAG" 1>/dev/null 2>/dev/null
 else
-    echo "not on a tag -> keep snapshot version in pom.xml"
+    echo "not on a tag -> keep snapshot version in pom.xml" >&2
 fi
 
 # Run the maven deploy steps
