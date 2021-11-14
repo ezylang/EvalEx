@@ -1298,6 +1298,9 @@ public class Expression {
    * @return <code>true</code>, if the input string is a number.
    */
   protected boolean isNumber(String st) {
+    if (st.isEmpty()) {
+      return false;
+    }
     if (st.charAt(0) == MINUS_SIGN && st.length() == 1) {
       return false;
     }
