@@ -7,7 +7,7 @@ addons:
     organization: uklimaschewski
     token: "$SONAR_TOKEN"
 script:
-  - mvn -e -X clean org.jacoco:jacoco-maven-plugin:prepare-agent install sonar:sonar -Dsonar.host.url=https://sonarcloud.io
+  - mvn clean org.jacoco:jacoco-maven-plugin:prepare-agent install sonar:sonar -Dsonar.host.url=https://sonarcloud.io
     -Dsonar.projectKey=uklimaschewski_EvalEx -Pcoverage
 cache:
   directories:
