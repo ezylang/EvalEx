@@ -78,7 +78,6 @@
           <target>1.6</target>
         </configuration>
       </plugin>
-      <!-- Disabled, as this is not working correctly
       <plugin>
         <groupId>org.moditect</groupId>
         <artifactId>moditect-maven-plugin</artifactId>
@@ -91,20 +90,16 @@
               <goal>add-module-info</goal>
             </goals>
             <configuration>
-              <jvmVersion>base</jvmVersion>
+              <jvmVersion>9</jvmVersion>
               <module>
-                <moduleInfo>
-                  <name>com.udojava.evalex</name>
-                  <exports>
-                    com.udojava.evalex;
-                  </exports>
-                </moduleInfo>
+                <moduleInfoFile>
+                  ${project.basedir}/src/main/java9/module-info.java
+                </moduleInfoFile>
               </module>
             </configuration>
           </execution>
         </executions>
       </plugin>
-      -->
     </plugins>
   </build>
 
