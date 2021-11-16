@@ -448,11 +448,28 @@ public class Expression {
      * @return The next character or character 0, if at end of string.
      */
     private char peekNextChar() {
-      if (pos < (input.length() - 1)) {
-        return input.charAt(pos + 1);
-      } else {
-        return 0;
-      }
+      return pos >= input.length()-1 ? 0 : input.charAt(pos+1);
+    }
+
+    /**
+     * Append the current character to the given token, and advance the tokenizer position.
+     *
+     * @param token  the destination token for the character
+     * @return The next character or character 0, if at end of string.
+     */
+    private char consumeChar(Token token) {
+      token.append(input.charAt(pos++));
+      return pos >= input.length() ? 0 : input.charAt(pos);
+    }
+
+    /**
+     * Discard the current character, and advance the tokenizer position by 1.
+     *
+     * @return The next character or character 0, if at end of string.
+     */
+    private char skipChar() {
+      pos++;
+      return pos >= input.length() ? 0 : input.charAt(pos);
     }
 
     private boolean isHexDigit(char ch) {
@@ -471,7 +488,7 @@ public class Expression {
       }
       char ch = input.charAt(pos);
       while (Character.isWhitespace(ch) && pos < input.length()) {
-        ch = input.charAt(++pos);
+        ch = skipChar();
       }
       token.pos = pos;
 
@@ -498,32 +515,20 @@ public class Expression {
             && ('e' == token.charAt(token.length() - 1)
             || 'E' == token.charAt(token.length() - 1))))
             && (pos < input.length())) {
-          token.append(input.charAt(pos++));
-          ch = pos == input.length() ? 0 : input.charAt(pos);
+          ch = consumeChar(token);
         }
         token.type = isHex ? TokenType.HEX_LITERAL : TokenType.LITERAL;
       } else if (ch == '"') {
-        pos++;
-        if (previousToken.type != TokenType.STRINGPARAM) {
-          ch = input.charAt(pos);
-          while (ch != '"') {
-            token.append(input.charAt(pos++));
-            ch = pos == input.length() ? 0 : input.charAt(pos);
-          }
-          token.type = TokenType.STRINGPARAM;
-        } else {
-          return next();
-        }
+        tokenizeString(token);
       } else if (Character.isLetter(ch) || firstVarChars.indexOf(ch) >= 0) {
         while ((Character.isLetter(ch) || Character.isDigit(ch) || varChars.indexOf(ch) >= 0
             || token.length() == 0 && firstVarChars.indexOf(ch) >= 0) && (pos < input.length())) {
-          token.append(input.charAt(pos++));
-          ch = pos == input.length() ? 0 : input.charAt(pos);
+          ch = consumeChar(token);
         }
         // Remove optional white spaces after function or variable name
         if (Character.isWhitespace(ch)) {
           while (Character.isWhitespace(ch) && pos < input.length()) {
-            ch = input.charAt(pos++);
+            ch = skipChar();
           }
           pos--;
         }
@@ -542,8 +547,7 @@ public class Expression {
         } else {
           token.type = TokenType.COMMA;
         }
-        token.append(ch);
-        pos++;
+        consumeChar(token);
       } else {
         String greedyMatch = "";
         int initialPos = pos;
@@ -553,11 +557,10 @@ public class Expression {
             && !Character.isWhitespace(ch) && ch != '(' && ch != ')' && ch != ','
             && (pos < input.length())) {
           greedyMatch += ch;
-          pos++;
+          ch = skipChar();
           if (operators.containsKey(greedyMatch)) {
             validOperatorSeenUntil = pos;
           }
-          ch = pos == input.length() ? 0 : input.charAt(pos);
         }
         if (validOperatorSeenUntil != -1) {
           token.append(input.substring(initialPos, validOperatorSeenUntil));
@@ -580,6 +583,25 @@ public class Expression {
       }
       previousToken = token;
       return token;
+    }
+
+    private void tokenizeString(Token token) {
+      char ch;
+      // skip opening quote
+      ch = skipChar();
+
+      // consume string contents
+      while (ch != '"' && ch != 0) {
+        ch = consumeChar(token);
+      }
+
+      // deal with the closing quote
+      if (ch == 0) {
+        throw new TokenizerException("unterminated string literal", token.pos);
+      }
+      skipChar();
+
+      token.type = TokenType.STRINGPARAM;
     }
 
     @Override
