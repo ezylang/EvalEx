@@ -34,6 +34,7 @@ import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Deque;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
@@ -195,6 +196,17 @@ public class Expression {
    */
   private static final char MINUS_SIGN = '-';
 
+  /**
+   * A map of symbols that stand for constant values. These are not considered variables by {@link #getUsedVariables()}.
+   */
+  private static final Map<String, BigDecimal> DEFAULT_CONSTANTS = new HashMap<String, BigDecimal>();
+  static {
+    DEFAULT_CONSTANTS.put("e",     e);
+    DEFAULT_CONSTANTS.put("PI",    PI);
+    DEFAULT_CONSTANTS.put("NULL",  null);
+    DEFAULT_CONSTANTS.put("TRUE",  BigDecimal.ONE);
+    DEFAULT_CONSTANTS.put("FALSE", BigDecimal.ZERO);
+  }
 
   /**
    * The BigDecimal representation of the left parenthesis, used for parsing varying numbers of
@@ -1281,12 +1293,10 @@ public class Expression {
       }
     });
 
-    variables.put("e", createLazyNumber(e));
-    variables.put("PI", createLazyNumber(PI));
-    variables.put("NULL", null);
-    variables.put("TRUE", createLazyNumber(BigDecimal.ONE));
-    variables.put("FALSE", createLazyNumber(BigDecimal.ZERO));
-
+    for (Map.Entry<String, BigDecimal> constant : DEFAULT_CONSTANTS.entrySet()) {
+      BigDecimal value = constant.getValue();
+      variables.put(constant.getKey(), value == null? null : createLazyNumber(value));
+    }
   }
 
 
@@ -2102,9 +2112,7 @@ public class Expression {
     while (tokenizer.hasNext()) {
       Token nextToken = tokenizer.next();
       String token = nextToken.toString();
-      if (nextToken.type != TokenType.VARIABLE || token.equals("PI") || token.equals("e") || token
-          .equals("TRUE")
-          || token.equals("FALSE")) {
+      if (nextToken.type != TokenType.VARIABLE || DEFAULT_CONSTANTS.containsKey(token)) {
         continue;
       }
       result.add(token);
