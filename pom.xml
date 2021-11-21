@@ -91,6 +91,7 @@
             </goals>
             <configuration>
               <jvmVersion>9</jvmVersion>
+              <overwriteExistingFiles>true</overwriteExistingFiles>
               <module>
                 <moduleInfoFile>
                   ${project.basedir}/src/main/java9/module-info.java
