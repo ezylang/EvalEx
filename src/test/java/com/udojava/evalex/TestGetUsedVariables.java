@@ -3,6 +3,8 @@ package com.udojava.evalex;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
+import java.math.BigDecimal;
+import java.util.Collections;
 import java.util.List;
 import org.junit.Test;
 
@@ -32,5 +34,12 @@ public class TestGetUsedVariables {
     Expression ex = new Expression("1/2");
     List<String> usedVars = ex.getUsedVariables();
     assertEquals(0, usedVars.size());
+  }
+
+  @Test
+  public void testStringComparison() {
+    // test for issue #267 (getUsedVariables() throws NPE in expressions containing string literals)
+    Expression ex = new Expression("foo=\"bar\"").setVariable("foo", (BigDecimal) null);
+    assertEquals(Collections.singletonList("foo"), ex.getUsedVariables());
   }
 }

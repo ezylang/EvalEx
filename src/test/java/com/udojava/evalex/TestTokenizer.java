@@ -1,15 +1,18 @@
 package com.udojava.evalex;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
-
 import com.udojava.evalex.Expression.Token;
 import com.udojava.evalex.Expression.TokenType;
 import java.math.BigDecimal;
 import java.util.Iterator;
+
 import org.junit.Test;
+import org.junit.function.ThrowingRunnable;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertThrows;
+import static org.junit.Assert.assertTrue;
 
 
 public class TestTokenizer {
@@ -365,4 +368,24 @@ public class TestTokenizer {
     BigDecimal result = e.with("a", "0").and("b", "0").eval();
     assertEquals("0", result.toPlainString());
   }
+
+  @Test
+  public void testStringLiterals() {
+    Iterator<Token> i = new Expression("\"foo\"").getExpressionTokenizer();
+    assertEquals(TokenType.STRINGPARAM, i.next().type);
+    assertFalse(i.hasNext());
+  }
+
+  @Test
+  public void testUnterminatedStringLiterals() {
+    TokenizerException ex = assertThrows(TokenizerException.class, new ThrowingRunnable() {
+      @Override
+      public void run() {
+        new Expression("\"foo").getExpressionTokenizer().next();
+      }
+    });
+
+    assertEquals("unterminated string literal at character position 0", ex.getMessage());
+  }
+
 }
