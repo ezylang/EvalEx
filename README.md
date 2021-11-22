@@ -169,7 +169,7 @@ new Expression("-2^2", settings).eval();
   <tr><td>&amp;&amp;</td><td>Boolean and</td></tr>
   <tr><td>||</td><td>Boolean or</td></tr>
 </table>
-*Boolean operators result always in a BigDecimal value of 1 or 0 (zero). Any non-zero value is treated as a _true_ value. Boolean _not_ is implemented by a function.
+*Boolean operators always result in a BigDecimal value of 1 or 0 (zero). Any non-zero value is treated as a _true_ value. Boolean _not_ is implemented by a function.
 
 ### Supported Functions
 
@@ -353,13 +353,13 @@ e.addLazyFunction(new AbstractLazyFunction("STREQ", 2) {
     @Override
     public LazyNumber lazyEval(List<LazyNumber> lazyParams) {
         if (lazyParams.get(0).getString().equals(lazyParams.get(1).getString())) {
-            return ZERO;
+            return ONE;
         }
-        return ONE;
+        return ZERO;
     }
 });
 
-e.eval(); // returns 1
+e.eval(); // returns 0
 ````
 
 ### How to contribute
