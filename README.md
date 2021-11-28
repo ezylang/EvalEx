@@ -24,7 +24,7 @@ Key Features:
 
 ### Discussion
 
-For announcements, questions and idea visit the [Discussions area](https://github.com/uklimaschewski/EvalEx/discussions).
+For announcements, questions and ideas visit the [Discussions area](https://github.com/uklimaschewski/EvalEx/discussions).
 
 ### Download / Maven
 
