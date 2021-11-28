@@ -1,7 +1,6 @@
 package com.udojava.evalex;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 
 import com.udojava.evalex.Expression.LazyNumber;
 import java.math.BigDecimal;
@@ -161,8 +160,7 @@ public class TestCustoms {
 
   @Test
   public void testCustomFunctionBoolean() {
-    Expression e = new Expression("STREQ(\"test\", \"test\")");
-    e.addLazyFunction(e.new LazyFunction("STREQ", 2, true) {
+    AbstractLazyFunction stringCompare = new AbstractLazyFunction("STREQ", 2, true) {
       private LazyNumber ZERO = new LazyNumber() {
         public BigDecimal eval() {
           return BigDecimal.ZERO;
@@ -190,10 +188,15 @@ public class TestCustoms {
         }
         return ZERO;
       }
-    });
+    };
 
-    assertEquals("1", e.eval().toPlainString());
-    assertTrue(e.isBoolean());
+    Expression e1 = new Expression("STREQ(\"test\", \"test\")");
+    e1.addLazyFunction(stringCompare);
+    assertEquals("1", e1.eval().toPlainString());
+
+    Expression e2 = new Expression("STREQ(\"test\", \"test2\")");
+    e2.addLazyFunction(stringCompare);
+    assertEquals("0", e2.eval().toPlainString());
   }
 
   @Test

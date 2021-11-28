@@ -495,7 +495,6 @@ public class Expression {
 
       if (pos >= input.length()) {
         previousToken = null;
-        //nextToken = null;
         return null;
       }
       char ch = input.charAt(pos);
