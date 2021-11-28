@@ -22,6 +22,10 @@ Key Features:
 - Supports implicit multiplication, e.g. (a+b)(a-b) or 2(x-y) which equals to (a+b)\*(a-b) or 2\*(
   x-y)
 
+### Discussion
+
+For announcements, questions and idea visit the [Discussions area](https://github.com/uklimaschewski/EvalEx/discussions).
+
 ### Download / Maven
 
 You can download the binaries, source code and JavaDoc jars
