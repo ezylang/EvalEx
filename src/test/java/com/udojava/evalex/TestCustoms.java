@@ -114,13 +114,13 @@ public class TestCustoms {
       @Override
       public LazyNumber lazyEval(List<LazyNumber> lazyParams) {
         if (lazyParams.get(0).getString().equals(lazyParams.get(1).getString())) {
-          return ZERO;
+          return ONE;
         }
-        return ONE;
+        return ZERO;
       }
     });
 
-    assertEquals("1", e.eval().toPlainString());
+    assertEquals("0", e.eval().toPlainString());
   }
 
   @Test
@@ -150,18 +150,18 @@ public class TestCustoms {
       @Override
       public LazyNumber lazyEval(List<LazyNumber> lazyParams) {
         if (lazyParams.get(0).getString().equals(lazyParams.get(1).getString())) {
-          return ZERO;
+          return ONE;
         }
-        return ONE;
+        return ZERO;
       }
     });
 
-    assertEquals("1", e.eval().toPlainString());
+    assertEquals("0", e.eval().toPlainString());
   }
 
   @Test
   public void testCustomFunctionBoolean() {
-    Expression e = new Expression("STREQ(\"test\", \"test2\")");
+    Expression e = new Expression("STREQ(\"test\", \"test\")");
     e.addLazyFunction(e.new LazyFunction("STREQ", 2, true) {
       private LazyNumber ZERO = new LazyNumber() {
         public BigDecimal eval() {
@@ -186,9 +186,9 @@ public class TestCustoms {
       @Override
       public LazyNumber lazyEval(List<LazyNumber> lazyParams) {
         if (lazyParams.get(0).getString().equals(lazyParams.get(1).getString())) {
-          return ZERO;
+          return ONE;
         }
-        return ONE;
+        return ZERO;
       }
     });
 
