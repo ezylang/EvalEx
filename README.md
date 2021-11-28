@@ -28,19 +28,17 @@ You can download the binaries, source code and JavaDoc jars
 from [Maven Central](http://search.maven.org/#search%7Cga%7C1%7Ca%3A%22EvalEx%22%20g%3A%22com.udojava%22)
 .
 
-The project and source code in `zip` and `tar.gz` format can also be downloaded from the
-projects [release area](https://github.com/uklimaschewski/EvalEx/releases).
-
 To include it in your Maven project, refer to the artifact in your pom. For example:
 
 ````xml
+
 <dependencies>
-    <dependency>
-        <groupId>com.udojava</groupId>
-        <artifactId>EvalEx</artifactId>
-        <!-- change to desired version -->
-        <version>2.6</version>
-    </dependency>
+  <dependency>
+    <groupId>com.udojava</groupId>
+    <artifactId>EvalEx</artifactId>
+    <!-- change to desired version -->
+    <version>2.7</version>
+  </dependency>
 </dependencies>
 ````
 
@@ -49,7 +47,7 @@ If you're using gradle add to your project's app build.gradle:
 ````gradle
 dependencies {
     ...
-    compile 'com.udojava:EvalEx:2.6'
+    compile 'com.udojava:EvalEx:2.7'
 }
 ````
 
@@ -61,48 +59,48 @@ here: [FAQ](https://github.com/uklimaschewski/EvalEx/blob/master/FAQ.md)
 ### Usage Examples
 
 ````java
- BigDecimal result = null;
- 
- // Simple usage with an expression without variables.
- Expression expression = new Expression("1+1/3");
- result = expression.eval(); // 1.333333
- // Lowering the precision.
- expression.setPrecision(2);
- result = expression.eval(); // 1.3
- 
- // A more complex expression showing support for unary operators.
- result = new Expression("(3.4 + -4.1)/2").eval(); // -0.35
- 
- // Using functions and variables.
- result = new Expression("SQRT(a^2 + b^2)")
-         .with("a", "2.4")
-         .and("b", "9.253")
-         .eval(); // 9.5591845
- 
- // Using pre-created BigDecimals for variables
- BigDecimal a = new BigDecimal("2.4");
- BigDecimal b = new BigDecimal("9.235");
- result = new Expression("SQRT(a^2 + b^2)")
-         .with("a", a)
-         .and("b", b)
-         .eval(); // 9.5591845
- 
- // Increasing the precision and setting a different rounding mode.
- result = new Expression("2.4/PI")
-         .setPrecision(128)
-         .setRoundingMode(RoundingMode.UP)
-         .eval(); // 0.763943726841...
- 
- // Using a function to receive a random number and test it.
- result = new Expression("random() > 0.5").eval(); // 1
+ BigDecimal result=null;
 
- // Using more functions and showing the boolean support.
- result = new Expression("not(x<7 || sqrt(max(x,9,3,min(4,3))) <= 3)")
-         .with("x", "22.9")
-         .eval(); // 1
- 
- // Calling a pre-defined function.
- result = new Expression("log10(100)").eval(); // 2
+    // Simple usage with an expression without variables.
+    Expression expression=new Expression("1+1/3");
+    result=expression.eval(); // 1.333333
+    // Lowering the precision.
+    expression.setPrecision(2);
+    result=expression.eval(); // 1.3
+
+    // A more complex expression showing support for unary operators.
+    result=new Expression("(3.4 + -4.1)/2").eval(); // -0.35
+
+    // Using functions and variables.
+    result=new Expression("SQRT(a^2 + b^2)")
+    .with("a","2.4")
+    .and("b","9.253")
+    .eval(); // 9.5591845
+
+    // Using pre-created BigDecimals for variables
+    BigDecimal a=new BigDecimal("2.4");
+    BigDecimal b=new BigDecimal("9.235");
+    result=new Expression("SQRT(a^2 + b^2)")
+    .with("a",a)
+    .and("b",b)
+    .eval(); // 9.5591845
+
+    // Increasing the precision and setting a different rounding mode.
+    result=new Expression("2.4/PI")
+    .setPrecision(128)
+    .setRoundingMode(RoundingMode.UP)
+    .eval(); // 0.763943726841...
+
+    // Using a function to receive a random number and test it.
+    result=new Expression("random() > 0.5").eval(); // 1
+
+    // Using more functions and showing the boolean support.
+    result=new Expression("not(x<7 || sqrt(max(x,9,3,min(4,3))) <= 3)")
+    .with("x","22.9")
+    .eval(); // 1
+
+    // Calling a pre-defined function.
+    result=new Expression("log10(100)").eval(); // 2
 ````
 
 ### Precision
@@ -112,12 +110,12 @@ will want to set a different precision to get accurate results:
 
 ```java
  new Expression("1/3")
-         .setPrecision(3)
-         .eval(); // 0.333
+    .setPrecision(3)
+    .eval(); // 0.333
 
- new Expression("1/3")
-         .setPrecision(12)
-         .eval(); // 0.333333333333
+    new Expression("1/3")
+    .setPrecision(12)
+    .eval(); // 0.333333333333
 ```
 
 If you do not increase the precision as needed, you will get inaccurate results:
@@ -125,9 +123,9 @@ If you do not increase the precision as needed, you will get inaccurate results:
 ```java
  new Expression("123456789 + 123456789").eval(); // 246913600
 
- new Expression("123456789 + 123456789")
-         .setPrecision(12)
-         .eval(); // 246913578
+    new Expression("123456789 + 123456789")
+    .setPrecision(12)
+    .eval(); // 246913578
 ```
 
 ### Default Settings
@@ -136,11 +134,11 @@ The default settings for an expression can be set on creation through an `Expres
 object. It can be created using a builder pattern:
 
 ````java
-ExpressionSettings settings = ExpressionSettings.builder()
-         .mathContext(MathContext.DECIMAL128)
-         .powerOperatorPrecedenceHigher()
-         .build();
-new Expression("-2^2", settings).eval();
+ExpressionSettings settings=ExpressionSettings.builder()
+    .mathContext(MathContext.DECIMAL128)
+    .powerOperatorPrecedenceHigher()
+    .build();
+    new Expression("-2^2",settings).eval();
 ````
 
 ### Supported Operators
@@ -245,16 +243,16 @@ existing operators can also be overridden.
 For example, add an operator `x >> n`, that moves the decimal point of _x_ _n_ digits to the right:
 
 ````java
-Expression e = new Expression("2.1234 >> 2");
+Expression e=new Expression("2.1234 >> 2");
 
-e.addOperator(new AbstractOperator(">>", 30, true) {
-    @Override
-    public BigDecimal eval(BigDecimal v1, BigDecimal v2) {
-        return v1.movePointRight(v2.toBigInteger().intValue());
+    e.addOperator(new AbstractOperator(">>",30,true){
+@Override
+public BigDecimal eval(BigDecimal v1,BigDecimal v2){
+    return v1.movePointRight(v2.toBigInteger().intValue());
     }
-});
+    });
 
-e.eval(); // returns 212.34
+    e.eval(); // returns 212.34
 ````
 
 Or another example, add a postfix unary operator `n!`, that calculates the factorial of n. The
@@ -262,32 +260,32 @@ parameters for postfix unary operators are the operator's string, its precedence
 associative, is it is boolean and if it is unary (<code>true</code>).
 
 ````java
-Expression e = new Expression("4!");
+Expression e=new Expression("4!");
 
-e.addOperator(new AbstractOperator("!", Expression.OPERATOR_PRECEDENCE_POWER_HIGHER + 1, true, false, true) {
-    @Override
-    public BigDecimal eval(BigDecimal v1, BigDecimal v2) {
-        if(v1 == null) {
-            throw new ArithmeticException("Operand may not be null");
-        }
-        if(v1.remainder(BigDecimal.ONE) != BigDecimal.ZERO) {
-            throw new ArithmeticException("Operand must be an integer");
-        }
-        BigDecimal factorial = v1;
-        v1 = v1.subtract(BigDecimal.ONE);
-        if (factorial.compareTo(BigDecimal.ZERO) == 0 || factorial.compareTo(BigDecimal.ONE) == 0) {
-            return BigDecimal.ONE;
-        } else {
-            while (v1.compareTo(BigDecimal.ONE) > 0) {
-                factorial = factorial.multiply(v1);
-                v1 = v1.subtract(BigDecimal.ONE);
-            }
-            return factorial;
-        }
+    e.addOperator(new AbstractOperator("!",Expression.OPERATOR_PRECEDENCE_POWER_HIGHER+1,true,false,true){
+@Override
+public BigDecimal eval(BigDecimal v1,BigDecimal v2){
+    if(v1==null){
+    throw new ArithmeticException("Operand may not be null");
     }
-});
+    if(v1.remainder(BigDecimal.ONE)!=BigDecimal.ZERO){
+    throw new ArithmeticException("Operand must be an integer");
+    }
+    BigDecimal factorial=v1;
+    v1=v1.subtract(BigDecimal.ONE);
+    if(factorial.compareTo(BigDecimal.ZERO)==0||factorial.compareTo(BigDecimal.ONE)==0){
+    return BigDecimal.ONE;
+    }else{
+    while(v1.compareTo(BigDecimal.ONE)>0){
+    factorial=factorial.multiply(v1);
+    v1=v1.subtract(BigDecimal.ONE);
+    }
+    return factorial;
+    }
+    }
+    });
 
-e.eval(); // returns 24
+    e.eval(); // returns 24
 ````
 
 ### Add Custom Functions
@@ -301,23 +299,23 @@ functions can also be overridden.
 For example, add a function `average(a,b,c)`, that will calculate the average value of a, b and c:
 
 ````java
-Expression e = new Expression("2 * average(12,4,8)");
+Expression e=new Expression("2 * average(12,4,8)");
 
-e.addFunction(new AbstractFunction("average", -1) {
-    @Override
-    public BigDecimal eval(List<BigDecimal> parameters) {
-        if (parameters.size() == 0) {
-            throw new ExpressionException("average requires at least one parameter");
-        }
-        BigDecimal avg = new BigDecimal(0);
-        for (BigDecimal parameter : parameters) {
-            avg = avg.add(parameter);
-        }
-        return avg.divide(new BigDecimal(parameters.size()));
+    e.addFunction(new AbstractFunction("average",-1){
+@Override
+public BigDecimal eval(List<BigDecimal> parameters){
+    if(parameters.size()==0){
+    throw new ExpressionException("average requires at least one parameter");
     }
-});
+    BigDecimal avg=new BigDecimal(0);
+    for(BigDecimal parameter:parameters){
+    avg=avg.add(parameter);
+    }
+    return avg.divide(new BigDecimal(parameters.size()));
+    }
+    });
 
-e.eval(); // returns 16
+    e.eval(); // returns 16
 ````
 
 #### Custom Functions With String Parameters
@@ -332,34 +330,34 @@ For example, add a function `STREQ("string1","string2")`, that will compare whet
 string2 are equal:
 
 ````java
-Expression e = new Expression("STREQ(\"test\", \"test2\")");
-e.addLazyFunction(new AbstractLazyFunction("STREQ", 2) {
-    private LazyNumber ZERO = new LazyNumber() {
-        public BigDecimal eval() {
-            return BigDecimal.ZERO;
-        }
-        public String getString() {
-            return "0";
-        }
-    };
-    private LazyNumber ONE = new LazyNumber() {
-        public BigDecimal eval() {
-            return BigDecimal.ONE;
-        }         
-        public String getString() {
-            return null;
-        }
-    };  
-    @Override
-    public LazyNumber lazyEval(List<LazyNumber> lazyParams) {
-        if (lazyParams.get(0).getString().equals(lazyParams.get(1).getString())) {
-            return ONE;
-        }
-        return ZERO;
+Expression e=new Expression("STREQ(\"test\", \"test2\")");
+    e.addLazyFunction(new AbstractLazyFunction("STREQ",2){
+private LazyNumber ZERO=new LazyNumber(){
+public BigDecimal eval(){
+    return BigDecimal.ZERO;
     }
-});
+public String getString(){
+    return"0";
+    }
+    };
+private LazyNumber ONE=new LazyNumber(){
+public BigDecimal eval(){
+    return BigDecimal.ONE;
+    }
+public String getString(){
+    return null;
+    }
+    };
+@Override
+public LazyNumber lazyEval(List<LazyNumber> lazyParams){
+    if(lazyParams.get(0).getString().equals(lazyParams.get(1).getString())){
+    return ONE;
+    }
+    return ZERO;
+    }
+    });
 
-e.eval(); // returns 0
+    e.eval(); // returns 0
 ````
 
 ### How to contribute
@@ -375,21 +373,20 @@ e.eval(); // returns 0
 - Follow the code style of EvalEx (Google code style), including indentation.
 - If the project has tests run them!
 - Add unit tests that test your new code.
-- In general, avoid changing existing tests, as they also make sure the existing public API is unchanged.
+- In general, avoid changing existing tests, as they also make sure the existing public API is
+  unchanged.
 - Add or change the documentation as needed.
 - Squash your commits into a single commit with git's interactive rebase.
 - Push your branch to your fork on GitHub, the remote origin.
 - From your fork open a pull request in the correct branch. Target the EvalEx's master branch.
-- Once the pull request is approved and merged you can pull the changes from upstream to your local repo and delete your branch.
-- And last but not least: Always write your commit messages in the present tense. Your commit message should describe what the commit, when applied, does to the code – not what you did to the code.
+- Once the pull request is approved and merged you can pull the changes from upstream to your local
+  repo and delete your branch.
+- Last but not least: Always write your commit messages in the present tense. Your commit message
+  should describe what the commit, when applied, does to the code – not what you did to the code.
 
 ### Author and License
 
-Copyright 2012 by Udo Klimaschewski
-
-http://about.me/udo.klimaschewski
-
-http://UdoJava.com
+Copyright 2012-2021 by Udo Klimaschewski
 
 **Thanks to all who contributed to this
 project: [Contributors](https://github.com/uklimaschewski/EvalEx/graphs/contributors)**
@@ -406,8 +403,6 @@ see [LICENSE](https://raw.githubusercontent.com/uklimaschewski/EvalEx/master/LIC
 * Varargs implementation based on "David's method" outlined in Gene Pavlovsky's comment
   from  [here](http://www.kallisti.net.nz/blog/2008/02/extension-to-the-shunting-yard-algorithm-to-allow-variable-numbers-of-arguments-to-functions/#comment-125789)
 
-### Similar Projects
+### Other projects based on EvalEx
 
 * [A port of EvalEx to Dart](https://github.com/RobluScouting/EvalEx)
-* [exp4j](https://github.com/fasseg/exp4j), a mathematical expression evaluator for Java using
-  doubles.

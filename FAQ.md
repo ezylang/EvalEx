@@ -14,13 +14,13 @@ numbers. Either create the expression with a different math context, or specify 
 evaluating:
 
 ````Java
-    Expression expression = new Expression("timestamp >= 1500551315569", new MathContext(13));
+    Expression expression=new Expression("timestamp >= 1500551315569",new MathContext(13));
 ````
 
 or
 
 ````Java
-    expression.with("timestamp", "1500551315568").setPrecision(13).eval();
+    expression.with("timestamp","1500551315568").setPrecision(13).eval();
 ````
 
 ### Results are in scientific notation (e.g. 4E+1)
@@ -28,7 +28,7 @@ or
 When evaluation an expression, e.g.:
 
 ````Java
-    String result = new Expression("5*8").eval();
+    String result=new Expression("5*8").eval();
 ````
 
 The string value in result will read `4E+1`. The reason is, that Expression.eval() returns
