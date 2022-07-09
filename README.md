@@ -2,6 +2,9 @@ EvalEx - Java Expression Evaluator
 ==========
 [![Build Status](https://travis-ci.com/uklimaschewski/EvalEx.svg?branch=master)](https://travis-ci.com/uklimaschewski/EvalEx) [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=uklimaschewski_EvalEx&metric=alert_status)](https://sonarcloud.io/dashboard?id=uklimaschewski_EvalEx)
 
+| :warning: Starting with version 3, [EvalEx will have a new repository location](https://github.com/ezylang/evalex-core)! |
+| --- |
+
 ### Introduction
 
 EvalEx is a handy expression evaluator for Java, that allows to evaluate simple mathematical and
