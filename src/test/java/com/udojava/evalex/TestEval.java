@@ -155,6 +155,20 @@ public class TestEval {
   }
 
   @Test
+  public void testCbrt() {
+    assertEquals("2", new Expression("cbrt(8)").eval().toPlainString());
+    assertEquals("-3", new Expression("cbrt(-27)").eval().toPlainString());
+    assertEquals("1.7099759", new Expression("CBRT(5)").eval().toPlainString());
+    assertEquals(
+        "1.7099759466766969893531088725438601098680551105430549243828617074442959205041732162571870100201890022",
+        new Expression("CBRT(5)").setPrecision(100).eval().toPlainString());
+    assertEquals("1000000000", new Expression("CBRT(1e27)").eval().toPlainString());
+    assertEquals("1.7705071", new Expression("CBRT(5.55)").eval().toPlainString());
+    assertEquals("14.4353043", new Expression("CBRT(3008)").eval().toPlainString());
+    assertEquals("0", new Expression("CBRT(0)").eval().toPlainString());
+  }
+
+  @Test
   public void testFunctions() {
     assertNotSame("1.5", new Expression("Random()").eval().toPlainString());
     assertEquals("0.400349", new Expression("SIN(23.6)").eval().toPlainString());

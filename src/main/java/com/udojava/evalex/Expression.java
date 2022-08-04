@@ -26,6 +26,8 @@
  */
 package com.udojava.evalex;
 
+import static java.math.BigDecimal.ONE;
+
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.math.MathContext;
@@ -1296,6 +1298,40 @@ public class Expression {
         } while (test.compareTo(BigInteger.ZERO) != 0 && test.compareTo(BigInteger.ONE) != 0);
 
         return new BigDecimal(ix, mc.getPrecision());
+      }
+    });
+    addFunction(new Function("CBRT", 1) {
+      @Override
+      public BigDecimal eval(List<BigDecimal> parameters) {
+        assertNotNull(parameters.get(0));
+        BigDecimal b = parameters.get(0);
+        if (b.compareTo(BigDecimal.ZERO) == 0) {
+          return new BigDecimal(0);
+        }
+        /*
+         * Copy from https://github.com/eobermuhlner/big-math
+         * in class BigDecimalMath.root(BigDecimal x, BigDecimal n, MathContext mathContext){}
+         * https://github.com/eobermuhlner/big-math/blob/master/ch.obermuhlner.math.big/src/main/java/ch/obermuhlner/math/big/BigDecimalMath.java
+         */
+        int maxPrecision = mc.getPrecision() * 2;
+        BigDecimal acceptableError = ONE.movePointLeft(mc.getPrecision() + 1);
+        BigDecimal result = new BigDecimal("1", mc);
+        int adaptivePrecision = 12;
+
+        if (adaptivePrecision < maxPrecision) {
+          BigDecimal step;
+          do {
+            adaptivePrecision *= 3;
+            if (adaptivePrecision > maxPrecision) {
+              adaptivePrecision = maxPrecision;
+            }
+            MathContext mc = new MathContext(adaptivePrecision, Expression.this.mc.getRoundingMode());
+
+            step = b.divide(result.pow(2, mc), mc).subtract(result).divide(new BigDecimal("3",mc), mc);
+            result = result.add(step);
+          } while (adaptivePrecision < maxPrecision || step.abs().compareTo(acceptableError) > 0);
+        }
+        return result.setScale(mc.getPrecision(), mc.getRoundingMode());
       }
     });
 

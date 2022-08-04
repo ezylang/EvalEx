@@ -192,6 +192,7 @@ ExpressionSettings settings=ExpressionSettings.builder()
   <tr><td>LOG(<i>expression</i>)</td><td>Returns the natural logarithm (base e) of an expression</td></tr>
   <tr><td>LOG10(<i>expression</i>)</td><td>Returns the common logarithm (base 10) of an expression</td></tr>
   <tr><td>SQRT(<i>expression</i>)</td><td>Returns the square root of an expression</td></tr>
+  <tr><td>CBRT(<i>expression</i>)</td><td>Returns the cube root of an expression</td></tr>
   <tr><td>SINR(<i>expression</i>)</td><td>Returns the trigonometric sine of an angle (in radians)</td></tr>
   <tr><td>COSR(<i>expression</i>)</td><td>Returns the trigonometric cosine of an angle (in radians)</td></tr>
   <tr><td>TANR(<i>expression</i>)</td><td>Returns the trigonometric tangensuiju of an angle (in radians)</td></tr>
