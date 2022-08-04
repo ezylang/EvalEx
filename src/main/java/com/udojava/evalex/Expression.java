@@ -122,6 +122,12 @@ public class Expression {
       "3.1415926535897932384626433832795028841971693993751058209749445923078164062862089986280348253421170679");
 
   /**
+   * Definition of PHI, the golden ratio.
+   */
+  public static final BigDecimal PHI = new BigDecimal(
+      "1.618033988749894848204586834365638117720309179805762862135448622705260462818902449707207204189391138");
+
+  /**
    * Definition of e: "Euler's number" as a constant, can be used in expressions as variable.
    */
   public static final BigDecimal e = new BigDecimal(
@@ -203,6 +209,7 @@ public class Expression {
   static {
     DEFAULT_CONSTANTS.put("e",     e);
     DEFAULT_CONSTANTS.put("PI",    PI);
+    DEFAULT_CONSTANTS.put("PHI",   PHI);
     DEFAULT_CONSTANTS.put("NULL",  null);
     DEFAULT_CONSTANTS.put("TRUE",  BigDecimal.ONE);
     DEFAULT_CONSTANTS.put("FALSE", BigDecimal.ZERO);

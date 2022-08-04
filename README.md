@@ -235,6 +235,7 @@ ExpressionSettings settings=ExpressionSettings.builder()
   <tr><th>Constant</th><th>Description</th></tr>
   <tr><td>e</td><td>The value of <i>e</i>, exact to 70 digits</td></tr>
   <tr><td>PI</td><td>The value of <i>PI</i>, exact to 100 digits</td></tr>
+  <tr><td>PHI</td><td>The value of <i>PHI</i>, exact to 100 digits</td></tr>
   <tr><td>TRUE</td><td>The value one</td></tr>
   <tr><td>FALSE</td><td>The value zero</td></tr>
   <tr><td>NULL</td><td>The null value</td></tr>

@@ -28,6 +28,7 @@ public class TestConstants {
     return Arrays.asList(
       new Object[]{"e",     Expression.e},
       new Object[]{"PI",    Expression.PI},
+      new Object[]{"PHI",   Expression.PHI},
       new Object[]{"TRUE",  BigDecimal.ONE},
       new Object[]{"FALSE", BigDecimal.ZERO},
       new Object[]{"NULL",  null}
