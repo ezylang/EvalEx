@@ -1,11 +1,10 @@
-EvalEx - Java Expression Evaluator
-==========
+---
+layout: default
+title: Welcome
+nav_order: 1
+---
 
-![example workflow](https://github.com/ezylang/EvalEx/actions/workflows/maven.yml/badge.svg)
-[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=EvalEx&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=EvalEx)
-[![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=EvalEx&metric=security_rating)](https://sonarcloud.io/summary/new_code?id=EvalEx)
-[![Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=EvalEx&metric=vulnerabilities)](https://sonarcloud.io/summary/new_code?id=EvalEx)
-[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=EvalEx&metric=coverage)](https://sonarcloud.io/summary/new_code?id=EvalEx)
+# EvalEx - Java Expression Evaluator
 
 EvalEx is a handy expression evaluator for Java, that allows to parse and evaluate expression
 strings.
@@ -28,19 +27,9 @@ strings.
   x-y)
 - Lazy evaluation of function parameters (see the IF function) and support of sub-expressions.
 
-## Documentation
-
-The full documentation for EvalEx can be found
-on [GitHub Pages](https://ezylang.github.io/EvalEx/)
-
-## Discussion
-
-For announcements, questions and ideas visit
-the [Discussions area](https://github.com/ezylang/EvalEx/discussions).
-
 ## Examples
 
-### A simple example, that shows how it works in general:
+A simple example, that shows how it works in general:
 
 ```java
 Expression expression = new Expression("1 + 2 / (4 * SQRT(4))");
@@ -50,7 +39,8 @@ EvaluationValue result = expression.evaluate();
 System.out.println(result.getNumberValue()); // prints 1.25
 ```
 
-### Variables can be specified in the expression and their values can be passed for evaluation:
+Of course, variables can be specified in the expression and their values can be passed for
+evaluation:
 
 ```java
 Expression expression = new Expression("(a + b) * (a - b)");
@@ -63,7 +53,7 @@ EvaluationValue result = expression
 System.out.println(result.getNumberValue()); // prints 6.00
 ```
 
-### Boolean expressions produce a boolean result:
+Boolean expressions produce a boolean result:
 
 ```java
 Expression expression = new Expression("level > 2 || level <= 0");
@@ -75,7 +65,7 @@ EvaluationValue result = expression
 System.out.println(result.getBooleanValue()); // prints true
 ```
 
-### Like in Java, strings and text can be mixed:
+Like in Java, strings and text can be mixed:
 
 ```java
 Expression expression = new Expression("\"Hello \" + name + \", you are \" + age")
@@ -85,9 +75,7 @@ Expression expression = new Expression("\"Hello \" + name + \", you are \" + age
 System.out.println(expression.evaluate().getStringValue()); // prints Hello Frank, you are 38
 ```
 
-### Arrays are supported and can be passed as Java _Lists_.
-See the [Documentation](https://ezylang.github.io/pages-playground/concepts/datatypes.html#array)
-for more details.
+Arrays are supported and can be passed as Java _Lists_:
 
 ```java
 Expression expression = new Expression("values[i-1] * factors[i-1]");
@@ -101,10 +89,8 @@ EvaluationValue result = expression
 System.out.println(result.getNumberValue()); // prints 4
 ```
 
-### Structures are supported and can be passed as Java _Maps_.
-Arrays and Structures can be combined to build arbitrary data structures. See
-the [Documentation](https://ezylang.github.io/pages-playground/concepts/datatypes.html#structure)
-for more details.
+Structures are supported and can be passed as Java _Maps_.
+Arrays and Structures can be combined to build arbitrary data structures:
 
 ```java
 Map<String, Object> order = new HashMap<>();

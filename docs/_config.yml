@@ -1,0 +1,6 @@
+remote_theme: just-the-docs/just-the-docs
+title: EvalEx Documentation
+aux_links:
+  "View on GitHub":
+    - "//github.com/ezylang/EvalEx"
+footer_content: "Copyright &copy; 2012-2022 Udo Klimaschewski"

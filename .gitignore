@@ -1,7 +1,31 @@
-/bin
-/.settings
+# Eclipse
 .classpath
 .project
+.settings/
+
+# Intellij
+.idea/
 *.iml
-.idea
-target
+*.iws
+
+# Mac
+.DS_Store
+
+# Maven
+log/
+target/
+
+# Compiled class file
+*.class
+
+# Log file
+*.log
+
+# Package Files #
+*.jar
+*.war
+*.nar
+*.ear
+
+# virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
+hs_err_pid*
