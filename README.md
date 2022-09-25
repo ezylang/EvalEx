@@ -2,10 +2,13 @@ EvalEx - Java Expression Evaluator
 ==========
 
 ![example workflow](https://github.com/ezylang/EvalEx/actions/workflows/maven.yml/badge.svg)
-[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=EvalEx&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=EvalEx)
-[![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=EvalEx&metric=security_rating)](https://sonarcloud.io/summary/new_code?id=EvalEx)
-[![Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=EvalEx&metric=vulnerabilities)](https://sonarcloud.io/summary/new_code?id=EvalEx)
-[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=EvalEx&metric=coverage)](https://sonarcloud.io/summary/new_code?id=EvalEx)
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=ezylang_EvalEx&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=EvalEx)
+[![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=ezylang_EvalEx&metric=security_rating)](https://sonarcloud.io/summary/new_code?id=EvalEx)
+[![Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=ezylang_EvalEx&metric=vulnerabilities)](https://sonarcloud.io/summary/new_code?id=EvalEx)
+[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=ezylang_EvalEx&metric=coverage)](https://sonarcloud.io/summary/new_code?id=EvalEx)
+
+| :warning: Version 3 of EvalEx is a complete rewrite of the popular expression evaluator. See [the new documentation area](https://ezylang.github.io/pages-playground/concepts/changes.html) for an overview of the changes. |
+|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 
 EvalEx is a handy expression evaluator for Java, that allows to parse and evaluate expression
 strings.
@@ -86,6 +89,7 @@ System.out.println(expression.evaluate().getStringValue()); // prints Hello Fran
 ```
 
 ### Arrays are supported and can be passed as Java _Lists_.
+
 See the [Documentation](https://ezylang.github.io/pages-playground/concepts/datatypes.html#array)
 for more details.
 
@@ -102,6 +106,7 @@ System.out.println(result.getNumberValue()); // prints 4
 ```
 
 ### Structures are supported and can be passed as Java _Maps_.
+
 Arrays and Structures can be combined to build arbitrary data structures. See
 the [Documentation](https://ezylang.github.io/pages-playground/concepts/datatypes.html#structure)
 for more details.
