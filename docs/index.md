@@ -9,6 +9,9 @@ nav_order: 1
 EvalEx is a handy expression evaluator for Java, that allows to parse and evaluate expression
 strings.
 
+| Version 3 of EvalEx is a complete rewrite of the popular expression evaluator. See [the new documentation area](https://ezylang.github.io/EvalEx/concepts/changes.html) for an overview of the changes.   |
+|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+
 ## Key Features:
 
 - Supports numerical, boolean, string, array and structure expressions, operations and variables.
