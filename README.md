@@ -2,10 +2,10 @@ EvalEx - Java Expression Evaluator
 ==========
 
 ![example workflow](https://github.com/ezylang/EvalEx/actions/workflows/maven.yml/badge.svg)
-[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=ezylang_EvalEx&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=EvalEx)
-[![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=ezylang_EvalEx&metric=security_rating)](https://sonarcloud.io/summary/new_code?id=EvalEx)
-[![Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=ezylang_EvalEx&metric=vulnerabilities)](https://sonarcloud.io/summary/new_code?id=EvalEx)
-[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=ezylang_EvalEx&metric=coverage)](https://sonarcloud.io/summary/new_code?id=EvalEx)
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=ezylang_EvalEx&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=ezylang_EvalEx)
+[![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=ezylang_EvalEx&metric=security_rating)](https://sonarcloud.io/summary/new_code?id=ezylang_EvalEx)
+[![Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=ezylang_EvalEx&metric=vulnerabilities)](https://sonarcloud.io/summary/new_code?id=ezylang_EvalEx)
+[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=ezylang_EvalEx&metric=coverage)](https://sonarcloud.io/summary/new_code?id=ezylang_EvalEx)
 
 | :warning: Version 3 of EvalEx is a complete rewrite of the popular expression evaluator. See [the new documentation area](https://ezylang.github.io/EvalEx/concepts/changes.html) for an overview of the changes.   |
 |---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
