@@ -3,25 +3,24 @@
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
-  <groupId>com.udojava</groupId>
+  <groupId>com.ezylang</groupId>
   <artifactId>EvalEx</artifactId>
-  <version>2.8-SNAPSHOT</version>
+  <version>3.0.0-SNAPSHOT</version>
 
-  <name>EvalEx</name>
-  <description>EvalEx is a handy expression evaluator for Java, that allows to evaluate simple
-    mathematical and boolean expressions.
+  <description>EvalEx is a handy expression evaluator for Java, that allows to evaluate
+    expressions.
   </description>
-  <url>https://github.com/uklimaschewski/EvalEx</url>
+  <url>https://github.com/ezylang/EvalEx</url>
 
   <organization>
     <name>Udo Klimaschewski</name>
-    <url>http://www.udojava.com</url>
+    <url>https://github.com/ezylang/EvalEx</url>
   </organization>
 
   <licenses>
     <license>
-      <name>MIT License</name>
-      <url>http://www.opensource.org/licenses/mit-license.php</url>
+      <name>Apache License 2.0</name>
+      <url>https://github.com/ezylang/EvalEx/blob/main/LICENSE</url>
     </license>
   </licenses>
 
@@ -33,36 +32,55 @@
   </developers>
 
   <scm>
-    <connection>scm:git:git@github.com:uklimaschewski/EvalEx.git</connection>
-    <developerConnection>scm:git:git@github.com:uklimaschewski/EvalEx.git</developerConnection>
-    <url>https://github.com/uklimaschewski/EvalEx</url>
+    <connection>scm:git:git@github.com:ezylang/EvalEx.git</connection>
+    <developerConnection>scm:git:git@github.com:ezylang/EvalEx.git</developerConnection>
+    <url>https://github.com/ezylang/EvalEx</url>
   </scm>
 
   <issueManagement>
     <system>github</system>
-    <url>https://github.com/uklimaschewski/EvalEx/issues</url>
+    <url>https://github.com/ezylang/EvalEx/issues</url>
   </issueManagement>
-
-  <distributionManagement>
-    <repository>
-      <id>ossrh</id>
-      <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
-    </repository>
-    <snapshotRepository>
-      <id>ossrh</id>
-      <url>https://oss.sonatype.org/content/repositories/snapshots</url>
-    </snapshotRepository>
-  </distributionManagement>
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <version.junit>5.9.0</version.junit>
+    <maven.compiler.source>11</maven.compiler.source>
+    <maven.compiler.target>11</maven.compiler.target>
   </properties>
 
   <dependencies>
+    <!-- We do not allow any runtime dependencies in EvalEx -->
+    <!-- Project Lombok needs no runtime dependency, hence it has scope "provided" -->
     <dependency>
-      <groupId>junit</groupId>
-      <artifactId>junit</artifactId>
-      <version>4.13.1</version>
+      <groupId>org.projectlombok</groupId>
+      <artifactId>lombok</artifactId>
+      <version>1.18.24</version>
+      <scope>provided</scope>
+    </dependency>
+    <!-- Dependencies used for testing -->
+    <dependency>
+      <groupId>org.junit.jupiter</groupId>
+      <artifactId>junit-jupiter-engine</artifactId>
+      <version>${version.junit}</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.junit.jupiter</groupId>
+      <artifactId>junit-jupiter-params</artifactId>
+      <version>${version.junit}</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.assertj</groupId>
+      <artifactId>assertj-core</artifactId>
+      <version>3.23.1</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.mockito</groupId>
+      <artifactId>mockito-core</artifactId>
+      <version>4.6.1</version>
       <scope>test</scope>
     </dependency>
   </dependencies>
@@ -70,136 +88,71 @@
   <build>
     <plugins>
       <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-compiler-plugin</artifactId>
-        <version>3.8.1</version>
+        <groupId>com.diffplug.spotless</groupId>
+        <artifactId>spotless-maven-plugin</artifactId>
+        <version>2.23.0</version>
+        <executions>
+          <execution>
+            <phase>validate</phase>
+            <goals>
+              <goal>check</goal>
+            </goals>
+          </execution>
+        </executions>
         <configuration>
-          <source>1.6</source>
-          <target>1.6</target>
+          <java>
+            <includes>
+              <include>src/main/java/**/*.java</include>
+              <include>src/test/java/**/*.java</include>
+            </includes>
+            <googleJavaFormat>
+              <version>1.15.0</version>
+              <style>GOOGLE</style>
+              <reflowLongStrings>true</reflowLongStrings>
+            </googleJavaFormat>
+            <licenseHeader>
+              <file>${basedir}/spotless/header.txt</file>
+            </licenseHeader>
+          </java>
         </configuration>
       </plugin>
       <plugin>
-        <groupId>org.moditect</groupId>
-        <artifactId>moditect-maven-plugin</artifactId>
-        <version>1.0.0.RC2</version>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <version>3.8.0</version>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-surefire-plugin</artifactId>
+        <version>2.22.2</version>
+        <dependencies>
+          <dependency>
+            <groupId>org.junit.platform</groupId>
+            <artifactId>junit-platform-surefire-provider</artifactId>
+            <version>1.2.0</version>
+          </dependency>
+        </dependencies>
+      </plugin>
+      <plugin>
+        <groupId>org.jacoco</groupId>
+        <artifactId>jacoco-maven-plugin</artifactId>
+        <version>0.8.5</version>
         <executions>
           <execution>
-            <id>add-module-info</id>
-            <phase>package</phase>
+            <id>prepare-agent</id>
             <goals>
-              <goal>add-module-info</goal>
+              <goal>prepare-agent</goal>
             </goals>
-            <configuration>
-              <jvmVersion>9</jvmVersion>
-              <overwriteExistingFiles>true</overwriteExistingFiles>
-              <module>
-                <moduleInfoFile>
-                  ${project.basedir}/src/main/java9/module-info.java
-                </moduleInfoFile>
-              </module>
-            </configuration>
+          </execution>
+          <execution>
+            <id>report</id>
+            <phase>prepare-package</phase>
+            <goals>
+              <goal>report</goal>
+            </goals>
           </execution>
         </executions>
       </plugin>
     </plugins>
   </build>
-
-  <profiles>
-    <profile>
-      <id>coverage</id>
-      <build>
-        <plugins>
-          <plugin>
-            <groupId>org.jacoco</groupId>
-            <artifactId>jacoco-maven-plugin</artifactId>
-            <version>0.8.5</version>
-            <executions>
-              <execution>
-                <id>prepare-agent</id>
-                <goals>
-                  <goal>prepare-agent</goal>
-                </goals>
-              </execution>
-              <execution>
-                <id>report</id>
-                <phase>test</phase>
-                <goals>
-                  <goal>report</goal>
-                </goals>
-              </execution>
-            </executions>
-          </plugin>
-        </plugins>
-      </build>
-    </profile>
-
-    <profile>
-      <id>publish</id>
-      <build>
-        <plugins>
-
-          <plugin>
-            <artifactId>maven-source-plugin</artifactId>
-            <version>3.0.1</version>
-            <executions>
-              <execution>
-                <id>attach-sources</id>
-                <phase>package</phase>
-                <goals>
-                  <goal>jar-no-fork</goal>
-                </goals>
-              </execution>
-            </executions>
-          </plugin>
-
-          <plugin>
-            <artifactId>maven-javadoc-plugin</artifactId>
-            <version>3.0.0-M1</version>
-            <configuration>
-              <doclint>none</doclint>
-              <detectJavaApiLink>false</detectJavaApiLink>
-            </configuration>
-            <executions>
-              <execution>
-                <id>attach-javadocs</id>
-                <phase>package</phase>
-                <goals>
-                  <goal>jar</goal>
-                </goals>
-              </execution>
-            </executions>
-          </plugin>
-
-          <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-gpg-plugin</artifactId>
-            <version>1.6</version>
-            <executions>
-              <execution>
-                <id>sign-artifacts</id>
-                <phase>verify</phase>
-                <goals>
-                  <goal>sign</goal>
-                </goals>
-              </execution>
-            </executions>
-          </plugin>
-
-          <plugin>
-            <groupId>org.sonatype.plugins</groupId>
-            <artifactId>nexus-staging-maven-plugin</artifactId>
-            <version>1.6.8</version>
-            <extensions>true</extensions>
-            <configuration>
-              <serverId>ossrh</serverId>
-              <nexusUrl>https://oss.sonatype.org/</nexusUrl>
-              <autoReleaseAfterClose>true</autoReleaseAfterClose>
-            </configuration>
-          </plugin>
-
-        </plugins>
-      </build>
-    </profile>
-  </profiles>
-
 </project>
