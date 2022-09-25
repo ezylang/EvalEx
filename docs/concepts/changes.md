@@ -9,7 +9,7 @@ nav_order: 4
 
 ### New features
 
-There are a lot of new features, see the README of the [home page](../index.htm) of this
+There are a lot of new features, see the README of the [home page](../index.html) of this
 documentation for more information.
 
 Most notably new features:

@@ -7,8 +7,8 @@ EvalEx - Java Expression Evaluator
 [![Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=ezylang_EvalEx&metric=vulnerabilities)](https://sonarcloud.io/summary/new_code?id=EvalEx)
 [![Coverage](https://sonarcloud.io/api/project_badges/measure?project=ezylang_EvalEx&metric=coverage)](https://sonarcloud.io/summary/new_code?id=EvalEx)
 
-| :warning: Version 3 of EvalEx is a complete rewrite of the popular expression evaluator. See [the new documentation area](https://ezylang.github.io/pages-playground/concepts/changes.html) for an overview of the changes. |
-|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| :warning: Version 3 of EvalEx is a complete rewrite of the popular expression evaluator. See [the new documentation area](https://ezylang.github.io/EvalEx/concepts/changes.html) for an overview of the changes.   |
+|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 
 EvalEx is a handy expression evaluator for Java, that allows to parse and evaluate expression
 strings.
