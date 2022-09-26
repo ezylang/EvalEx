@@ -84,7 +84,7 @@ class TokenizerPrefixPostfixTest extends BaseParserTest {
   @Test
   void testPrefixWithFunction() throws ParseException {
     assertAllTokensParsedCorrectly(
-        "++MAX(++a,a++)++",
+        "++MAX(++a,a++,b++)++",
         new Token(1, "++", TokenType.PREFIX_OPERATOR),
         new Token(3, "MAX", TokenType.FUNCTION),
         new Token(6, "(", TokenType.BRACE_OPEN),
@@ -93,8 +93,11 @@ class TokenizerPrefixPostfixTest extends BaseParserTest {
         new Token(10, ",", TokenType.COMMA),
         new Token(11, "a", TokenType.VARIABLE_OR_CONSTANT),
         new Token(12, "++", TokenType.POSTFIX_OPERATOR),
-        new Token(14, ")", TokenType.BRACE_CLOSE),
-        new Token(15, "++", TokenType.POSTFIX_OPERATOR));
+        new Token(14, ",", TokenType.COMMA),
+        new Token(15, "b", TokenType.VARIABLE_OR_CONSTANT),
+        new Token(16, "++", TokenType.POSTFIX_OPERATOR),
+        new Token(18, ")", TokenType.BRACE_CLOSE),
+        new Token(19, "++", TokenType.POSTFIX_OPERATOR));
   }
 
   @Test
