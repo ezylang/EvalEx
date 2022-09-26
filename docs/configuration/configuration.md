@@ -47,9 +47,6 @@ The supplier is called whenever a new Expression is created, so that each expres
 instance of an accessor. Custom implementations of the supplier and data accessor may allow
 expressions to share the same space.
 
-Upon creation of an expression, the configured default constants will be added to the data accessor
-through the set method.
-
 ### Decimal Places Rounding
 
 Specifies the amount of decimal places to round to in each operation or function.
@@ -58,9 +55,9 @@ See chapter [Precision, Scale and Rounding](../concepts/rounding.html) for detai
 ### Default Constants
 
 Specifies the default constants that can be used in every expression as a _Map_ with the constant
-name and _EvaluationValue_ as value.
-See the reference chapter for a
-list: [Default Constants](../references/constants.html)
+name and _EvaluationValue_ as value. Each expression has a case-insensitive copy of the default
+constants.
+See the reference chapter for a list: [Default Constants](../references/constants.html)
 
 ### Function Dictionary
 

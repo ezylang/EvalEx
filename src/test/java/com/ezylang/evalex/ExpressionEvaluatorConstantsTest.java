@@ -46,7 +46,7 @@ class ExpressionEvaluatorConstantsTest extends BaseExpressionEvaluatorTest {
   }
 
   @Test
-  void testCustomConstants() throws EvaluationException, ParseException {
+  void testCustomConstantsMixedCase() throws EvaluationException, ParseException {
     Map<String, EvaluationValue> constants =
         new HashMap<>() {
           {
@@ -58,7 +58,7 @@ class ExpressionEvaluatorConstantsTest extends BaseExpressionEvaluatorTest {
     ExpressionConfiguration configuration =
         ExpressionConfiguration.builder().defaultConstants(constants).build();
 
-    Expression expression = new Expression("a+b", configuration);
+    Expression expression = new Expression("a+B", configuration);
 
     assertThat(expression.evaluate().getStringValue()).isEqualTo("6.4");
   }

@@ -88,7 +88,7 @@ Expression expression = new Expression("\"Hello \" + name + \", you are \" + age
 System.out.println(expression.evaluate().getStringValue()); // prints Hello Frank, you are 38
 ```
 
-### Arrays are supported and can be passed as Java _Lists_.
+### Arrays (also multidimensional) are supported and can be passed as Java _Lists_.
 
 See the [Documentation](https://ezylang.github.io/pages-playground/concepts/datatypes.html#array)
 for more details.
