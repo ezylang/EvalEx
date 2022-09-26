@@ -17,6 +17,7 @@ package com.ezylang.evalex.parser;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
+import com.ezylang.evalex.Expression;
 import com.ezylang.evalex.parser.Token.TokenType;
 import org.junit.jupiter.api.Test;
 
@@ -38,6 +39,37 @@ class TokenizerStringLiteralTest extends BaseParserTest {
   void testSimpleQuoteTrailingBlanks() throws ParseException {
     assertAllTokensParsedCorrectly(
         "\"Hello, World\"  \t\n ", new Token(1, "Hello, World", TokenType.STRING_LITERAL));
+  }
+
+  @Test
+  void testEscapeDoubleQuote() throws ParseException {
+    assertAllTokensParsedCorrectly(
+        "\"Hello, \\\"World\\\"\"", new Token(1, "Hello, \"World\"", TokenType.STRING_LITERAL));
+  }
+
+  @Test
+  void testEscapeSingleQuote() throws ParseException {
+    assertAllTokensParsedCorrectly(
+        "\"Hello, \\'World\\'\"", new Token(1, "Hello, 'World'", TokenType.STRING_LITERAL));
+  }
+
+  @Test
+  void testEscapeBackslash() throws ParseException {
+    assertAllTokensParsedCorrectly(
+        "\"a \\\\ b\"", new Token(1, "a \\ b", TokenType.STRING_LITERAL));
+  }
+
+  @Test
+  void testEscapeCharacters() throws ParseException {
+    assertAllTokensParsedCorrectly(
+        "\" \\t \\r \\n \\f \\b \"", new Token(1, " \t \r \n \f \b ", TokenType.STRING_LITERAL));
+  }
+
+  @Test
+  void testUnknownEscapeCharacter() {
+    assertThatThrownBy(() -> new Expression("\" \\y \"").evaluate())
+        .isInstanceOf(ParseException.class)
+        .hasMessage("Unknown escape character");
   }
 
   @Test

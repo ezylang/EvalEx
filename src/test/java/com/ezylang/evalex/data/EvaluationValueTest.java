@@ -44,6 +44,11 @@ class EvaluationValueTest {
     EvaluationValue value = new EvaluationValue("Hello World");
 
     assertThat(value.isStringValue()).isTrue();
+    assertThat(value.isNumberValue()).isFalse();
+    assertThat(value.isBooleanValue()).isFalse();
+    assertThat(value.isStructureValue()).isFalse();
+    assertThat(value.isArrayValue()).isFalse();
+    assertThat(value.isExpressionNode()).isFalse();
     assertDataIsCorrect(value, "Hello World", BigDecimal.ZERO, false, String.class);
   }
 
@@ -56,7 +61,7 @@ class EvaluationValueTest {
   }
 
   @Test
-  void tesSCharacter() {
+  void testCharacter() {
     EvaluationValue value = new EvaluationValue('a');
 
     assertThat(value.isStringValue()).isTrue();
@@ -68,6 +73,11 @@ class EvaluationValueTest {
     EvaluationValue value = new EvaluationValue(true);
 
     assertThat(value.isBooleanValue()).isTrue();
+    assertThat(value.isNumberValue()).isFalse();
+    assertThat(value.isStringValue()).isFalse();
+    assertThat(value.isStructureValue()).isFalse();
+    assertThat(value.isArrayValue()).isFalse();
+    assertThat(value.isExpressionNode()).isFalse();
     assertDataIsCorrect(value, "true", BigDecimal.ONE, true, Boolean.class);
   }
 
@@ -157,6 +167,11 @@ class EvaluationValueTest {
         new EvaluationValue(Arrays.asList(new BigDecimal(1), new BigDecimal(2)));
 
     assertThat(value.isArrayValue()).isTrue();
+    assertThat(value.isNumberValue()).isFalse();
+    assertThat(value.isBooleanValue()).isFalse();
+    assertThat(value.isStructureValue()).isFalse();
+    assertThat(value.isStringValue()).isFalse();
+    assertThat(value.isExpressionNode()).isFalse();
 
     assertThat(value.getArrayValue()).hasSize(2);
     assertThat(value.getArrayValue().get(0).getStringValue()).isEqualTo("1");
@@ -180,6 +195,11 @@ class EvaluationValueTest {
     EvaluationValue value = new EvaluationValue(structure);
 
     assertThat(value.isStructureValue()).isTrue();
+    assertThat(value.isNumberValue()).isFalse();
+    assertThat(value.isBooleanValue()).isFalse();
+    assertThat(value.isStringValue()).isFalse();
+    assertThat(value.isArrayValue()).isFalse();
+    assertThat(value.isExpressionNode()).isFalse();
 
     assertThat(value.getStructureValue()).hasSize(2);
     assertThat(value.getStructureValue().get("a").getStringValue()).isEqualTo("Hello");
@@ -201,6 +221,11 @@ class EvaluationValueTest {
     EvaluationValue value = new EvaluationValue(node);
 
     assertThat(value.isExpressionNode()).isTrue();
+    assertThat(value.isNumberValue()).isFalse();
+    assertThat(value.isBooleanValue()).isFalse();
+    assertThat(value.isStructureValue()).isFalse();
+    assertThat(value.isArrayValue()).isFalse();
+    assertThat(value.isStringValue()).isFalse();
 
     assertDataIsCorrect(
         value,
@@ -208,6 +233,12 @@ class EvaluationValueTest {
         BigDecimal.ZERO,
         false,
         ASTNode.class);
+  }
+
+  @Test
+  void testExpressionNodeReturnsNull() {
+    EvaluationValue value = new EvaluationValue(false);
+    assertThat(value.getExpressionNode()).isNull();
   }
 
   @Test

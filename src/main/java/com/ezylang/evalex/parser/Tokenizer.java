@@ -184,7 +184,7 @@ public class Tokenizer {
   private Token parseOperator() throws ParseException {
     int tokenStartIndex = currentColumnIndex;
     StringBuilder tokenValue = new StringBuilder();
-    while (currentChar != -1 && isNotOtherTokenStart(currentChar)) {
+    while (isNotOtherTokenStart(currentChar)) {
       tokenValue.append((char) currentChar);
       String tokenString = tokenValue.toString();
       String possibleNextOperator = tokenString + (char) peekNextChar();
@@ -399,18 +399,47 @@ public class Tokenizer {
     StringBuilder tokenValue = new StringBuilder();
     // skip starting quote
     consumeChar();
-    while (currentChar != -1 && currentChar != '"' && peekPreviousChar() != '\\') {
-      tokenValue.append((char) currentChar);
+    boolean inQuote = true;
+    while (inQuote && currentChar != -1) {
+      if (currentChar == '\\') {
+        consumeChar();
+        tokenValue.append(escapeCharacter(currentChar));
+      } else if (currentChar == '"') {
+        inQuote = false;
+      } else {
+        tokenValue.append((char) currentChar);
+      }
       consumeChar();
     }
-    // skip trailing quote
-    if (currentChar == '"') {
-      consumeChar();
-    } else {
+    if (inQuote) {
       throw new ParseException(
           tokenStartIndex, currentColumnIndex, tokenValue.toString(), "Closing quote not found");
     }
     return new Token(tokenStartIndex, tokenValue.toString(), TokenType.STRING_LITERAL);
+  }
+
+  private char escapeCharacter(int character) throws ParseException {
+    switch (character) {
+      case '\'':
+        return '\'';
+      case '"':
+        return '"';
+      case '\\':
+        return '\\';
+      case 'n':
+        return '\n';
+      case 'r':
+        return '\r';
+      case 't':
+        return '\t';
+      case 'b':
+        return '\b';
+      case 'f':
+        return '\f';
+      default:
+        throw new ParseException(
+            currentColumnIndex, 1, "\\" + (char) character, "Unknown escape character");
+    }
   }
 
   private boolean isNotOtherTokenStart(int ch) {
