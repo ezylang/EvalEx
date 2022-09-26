@@ -94,8 +94,7 @@ System.out.println(result.getNumberValue()); // prints 6.00
 ```
 
 Alternatively, the variable values can be set by defining a map with names and values and then
-passing it to
-the _withValues()_ method:
+passing it to the _withValues()_ method:
 
 ```java
 Expression expression = new Expression("(a + b) * (a - b)");

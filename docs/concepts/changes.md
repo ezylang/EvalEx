@@ -9,15 +9,15 @@ nav_order: 4
 
 ### New features
 
-There are a lot of new features, see the README of the [home page](../index.html) of this
+There are a lot of new features, see the  [home page](../index.html) of this
 documentation for more information.
 
 Most notably new features:
 
 * Better boolean support.
 * Full support for string operations and functions.
-* Full support for arrays.
-* Full support for structures.
+* Full support for multidimensional arrays.
+* Full support for nestable structures.
 * Structures and arrays can be combined to work with arbitrary data structures.
 * New data access support, connecting expressions with you data made easy.
 * New configuration concept.
@@ -34,18 +34,17 @@ EvalEx 3 now requires at least Java 11 to run and compile.
 ### New package, group id and repository home.
 
 EvalEx has moved from a personal repository to an organizational repository.
-This decouples the product from a single person and allows more ad better control over the product.
+This decouples the product from a single person and allows more and better control over the product.
 
 ### Complete rewrite
 
 EvalEx 3 is a complete rewrite. After 10 years of adding features and trying to stay backward
 compatible, I felt that this is the time for a big cut.
 Trying to stay backward compatible has introduced several code constructs, that didn't feel good.
-The lazy evaluation is one of that features to name.
 
-This has direct impact to the integration of EvalEx in an existing application.
+This cut has direct impact to the integration of EvalEx in an existing application.
 Though I believe that the new version has much better integration possibilities (e.g. the data
-access interface, the separate configuration object), existing integration need some refactorings.
+access interface, the separate configuration object), existing integrations need some refactorings.
 
 Depending on how you used EvalEx until now, this may not need very much changes, e.g.:
 
@@ -63,8 +62,7 @@ Here are the main changes, when it comes to integration:
 
 Configurations are now separated from the expression. You can create a configuration once and then
 re-use it with your expressions. All the heavy constructor work is now in the configuration, making
-the instantiation of an expression much faster. The new concept was designed with better thread
-safety in mind.
+the instantiation of an expression much faster.
 
 ### New default MathContext
 
@@ -81,32 +79,34 @@ Now the parser transforms the infix notation to an AST (Abstract Syntax Tree), a
 improvements and new features. The main reason for the switch was the lazy evaluation needed for the
 IF function. With the use of an AST, this was easy to achieve.
 
-If you were using the getRPN() function in EvalEx 2, then the new getAllASTNodes()
-getAbstractSyntaxTree() method may be useful for you.
-If you still need RPN support, it should be possible to create an RPN notation out of the AST.
+If you were using the getRPN() function in EvalEx 2, then the new getAllASTNodes() or
+getAbstractSyntaxTree() methods may be useful for you.
+If you still need RPN support, it should be possible to create an RPN notation out of the AST with a
+bit of effort.
 
 ### New return value type
 
-EvalEx 2 evaluation always returned a BigDecimal. With the support of strings, arrays and
+EvalEx 2 evaluation always returned a BigDecimal. With the new support of strings, arrays and
 structures, this was not suitable anymore. The new EvaluationValue return type for an evaluation has
 a type member that defines what data type it holds (boolean, number, string, array, structure, or an
-AST). It also has some convenience methods to transform the types, e.g. number to string.
+AST). It also has some convenience methods to convert the values, e.g. number to string.
 
 ### New data access concept
 
-EvalEx 2 only had the possibility to pass and store variable values just before the evaluation into
-a local java.util.Map data structure. This is also the default with EvalEx 3, so no change to
+EvalEx 2 had an own storage for variable and constant values, that had to be filled with the
+required values before evaluation. This is also the default with EvalEx 3, so no change to
 existing integrations is required.
 
-The new concept allows additionally to configure a data access interface.
+But the new concept allows additionally to configure a custom data access interface, which could be
+backed by any kind of storage.
 See chapter [Data Access](../customization/data_access.html) for details.
 
 ### Custom Operators
 
 Adding custom operators is now easier, but has changed significantly.
-See chapter [Custom Functions](../customization/custom_functions.html) for details.
+See chapter [Custom Operators](../customization/custom_operators.html) for details.
 
 ### Custom function
 
 Adding custom functions is now easier, but has changed significantly.
-See chapter [Custom Operators](../customization/custom_operators.html) for details.
+See chapter [Custom Functions](../customization/custom_functions.html) for details.

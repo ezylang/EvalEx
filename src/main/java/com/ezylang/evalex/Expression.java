@@ -29,6 +29,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.TreeMap;
 import java.util.TreeSet;
 import lombok.Getter;
 
@@ -43,6 +44,10 @@ public class Expression {
   @Getter private final String expressionString;
 
   @Getter private final DataAccessorIfc dataAccessor;
+
+  @Getter
+  private final Map<String, EvaluationValue> constants =
+      new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
 
   private ASTNode abstractSyntaxTree;
 
@@ -66,12 +71,7 @@ public class Expression {
     this.expressionString = expressionString;
     this.configuration = configuration;
     this.dataAccessor = configuration.getDataAccessorSupplier().get();
-
-    // add default constants to data
-    for (Map.Entry<String, EvaluationValue> constant :
-        configuration.getDefaultConstants().entrySet()) {
-      getDataAccessor().setData(constant.getKey(), constant.getValue());
-    }
+    this.constants.putAll(configuration.getDefaultConstants());
   }
 
   /**
@@ -103,7 +103,7 @@ public class Expression {
         result = new EvaluationValue(token.getValue());
         break;
       case VARIABLE_OR_CONSTANT:
-        result = getDataAccessor().getData(token.getValue());
+        result = getVariableOrConstant(token);
         if (result.isExpressionNode()) {
           result = evaluateSubtree(result.getExpressionNode());
         }
@@ -139,6 +139,18 @@ public class Expression {
     }
 
     return result.isNumberValue() ? roundAndStripZerosIfNeeded(result) : result;
+  }
+
+  private EvaluationValue getVariableOrConstant(Token token) throws EvaluationException {
+    EvaluationValue result = constants.get(token.getValue());
+    if (result == null) {
+      result = getDataAccessor().getData(token.getValue());
+    }
+    if (result == null) {
+      throw new EvaluationException(
+          token, String.format("Variable or constant value for '%s' not found", token.getValue()));
+    }
+    return result;
   }
 
   private EvaluationValue evaluateFunction(ASTNode startNode, Token token)
@@ -331,8 +343,7 @@ public class Expression {
 
     for (ASTNode node : getAllASTNodes()) {
       if (node.getToken().getType() == Token.TokenType.VARIABLE_OR_CONSTANT
-          && !configuration.getDefaultConstants().containsKey(node.getToken().getValue())
-          && !variables.contains(node.getToken().getValue())) {
+          && !constants.containsKey(node.getToken().getValue())) {
         variables.add(node.getToken().getValue());
       }
     }

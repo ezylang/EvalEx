@@ -16,6 +16,7 @@
 package com.ezylang.evalex;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import com.ezylang.evalex.data.EvaluationValue;
 import com.ezylang.evalex.parser.ParseException;
@@ -73,5 +74,12 @@ class ExpressionEvaluatorSimpleVariablesTest extends BaseExpressionEvaluatorTest
     EvaluationValue result = expression.evaluate();
     assertThat(result.isStringValue()).isTrue();
     assertThat(result.getStringValue()).isEqualTo("Hello2world");
+  }
+
+  @Test
+  void testUnknownVariable() {
+    assertThatThrownBy(() -> createExpression("a").evaluate())
+        .isInstanceOf(EvaluationException.class)
+        .hasMessage("Variable or constant value for 'a' not found");
   }
 }
