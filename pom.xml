@@ -7,9 +7,12 @@
   <artifactId>EvalEx</artifactId>
   <version>3.0.0</version>
 
+  <name>EvalEx</name>
+
   <description>EvalEx is a handy expression evaluator for Java, that allows to evaluate
     expressions.
   </description>
+
   <url>https://github.com/ezylang/EvalEx</url>
 
   <organization>
