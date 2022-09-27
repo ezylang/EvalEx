@@ -5,7 +5,7 @@
 
   <groupId>com.ezylang</groupId>
   <artifactId>EvalEx</artifactId>
-  <version>3.0.0-SNAPSHOT</version>
+  <version>3.0.0</version>
 
   <description>EvalEx is a handy expression evaluator for Java, that allows to evaluate
     expressions.
