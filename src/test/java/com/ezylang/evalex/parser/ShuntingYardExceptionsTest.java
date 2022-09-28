@@ -78,6 +78,15 @@ class ShuntingYardExceptionsTest extends BaseParserTest {
   }
 
   @Test
+  void testComma() {
+    Expression expression = new Expression(",");
+
+    assertThatThrownBy(expression::evaluate)
+        .isInstanceOf(ParseException.class)
+        .hasMessage("Empty expression");
+  }
+
+  @Test
   void testDoubleStructureOperator() {
     List<Token> tokens =
         List.of(new Token(1, ".", STRUCTURE_SEPARATOR), new Token(2, ".", STRUCTURE_SEPARATOR));

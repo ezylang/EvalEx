@@ -120,7 +120,7 @@ public class ShuntingYardConverter {
     while (nextToken != null && nextToken.getType() == STRUCTURE_SEPARATOR) {
       Token token = operatorStack.pop();
       createOperatorNode(token);
-      nextToken = operatorStack.isEmpty() ? null : operatorStack.peek();
+      nextToken = operatorStack.peek();
     }
     operatorStack.push(currentToken);
   }
@@ -144,7 +144,7 @@ public class ShuntingYardConverter {
     if (!operatorStack.isEmpty() && operatorStack.peek().getType() == FUNCTION) {
       Token functionToken = operatorStack.pop();
       ArrayList<ASTNode> parameters = new ArrayList<>();
-      while (!operandStack.isEmpty()) {
+      while (true) {
         // add all parameters in reverse order from stack to the parameter array
         ASTNode node = operandStack.pop();
         if (node.getToken().getType() == TokenType.FUNCTION_PARAM_START) {

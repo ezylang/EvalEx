@@ -20,7 +20,7 @@ jobs:
         uses: actions/setup-java@v3
         with:
           java-version: '11'
-          distribution: 'temurin'
+          distribution: 'corretto'
           cache: maven
       - name: Verify and analyze with SonarCloud
         run: mvn --batch-mode verify sonar:sonar -Dsonar.projectKey=ezylang_EvalEx -Dsonar.organization=ezylang -Dsonar.host.url=https://sonarcloud.io -Dsonar.coverage.jacoco.xmlReportPaths=/home/runner/work/EvalEx/EvalEx/target/site/jacoco/jacoco.xml

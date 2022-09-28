@@ -184,7 +184,7 @@ public class Tokenizer {
   private Token parseOperator() throws ParseException {
     int tokenStartIndex = currentColumnIndex;
     StringBuilder tokenValue = new StringBuilder();
-    while (isNotOtherTokenStart(currentChar)) {
+    while (true) {
       tokenValue.append((char) currentChar);
       String tokenString = tokenValue.toString();
       String possibleNextOperator = tokenString + (char) peekNextChar();
@@ -325,7 +325,7 @@ public class Tokenizer {
     }
   }
 
-  private Token parseNumberLiteral() {
+  private Token parseNumberLiteral() throws ParseException {
     int tokenStartIndex = currentColumnIndex;
     StringBuilder tokenValue = new StringBuilder();
     int nextChar = peekNextChar();
@@ -341,9 +341,17 @@ public class Tokenizer {
       }
     } else {
       // decimal number
+      int lastChar = -1;
       while (currentChar != -1 && isNumberChar(currentChar)) {
         tokenValue.append((char) currentChar);
+        lastChar = currentChar;
         consumeChar();
+      }
+      // illegal scientific format literal
+      if (lastChar == 'e' || lastChar == 'E' || lastChar == '+' || lastChar == '-') {
+        throw new ParseException(
+            new Token(tokenStartIndex, tokenValue.toString(), TokenType.NUMBER_LITERAL),
+            "Illegal scientific format");
       }
     }
     return new Token(tokenStartIndex, tokenValue.toString(), TokenType.NUMBER_LITERAL);
@@ -370,7 +378,7 @@ public class Tokenizer {
           tokenName,
           TokenType.POSTFIX_OPERATOR,
           operatorDictionary.getPostfixOperator(tokenName));
-    } else if (infixOperatorAllowed() && operatorDictionary.hasInfixOperator(tokenName)) {
+    } else if (operatorDictionary.hasInfixOperator(tokenName)) {
       return new Token(
           tokenStartIndex,
           tokenName,
@@ -442,16 +450,6 @@ public class Tokenizer {
     }
   }
 
-  private boolean isNotOtherTokenStart(int ch) {
-    return !(Character.isWhitespace(ch)
-        || isNumberStart(ch)
-        || isIdentifierStart(ch)
-        || ch == '"'
-        || ch == '('
-        || ch == ')'
-        || ch == ',');
-  }
-
   private boolean isNumberStart(int ch) {
     if (Character.isDigit(ch)) {
       return true;
@@ -462,7 +460,7 @@ public class Tokenizer {
   private boolean isNumberChar(int ch) {
     int previousChar = peekPreviousChar();
     if (previousChar == 'e' || previousChar == 'E') {
-      return Character.isDigit(ch) || ch == '.' || ch == '+' || ch == '-';
+      return Character.isDigit(ch) || ch == '+' || ch == '-';
     } else {
       return Character.isDigit(ch) || ch == '.' || ch == 'e' || ch == 'E';
     }

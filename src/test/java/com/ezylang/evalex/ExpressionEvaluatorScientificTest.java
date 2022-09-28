@@ -28,15 +28,15 @@ class ExpressionEvaluatorScientificTest extends BaseExpressionEvaluatorTest {
       delimiter = ':',
       value = {
         "2e3 : 2000 ",
-        "2e10 : 20000000000 ",
         "2E3 : 2000",
-        "0.5e2 : 50",
-        "0.35E4 + 0.5e1 : 3505",
         "1e-10 : 0.0000000001",
         "1E-10 : 0.0000000001",
-        "2135E-4 : 0.2135",
         "1e+10 : 10000000000",
         "1E+10 : 10000000000",
+        "2e10 : 20000000000 ",
+        "0.5e2 : 50",
+        "0.35E4 + 0.5e1 : 3505",
+        "2135E-4 : 0.2135",
         "2135E+4 : 21350000"
       })
   void testScientificLiteralsEvaluation(String expression, String expectedResult)
