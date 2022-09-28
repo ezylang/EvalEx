@@ -29,6 +29,8 @@ public class NotFunction extends AbstractFunction {
   public EvaluationValue evaluate(
       Expression expression, Token functionToken, EvaluationValue... parameterValues) {
 
-    return new EvaluationValue(!parameterValues[0].getBooleanValue());
+    boolean result = parameterValues[0].getBooleanValue();
+
+    return new EvaluationValue(!result);
   }
 }
