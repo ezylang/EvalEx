@@ -24,11 +24,14 @@ import com.ezylang.evalex.Expression;
 import com.ezylang.evalex.config.ExpressionConfiguration;
 import com.ezylang.evalex.data.EvaluationValue;
 import com.ezylang.evalex.parser.ParseException;
+import com.ezylang.evalex.parser.Token;
+import com.ezylang.evalex.parser.Token.TokenType;
 import java.math.MathContext;
 import java.math.RoundingMode;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
+import org.mockito.Mockito;
 
 class BasicFunctionsTest extends BaseEvaluationTest {
 
@@ -177,6 +180,25 @@ class BasicFunctionsTest extends BaseEvaluationTest {
   void testBooleanNegation(String expression, String expectedResult)
       throws EvaluationException, ParseException {
     assertExpressionHasExpectedResult(expression, expectedResult);
+  }
+
+  @Test
+  void testNotFunctionDirectly() {
+    // somehow, code coverage for the NotFunction traditional tests does not work on Google build
+    NotFunction notFunction = new NotFunction();
+    Expression expressionMock = Mockito.mock(Expression.class);
+    Token token = new Token(1, "NOT", TokenType.FUNCTION, notFunction);
+
+    assertThat(
+            notFunction
+                .evaluate(expressionMock, token, new EvaluationValue(true))
+                .getBooleanValue())
+        .isFalse();
+    assertThat(
+            notFunction
+                .evaluate(expressionMock, token, new EvaluationValue(false))
+                .getBooleanValue())
+        .isTrue();
   }
 
   @Test

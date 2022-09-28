@@ -97,22 +97,4 @@ class ExpressionEvaluatorSimpleTest extends BaseExpressionEvaluatorTest {
       throws ParseException, EvaluationException {
     assertThat(evaluate(expression)).isEqualTo(expectedResult);
   }
-
-  @ParameterizedTest
-  @CsvSource(
-      delimiter = ':',
-      value = {
-        "true : true",
-        "false : false",
-        "NOT(true) : false",
-        "NOT(false) : true",
-        "true || false : true",
-        "true || true : true",
-        "true && false : false",
-        "true && true : true"
-      })
-  void testSimpleBooleanExpressions(String expression, String expectedResult)
-      throws ParseException, EvaluationException {
-    assertThat(evaluate(expression)).isEqualTo(expectedResult);
-  }
 }
