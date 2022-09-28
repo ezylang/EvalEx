@@ -174,7 +174,7 @@ class BasicFunctionsTest extends BaseEvaluationTest {
         "NOT(\"false\") : true",
         "NOT(2-4/2) : true",
       })
-  void testNotFunction(String expression, String expectedResult)
+  void testBooleanNegation(String expression, String expectedResult)
       throws EvaluationException, ParseException {
     assertExpressionHasExpectedResult(expression, expectedResult);
   }
