@@ -12,7 +12,7 @@ jobs:
         uses: actions/setup-java@v3
         with:
           java-version: '11'
-          distribution: 'temurin'
+          distribution: 'corretto'
           cache: maven
           server-id: ossrh
           server-username: MAVEN_USERNAME
@@ -25,6 +25,7 @@ jobs:
         uses: ncipollo/release-action@v1
         with:
           allowUpdates: true
+          generateReleaseNotes: true
           artifacts: "${{ github.workspace }}/target/*.jar"
           token: ${{ secrets.GITHUB_TOKEN }}
       - name: Publish to the Maven Central Repository
