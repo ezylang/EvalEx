@@ -1,7 +1,7 @@
 EvalEx - Java Expression Evaluator
 ==========
 
-![example workflow](https://github.com/ezylang/EvalEx/actions/workflows/maven.yml/badge.svg)
+[![Build](https://github.com/ezylang/EvalEx/actions/workflows/build.yml/badge.svg)](https://github.com/ezylang/EvalEx/actions/workflows/build.yml)
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=ezylang_EvalEx&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=ezylang_EvalEx)
 [![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=ezylang_EvalEx&metric=security_rating)](https://sonarcloud.io/summary/new_code?id=ezylang_EvalEx)
 [![Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=ezylang_EvalEx&metric=vulnerabilities)](https://sonarcloud.io/summary/new_code?id=ezylang_EvalEx)
