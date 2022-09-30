@@ -111,4 +111,14 @@ public class TestVariables {
     }
     assertEquals("First operand may not be null", err);
   }
+
+  @Test
+  public void testIsoDateInString() {
+
+    new Expression( "23" )
+      .with( "someString", "2022-01-02" )
+      .eval();
+
+  }
+
 }
