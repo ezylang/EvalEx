@@ -145,4 +145,10 @@ class ExpressionTest {
     Expression expression = new Expression("a+B*b-A/PI*(1/2)*pi+e-E+a");
     assertThat(expression.getUsedVariables()).containsExactlyInAnyOrder("a", "b");
   }
+
+  @Test
+  void testGetUndefinedVariables() throws ParseException {
+    Expression expression = new Expression("a+A+b+B+c+C+E+e+PI+x").with("x", 1);
+    assertThat(expression.getUndefinedVariables()).containsExactlyInAnyOrder("a", "b", "c");
+  }
 }

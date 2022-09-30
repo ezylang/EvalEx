@@ -332,10 +332,10 @@ public class Expression {
   }
 
   /**
-   * Returns all variables or constants that are used i the expression, excluding the standard
-   * constants like e.g. <code>PI</code> or <code>TRUE</code> and <code>FALSE</code>.
+   * Returns all variables that are used i the expression, excluding the constants like e.g. <code>
+   * PI</code> or <code>TRUE</code> and <code>FALSE</code>.
    *
-   * @return All used variables and constants less the standard constants.
+   * @return All used variables excluding constants.
    * @throws ParseException If there were problems while parsing the expression.
    */
   public Set<String> getUsedVariables() throws ParseException {
@@ -348,6 +348,22 @@ public class Expression {
       }
     }
 
+    return variables;
+  }
+
+  /**
+   * Returns all variables that are used in the expression, but have no value assigned.
+   *
+   * @return All variables that have no value assigned.
+   * @throws ParseException If there were problems while parsing the expression.
+   */
+  public Set<String> getUndefinedVariables() throws ParseException {
+    Set<String> variables = new TreeSet<>(String.CASE_INSENSITIVE_ORDER);
+    for (String variable : getUsedVariables()) {
+      if (getDataAccessor().getData(variable) == null) {
+        variables.add(variable);
+      }
+    }
     return variables;
   }
 }

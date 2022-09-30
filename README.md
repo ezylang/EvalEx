@@ -6,6 +6,7 @@ EvalEx - Java Expression Evaluator
 [![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=ezylang_EvalEx&metric=security_rating)](https://sonarcloud.io/summary/new_code?id=ezylang_EvalEx)
 [![Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=ezylang_EvalEx&metric=vulnerabilities)](https://sonarcloud.io/summary/new_code?id=ezylang_EvalEx)
 [![Coverage](https://sonarcloud.io/api/project_badges/measure?project=ezylang_EvalEx&metric=coverage)](https://sonarcloud.io/summary/new_code?id=ezylang_EvalEx)
+[![Maven Central](https://img.shields.io/maven-central/v/com.ezylang/EvalEx.svg?label=Maven%20Central)](https://search.maven.org/search?q=a:%22EvalEx%22)
 
 | :warning: Version 3 of EvalEx is a complete rewrite of the popular expression evaluator. See [the new documentation area](https://ezylang.github.io/EvalEx/concepts/changes.html) for an overview of the changes.   |
 |---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
@@ -40,6 +41,13 @@ on [GitHub Pages](https://ezylang.github.io/EvalEx/)
 
 For announcements, questions and ideas visit
 the [Discussions area](https://github.com/ezylang/EvalEx/discussions).
+
+## Download / Including
+
+You can download the binaries, source code and JavaDoc jars from
+[Maven Central](https://search.maven.org/search?q=a:%22EvalEx%22).\
+You will find there also copy/paste templates for including EvalEx in your project with build
+systems like Maven or Gradle.
 
 ## Examples
 
