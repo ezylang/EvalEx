@@ -22,7 +22,7 @@ import com.ezylang.evalex.functions.AbstractFunction;
 import com.ezylang.evalex.functions.FunctionParameter;
 import com.ezylang.evalex.parser.Token;
 
-/** Returns the hyperbolic arc-sine (in degrees). */
+/** Returns the hyperbolic arc-sine. */
 @FunctionParameter(name = "value")
 public class AtanHFunction extends AbstractFunction {
   @Override
