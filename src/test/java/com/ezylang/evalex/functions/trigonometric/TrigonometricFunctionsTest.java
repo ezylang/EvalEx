@@ -70,20 +70,6 @@ class TrigonometricFunctionsTest extends BaseEvaluationTest {
   @CsvSource(
       delimiter = ':',
       value = {
-        "COS(0) : 1",
-        "COS(1) : 0.9998476951563913",
-        "COS(19) : 0.9455185755993168",
-        "COS(-19) : 0.9455185755993168"
-      })
-  void testCos(String expression, String expectedResult)
-      throws EvaluationException, ParseException {
-    assertExpressionHasExpectedResult(expression, expectedResult);
-  }
-
-  @ParameterizedTest
-  @CsvSource(
-      delimiter = ':',
-      value = {
         "TAN(0) : 0",
         "TAN(1) : 0.017455064928217585",
         "TAN(19) : 0.34432761328966527",
@@ -104,6 +90,33 @@ class TrigonometricFunctionsTest extends BaseEvaluationTest {
         "SINR(-90) : -0.8939966636005579"
       })
   void testSinR(String expression, String expectedResult)
+      throws EvaluationException, ParseException {
+    assertExpressionHasExpectedResult(expression, expectedResult);
+  }
+
+  @ParameterizedTest
+  @CsvSource(
+      delimiter = ':',
+      value = {
+        "COS(0) : 1",
+        "COS(1) : 0.9998476951563913",
+        "COS(19) : 0.9455185755993168",
+        "COS(-19) : 0.9455185755993168"
+      })
+  void testCos(String expression, String expectedResult)
+      throws EvaluationException, ParseException {
+    assertExpressionHasExpectedResult(expression, expectedResult);
+  }
+
+  @ParameterizedTest
+  @CsvSource(
+      delimiter = ':',
+      value = {
+        "COSH(0) : 1",
+        "COSH(1) : 1.543080634815244",
+        "COSH(-1) : 1.543080634815244",
+      })
+  void testCosH(String expression, String expectedResult)
       throws EvaluationException, ParseException {
     assertExpressionHasExpectedResult(expression, expectedResult);
   }
@@ -521,19 +534,6 @@ class TrigonometricFunctionsTest extends BaseEvaluationTest {
         "ATAN2R(-1,-1) : -2.356194490192345",
       })
   void testAtan2R(String expression, String expectedResult)
-      throws EvaluationException, ParseException {
-    assertExpressionHasExpectedResult(expression, expectedResult);
-  }
-
-  @ParameterizedTest
-  @CsvSource(
-      delimiter = ':',
-      value = {
-        "COSH(0) : 1",
-        "COSH(1) : 1.543080634815244",
-        "COSH(-1) : 1.543080634815244",
-      })
-  void testCosH(String expression, String expectedResult)
       throws EvaluationException, ParseException {
     assertExpressionHasExpectedResult(expression, expectedResult);
   }

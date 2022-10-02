@@ -21,7 +21,7 @@ import com.ezylang.evalex.functions.AbstractFunction;
 import com.ezylang.evalex.functions.FunctionParameter;
 import com.ezylang.evalex.parser.Token;
 
-/** Returns the hyperbolic secant (in degrees). */
+/** Returns the hyperbolic secant. */
 @FunctionParameter(name = "value", nonZero = true)
 public class SecHFunction extends AbstractFunction {
   @Override
