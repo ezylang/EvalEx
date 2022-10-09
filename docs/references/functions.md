@@ -44,6 +44,7 @@ Available through the _ExpressionConfiguration.StandardFunctionsDictionary_ cons
 | ACOSH(value) | Returns the hyperbolic arc-cosine                                                              |
 | ACOSR(value) | Returns the arc-cosine (in radians)                                                            |
 | ACOT(value)  | Returns the arc-co-tangent (in degrees)                                                        |
+| ACOTH(value) | Returns the hyperbolic arc-co-tangent (in degrees)                                             |
 | ACOTR(value) | Returns the arc-co-tangent (in radians)                                                        |
 | ASIN(value)  | Returns the arc-sine (in degrees)                                                              |
 | ASINH(value) | Returns the hyperbolic arc-sine                                                                |
