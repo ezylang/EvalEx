@@ -40,6 +40,7 @@ import com.ezylang.evalex.functions.trigonometric.AcosFunction;
 import com.ezylang.evalex.functions.trigonometric.AcosHFunction;
 import com.ezylang.evalex.functions.trigonometric.AcosRFunction;
 import com.ezylang.evalex.functions.trigonometric.AcotFunction;
+import com.ezylang.evalex.functions.trigonometric.AcotHFunction;
 import com.ezylang.evalex.functions.trigonometric.AcotRFunction;
 import com.ezylang.evalex.functions.trigonometric.AsinFunction;
 import com.ezylang.evalex.functions.trigonometric.AsinHFunction;
@@ -187,6 +188,7 @@ public class ExpressionConfiguration {
           Map.entry("ACOSH", new AcosHFunction()),
           Map.entry("ACOSR", new AcosRFunction()),
           Map.entry("ACOT", new AcotFunction()),
+          Map.entry("ACOTH", new AcotHFunction()),
           Map.entry("ACOTR", new AcotRFunction()),
           Map.entry("ASIN", new AsinFunction()),
           Map.entry("ASINH", new AsinHFunction()),
