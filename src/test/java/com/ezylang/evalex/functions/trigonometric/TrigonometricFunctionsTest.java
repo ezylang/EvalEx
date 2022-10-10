@@ -382,7 +382,7 @@ class TrigonometricFunctionsTest extends BaseEvaluationTest {
       delimiter = ':',
       value = {
         "ACOT(1) : 45",
-        "ACOT(-1) : -45",
+        "ACOT(-1) : 135",
       })
   void testAcot(String expression, String expectedResult)
       throws EvaluationException, ParseException {
