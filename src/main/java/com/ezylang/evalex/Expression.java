@@ -253,6 +253,14 @@ public class Expression {
    * @return The Expression instance, to allow chaining of methods.
    */
   public Expression with(String variable, Object value) {
+    if (constants.containsKey(variable)) {
+      if (configuration.isAllowOverwriteConstants()) {
+        constants.remove(variable);
+      } else {
+        throw new UnsupportedOperationException(
+            String.format("Can't set value for constant '%s'", variable));
+      }
+    }
     getDataAccessor().setData(variable, new EvaluationValue(value));
     return this;
   }
@@ -281,7 +289,7 @@ public class Expression {
    */
   public Expression withValues(Map<String, Object> values) {
     for (Map.Entry<String, Object> entry : values.entrySet()) {
-      getDataAccessor().setData(entry.getKey(), new EvaluationValue(entry.getValue()));
+      with(entry.getKey(), entry.getValue());
     }
     return this;
   }
