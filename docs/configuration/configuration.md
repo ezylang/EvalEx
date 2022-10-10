@@ -13,6 +13,7 @@ Example usage, showing all default configuration values:
 
 ```java
 ExpressionConfiguration configuration = ExpressionConfiguration.builder()
+    .allowOverwriteConstants(true)
     .arraysAllowed(true)
     .dataAccessorSupplier(MapBasedDataAccessor::new)
     .decimalPlacesRounding(ExpressionConfiguration.DECIMAL_PLACES_ROUNDING_UNLIMITED)
@@ -22,11 +23,17 @@ ExpressionConfiguration configuration = ExpressionConfiguration.builder()
     .mathContext(ExpressionConfiguration.DEFAULT_MATH_CONTEXT)
     .operatorDictionary(ExpressionConfiguration.StandardOperatorsDictionary)
     .powerOfPrecedence(OperatorIfc.OPERATOR_PRECEDENCE_POWER)
+    .stripTrailingZeros(true)
     .structuresAllowed(true)
     .build();
 
 Expression expression = new Expression("2.128 + a", configuration);
 ```
+
+### Allow to Overwrite Constants
+
+If set to true (default), then variables can be set that have the name of a constant. In that case,
+the constant value will be removed and a variable value will be set.
 
 ### Arrays allowed
 

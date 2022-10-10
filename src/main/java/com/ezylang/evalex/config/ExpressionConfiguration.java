@@ -271,6 +271,12 @@ public class ExpressionConfiguration {
   @Builder.Default @Getter private final boolean stripTrailingZeros = true;
 
   /**
+   * If set to true (default), then variables can be set that have the name of a constant. In that
+   * case, the constant value will be removed and a variable value will be set.
+   */
+  @Builder.Default @Getter private final boolean allowOverwriteConstants = true;
+
+  /**
    * Convenience method to create a default configuration.
    *
    * @return A configuration with default settings.
