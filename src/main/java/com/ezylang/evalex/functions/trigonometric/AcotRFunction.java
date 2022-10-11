@@ -28,8 +28,8 @@ public class AcotRFunction extends AbstractFunction {
   public EvaluationValue evaluate(
       Expression expression, Token functionToken, EvaluationValue... parameterValues) {
 
-    /* Formula: acot(x) = atan(1/x) */
+    /* Formula: acot(x) = (pi / 2) - atan(x) */
     return expression.convertDoubleValue(
-        Math.atan(1 / parameterValues[0].getNumberValue().doubleValue()));
+        (Math.PI / 2) - Math.atan(parameterValues[0].getNumberValue().doubleValue()));
   }
 }

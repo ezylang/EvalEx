@@ -29,8 +29,8 @@ public class AcotFunction extends AbstractFunction {
       Expression expression, Token functionToken, EvaluationValue... parameterValues) {
 
     /* Formula: acot(x) = (pi / 2) - atan(x) */
-    double resultRad = (Math.PI / 2) - Math.atan(parameterValues[0].getNumberValue().doubleValue());
-
-    return expression.convertDoubleValue(Math.toDegrees(resultRad));
+    return expression.convertDoubleValue(
+        Math.toDegrees(
+            (Math.PI / 2) - Math.atan(parameterValues[0].getNumberValue().doubleValue())));
   }
 }
