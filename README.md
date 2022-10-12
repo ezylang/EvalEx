@@ -49,6 +49,30 @@ You can download the binaries, source code and JavaDoc jars from
 You will find there also copy/paste templates for including EvalEx in your project with build
 systems like Maven or Gradle.
 
+### Maven
+
+To include it in your Maven project, add the dependency to your pom. For example:
+
+```xml
+<dependencies>
+    <dependency>
+      <groupId>com.ezylang</groupId>
+      <artifactId>EvalEx</artifactId>
+      <version>3.0.1</version>
+    </dependency>
+</dependencies>
+```
+
+### Gradle
+
+If you're using gradle add the dependencies to your project's app build.gradle:
+
+```gradle
+dependencies {
+    compile 'com.ezylang:EvalEx:3.0.1'
+}
+```
+
 ## Examples
 
 ### A simple example, that shows how it works in general:
@@ -139,6 +163,14 @@ BigDecimal result = expression.evaluate().getNumberValue();
 
 System.out.println(result); // prints 44.85
 ```
+
+## EvalEx-big-math
+
+[Big-math](https://github.com/eobermuhlner/big-math) is a library by Eric Obermühlner. It provides
+advanced Java BigDecimal math functions using an arbitrary precision.
+
+[EvalEx-big-math](https://github.com/ezylang/EvalEx-big-math) adds the advanced math functions from
+big-math to EvalEx.
 
 ## Author and License
 

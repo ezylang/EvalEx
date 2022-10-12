@@ -17,3 +17,12 @@ https://ezylang.github.io/EvalEx/
 ## Using _JustTheDocs_ template:
 
 https://just-the-docs.github.io/just-the-docs/
+
+## Install Jekyll locally (for testing the site locally)
+
+https://jekyllrb.com/docs/installation/
+
+## Testing locally
+
+https://docs.github.com/en/pages/setting-up-a-github-pages-site-with-jekyll/testing-your-github-pages-site-locally-with-jekyll
+

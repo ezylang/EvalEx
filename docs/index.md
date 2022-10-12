@@ -9,7 +9,9 @@ nav_order: 1
 EvalEx is a handy expression evaluator for Java, that allows to parse and evaluate expression
 strings.
 
-_Version 3 of EvalEx is a complete rewrite of the popular expression evaluator. See [Major Changes](https://ezylang.github.io/EvalEx/concepts/changes.html) for an overview of the changes._
+_Version 3 of EvalEx is a complete rewrite of the popular expression evaluator.
+See [Major Changes](https://ezylang.github.io/EvalEx/concepts/changes.html) for an overview of the
+changes._
 
 ## Key Features:
 
@@ -28,6 +30,42 @@ _Version 3 of EvalEx is a complete rewrite of the popular expression evaluator. 
 - Supports implicit multiplication, e.g. (a+b)(a-b) or 2(x-y) which equals to (a+b)\*(a-b) or 2\*(
   x-y)
 - Lazy evaluation of function parameters (see the IF function) and support of sub-expressions.
+
+## Discussion
+
+For announcements, questions and ideas visit
+the [Discussions area](https://github.com/ezylang/EvalEx/discussions).
+
+## Download / Including
+
+You can download the binaries, source code and JavaDoc jars from
+[Maven Central](https://search.maven.org/search?q=a:%22EvalEx%22).\
+You will find there also copy/paste templates for including EvalEx in your project with build
+systems like Maven or Gradle.
+
+### Maven
+
+To include it in your Maven project, add the dependency to your pom. For example:
+
+```xml
+<dependencies>
+    <dependency>
+      <groupId>com.ezylang</groupId>
+      <artifactId>EvalEx</artifactId>
+      <version>3.0.1</version>
+    </dependency>
+</dependencies>
+```
+
+### Gradle
+
+If you're using gradle add the dependencies to your project's app build.gradle:
+
+```gradle
+dependencies {
+    compile 'com.ezylang:EvalEx:3.0.1'
+}
+```
 
 ## Examples
 
@@ -114,6 +152,14 @@ BigDecimal result = expression.evaluate().getNumberValue();
 
 System.out.println(result); // prints 44.85
 ```
+
+## EvalEx-big-math
+
+[Big-math](https://github.com/eobermuhlner/big-math) is a library by Eric Obermühlner. It provides
+advanced Java BigDecimal math functions using an arbitrary precision.
+
+[EvalEx-big-math](https://github.com/ezylang/EvalEx-big-math) adds the advanced math functions from
+big-math to EvalEx.
 
 ## Author and License
 
