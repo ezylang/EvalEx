@@ -106,7 +106,7 @@ See chapter [Data Access](../customization/data_access.html) for details.
 Adding custom operators is now easier, but has changed significantly.
 See chapter [Custom Operators](../customization/custom_operators.html) for details.
 
-### Custom function
+### Custom functions
 
 Adding custom functions is now easier, but has changed significantly.
 See chapter [Custom Functions](../customization/custom_functions.html) for details.

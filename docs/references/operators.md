@@ -11,7 +11,7 @@ Available through the _ExpressionConfiguration.StandardOperatorsDictionary_ cons
 
 ### Arithmetic operators
 
-| Name | Value                                   |
+| Name | Description                             |
 |------|-----------------------------------------|
 | -    | The prefix minus operator, like in "-2" |
 | +    | The prefix minus operator, like in "+2" |
@@ -24,7 +24,7 @@ Available through the _ExpressionConfiguration.StandardOperatorsDictionary_ cons
 
 ### Boolean operators
 
-| Name         | Value                               |
+| Name         | Description                         |
 |--------------|-------------------------------------|
 | =, ==        | The equals operator                 | 
 | !=, <>       | The not equals operator             | 

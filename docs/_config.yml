@@ -2,9 +2,9 @@ remote_theme: just-the-docs/just-the-docs
 title: EvalEx Documentation
 aux_links:
   "View on GitHub":
-    - "//github.com/ezylang/EvalEx"
+    - "https://github.com/ezylang/EvalEx"
   "Download from Maven Central":
-    - "//search.maven.org/search?q=a:%22EvalEx%22"
+    - "https://search.maven.org/search?q=a:%22EvalEx%22"
   "Release Notes":
-    - "//github.com/ezylang/EvalEx/releases"
+    - "https://github.com/ezylang/EvalEx/releases"
 footer_content: "Copyright &copy; 2012-2022 Udo Klimaschewski"
