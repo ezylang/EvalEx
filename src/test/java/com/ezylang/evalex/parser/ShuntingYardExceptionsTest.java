@@ -142,4 +142,40 @@ class ShuntingYardExceptionsTest extends BaseParserTest {
         .isInstanceOf(ParseException.class)
         .hasMessage("Too many parameters for function");
   }
+
+  @Test
+  void testTooManyOperands() {
+    Expression expression = new Expression("1 2");
+
+    assertThatThrownBy(expression::evaluate)
+        .isInstanceOf(ParseException.class)
+        .hasMessage("Too many operands");
+  }
+
+  @Test
+  void testTooManyOperandsString() {
+    Expression expression = new Expression("Hello World");
+
+    assertThatThrownBy(expression::evaluate)
+        .isInstanceOf(ParseException.class)
+        .hasMessage("Too many operands");
+  }
+
+  @Test
+  void testTooManyOperandsStringWithNumbers() {
+    Expression expression = new Expression("Hello 1 World");
+
+    assertThatThrownBy(expression::evaluate)
+        .isInstanceOf(ParseException.class)
+        .hasMessage("Too many operands");
+  }
+
+  @Test
+  void testTooManyOperandsStringWithNumbersAndOperators() {
+    Expression expression = new Expression("Hello 1 + 1 World");
+
+    assertThatThrownBy(expression::evaluate)
+        .isInstanceOf(ParseException.class)
+        .hasMessage("Too many operands");
+  }
 }
