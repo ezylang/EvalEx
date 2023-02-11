@@ -112,6 +112,10 @@ public class ShuntingYardConverter {
       throw new ParseException(this.originalExpression, "Empty expression");
     }
 
+    if (operandStack.size() > 1) {
+      throw new ParseException(this.originalExpression, "Too many operands");
+    }
+
     return operandStack.pop();
   }
 
