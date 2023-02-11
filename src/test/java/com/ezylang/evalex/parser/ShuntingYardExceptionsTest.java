@@ -163,7 +163,7 @@ class ShuntingYardExceptionsTest extends BaseParserTest {
 
   @Test
   void testTooManyOperandsStringWithNumbers() {
-    Expression expression = new Expression("Hello 1 World");
+    Expression expression = new Expression("Hello 1");
 
     assertThatThrownBy(expression::evaluate)
         .isInstanceOf(ParseException.class)
@@ -172,7 +172,7 @@ class ShuntingYardExceptionsTest extends BaseParserTest {
 
   @Test
   void testTooManyOperandsStringWithNumbersAndOperators() {
-    Expression expression = new Expression("Hello 1 + 1 World");
+    Expression expression = new Expression("Hello 1 + 1");
 
     assertThatThrownBy(expression::evaluate)
         .isInstanceOf(ParseException.class)
@@ -181,7 +181,7 @@ class ShuntingYardExceptionsTest extends BaseParserTest {
 
   @Test
   void testTooManyOperandsStringWithNumbersAndOperatorsAndBraces() {
-    Expression expression = new Expression("Hello 1 + (1 + 1) World");
+    Expression expression = new Expression("Hello 1 + (1 + 1)");
 
     assertThatThrownBy(expression::evaluate)
         .isInstanceOf(ParseException.class)
@@ -190,7 +190,7 @@ class ShuntingYardExceptionsTest extends BaseParserTest {
 
   @Test
   void testTooManyOperandsStringWithFunctions() {
-    Expression expression = new Expression("Hello ROUND(1,2) World");
+    Expression expression = new Expression("Hello ROUND(1,2)");
 
     assertThatThrownBy(expression::evaluate)
         .isInstanceOf(ParseException.class)
@@ -199,7 +199,7 @@ class ShuntingYardExceptionsTest extends BaseParserTest {
 
   @Test
   void testTooManyOperandsStringWithFunctionsAndBraces() {
-    Expression expression = new Expression("Hello ROUND(1,2) + (1 + 1) World");
+    Expression expression = new Expression("Hello ROUND(1,2) + (1 + 1)");
 
     assertThatThrownBy(expression::evaluate)
         .isInstanceOf(ParseException.class)
