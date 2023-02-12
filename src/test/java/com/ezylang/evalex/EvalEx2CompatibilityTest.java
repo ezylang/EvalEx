@@ -22,6 +22,8 @@ import com.ezylang.evalex.parser.ParseException;
 import java.math.BigDecimal;
 import java.math.MathContext;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 
 class EvalEx2CompatibilityTest {
 
@@ -215,6 +217,28 @@ class EvalEx2CompatibilityTest {
     assertThat(evaluateToNumber("sin(3.e1 )")).isEqualByComparingTo("0.5");
     assertThat(evaluateToNumber("sin( 3.e1 )")).isEqualByComparingTo("0.5");
     assertThat(evaluateToNumber("2.2e-16 * 10.2")).isEqualByComparingTo("2.244E-15");
+  }
+
+  @ParameterizedTest
+  @CsvSource(
+      delimiter = ':',
+      value = {
+        "2a*(a+b) : 20",
+        "2a*2b : 24",
+        "22(3+1) : 88",
+        "(1+2)(2-1) : 3",
+        "0xA(a+b) : 50",
+        "(a+b)(a-b) : -5"
+      })
+  void testImplicitMultiplication(String expressionString, String expectedResult)
+      throws EvaluationException, ParseException {
+    Expression expression =
+        new Expression(
+                expressionString,
+                ExpressionConfiguration.builder().mathContext(MathContext.DECIMAL32).build())
+            .with("a", 2)
+            .and("b", 3);
+    assertThat(expression.evaluate().getStringValue()).isEqualTo(expectedResult);
   }
 
   private BigDecimal evaluateToNumber(String expression)

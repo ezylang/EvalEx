@@ -15,8 +15,7 @@
 */
 package com.ezylang.evalex.parser;
 
-import static com.ezylang.evalex.parser.Token.TokenType.BRACE_OPEN;
-import static com.ezylang.evalex.parser.Token.TokenType.INFIX_OPERATOR;
+import static com.ezylang.evalex.parser.Token.TokenType.*;
 
 import com.ezylang.evalex.config.ExpressionConfiguration;
 import com.ezylang.evalex.config.FunctionDictionaryIfc;
@@ -67,10 +66,14 @@ public class Tokenizer {
   public List<Token> parse() throws ParseException {
     Token currentToken = getNextToken();
     while (currentToken != null) {
-      if (currentToken.getType() == BRACE_OPEN && implicitMultiplicationPossible()) {
+      if (implicitMultiplicationPossible(currentToken)) {
         if (configuration.isImplicitMultiplicationAllowed()) {
           Token multiplication =
-              new Token(currentToken.getStartPosition(), "*", TokenType.INFIX_OPERATOR);
+              new Token(
+                  currentToken.getStartPosition(),
+                  "*",
+                  TokenType.INFIX_OPERATOR,
+                  operatorDictionary.getInfixOperator("*"));
           tokens.add(multiplication);
         } else {
           throw new ParseException(currentToken, "Missing operator");
@@ -90,6 +93,19 @@ public class Tokenizer {
     }
 
     return tokens;
+  }
+
+  private boolean implicitMultiplicationPossible(Token currentToken) {
+    Token previousToken = getPreviousToken();
+
+    if (previousToken == null) {
+      return false;
+    }
+
+    return ((previousToken.getType() == BRACE_CLOSE && currentToken.getType() == BRACE_OPEN)
+        || ((previousToken.getType() == NUMBER_LITERAL
+            && currentToken.getType() == VARIABLE_OR_CONSTANT))
+        || ((previousToken.getType() == NUMBER_LITERAL && currentToken.getType() == BRACE_OPEN)));
   }
 
   private void validateToken(Token currentToken) throws ParseException {
@@ -237,22 +253,6 @@ public class Tokenizer {
         tokenStartIndex + tokenString.length() - 1,
         tokenString,
         "Undefined operator '" + tokenString + "'");
-  }
-
-  private boolean implicitMultiplicationPossible() {
-    Token previousToken = getPreviousToken();
-
-    if (previousToken == null) {
-      return false;
-    }
-
-    switch (previousToken.getType()) {
-      case BRACE_CLOSE:
-      case NUMBER_LITERAL:
-        return true;
-      default:
-        return false;
-    }
   }
 
   private boolean arrayOpenOrStructureSeparatorNotAllowed() {

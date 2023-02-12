@@ -12,22 +12,22 @@ parameter to the _Expression_ constructor.
 Example usage, showing all default configuration values:
 
 ```java
-ExpressionConfiguration configuration = ExpressionConfiguration.builder()
-    .allowOverwriteConstants(true)
-    .arraysAllowed(true)
-    .dataAccessorSupplier(MapBasedDataAccessor::new)
-    .decimalPlacesRounding(ExpressionConfiguration.DECIMAL_PLACES_ROUNDING_UNLIMITED)
-    .defaultConstants(ExpressionConfiguration.StandardConstants)
-    .functionDictionary(ExpressionConfiguration.StandardFunctionsDictionary)
-    .implicitMultiplicationAllowed(true)
-    .mathContext(ExpressionConfiguration.DEFAULT_MATH_CONTEXT)
-    .operatorDictionary(ExpressionConfiguration.StandardOperatorsDictionary)
-    .powerOfPrecedence(OperatorIfc.OPERATOR_PRECEDENCE_POWER)
-    .stripTrailingZeros(true)
-    .structuresAllowed(true)
-    .build();
+ExpressionConfiguration configuration=ExpressionConfiguration.builder()
+        .allowOverwriteConstants(true)
+        .arraysAllowed(true)
+        .dataAccessorSupplier(MapBasedDataAccessor::new)
+        .decimalPlacesRounding(ExpressionConfiguration.DECIMAL_PLACES_ROUNDING_UNLIMITED)
+        .defaultConstants(ExpressionConfiguration.StandardConstants)
+        .functionDictionary(ExpressionConfiguration.StandardFunctionsDictionary)
+        .implicitMultiplicationAllowed(true)
+        .mathContext(ExpressionConfiguration.DEFAULT_MATH_CONTEXT)
+        .operatorDictionary(ExpressionConfiguration.StandardOperatorsDictionary)
+        .powerOfPrecedence(OperatorIfc.OPERATOR_PRECEDENCE_POWER)
+        .stripTrailingZeros(true)
+        .structuresAllowed(true)
+        .build();
 
-Expression expression = new Expression("2.128 + a", configuration);
+        Expression expression=new Expression("2.128 + a",configuration);
 ```
 
 ### Allow to Overwrite Constants
@@ -77,8 +77,13 @@ The default implementation is the _MapBasedFunctionDictionary_, which stores all
 
 ### Implicit Multiplication
 
-Implicit multiplication automatically adds in expression like "(a+b)(b+c)" the missing
-multiplication operator, so that the expression reads "(a+b) * (b+c)".
+Implicit multiplication automatically adds in expressions like "2x" or "(a+b)(b+c)" the missing
+multiplication operator, so that the expression reads "2*x" or "(a+b) * (b+c)".
+
+Implicit multiplication will not work for expressions like x(a+b), which will not be extended to "2*(a+b)".
+This expression is treated as a call to function "x", which, if not defined, will raise a parse exception.
+
+An expression like "2(a+b)" will be expanded to "2*(a+b)".
 
 By default, implicit multiplication is enabled. It can be disabled with this configuration
 parameter.
@@ -112,12 +117,12 @@ By default, EvalEx uses a lower precedence. You can configure to use a higher pr
 specifying it here, or by using a predefined constant:
 
 ```java
-ExpressionConfiguration configuration = ExpressionConfiguration.builder()
-    .powerOfPrecedence(OperatorIfc.OPERATOR_PRECEDENCE_POWER_HIGHER)
-    .build();
+ExpressionConfiguration configuration=ExpressionConfiguration.builder()
+        .powerOfPrecedence(OperatorIfc.OPERATOR_PRECEDENCE_POWER_HIGHER)
+        .build();
 
 // will now result in -4, instead of 4:
-Expression expression = new Expression("-2^2", configuration);
+        Expression expression=new Expression("-2^2",configuration);
 ```
 
 ### Strip Trailing Zeros

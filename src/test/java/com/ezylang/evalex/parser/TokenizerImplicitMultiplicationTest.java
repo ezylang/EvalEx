@@ -41,7 +41,7 @@ class TokenizerImplicitMultiplicationTest extends BaseParserTest {
   }
 
   @Test
-  void testImplicitNumber() throws ParseException {
+  void testImplicitNumberBraces() throws ParseException {
     assertAllTokensParsedCorrectly(
         "2(x)",
         new Token(1, "2", TokenType.NUMBER_LITERAL),
@@ -49,6 +49,24 @@ class TokenizerImplicitMultiplicationTest extends BaseParserTest {
         new Token(2, "(", TokenType.BRACE_OPEN),
         new Token(3, "x", TokenType.VARIABLE_OR_CONSTANT),
         new Token(4, ")", TokenType.BRACE_CLOSE));
+  }
+
+  @Test
+  void testImplicitNumberNoBraces() throws ParseException {
+    assertAllTokensParsedCorrectly(
+        "2x",
+        new Token(1, "2", TokenType.NUMBER_LITERAL),
+        new Token(2, "*", TokenType.INFIX_OPERATOR),
+        new Token(2, "x", TokenType.VARIABLE_OR_CONSTANT));
+  }
+
+  @Test
+  void testImplicitNumberVariable() throws ParseException {
+    assertAllTokensParsedCorrectly(
+        "2x",
+        new Token(1, "2", TokenType.NUMBER_LITERAL),
+        new Token(2, "*", TokenType.INFIX_OPERATOR),
+        new Token(2, "x", TokenType.VARIABLE_OR_CONSTANT));
   }
 
   @Test
