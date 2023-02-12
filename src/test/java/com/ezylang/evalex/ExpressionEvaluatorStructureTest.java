@@ -64,4 +64,17 @@ class ExpressionEvaluatorStructureTest extends BaseExpressionEvaluatorTest {
         .isInstanceOf(EvaluationException.class)
         .hasMessage("Unsupported data types in operation");
   }
+
+  @Test
+  void testThrowsFieldNotFound() {
+    Map<String, BigDecimal> testStructure = new HashMap<>();
+    testStructure.put("field1", new BigDecimal(3));
+
+    assertThatThrownBy(
+            () -> createExpression("a.field1 + a.field2").with("a", testStructure).evaluate())
+        .isInstanceOf(EvaluationException.class)
+        .hasMessage("Field 'field2' not found in structure")
+        .extracting("startPosition")
+        .isEqualTo(14);
+  }
 }
