@@ -16,6 +16,7 @@
 package com.ezylang.evalex.parser;
 
 import static com.ezylang.evalex.parser.Token.TokenType.BRACE_OPEN;
+import static com.ezylang.evalex.parser.Token.TokenType.INFIX_OPERATOR;
 
 import com.ezylang.evalex.config.ExpressionConfiguration;
 import com.ezylang.evalex.config.FunctionDictionaryIfc;
@@ -75,6 +76,7 @@ public class Tokenizer {
           throw new ParseException(currentToken, "Missing operator");
         }
       }
+      validateToken(currentToken);
       tokens.add(currentToken);
       currentToken = getNextToken();
     }
@@ -88,6 +90,26 @@ public class Tokenizer {
     }
 
     return tokens;
+  }
+
+  private void validateToken(Token currentToken) throws ParseException {
+    Token previousToken = getPreviousToken();
+    if (previousToken != null
+        && previousToken.getType() == INFIX_OPERATOR
+        && invalidTokenAfterInfixOperator(currentToken)) {
+      throw new ParseException(currentToken, "Unexpected token after infix operator");
+    }
+  }
+
+  private boolean invalidTokenAfterInfixOperator(Token token) {
+    switch (token.getType()) {
+      case INFIX_OPERATOR:
+      case BRACE_CLOSE:
+      case COMMA:
+        return true;
+      default:
+        return false;
+    }
   }
 
   private Token getNextToken() throws ParseException {
