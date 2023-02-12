@@ -15,14 +15,15 @@
 */
 package com.ezylang.evalex;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
-
 import com.ezylang.evalex.parser.ParseException;
+import org.junit.jupiter.api.Test;
+
 import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.Map;
-import org.junit.jupiter.api.Test;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 class ExpressionEvaluatorStructureTest extends BaseExpressionEvaluatorTest {
 
@@ -63,5 +64,18 @@ class ExpressionEvaluatorStructureTest extends BaseExpressionEvaluatorTest {
     assertThatThrownBy(() -> createExpression("a.b").with("a", "aString").evaluate())
         .isInstanceOf(EvaluationException.class)
         .hasMessage("Unsupported data types in operation");
+  }
+
+  @Test
+  void testThrowsFieldNotFound() {
+    Map<String, BigDecimal> testStructure = new HashMap<>();
+    testStructure.put("field1", new BigDecimal(3));
+
+    assertThatThrownBy(
+            () -> createExpression("a.field1 + a.field2").with("a", testStructure).evaluate())
+        .isInstanceOf(EvaluationException.class)
+        .hasMessage("Field 'field2' not found in structure")
+        .extracting("startPosition")
+        .isEqualTo(14);
   }
 }

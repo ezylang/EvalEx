@@ -186,9 +186,14 @@ public class Expression {
 
   private EvaluationValue evaluateStructureSeparator(ASTNode startNode) throws EvaluationException {
     EvaluationValue structure = evaluateSubtree(startNode.getParameters().get(0));
-    String name = startNode.getParameters().get(1).getToken().getValue();
+    Token nameToken = startNode.getParameters().get(1).getToken();
+    String name = nameToken.getValue();
 
     if (structure.isStructureValue()) {
+      if (!structure.getStructureValue().containsKey(name)) {
+        throw new EvaluationException(
+            nameToken, String.format("Field '%s' not found in structure", name));
+      }
       return structure.getStructureValue().get(name);
     } else {
       throw EvaluationException.ofUnsupportedDataTypeInOperation(startNode.getToken());
