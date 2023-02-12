@@ -58,7 +58,7 @@ To include it in your Maven project, add the dependency to your pom. For example
     <dependency>
       <groupId>com.ezylang</groupId>
       <artifactId>EvalEx</artifactId>
-      <version>3.0.1</version>
+      <version>3.0.2</version>
     </dependency>
 </dependencies>
 ```
@@ -69,7 +69,7 @@ If you're using gradle add the dependencies to your project's app build.gradle:
 
 ```gradle
 dependencies {
-    compile 'com.ezylang:EvalEx:3.0.1'
+    compile 'com.ezylang:EvalEx:3.0.2'
 }
 ```
 
