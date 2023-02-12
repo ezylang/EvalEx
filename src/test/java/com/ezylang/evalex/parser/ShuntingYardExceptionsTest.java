@@ -15,12 +15,7 @@
 */
 package com.ezylang.evalex.parser;
 
-import static com.ezylang.evalex.parser.Token.TokenType.FUNCTION_PARAM_START;
-import static com.ezylang.evalex.parser.Token.TokenType.INFIX_OPERATOR;
-import static com.ezylang.evalex.parser.Token.TokenType.POSTFIX_OPERATOR;
-import static com.ezylang.evalex.parser.Token.TokenType.PREFIX_OPERATOR;
-import static com.ezylang.evalex.parser.Token.TokenType.STRUCTURE_SEPARATOR;
-import static com.ezylang.evalex.parser.Token.TokenType.VARIABLE_OR_CONSTANT;
+import static com.ezylang.evalex.parser.Token.TokenType.*;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import com.ezylang.evalex.Expression;
@@ -29,6 +24,9 @@ import com.ezylang.evalex.operators.arithmetic.PrefixMinusOperator;
 import java.util.Arrays;
 import java.util.List;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
+import org.junit.jupiter.params.provider.ValueSource;
 
 class ShuntingYardExceptionsTest extends BaseParserTest {
 
@@ -143,75 +141,37 @@ class ShuntingYardExceptionsTest extends BaseParserTest {
         .hasMessage("Too many parameters for function");
   }
 
-  @Test
-  void testTooManyOperands() {
-    Expression expression = new Expression("1 2");
+  @ParameterizedTest
+  @ValueSource(
+      strings = {
+        "Hello, World",
+        "Hello ROUND(1,2) + (1 + 1)",
+        "Hello ROUND(1,2)",
+        "Hello 1 + (1 + 1)",
+        "Hello 1 + 1",
+        "Hello World",
+        "Hello 1",
+        "1 2"
+      })
+  void testTooManyOperands(String expressionString) {
+    Expression expression = new Expression(expressionString);
 
     assertThatThrownBy(expression::evaluate)
         .isInstanceOf(ParseException.class)
         .hasMessage("Too many operands");
   }
 
-  @Test
-  void testTooManyOperandsString() {
-    Expression expression = new Expression("Hello World");
+  @ParameterizedTest
+  @CsvSource(
+      delimiter = ':',
+      value = {"(x+y)*(a-) : 10", "a** : 3", "5+, : 3"})
+  void testInvalidTokenAfterInfixOperator(String expressionString, int position) {
+    Expression expression = new Expression(expressionString);
 
     assertThatThrownBy(expression::evaluate)
         .isInstanceOf(ParseException.class)
-        .hasMessage("Too many operands");
-  }
-
-  @Test
-  void testTooManyOperandsStringWithNumbers() {
-    Expression expression = new Expression("Hello 1");
-
-    assertThatThrownBy(expression::evaluate)
-        .isInstanceOf(ParseException.class)
-        .hasMessage("Too many operands");
-  }
-
-  @Test
-  void testTooManyOperandsStringWithNumbersAndOperators() {
-    Expression expression = new Expression("Hello 1 + 1");
-
-    assertThatThrownBy(expression::evaluate)
-        .isInstanceOf(ParseException.class)
-        .hasMessage("Too many operands");
-  }
-
-  @Test
-  void testTooManyOperandsStringWithNumbersAndOperatorsAndBraces() {
-    Expression expression = new Expression("Hello 1 + (1 + 1)");
-
-    assertThatThrownBy(expression::evaluate)
-        .isInstanceOf(ParseException.class)
-        .hasMessage("Too many operands");
-  }
-
-  @Test
-  void testTooManyOperandsStringWithFunctions() {
-    Expression expression = new Expression("Hello ROUND(1,2)");
-
-    assertThatThrownBy(expression::evaluate)
-        .isInstanceOf(ParseException.class)
-        .hasMessage("Too many operands");
-  }
-
-  @Test
-  void testTooManyOperandsStringWithFunctionsAndBraces() {
-    Expression expression = new Expression("Hello ROUND(1,2) + (1 + 1)");
-
-    assertThatThrownBy(expression::evaluate)
-        .isInstanceOf(ParseException.class)
-        .hasMessage("Too many operands");
-  }
-
-  @Test
-  void testTooManyOperandsStringWithSpecialCharacters() {
-    Expression expression = new Expression("Hello, World");
-
-    assertThatThrownBy(expression::evaluate)
-        .isInstanceOf(ParseException.class)
-        .hasMessage("Too many operands");
+        .hasMessage("Unexpected token after infix operator")
+        .extracting("startPosition")
+        .isEqualTo(position);
   }
 }
