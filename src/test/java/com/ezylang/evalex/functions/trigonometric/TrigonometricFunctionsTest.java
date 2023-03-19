@@ -135,6 +135,20 @@ class TrigonometricFunctionsTest extends BaseEvaluationTest {
     assertExpressionHasExpectedResult(expression, expectedResult);
   }
 
+  @Test
+  void testAsinThrowsExceptionPositive() {
+    assertThatThrownBy(() -> new Expression("ASIN(1.5)").evaluate())
+        .isInstanceOf(EvaluationException.class)
+        .hasMessage("Illegal asin(x) for x > 1: x = 1.5");
+  }
+
+  @Test
+  void testAsinThrowsExceptionNegative() {
+    assertThatThrownBy(() -> new Expression("ASIN(-1.5)").evaluate())
+        .isInstanceOf(EvaluationException.class)
+        .hasMessage("Illegal asin(x) for x < -1: x = -1.5");
+  }
+
   @ParameterizedTest
   @CsvSource(
       delimiter = ':',
@@ -159,6 +173,20 @@ class TrigonometricFunctionsTest extends BaseEvaluationTest {
   void testAsinR(String expression, String expectedResult)
       throws EvaluationException, ParseException {
     assertExpressionHasExpectedResult(expression, expectedResult);
+  }
+
+  @Test
+  void testAsinRThrowsExceptionPositive() {
+    assertThatThrownBy(() -> new Expression("ASINR(1.5)").evaluate())
+        .isInstanceOf(EvaluationException.class)
+        .hasMessage("Illegal asinr(x) for x > 1: x = 1.5");
+  }
+
+  @Test
+  void testAsinRThrowsExceptionNegative() {
+    assertThatThrownBy(() -> new Expression("ASINR(-1.5)").evaluate())
+        .isInstanceOf(EvaluationException.class)
+        .hasMessage("Illegal asinr(x) for x < -1: x = -1.5");
   }
 
   @ParameterizedTest
