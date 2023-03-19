@@ -27,6 +27,35 @@ import org.junit.jupiter.api.Test;
 class ExpressionEvaluatorStructureTest extends BaseExpressionEvaluatorTest {
 
   @Test
+  void testStructureScientificNumberDistinction() throws EvaluationException, ParseException {
+    Map<String, BigDecimal> structure =
+        new HashMap<>() {
+          {
+            put("environment_id", new BigDecimal(12345));
+          }
+        };
+    Expression expression = new Expression("order.environment_id").with("order", structure);
+
+    assertThat(expression.evaluate().getStringValue()).isEqualTo("12345");
+  }
+
+  @Test
+  void testStructureScientificNumberDistinctionMultiple()
+      throws EvaluationException, ParseException {
+    Map<String, Object> structure1 = new HashMap<>();
+    Map<String, Object> structure2 = new HashMap<>();
+    Map<String, Object> structure3 = new HashMap<>();
+
+    structure3.put("e", new BigDecimal("765"));
+    structure2.put("var_x", structure3);
+    structure1.put("e_id_e", structure2);
+
+    Expression expression = new Expression("order.e_id_e.var_x.e").with("order", structure1);
+
+    assertThat(expression.evaluate().getStringValue()).isEqualTo("765");
+  }
+
+  @Test
   void testSimpleStructure() throws ParseException, EvaluationException {
     Map<String, BigDecimal> structure =
         new HashMap<>() {

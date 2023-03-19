@@ -103,9 +103,9 @@ public class Tokenizer {
     }
 
     return ((previousToken.getType() == BRACE_CLOSE && currentToken.getType() == BRACE_OPEN)
-        || ((previousToken.getType() == NUMBER_LITERAL
-            && currentToken.getType() == VARIABLE_OR_CONSTANT))
-        || ((previousToken.getType() == NUMBER_LITERAL && currentToken.getType() == BRACE_OPEN)));
+        || (previousToken.getType() == NUMBER_LITERAL
+            && currentToken.getType() == VARIABLE_OR_CONSTANT)
+        || (previousToken.getType() == NUMBER_LITERAL && currentToken.getType() == BRACE_OPEN));
   }
 
   private void validateToken(Token currentToken) throws ParseException {
@@ -150,16 +150,16 @@ public class Tokenizer {
     } else if (currentChar == ']' && configuration.isArraysAllowed()) {
       return parseArrayClose();
     } else if (currentChar == '.'
-        && !isNumberChar(peekNextChar())
+        && !isNextCharNumberChar()
         && configuration.isStructuresAllowed()) {
       return parseStructureSeparator();
     } else if (currentChar == ',') {
       Token token = new Token(currentColumnIndex, ",", TokenType.COMMA);
       consumeChar();
       return token;
-    } else if (isIdentifierStart(currentChar)) {
+    } else if (isAtIdentifierStart()) {
       return parseIdentifier();
-    } else if (isNumberStart(currentChar)) {
+    } else if (isAtNumberStart()) {
       return parseNumberLiteral();
     } else {
       return parseOperator();
@@ -247,6 +247,8 @@ public class Tokenizer {
     } else if (operatorDictionary.hasInfixOperator(tokenString)) {
       OperatorIfc operator = operatorDictionary.getInfixOperator(tokenString);
       return new Token(tokenStartIndex, tokenString, TokenType.INFIX_OPERATOR, operator);
+    } else if (tokenString.equals(".") && configuration.isStructuresAllowed()) {
+      return new Token(tokenStartIndex, tokenString, STRUCTURE_SEPARATOR);
     }
     throw new ParseException(
         tokenStartIndex,
@@ -357,14 +359,14 @@ public class Tokenizer {
       consumeChar();
       tokenValue.append((char) currentChar);
       consumeChar();
-      while (currentChar != -1 && isHexChar(currentChar)) {
+      while (currentChar != -1 && isAtHexChar()) {
         tokenValue.append((char) currentChar);
         consumeChar();
       }
     } else {
       // decimal number
       int lastChar = -1;
-      while (currentChar != -1 && isNumberChar(currentChar)) {
+      while (currentChar != -1 && isAtNumberChar()) {
         tokenValue.append((char) currentChar);
         lastChar = currentChar;
         consumeChar();
@@ -382,7 +384,7 @@ public class Tokenizer {
   private Token parseIdentifier() throws ParseException {
     int tokenStartIndex = currentColumnIndex;
     StringBuilder tokenValue = new StringBuilder();
-    while (currentChar != -1 && isIdentifierChar(currentChar)) {
+    while (currentChar != -1 && isAtIdentifierChar()) {
       tokenValue.append((char) currentChar);
       consumeChar();
     }
@@ -472,24 +474,43 @@ public class Tokenizer {
     }
   }
 
-  private boolean isNumberStart(int ch) {
-    if (Character.isDigit(ch)) {
+  private boolean isAtNumberStart() {
+    if (Character.isDigit(currentChar)) {
       return true;
     }
-    return ch == '.' && Character.isDigit(peekNextChar());
+    return currentChar == '.' && Character.isDigit(peekNextChar());
   }
 
-  private boolean isNumberChar(int ch) {
+  private boolean isAtNumberChar() {
     int previousChar = peekPreviousChar();
+
     if (previousChar == 'e' || previousChar == 'E') {
-      return Character.isDigit(ch) || ch == '+' || ch == '-';
-    } else {
-      return Character.isDigit(ch) || ch == '.' || ch == 'e' || ch == 'E';
+      return Character.isDigit(currentChar) || currentChar == '+' || currentChar == '-';
     }
+
+    if (previousChar == '.') {
+      return Character.isDigit(currentChar) || currentChar == 'e' || currentChar == 'E';
+    }
+
+    return Character.isDigit(currentChar)
+        || currentChar == '.'
+        || currentChar == 'e'
+        || currentChar == 'E';
   }
 
-  private boolean isHexChar(int ch) {
-    switch (ch) {
+  private boolean isNextCharNumberChar() {
+    if (peekNextChar() == -1) {
+      return false;
+    }
+    consumeChar();
+    boolean isAtNumber = isAtNumberChar();
+    currentColumnIndex--;
+    currentChar = expressionString.charAt(currentColumnIndex - 1);
+    return isAtNumber;
+  }
+
+  private boolean isAtHexChar() {
+    switch (currentChar) {
       case '0':
       case '1':
       case '2':
@@ -518,12 +539,12 @@ public class Tokenizer {
     }
   }
 
-  private boolean isIdentifierStart(int ch) {
-    return Character.isLetter(ch) || ch == '_';
+  private boolean isAtIdentifierStart() {
+    return Character.isLetter(currentChar) || currentChar == '_';
   }
 
-  private boolean isIdentifierChar(int ch) {
-    return Character.isLetter(ch) || Character.isDigit(ch) || ch == '_';
+  private boolean isAtIdentifierChar() {
+    return Character.isLetter(currentChar) || Character.isDigit(currentChar) || currentChar == '_';
   }
 
   private void skipBlanks() {
