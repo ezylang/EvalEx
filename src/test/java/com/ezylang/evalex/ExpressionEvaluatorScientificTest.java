@@ -15,11 +15,11 @@
 */
 package com.ezylang.evalex;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 import com.ezylang.evalex.parser.ParseException;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
-
-import static org.assertj.core.api.Assertions.assertThat;
 
 class ExpressionEvaluatorScientificTest extends BaseExpressionEvaluatorTest {
 
