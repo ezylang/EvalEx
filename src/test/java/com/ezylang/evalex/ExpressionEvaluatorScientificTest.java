@@ -15,11 +15,11 @@
 */
 package com.ezylang.evalex;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
 import com.ezylang.evalex.parser.ParseException;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 class ExpressionEvaluatorScientificTest extends BaseExpressionEvaluatorTest {
 
@@ -40,7 +40,10 @@ class ExpressionEvaluatorScientificTest extends BaseExpressionEvaluatorTest {
         "2135E+4 : 21350000",
         "3.e1: 30",
         "3.e-1: 0.3",
-        "3.e+2: 300"
+        "3.e+2: 300",
+        "3.E1: 30",
+        "3.E-1: 0.3",
+        "3.E+2: 300"
       })
   void testScientificLiteralsEvaluation(String expression, String expectedResult)
       throws ParseException, EvaluationException {
