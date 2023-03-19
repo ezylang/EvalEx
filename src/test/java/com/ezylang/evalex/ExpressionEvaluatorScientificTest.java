@@ -37,7 +37,13 @@ class ExpressionEvaluatorScientificTest extends BaseExpressionEvaluatorTest {
         "0.5e2 : 50",
         "0.35E4 + 0.5e1 : 3505",
         "2135E-4 : 0.2135",
-        "2135E+4 : 21350000"
+        "2135E+4 : 21350000",
+        "3.e1: 30",
+        "3.e-1: 0.3",
+        "3.e+2: 300",
+        "3.E1: 30",
+        "3.E-1: 0.3",
+        "3.E+2: 300"
       })
   void testScientificLiteralsEvaluation(String expression, String expectedResult)
       throws ParseException, EvaluationException {
