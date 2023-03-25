@@ -5,7 +5,6 @@ EvalEx - Java Expression Evaluator
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=ezylang_EvalEx&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=ezylang_EvalEx)
 [![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=ezylang_EvalEx&metric=security_rating)](https://sonarcloud.io/summary/new_code?id=ezylang_EvalEx)
 [![Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=ezylang_EvalEx&metric=vulnerabilities)](https://sonarcloud.io/summary/new_code?id=ezylang_EvalEx)
-[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=ezylang_EvalEx&metric=coverage)](https://sonarcloud.io/summary/new_code?id=ezylang_EvalEx)
 [![Maven Central](https://img.shields.io/maven-central/v/com.ezylang/EvalEx.svg?label=Maven%20Central)](https://search.maven.org/search?q=a:%22EvalEx%22)
 
 | :warning: Version 3 of EvalEx is a complete rewrite of the popular expression evaluator. See [the new documentation area](https://ezylang.github.io/EvalEx/concepts/changes.html) for an overview of the changes.   |
@@ -174,7 +173,7 @@ big-math to EvalEx.
 
 ## Author and License
 
-Copyright 2012-2022 by Udo Klimaschewski
+Copyright 2012-2023 by Udo Klimaschewski
 
 **Thanks to all who contributed to this
 project: [Contributors](https://github.com/ezylang/EvalEx/graphs/contributors)**
