@@ -27,6 +27,7 @@ jobs:
       - name: Verify and analyze with SonarCloud
         ## automatic analysis is enabled in SonarCloud, so it is disabled here
         ## run: mvn --batch-mode verify sonar:sonar -Dsonar.projectKey=ezylang_EvalEx -Dsonar.organization=ezylang -Dsonar.host.url=https://sonarcloud.io -Dsonar.coverage.jacoco.xmlReportPaths=/home/runner/work/EvalEx/EvalEx/target/site/jacoco/jacoco.xml
+        run: mvn --batch-mode clean verify
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
