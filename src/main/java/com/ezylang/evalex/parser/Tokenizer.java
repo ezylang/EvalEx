@@ -268,6 +268,7 @@ public class Tokenizer {
       case BRACE_CLOSE:
       case VARIABLE_OR_CONSTANT:
       case ARRAY_CLOSE:
+      case STRING_LITERAL:
         return false;
       default:
         return true;

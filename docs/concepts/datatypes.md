@@ -129,6 +129,35 @@ BigDecimal result = expression.evaluate().getNumberValue();
 System.out.println(result); // prints 44.85
 ```
 
+#### Structure elements containing spaces in name
+If your structure has element names that contain spaces, you can use double quotes in the expression to access them.
+
+```java
+Map<String, Object> data = new HashMap<>();
+data.put("property 1", 12345);
+
+Expression expression = new Expression("data.\"property 1\"")
+    .with("data", data);
+
+BigDecimal result = expression.evaluate().getNumberValue();
+
+System.out.println(result); // prints 12345
+```
+
+This also works with arrays.
+
+```java
+Map<String, Object> data = new HashMap<>();
+data.put("property 1", Arrays.asList(1, 2, 3));
+
+Expression expression = new Expression("data.\"property 1\"[1]")
+    .with("data", data);
+
+BigDecimal result = expression.evaluate().getNumberValue();
+
+System.out.println(result); // prints 2
+```
+
 ### EXPRESSION_NODE
 
 A string expression is converted into an abstract syntax tree (AST), which represents the expression

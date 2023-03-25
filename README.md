@@ -174,7 +174,7 @@ big-math to EvalEx.
 
 ## Author and License
 
-Copyright 2012-2022 by Udo Klimaschewski
+Copyright 2012-2023 by Udo Klimaschewski
 
 **Thanks to all who contributed to this
 project: [Contributors](https://github.com/ezylang/EvalEx/graphs/contributors)**
