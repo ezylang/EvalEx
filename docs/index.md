@@ -52,7 +52,7 @@ To include it in your Maven project, add the dependency to your pom. For example
     <dependency>
       <groupId>com.ezylang</groupId>
       <artifactId>EvalEx</artifactId>
-      <version>3.0.3</version>
+      <version>3.0.4</version>
     </dependency>
 </dependencies>
 ```
@@ -63,7 +63,7 @@ If you're using gradle add the dependencies to your project's app build.gradle:
 
 ```gradle
 dependencies {
-    compile 'com.ezylang:EvalEx:3.0.3'
+    compile 'com.ezylang:EvalEx:3.0.4'
 }
 ```
 
@@ -163,7 +163,7 @@ big-math to EvalEx.
 
 ## Author and License
 
-Copyright 2012-2022 by Udo Klimaschewski
+Copyright 2012-2023 by Udo Klimaschewski
 
 **Thanks to all who contributed to this
 project: [Contributors](https://github.com/ezylang/EvalEx/graphs/contributors)**

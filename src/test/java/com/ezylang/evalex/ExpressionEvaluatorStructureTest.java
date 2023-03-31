@@ -20,7 +20,9 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import com.ezylang.evalex.parser.ParseException;
 import java.math.BigDecimal;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import org.junit.jupiter.api.Test;
 
@@ -105,5 +107,41 @@ class ExpressionEvaluatorStructureTest extends BaseExpressionEvaluatorTest {
         .hasMessage("Field 'field2' not found in structure")
         .extracting("startPosition")
         .isEqualTo(14);
+  }
+
+  @Test
+  void testStructureWithSpaceInName() throws EvaluationException, ParseException {
+    Map<String, BigDecimal> testStructure = new HashMap<>();
+    testStructure.put("field 1", new BigDecimal(88));
+
+    Expression expression = createExpression("a.\"field 1\"").with("a", testStructure);
+
+    assertThat(expression.evaluate().getStringValue()).isEqualTo("88");
+  }
+
+  @Test
+  void testTripleStructureWithSpaces() throws ParseException, EvaluationException {
+    Map<String, Object> structure = new HashMap<>();
+    Map<String, Object> subStructure = new HashMap<>();
+    subStructure.put("prop c", 99);
+    structure.put("prop b", List.of(subStructure));
+
+    Expression expression = createExpression("a.\"prop b\"[0].\"prop c\"").with("a", structure);
+
+    assertThat(expression.evaluate().getStringValue()).isEqualTo("99");
+  }
+
+  @Test
+  void testStructureWithSpaceInNameAndArrayAccess() throws EvaluationException, ParseException {
+    Map<String, List<Integer>> structure =
+        new HashMap<>() {
+          {
+            put("b prop", Arrays.asList(1, 2, 3));
+          }
+        };
+
+    Expression expression = createExpression("a.\"b prop\"[1]").with("a", structure);
+
+    assertThat(expression.evaluate().getStringValue()).isEqualTo("2");
   }
 }
