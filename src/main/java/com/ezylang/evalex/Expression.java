@@ -292,8 +292,8 @@ public class Expression {
    * @param values A map with variable values.
    * @return The Expression instance, to allow chaining of methods.
    */
-  public Expression withValues(Map<String, Object> values) {
-    for (Map.Entry<String, Object> entry : values.entrySet()) {
+  public Expression withValues(Map<String, ?> values) {
+    for (Map.Entry<String, ?> entry : values.entrySet()) {
       with(entry.getKey(), entry.getValue());
     }
     return this;
