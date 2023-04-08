@@ -82,6 +82,47 @@ class ExpressionTest {
   }
 
   @Test
+  void testWithValuesDoubleMap() throws ParseException, EvaluationException {
+    Expression expression = new Expression("a+b");
+
+    Map<String, Double> values = new HashMap<>();
+    values.put("a", 3.9);
+    values.put("b", 3.1);
+
+    EvaluationValue result = expression.withValues(values).evaluate();
+
+    assertThat(result.getStringValue()).isEqualTo("7");
+  }
+
+  @Test
+  void testWithValuesStringMap() throws ParseException, EvaluationException {
+    Expression expression = new Expression("a+b+c");
+
+    Map<String, String> values = new HashMap<>();
+    values.put("a", "Hello");
+    values.put("b", " ");
+    values.put("c", "world");
+
+    EvaluationValue result = expression.withValues(values).evaluate();
+
+    assertThat(result.getStringValue()).isEqualTo("Hello world");
+  }
+
+  @Test
+  void testWithValuesMixedMap() throws ParseException, EvaluationException {
+    Expression expression = new Expression("a+b+c");
+
+    Map<String, Object> values = new HashMap<>();
+    values.put("a", true);
+    values.put("b", " ");
+    values.put("c", 24.7);
+
+    EvaluationValue result = expression.withValues(values).evaluate();
+
+    assertThat(result.getStringValue()).isEqualTo("true 24.7");
+  }
+
+  @Test
   void testDefaultExpressionOwnsOwnConfigurationEntries() {
     Expression expression1 = new Expression("1+1");
     Expression expression2 = new Expression("1+1");
