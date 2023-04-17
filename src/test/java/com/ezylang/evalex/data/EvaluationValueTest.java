@@ -191,6 +191,13 @@ class EvaluationValueTest {
   }
 
   @Test
+  void testArrayNull() {
+    EvaluationValue value = new EvaluationValue(null);
+
+    assertThat(value.getArrayValue()).isNull();
+  }
+
+  @Test
   void testStructure() {
     Map<String, Object> structure = new HashMap<>();
     structure.put("a", "Hello");
@@ -217,6 +224,13 @@ class EvaluationValueTest {
     EvaluationValue value = new EvaluationValue(new BigDecimal(1));
 
     assertThat(value.getStructureValue()).isEmpty();
+  }
+
+  @Test
+  void testStructureNull() {
+    EvaluationValue value = new EvaluationValue(null);
+
+    assertThat(value.getStructureValue()).isNull();
   }
 
   @Test
