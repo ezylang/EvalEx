@@ -51,17 +51,17 @@ public class ExpressionEvaluatorNullTest extends BaseExpressionEvaluatorTest {
 
   @Test
   void testFailWithNoHandling() {
-    Expression expression1 = createExpression("a * 5");
-    assertThatThrownBy(() -> expression1.with("a", null).evaluate())
+    Expression expression1 = createExpression("a * 5").with("a", null);
+    assertThatThrownBy(expression1::evaluate)
         .isInstanceOf(EvaluationException.class)
         .hasMessage("Unsupported data types in operation");
 
-    Expression expression2 = createExpression("FLOOR(a)");
-    assertThatThrownBy(() -> expression2.with("a", null).evaluate())
+    Expression expression2 = createExpression("FLOOR(a)").with("a", null);
+    assertThatThrownBy(expression2::evaluate)
         .isInstanceOf(NullPointerException.class);
 
-    Expression expression3 = createExpression("a > 5");
-    assertThatThrownBy(() -> expression3.with("a", null).evaluate())
+    Expression expression3 = createExpression("a > 5").with("a", null);
+    assertThatThrownBy(expression3::evaluate)
         .isInstanceOf(NullPointerException.class);
   }
 
