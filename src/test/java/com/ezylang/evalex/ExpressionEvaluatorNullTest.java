@@ -23,7 +23,7 @@ import java.util.HashMap;
 import java.util.Map;
 import org.junit.jupiter.api.Test;
 
-public class ExpressionEvaluatorNullTest extends BaseExpressionEvaluatorTest {
+class ExpressionEvaluatorNullTest extends BaseExpressionEvaluatorTest {
 
   @Test
   void testNullEquals() throws ParseException, EvaluationException {
