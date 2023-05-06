@@ -22,6 +22,7 @@ import com.ezylang.evalex.data.EvaluationValue;
 import com.ezylang.evalex.operators.AbstractOperator;
 import com.ezylang.evalex.operators.InfixOperator;
 import com.ezylang.evalex.parser.Token;
+import java.time.Duration;
 
 /**
  * Addition of numbers and strings. If one operand is a string, a string concatenation is performed.
@@ -40,6 +41,17 @@ public class InfixPlusOperator extends AbstractOperator {
           leftOperand
               .getNumberValue()
               .add(rightOperand.getNumberValue(), expression.getConfiguration().getMathContext()));
+    } else if (leftOperand.isDateTimeValue() && rightOperand.isDurationValue()) {
+      return new EvaluationValue(
+          leftOperand.getDateTimeValue().plus(rightOperand.getDurationValue()));
+    } else if (leftOperand.isDurationValue() && rightOperand.isDurationValue()) {
+      return new EvaluationValue(
+          leftOperand.getDurationValue().plus(rightOperand.getDurationValue()));
+    } else if (leftOperand.isDateTimeValue() && rightOperand.isNumberValue()) {
+      return new EvaluationValue(
+          leftOperand
+              .getDateTimeValue()
+              .plus(Duration.ofDays(rightOperand.getNumberValue().longValue())));
     } else {
       return new EvaluationValue(leftOperand.getStringValue() + rightOperand.getStringValue());
     }

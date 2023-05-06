@@ -38,7 +38,11 @@ class InfixLessOperatorTest extends BaseEvaluationTest {
         "\"abc\"<\"xyz\" : true",
         "\"abc\"<\"ABC\" : false",
         "\"5\"<\"9\" : true",
-        "-5<-4 :true"
+        "-5<-4 :true",
+        "DT_DATE_TIME(2022,10,30)<DT_DATE_TIME(2022,10,30) : false",
+        "DT_DATE_TIME(2022,10,30)<DT_DATE_TIME(2022,10,28) : false",
+        "DT_DATE_TIME(2022,10,30)<DT_DATE_TIME(2022,10,31) : true",
+        "DT_DURATION_PARSE(\"P2D\")<DT_DURATION_PARSE(\"PT24H\") : false"
       })
   void testInfixLessLiterals(String expression, String expectedResult)
       throws EvaluationException, ParseException {

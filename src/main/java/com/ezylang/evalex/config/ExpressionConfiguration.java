@@ -33,6 +33,7 @@ import com.ezylang.evalex.functions.basic.RandomFunction;
 import com.ezylang.evalex.functions.basic.RoundFunction;
 import com.ezylang.evalex.functions.basic.SqrtFunction;
 import com.ezylang.evalex.functions.basic.SumFunction;
+import com.ezylang.evalex.functions.datetime.*;
 import com.ezylang.evalex.functions.string.StringContains;
 import com.ezylang.evalex.functions.string.StringLowerFunction;
 import com.ezylang.evalex.functions.string.StringUpperFunction;
@@ -221,7 +222,16 @@ public class ExpressionConfiguration {
           // string functions
           Map.entry("STR_CONTAINS", new StringContains()),
           Map.entry("STR_LOWER", new StringLowerFunction()),
-          Map.entry("STR_UPPER", new StringUpperFunction()));
+          Map.entry("STR_UPPER", new StringUpperFunction()),
+          // date time functions
+          Map.entry("DT_DATE_TIME", new DateTimeFunction()),
+          Map.entry("DT_PARSE", new DateTimeParseFunction()),
+          Map.entry("DT_FORMAT", new DateTimeFormatFunction()),
+          Map.entry("DT_EPOCH", new DateTimeToEpochFunction()),
+          Map.entry("DT_DATE_TIME_EPOCH", new DateTimeFromEpochFunction()),
+          Map.entry("DT_DURATION_MILLIS", new DurationFromMillisFunction()),
+          Map.entry("DT_DURATION_DAYS", new DurationFromDaysFunction()),
+          Map.entry("DT_DURATION_PARSE", new DurationParseFunction()));
 
   /** The math context to use. */
   @Builder.Default @Getter private final MathContext mathContext = DEFAULT_MATH_CONTEXT;

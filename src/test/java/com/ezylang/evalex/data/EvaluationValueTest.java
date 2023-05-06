@@ -23,6 +23,7 @@ import com.ezylang.evalex.parser.Token;
 import com.ezylang.evalex.parser.Token.TokenType;
 import java.math.BigDecimal;
 import java.math.MathContext;
+import java.time.*;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -49,7 +50,8 @@ class EvaluationValueTest {
     assertThat(value.isStructureValue()).isFalse();
     assertThat(value.isArrayValue()).isFalse();
     assertThat(value.isExpressionNode()).isFalse();
-    assertDataIsCorrect(value, "Hello World", BigDecimal.ZERO, false, String.class);
+    assertDataIsCorrect(
+        value, "Hello World", BigDecimal.ZERO, false, Instant.EPOCH, Duration.ZERO, String.class);
   }
 
   @Test
@@ -57,7 +59,14 @@ class EvaluationValueTest {
     EvaluationValue value = new EvaluationValue(new StringBuilder("Hello StringBuilder World"));
 
     assertThat(value.isStringValue()).isTrue();
-    assertDataIsCorrect(value, "Hello StringBuilder World", BigDecimal.ZERO, false, String.class);
+    assertDataIsCorrect(
+        value,
+        "Hello StringBuilder World",
+        BigDecimal.ZERO,
+        false,
+        Instant.EPOCH,
+        Duration.ZERO,
+        String.class);
   }
 
   @Test
@@ -65,7 +74,8 @@ class EvaluationValueTest {
     EvaluationValue value = new EvaluationValue('a');
 
     assertThat(value.isStringValue()).isTrue();
-    assertDataIsCorrect(value, "a", BigDecimal.ZERO, false, String.class);
+    assertDataIsCorrect(
+        value, "a", BigDecimal.ZERO, false, Instant.EPOCH, Duration.ZERO, String.class);
   }
 
   @Test
@@ -78,7 +88,8 @@ class EvaluationValueTest {
     assertThat(value.isStructureValue()).isFalse();
     assertThat(value.isArrayValue()).isFalse();
     assertThat(value.isExpressionNode()).isFalse();
-    assertDataIsCorrect(value, "true", BigDecimal.ONE, true, Boolean.class);
+    assertDataIsCorrect(
+        value, "true", BigDecimal.ONE, true, Instant.EPOCH, Duration.ZERO, Boolean.class);
   }
 
   @Test
@@ -86,7 +97,8 @@ class EvaluationValueTest {
     EvaluationValue value = new EvaluationValue(false);
 
     assertThat(value.isBooleanValue()).isTrue();
-    assertDataIsCorrect(value, "false", BigDecimal.ZERO, false, Boolean.class);
+    assertDataIsCorrect(
+        value, "false", BigDecimal.ZERO, false, Instant.EPOCH, Duration.ZERO, Boolean.class);
   }
 
   @Test
@@ -94,7 +106,8 @@ class EvaluationValueTest {
     EvaluationValue value = new EvaluationValue("true");
 
     assertThat(value.isStringValue()).isTrue();
-    assertDataIsCorrect(value, "true", BigDecimal.ONE, true, String.class);
+    assertDataIsCorrect(
+        value, "true", BigDecimal.ONE, true, Instant.EPOCH, Duration.ZERO, String.class);
   }
 
   @Test
@@ -102,7 +115,85 @@ class EvaluationValueTest {
     EvaluationValue value = new EvaluationValue(BigDecimal.ZERO);
 
     assertThat(value.isNumberValue()).isTrue();
-    assertDataIsCorrect(value, "0", BigDecimal.ZERO, false, BigDecimal.class);
+    assertDataIsCorrect(
+        value, "0", BigDecimal.ZERO, false, Instant.EPOCH, Duration.ZERO, BigDecimal.class);
+  }
+
+  @Test
+  void testInstant() {
+    EvaluationValue value = new EvaluationValue(Instant.parse("2022-10-30T00:00:00Z"));
+
+    assertThat(value.isDateTimeValue()).isTrue();
+    assertDataIsCorrect(
+        value,
+        "2022-10-30T00:00:00Z",
+        BigDecimal.ZERO,
+        false,
+        LocalDate.of(2022, 10, 30).atStartOfDay().toInstant(ZoneOffset.UTC),
+        Duration.ZERO,
+        Instant.class);
+  }
+
+  @Test
+  void testLocalDate() {
+    EvaluationValue value = new EvaluationValue(LocalDate.parse("2022-10-30"));
+
+    assertThat(value.isDateTimeValue()).isTrue();
+    assertDataIsCorrect(
+        value,
+        "2022-10-30T00:00:00Z",
+        BigDecimal.ZERO,
+        false,
+        LocalDate.of(2022, 10, 30).atStartOfDay().toInstant(ZoneOffset.UTC),
+        Duration.ZERO,
+        Instant.class);
+  }
+
+  @Test
+  void testLocalDateTime() {
+    EvaluationValue value = new EvaluationValue(LocalDateTime.parse("2022-10-30T11:20:30"));
+
+    assertThat(value.isDateTimeValue()).isTrue();
+    assertDataIsCorrect(
+        value,
+        "2022-10-30T11:20:30Z",
+        BigDecimal.ZERO,
+        false,
+        LocalDate.of(2022, 10, 30).atTime(11, 20, 30).toInstant(ZoneOffset.UTC),
+        Duration.ZERO,
+        Instant.class);
+  }
+
+  @Test
+  void testZonedDateTime() {
+    ZonedDateTime zonedDateTime =
+        ZonedDateTime.of(LocalDateTime.of(2022, 10, 30, 11, 20, 30), ZoneId.of("GMT+05:30"));
+    EvaluationValue value = new EvaluationValue(zonedDateTime);
+
+    assertThat(value.isDateTimeValue()).isTrue();
+    assertDataIsCorrect(
+        value,
+        "2022-10-30T05:50:30Z",
+        BigDecimal.ZERO,
+        false,
+        zonedDateTime.toInstant(),
+        Duration.ZERO,
+        Instant.class);
+  }
+
+  @Test
+  void testDuration() {
+    EvaluationValue value = new EvaluationValue(Duration.ofMinutes(1));
+
+    assertThat(value.isDurationValue()).isTrue();
+    assertDataIsCorrect(
+        value,
+        "PT1M",
+        BigDecimal.ZERO,
+        false,
+        Instant.EPOCH,
+        Duration.ofMinutes(1),
+        Duration.class);
   }
 
   @Test
@@ -110,7 +201,14 @@ class EvaluationValueTest {
     EvaluationValue value = new EvaluationValue(new BigDecimal("123.5"));
 
     assertThat(value.isNumberValue()).isTrue();
-    assertDataIsCorrect(value, "123.5", new BigDecimal("123.5"), true, BigDecimal.class);
+    assertDataIsCorrect(
+        value,
+        "123.5",
+        new BigDecimal("123.5"),
+        true,
+        Instant.EPOCH,
+        Duration.ZERO,
+        BigDecimal.class);
   }
 
   @Test
@@ -118,7 +216,14 @@ class EvaluationValueTest {
     EvaluationValue value = new EvaluationValue((float) 4.5);
 
     assertThat(value.isNumberValue()).isTrue();
-    assertDataIsCorrect(value, "4.5", BigDecimal.valueOf((float) 4.5), true, BigDecimal.class);
+    assertDataIsCorrect(
+        value,
+        "4.5",
+        BigDecimal.valueOf((float) 4.5),
+        true,
+        Instant.EPOCH,
+        Duration.ZERO,
+        BigDecimal.class);
   }
 
   @Test
@@ -126,7 +231,14 @@ class EvaluationValueTest {
     EvaluationValue value = new EvaluationValue(8.5);
 
     assertThat(value.isNumberValue()).isTrue();
-    assertDataIsCorrect(value, "8.5", BigDecimal.valueOf(8.5), true, BigDecimal.class);
+    assertDataIsCorrect(
+        value,
+        "8.5",
+        BigDecimal.valueOf(8.5),
+        true,
+        Instant.EPOCH,
+        Duration.ZERO,
+        BigDecimal.class);
   }
 
   @Test
@@ -134,7 +246,8 @@ class EvaluationValueTest {
     EvaluationValue value = new EvaluationValue(6L);
 
     assertThat(value.isNumberValue()).isTrue();
-    assertDataIsCorrect(value, "6", new BigDecimal(6), true, BigDecimal.class);
+    assertDataIsCorrect(
+        value, "6", new BigDecimal(6), true, Instant.EPOCH, Duration.ZERO, BigDecimal.class);
   }
 
   @Test
@@ -142,7 +255,8 @@ class EvaluationValueTest {
     EvaluationValue value = new EvaluationValue(5);
 
     assertThat(value.isNumberValue()).isTrue();
-    assertDataIsCorrect(value, "5", new BigDecimal(5), true, BigDecimal.class);
+    assertDataIsCorrect(
+        value, "5", new BigDecimal(5), true, Instant.EPOCH, Duration.ZERO, BigDecimal.class);
   }
 
   @Test
@@ -150,7 +264,8 @@ class EvaluationValueTest {
     EvaluationValue value = new EvaluationValue((short) 4);
 
     assertThat(value.isNumberValue()).isTrue();
-    assertDataIsCorrect(value, "4", new BigDecimal(4), true, BigDecimal.class);
+    assertDataIsCorrect(
+        value, "4", new BigDecimal(4), true, Instant.EPOCH, Duration.ZERO, BigDecimal.class);
   }
 
   @Test
@@ -158,7 +273,8 @@ class EvaluationValueTest {
     EvaluationValue value = new EvaluationValue((byte) 3);
 
     assertThat(value.isNumberValue()).isTrue();
-    assertDataIsCorrect(value, "3", new BigDecimal(3), true, BigDecimal.class);
+    assertDataIsCorrect(
+        value, "3", new BigDecimal(3), true, Instant.EPOCH, Duration.ZERO, BigDecimal.class);
   }
 
   @Test
@@ -232,6 +348,8 @@ class EvaluationValueTest {
         "ASTNode(parameters=[], token=Token(startPosition=1, value=a, type=VARIABLE_OR_CONSTANT))",
         BigDecimal.ZERO,
         false,
+        Instant.EPOCH,
+        Duration.ZERO,
         ASTNode.class);
   }
 
@@ -279,10 +397,14 @@ class EvaluationValueTest {
       String stringValue,
       BigDecimal numberValue,
       Boolean booleanValue,
+      Instant dateTimeValue,
+      Duration durationValue,
       Class<?> valueInstance) {
     assertThat(value.getStringValue()).isEqualTo(stringValue);
     assertThat(value.getNumberValue()).isEqualTo(numberValue);
     assertThat(value.getBooleanValue()).isEqualTo(booleanValue);
+    assertThat(value.getDateTimeValue()).isEqualTo(dateTimeValue);
+    assertThat(value.getDurationValue()).isEqualTo(durationValue);
     assertThat(value.getValue()).isInstanceOf(valueInstance);
   }
 }

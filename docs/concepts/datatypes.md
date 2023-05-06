@@ -9,14 +9,16 @@ nav_order: 2
 
 EvalEx supports the following data types:
 
-| Data Type       | Internal Representation           |
-|-----------------|-----------------------------------|
-| NUMBER          | java.math.BigDecimal              |
-| BOOLEAN         | java.lang.Boolean                 |
-| STRING          | java.lang.String                  |
-| ARRAY           | java.util.List                    |
-| STRUCTURE       | java.util.Map                     |
-| EXPRESSION_NODE | com.ezylang.evalex.parser.ASTNode |
+| Data Type       | Internal Representation            |
+|-----------------|------------------------------------|
+| NUMBER          | java.math.BigDecimal               |
+| BOOLEAN         | java.lang.Boolean                  |
+| STRING          | java.lang.String                   |
+| DATE_TIME       | java.time.Instant                  |
+ | DURATION       | java.time.Duration                 |
+| ARRAY           | java.util.List                     |
+| STRUCTURE       | java.util.Map                      |
+| EXPRESSION_NODE | com.ezylang.evalex.parser.ASTNode  |
 
 Data is stored in an _EvaluationValue_, which holds the value and the data type.
 
@@ -60,6 +62,16 @@ Expression expression = new Expression("stringValue && numberValue")
 Any instance of _java.lang.CharSequence_ or _java.lang.Character_ will automatically be converted to
 a _STRING_ datatype. Conversion will be done by invoking the _toString()_ method on the input
 object.
+
+### DATE_TIME
+
+Any instance of _java.time.LocalDate_, _java.time.LocalDateTime_ or _java.time.ZoneDateTime_ will automatically be converted to
+a _DATE_TIME_ datatype. Conversion will be done by using the _UTC_ zone id on the input
+object.
+
+### DURATION
+
+Duration are stored as a _java.time.Duration_. The duration values are useful for calculations with _DATE_TIME_ values.
 
 ### ARRAY
 

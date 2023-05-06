@@ -84,7 +84,21 @@ class ArithmeticOperatorsTest extends BaseEvaluationTest {
         "1-89282 : -89281",
         "1.54321-1.5432 : 0.00001"
       })
-  void testInfixMinus(String expression, String expectedResult)
+  void testInfixMinusNumber(String expression, String expectedResult)
+      throws EvaluationException, ParseException {
+    assertExpressionHasExpectedResult(expression, expectedResult);
+  }
+
+  @ParameterizedTest
+  @CsvSource(
+      delimiter = '|',
+      value = {
+        "DT_DATE_TIME(2022,10,30)-2 | 2022-10-28T00:00:00Z",
+        "DT_DATE_TIME(2022,10,30,11,50,30)-DT_DATE_TIME(2022,10,30,11,50,28) | PT2S",
+        "DT_DATE_TIME(2022,10,30,11,50,30)-DT_DURATION_PARSE(\"PT2S\") | 2022-10-30T11:50:28Z",
+        "DT_DURATION_PARSE(\"PT5S\")-DT_DURATION_PARSE(\"PT2S\") | PT3S"
+      })
+  void testInfixMinusDateTime(String expression, String expectedResult)
       throws EvaluationException, ParseException {
     assertExpressionHasExpectedResult(expression, expectedResult);
   }
@@ -161,6 +175,19 @@ class ArithmeticOperatorsTest extends BaseEvaluationTest {
         "\"1\"+1 : 11"
       })
   void testInfixPlusStrings(String expression, String expectedResult)
+      throws EvaluationException, ParseException {
+    assertExpressionHasExpectedResult(expression, expectedResult);
+  }
+
+  @ParameterizedTest
+  @CsvSource(
+      delimiter = '|',
+      value = {
+        "DT_DATE_TIME(2022,10,30)+2 | 2022-11-01T00:00:00Z",
+        "DT_DATE_TIME(2022,10,30,11,50,30)+DT_DURATION_PARSE(\"PT2S\") | 2022-10-30T11:50:32Z",
+        "DT_DURATION_PARSE(\"PT5S\")+DT_DURATION_PARSE(\"PT2S\") | PT7S"
+      })
+  void testInfixPlusDateTime(String expression, String expectedResult)
       throws EvaluationException, ParseException {
     assertExpressionHasExpectedResult(expression, expectedResult);
   }
