@@ -27,10 +27,10 @@ class DateTimeFunctionsTest extends BaseEvaluationTest {
   @CsvSource(
       delimiter = '|',
       value = {
-        "DT_DATE_TIME(2022,10,30) | 2022-10-30T00:00:00Z",
-        "DT_DATE_TIME(2022,10,30,11) | 2022-10-30T11:00:00Z",
-        "DT_DATE_TIME(2022,10,30,11,50,20) | 2022-10-30T11:50:20Z",
-        "DT_DATE_TIME(2022,10,30,11,50,20,30) | 2022-10-30T11:50:20.000000030Z"
+        "DT_DATE_TIME(2022,10,30) | 2022-10-30T00:00",
+        "DT_DATE_TIME(2022,10,30,11) | 2022-10-30T11:00",
+        "DT_DATE_TIME(2022,10,30,11,50,20) | 2022-10-30T11:50:20",
+        "DT_DATE_TIME(2022,10,30,11,50,20,30) | 2022-10-30T11:50:20.000000030"
       })
   void testDateTime(String expression, String expectedResult)
       throws EvaluationException, ParseException {
@@ -41,10 +41,10 @@ class DateTimeFunctionsTest extends BaseEvaluationTest {
   @CsvSource(
       delimiter = '|',
       value = {
-        "DT_PARSE(\"2022-10-30T11:50:20Z\") | 2022-10-30T11:50:20Z",
-        "DT_PARSE(\"2022-10-30T11:50:20.000000030Z\") | 2022-10-30T11:50:20.000000030Z",
-        "DT_PARSE(\"30/10/2022 11:50:20\", \"dd/MM/yyyy HH:mm:ss\") | 2022-10-30T11:50:20Z",
-        "DT_PARSE(\"30/10/2022\", \"dd/MM/yyyy\") | 2022-10-30T00:00:00Z"
+        "DT_PARSE(\"2022-10-30T11:50:20\") | 2022-10-30T11:50:20",
+        "DT_PARSE(\"2022-10-30T11:50:20.000000030\") | 2022-10-30T11:50:20.000000030",
+        "DT_PARSE(\"30/10/2022 11:50:20\", \"dd/MM/yyyy HH:mm:ss\") | 2022-10-30T11:50:20",
+        "DT_PARSE(\"30/10/2022\", \"dd/MM/yyyy\") | 2022-10-30T00:00"
       })
   void testDateTimeParse(String expression, String expectedResult)
       throws EvaluationException, ParseException {
@@ -55,9 +55,9 @@ class DateTimeFunctionsTest extends BaseEvaluationTest {
   @CsvSource(
       delimiter = '|',
       value = {
-        "DT_FORMAT(DT_PARSE(\"2022-10-30T11:50:20Z\")) | 2022-10-30T11:50:20",
-        "DT_FORMAT(DT_PARSE(\"2022-10-30T11:50:20.000000030Z\"), \"dd/MM/yyyy\") | 30/10/2022",
-        "DT_FORMAT(DT_PARSE(\"2022-10-30T11:50:20.000000030Z\"), \"dd/MM/yyyy HH:mm:ss\") |"
+        "DT_FORMAT(DT_PARSE(\"2022-10-30T11:50:20\")) | 2022-10-30T11:50:20",
+        "DT_FORMAT(DT_PARSE(\"2022-10-30T11:50:20.000000030\"), \"dd/MM/yyyy\") | 30/10/2022",
+        "DT_FORMAT(DT_PARSE(\"2022-10-30T11:50:20.000000030\"), \"dd/MM/yyyy HH:mm:ss\") |"
             + " 30/10/2022 11:50:20"
       })
   void testDateTimeFormat(String expression, String expectedResult)
@@ -69,22 +69,10 @@ class DateTimeFunctionsTest extends BaseEvaluationTest {
   @CsvSource(
       delimiter = '|',
       value = {
-        "DT_EPOCH(DT_PARSE(\"2022-10-30T11:50:20Z\")) | 1667130620000",
-        "DT_EPOCH(DT_PARSE(\"1970-01-01T00:00:00Z\")) | 0"
+        "DT_EPOCH(DT_DATE_TIME_EPOCH(1667130620000)) | 1667130620000",
+        "DT_EPOCH(DT_DATE_TIME_EPOCH(0)) | 0"
       })
   void testDateTimeToEpoch(String expression, String expectedResult)
-      throws EvaluationException, ParseException {
-    assertExpressionHasExpectedResult(expression, expectedResult);
-  }
-
-  @ParameterizedTest
-  @CsvSource(
-      delimiter = '|',
-      value = {
-        "DT_DATE_TIME_EPOCH(1667130620000) | 2022-10-30T11:50:20Z",
-        "DT_DATE_TIME_EPOCH(0) | 1970-01-01T00:00:00Z"
-      })
-  void testDateTimeFromEpoch(String expression, String expectedResult)
       throws EvaluationException, ParseException {
     assertExpressionHasExpectedResult(expression, expectedResult);
   }

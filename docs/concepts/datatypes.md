@@ -9,16 +9,16 @@ nav_order: 2
 
 EvalEx supports the following data types:
 
-| Data Type       | Internal Representation            |
-|-----------------|------------------------------------|
-| NUMBER          | java.math.BigDecimal               |
-| BOOLEAN         | java.lang.Boolean                  |
-| STRING          | java.lang.String                   |
-| DATE_TIME       | java.time.Instant                  |
- | DURATION       | java.time.Duration                 |
-| ARRAY           | java.util.List                     |
-| STRUCTURE       | java.util.Map                      |
-| EXPRESSION_NODE | com.ezylang.evalex.parser.ASTNode  |
+| Data Type       | Internal Representation           |
+|-----------------|-----------------------------------|
+| NUMBER          | java.math.BigDecimal              |
+| BOOLEAN         | java.lang.Boolean                 |
+| STRING          | java.lang.String                  |
+| DATE_TIME       | java.time.LocalDateTime           |
+| DURATION        | java.time.Duration                |
+| ARRAY           | java.util.List                    |
+| STRUCTURE       | java.util.Map                     |
+| EXPRESSION_NODE | com.ezylang.evalex.parser.ASTNode |
 
 Data is stored in an _EvaluationValue_, which holds the value and the data type.
 
@@ -65,8 +65,8 @@ object.
 
 ### DATE_TIME
 
-Any instance of _java.time.LocalDate_, _java.time.LocalDateTime_ or _java.time.ZoneDateTime_ will automatically be converted to
-a _DATE_TIME_ datatype. Conversion will be done by using the _UTC_ zone id on the input
+Any instance of _java.time.LocalDate_, _java.time.Instant_ or _java.time.ZoneDateTime_ will automatically be converted to
+a _DATE_TIME_ datatype. Conversion will be done by using the current time zone id on the input
 object.
 
 ### DURATION

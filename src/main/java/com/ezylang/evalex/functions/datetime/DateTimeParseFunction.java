@@ -20,10 +20,7 @@ import com.ezylang.evalex.data.EvaluationValue;
 import com.ezylang.evalex.functions.AbstractFunction;
 import com.ezylang.evalex.functions.FunctionParameter;
 import com.ezylang.evalex.parser.Token;
-import java.time.Instant;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.ZoneOffset;
+import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 
@@ -32,21 +29,19 @@ public class DateTimeParseFunction extends AbstractFunction {
   @Override
   public EvaluationValue evaluate(
       Expression expression, Token functionToken, EvaluationValue... parameterValues) {
-    Instant instant;
+    LocalDateTime dateTime;
     if (parameterValues.length < 2) {
-      instant = Instant.parse(parameterValues[0].getStringValue());
+      dateTime = LocalDateTime.parse(parameterValues[0].getStringValue());
     } else {
       DateTimeFormatter formatter =
           DateTimeFormatter.ofPattern(parameterValues[1].getStringValue());
       try {
-        LocalDateTime localDateTime =
-            LocalDateTime.parse(parameterValues[0].getStringValue(), formatter);
-        instant = localDateTime.toInstant(ZoneOffset.UTC);
+        dateTime = LocalDateTime.parse(parameterValues[0].getStringValue(), formatter);
       } catch (DateTimeParseException ex) {
         LocalDate localDate = LocalDate.parse(parameterValues[0].getStringValue(), formatter);
-        instant = localDate.atStartOfDay().toInstant(ZoneOffset.UTC);
+        dateTime = localDate.atStartOfDay();
       }
     }
-    return new EvaluationValue(instant);
+    return new EvaluationValue(dateTime);
   }
 }

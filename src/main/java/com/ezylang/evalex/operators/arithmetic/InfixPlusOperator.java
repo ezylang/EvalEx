@@ -51,7 +51,7 @@ public class InfixPlusOperator extends AbstractOperator {
       return new EvaluationValue(
           leftOperand
               .getDateTimeValue()
-              .plus(Duration.ofDays(rightOperand.getNumberValue().longValue())));
+              .plus(Duration.ofMillis(rightOperand.getNumberValue().longValue())));
     } else {
       return new EvaluationValue(leftOperand.getStringValue() + rightOperand.getStringValue());
     }

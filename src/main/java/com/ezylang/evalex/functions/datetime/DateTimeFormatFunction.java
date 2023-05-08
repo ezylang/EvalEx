@@ -20,8 +20,6 @@ import com.ezylang.evalex.data.EvaluationValue;
 import com.ezylang.evalex.functions.AbstractFunction;
 import com.ezylang.evalex.functions.FunctionParameter;
 import com.ezylang.evalex.parser.Token;
-import java.time.LocalDateTime;
-import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 
 @FunctionParameter(name = "value", isVarArg = true)
@@ -31,14 +29,11 @@ public class DateTimeFormatFunction extends AbstractFunction {
       Expression expression, Token functionToken, EvaluationValue... parameterValues) {
     String formatted;
     if (parameterValues.length < 2) {
-      formatted =
-          LocalDateTime.ofInstant(parameterValues[0].getDateTimeValue(), ZoneOffset.UTC).toString();
+      formatted = parameterValues[0].getDateTimeValue().toString();
     } else {
       DateTimeFormatter formatter =
           DateTimeFormatter.ofPattern(parameterValues[1].getStringValue());
-      formatted =
-          LocalDateTime.ofInstant(parameterValues[0].getDateTimeValue(), ZoneOffset.UTC)
-              .format(formatter);
+      formatted = parameterValues[0].getDateTimeValue().format(formatter);
     }
     return new EvaluationValue(formatted);
   }

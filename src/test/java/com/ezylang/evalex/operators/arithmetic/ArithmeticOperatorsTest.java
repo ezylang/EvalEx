@@ -93,9 +93,9 @@ class ArithmeticOperatorsTest extends BaseEvaluationTest {
   @CsvSource(
       delimiter = '|',
       value = {
-        "DT_DATE_TIME(2022,10,30)-2 | 2022-10-28T00:00:00Z",
+        "DT_DATE_TIME(2022,10,30,11,50,30)-2000 | 2022-10-30T11:50:28",
         "DT_DATE_TIME(2022,10,30,11,50,30)-DT_DATE_TIME(2022,10,30,11,50,28) | PT2S",
-        "DT_DATE_TIME(2022,10,30,11,50,30)-DT_DURATION_PARSE(\"PT2S\") | 2022-10-30T11:50:28Z",
+        "DT_DATE_TIME(2022,10,30,11,50,30)-DT_DURATION_PARSE(\"PT2S\") | 2022-10-30T11:50:28",
         "DT_DURATION_PARSE(\"PT5S\")-DT_DURATION_PARSE(\"PT2S\") | PT3S"
       })
   void testInfixMinusDateTime(String expression, String expectedResult)
@@ -183,8 +183,8 @@ class ArithmeticOperatorsTest extends BaseEvaluationTest {
   @CsvSource(
       delimiter = '|',
       value = {
-        "DT_DATE_TIME(2022,10,30)+2 | 2022-11-01T00:00:00Z",
-        "DT_DATE_TIME(2022,10,30,11,50,30)+DT_DURATION_PARSE(\"PT2S\") | 2022-10-30T11:50:32Z",
+        "DT_DATE_TIME(2022,10,30,11,50,30)+2000 | 2022-10-30T11:50:32",
+        "DT_DATE_TIME(2022,10,30,11,50,30)+DT_DURATION_PARSE(\"PT2S\") | 2022-10-30T11:50:32",
         "DT_DURATION_PARSE(\"PT5S\")+DT_DURATION_PARSE(\"PT2S\") | PT7S"
       })
   void testInfixPlusDateTime(String expression, String expectedResult)

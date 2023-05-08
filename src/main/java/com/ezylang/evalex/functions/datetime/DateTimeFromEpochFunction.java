@@ -22,6 +22,8 @@ import com.ezylang.evalex.functions.FunctionParameter;
 import com.ezylang.evalex.parser.Token;
 import java.math.BigDecimal;
 import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 
 @FunctionParameter(name = "value")
 public class DateTimeFromEpochFunction extends AbstractFunction {
@@ -29,6 +31,7 @@ public class DateTimeFromEpochFunction extends AbstractFunction {
   public EvaluationValue evaluate(
       Expression expression, Token functionToken, EvaluationValue... parameterValues) {
     BigDecimal millis = parameterValues[0].getNumberValue();
-    return new EvaluationValue(Instant.ofEpochMilli(millis.longValue()));
+    return new EvaluationValue(
+        LocalDateTime.ofInstant(Instant.ofEpochMilli(millis.longValue()), ZoneId.systemDefault()));
   }
 }

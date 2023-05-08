@@ -21,7 +21,6 @@ import com.ezylang.evalex.functions.AbstractFunction;
 import com.ezylang.evalex.functions.FunctionParameter;
 import com.ezylang.evalex.parser.Token;
 import java.time.LocalDateTime;
-import java.time.ZoneOffset;
 
 @FunctionParameter(name = "values", isVarArg = true, nonNegative = true)
 public class DateTimeFunction extends AbstractFunction {
@@ -36,8 +35,6 @@ public class DateTimeFunction extends AbstractFunction {
     int second = parameterValues.length >= 6 ? parameterValues[5].getNumberValue().intValue() : 0;
     int nanoOfs = parameterValues.length >= 7 ? parameterValues[6].getNumberValue().intValue() : 0;
 
-    return new EvaluationValue(
-        LocalDateTime.of(year, month, day, hour, minute, second, nanoOfs)
-            .toInstant(ZoneOffset.UTC));
+    return new EvaluationValue(LocalDateTime.of(year, month, day, hour, minute, second, nanoOfs));
   }
 }
