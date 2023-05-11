@@ -20,24 +20,45 @@ import com.ezylang.evalex.data.EvaluationValue;
 import com.ezylang.evalex.functions.AbstractFunction;
 import com.ezylang.evalex.functions.FunctionParameter;
 import com.ezylang.evalex.parser.Token;
-import java.time.ZoneId;
+import java.time.*;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
+import java.util.Optional;
 
 @FunctionParameter(name = "value", isVarArg = true)
-public class DateTimeFormatFunction extends AbstractFunction {
+public class ZonedDateTimeParseFunction extends AbstractFunction {
   @Override
   public EvaluationValue evaluate(
       Expression expression, Token functionToken, EvaluationValue... parameterValues) {
-    String formatted;
     ZoneId zoneId = expression.getConfiguration().getDefaultZoneId();
+    Instant instant;
+
     if (parameterValues.length < 2) {
-      formatted = parameterValues[0].getDateTimeValue().atZone(zoneId).toLocalDateTime().toString();
+      instant = parse(parameterValues[0].getStringValue(), null, zoneId);
     } else {
-      DateTimeFormatter formatter =
-          DateTimeFormatter.ofPattern(parameterValues[1].getStringValue());
-      formatted =
-          parameterValues[0].getDateTimeValue().atZone(zoneId).toLocalDateTime().format(formatter);
+      instant =
+          parse(parameterValues[0].getStringValue(), parameterValues[1].getStringValue(), zoneId);
     }
-    return new EvaluationValue(formatted);
+    return new EvaluationValue(instant);
+  }
+
+  private Instant parse(String value, String format, ZoneId zoneId) {
+    return parseZonedDateTime(value, format, zoneId)
+        .orElseThrow(
+            () -> new IllegalArgumentException("Unable to parse zoned date/time: " + value));
+  }
+
+  private Optional<Instant> parseZonedDateTime(String value, String format, ZoneId zoneId) {
+    try {
+      DateTimeFormatter formatter =
+          (format == null
+                  ? DateTimeFormatter.ISO_ZONED_DATE_TIME
+                  : DateTimeFormatter.ofPattern(format))
+              .withZone(zoneId);
+      ZonedDateTime zonedDateTime = ZonedDateTime.parse(value, formatter);
+      return Optional.of(zonedDateTime.toInstant());
+    } catch (DateTimeParseException ex) {
+      return Optional.empty();
+    }
   }
 }

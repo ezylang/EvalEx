@@ -40,7 +40,7 @@ public class EvaluationValue implements Comparable<EvaluationValue> {
     NUMBER,
     /** A boolean, stored as {@link Boolean}. */
     BOOLEAN,
-    /** A date time value, stored as {@link java.time.LocalDateTime}. */
+    /** A date time value, stored as {@link java.time.Instant}. */
     DATE_TIME,
     /** A period value, stored as {@link java.time.Duration}. */
     DURATION,
@@ -79,10 +79,10 @@ public class EvaluationValue implements Comparable<EvaluationValue> {
    *   <tr><td>Float, float</td><td>BigDecimal *</td></tr>
    *   <tr><td>CharSequence , String</td><td>String</td></tr>
    *   <tr><td>Boolean, boolean</td><td>Boolean</td></tr>
-   *   <tr><td>Instant, instant</td><td>LocalDateTime</td></tr>
-   *   <tr><td>LocalDate, localDate</td><td>LocalDateTime</td></tr>
-   *   <tr><td>LocalDateTime, localDateTime</td><td>LocalDateTime</td></tr>
-   *   <tr><td>ZonedDateTime, zonedDateTime</td><td>LocalDateTime</td></tr>
+   *   <tr><td>Instant, instant</td><td>Instant</td></tr>
+   *   <tr><td>ZonedDateTime, zonedDateTime</td><td>Instant</td></tr>
+   *   <tr><td>LocalDate, localDate</td><td>Instant</td></tr>
+   *   <tr><td>OffsetDateTime, offsetDateTime</td><td>Instant</td></tr>
    *   <tr><td>Duration, duration</td><td>Duration</td></tr>
    *   <tr><td>ASTNode</td><td>ASTNode</td></tr>
    *   <tr><td>List&lt;?&gt;</td><td>List&lt;EvaluationValue&gt; - each entry will be converted</td></tr>
@@ -111,16 +111,16 @@ public class EvaluationValue implements Comparable<EvaluationValue> {
       this.value = value;
     } else if (value instanceof Instant) {
       this.dataType = DataType.DATE_TIME;
-      this.value = LocalDateTime.ofInstant((Instant) value, ZoneId.systemDefault());
-    } else if (value instanceof LocalDate) {
-      this.dataType = DataType.DATE_TIME;
-      this.value = ((LocalDate) value).atStartOfDay();
-    } else if (value instanceof LocalDateTime) {
-      this.dataType = DataType.DATE_TIME;
       this.value = value;
     } else if (value instanceof ZonedDateTime) {
       this.dataType = DataType.DATE_TIME;
-      this.value = ((ZonedDateTime) value).toLocalDateTime();
+      this.value = ((ZonedDateTime) value).toInstant();
+    } else if (value instanceof OffsetDateTime) {
+      this.dataType = DataType.DATE_TIME;
+      this.value = ((OffsetDateTime) value).toInstant();
+    } else if (value instanceof LocalDate) {
+      this.dataType = DataType.DATE_TIME;
+      this.value = ((LocalDate) value).atStartOfDay().atOffset(ZoneOffset.UTC).toInstant();
     } else if (value instanceof Duration) {
       this.dataType = DataType.DURATION;
       this.value = value;
@@ -142,6 +142,11 @@ public class EvaluationValue implements Comparable<EvaluationValue> {
   public EvaluationValue(double value, MathContext mathContext) {
     this.dataType = DataType.NUMBER;
     this.value = new BigDecimal(Double.toString(value), mathContext);
+  }
+
+  public EvaluationValue(LocalDateTime value, ZoneId zoneId) {
+    this.dataType = DataType.DATE_TIME;
+    this.value = value.atZone(zoneId).toInstant();
   }
 
   /**
@@ -349,34 +354,33 @@ public class EvaluationValue implements Comparable<EvaluationValue> {
   }
 
   /**
-   * Gets a {@link LocalDateTime} representation of the value. If possible and needed, a conversion
-   * will be made.
+   * Gets a {@link Instant} representation of the value. If possible and needed, a conversion will
+   * be made.
    *
    * <ul>
    *   <li>Any number value will return the instant from the epoc value.
    *   <li>Any string with the string representation of a LocalDateTime (ex: <code>
    *       "2018-11-30T18:35:24.00"</code>) (case ignored) will return the current LocalDateTime.
-   *   <li>The date {@link LocalDateTime#MIN} will return if a conversion error occurs or in all
-   *       other cases.
+   *   <li>The date {@link Instant#EPOCH} will return if a conversion error occurs or in all other
+   *       cases.
    * </ul>
    *
-   * @return The {@link LocalDateTime} representation of the value.
+   * @return The {@link Instant} representation of the value.
    */
-  public LocalDateTime getDateTimeValue() {
+  public Instant getDateTimeValue() {
     try {
       switch (getDataType()) {
         case NUMBER:
-          return LocalDateTime.ofInstant(
-              Instant.ofEpochMilli(((BigDecimal) value).longValue()), ZoneId.systemDefault());
+          return Instant.ofEpochMilli(((BigDecimal) value).longValue());
         case DATE_TIME:
-          return (LocalDateTime) value;
+          return (Instant) value;
         case STRING:
-          return LocalDateTime.parse((String) value);
+          return Instant.parse((String) value);
         default:
-          return LocalDateTime.MIN;
+          return Instant.EPOCH;
       }
     } catch (DateTimeException ex) {
-      return LocalDateTime.MIN;
+      return Instant.EPOCH;
     }
   }
 

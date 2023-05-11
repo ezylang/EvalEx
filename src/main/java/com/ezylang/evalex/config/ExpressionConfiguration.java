@@ -31,6 +31,7 @@ import com.ezylang.evalex.operators.booleans.*;
 import java.math.BigDecimal;
 import java.math.MathContext;
 import java.math.RoundingMode;
+import java.time.ZoneId;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Map;
@@ -60,7 +61,7 @@ import lombok.Getter;
  *            Map.entry("update", new UpdateFunction()));
  * </pre>
  */
-@Builder
+@Builder(toBuilder = true)
 public class ExpressionConfiguration {
 
   /** The standard set constants for EvalEx. */
@@ -165,6 +166,7 @@ public class ExpressionConfiguration {
           // date time functions
           Map.entry("DT_DATE_TIME", new DateTimeFunction()),
           Map.entry("DT_PARSE", new DateTimeParseFunction()),
+          Map.entry("DT_ZONED_PARSE", new ZonedDateTimeParseFunction()),
           Map.entry("DT_FORMAT", new DateTimeFormatFunction()),
           Map.entry("DT_EPOCH", new DateTimeToEpochFunction()),
           Map.entry("DT_DATE_TIME_EPOCH", new DateTimeFromEpochFunction()),
@@ -225,6 +227,8 @@ public class ExpressionConfiguration {
    */
   @Builder.Default @Getter private final boolean allowOverwriteConstants = true;
 
+  /** Set the default zone id. By default, the system default zone id is used. */
+  @Builder.Default @Getter private final ZoneId defaultZoneId = ZoneId.systemDefault();
   /**
    * Convenience method to create a default configuration.
    *

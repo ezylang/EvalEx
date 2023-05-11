@@ -17,38 +17,87 @@ package com.ezylang.evalex.functions.datetime;
 
 import com.ezylang.evalex.BaseEvaluationTest;
 import com.ezylang.evalex.EvaluationException;
+import com.ezylang.evalex.config.ExpressionConfiguration;
+import com.ezylang.evalex.config.TestConfigurationProvider;
 import com.ezylang.evalex.parser.ParseException;
+import java.time.ZoneId;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 
 class DateTimeFunctionsTest extends BaseEvaluationTest {
 
+  private static final ExpressionConfiguration DateTimeTestConfiguration =
+      TestConfigurationProvider.StandardConfigurationWithAdditionalTestOperators.toBuilder()
+          .defaultZoneId(ZoneId.of("UTC+2"))
+          .build();
+
   @ParameterizedTest
   @CsvSource(
       delimiter = '|',
       value = {
-        "DT_DATE_TIME(2022,10,30) | 2022-10-30T00:00",
-        "DT_DATE_TIME(2022,10,30,11) | 2022-10-30T11:00",
-        "DT_DATE_TIME(2022,10,30,11,50,20) | 2022-10-30T11:50:20",
-        "DT_DATE_TIME(2022,10,30,11,50,20,30) | 2022-10-30T11:50:20.000000030"
+        "DT_PARSE(\"2022-10-30T11:50:20Z\") | 2022-10-30T11:50:20Z",
+        "DT_PARSE(\"2022-10-30T11:50:20\") | 2022-10-30T09:50:20Z",
+        "DT_PARSE(\"2022-10-30T11:50:20.000000030\") | 2022-10-30T09:50:20.000000030Z",
+        "DT_PARSE(\"2022-10-30\") | 2022-10-30T00:00:00Z",
+        "DT_PARSE(\"30/10/2022 11:50:20\", \"dd/MM/yyyy HH:mm:ss\") | 2022-10-30T09:50:20Z",
+        "DT_PARSE(\"30/10/2022\",\"dd/MM/yyyy\") | 2022-10-30T00:00:00Z",
       })
-  void testDateTime(String expression, String expectedResult)
+  void testDateTimeParse(String expression, String expectedResult)
       throws EvaluationException, ParseException {
-    assertExpressionHasExpectedResult(expression, expectedResult);
+    assertExpressionHasExpectedResult(expression, expectedResult, DateTimeTestConfiguration);
   }
 
   @ParameterizedTest
   @CsvSource(
       delimiter = '|',
       value = {
-        "DT_PARSE(\"2022-10-30T11:50:20\") | 2022-10-30T11:50:20",
-        "DT_PARSE(\"2022-10-30T11:50:20.000000030\") | 2022-10-30T11:50:20.000000030",
-        "DT_PARSE(\"30/10/2022 11:50:20\", \"dd/MM/yyyy HH:mm:ss\") | 2022-10-30T11:50:20",
-        "DT_PARSE(\"30/10/2022\", \"dd/MM/yyyy\") | 2022-10-30T00:00"
+        "DT_PARSE(\"NOT A DATE\") | Unable to parse date/time: NOT A DATE",
       })
-  void testDateTimeParse(String expression, String expectedResult)
+  void testDateTimeParseFailure(String expression, String message)
       throws EvaluationException, ParseException {
-    assertExpressionHasExpectedResult(expression, expectedResult);
+    assertExpressionThrows(expression, message, DateTimeTestConfiguration);
+  }
+
+  @ParameterizedTest
+  @CsvSource(
+      delimiter = '|',
+      value = {
+        "DT_ZONED_PARSE(\"2022-10-30T11:50:20Z\") | 2022-10-30T11:50:20Z",
+        "DT_ZONED_PARSE(\"2011-12-03T10:15:30+01:00[Europe/Paris]\") | 2011-12-03T09:15:30Z",
+        "DT_ZONED_PARSE(\"2011-12-03T10:15:30+01:00\") | 2011-12-03T09:15:30Z",
+        "DT_ZONED_PARSE(\"03/12/2011 10:15:30 Europe/Paris\", \"dd/MM/yyyy HH:mm:ss v\") |"
+            + " 2011-12-03T09:15:30Z",
+        "DT_ZONED_PARSE(\"03/08/2019T16:20:17:717+05:30\",\"dd/MM/uuuu'T'HH:mm:ss:SSSXXXXX\") |"
+            + " 2019-08-03T10:50:17.717Z",
+      })
+  void testZonedDateTimeParse(String expression, String expectedResult)
+      throws EvaluationException, ParseException {
+    assertExpressionHasExpectedResult(expression, expectedResult, DateTimeTestConfiguration);
+  }
+
+  @ParameterizedTest
+  @CsvSource(
+      delimiter = '|',
+      value = {
+        "DT_ZONED_PARSE(\"NOT A DATE\") | Unable to parse zoned date/time: NOT A DATE",
+      })
+  void testZonedDateTimeParseFailure(String expression, String message)
+      throws EvaluationException, ParseException {
+    assertExpressionThrows(expression, message, DateTimeTestConfiguration);
+  }
+
+  @ParameterizedTest
+  @CsvSource(
+      delimiter = '|',
+      value = {
+        "DT_DATE_TIME(2022,10,30) | 2022-10-29T22:00:00Z",
+        "DT_DATE_TIME(2022,10,30,11) | 2022-10-30T09:00:00Z",
+        "DT_DATE_TIME(2022,10,30,11,50,20) | 2022-10-30T09:50:20Z",
+        "DT_DATE_TIME(2022,10,30,11,50,20,30) | 2022-10-30T09:50:20.000000030Z"
+      })
+  void testDateTime(String expression, String expectedResult)
+      throws EvaluationException, ParseException {
+    assertExpressionHasExpectedResult(expression, expectedResult, DateTimeTestConfiguration);
   }
 
   @ParameterizedTest
@@ -62,7 +111,7 @@ class DateTimeFunctionsTest extends BaseEvaluationTest {
       })
   void testDateTimeFormat(String expression, String expectedResult)
       throws EvaluationException, ParseException {
-    assertExpressionHasExpectedResult(expression, expectedResult);
+    assertExpressionHasExpectedResult(expression, expectedResult, DateTimeTestConfiguration);
   }
 
   @ParameterizedTest

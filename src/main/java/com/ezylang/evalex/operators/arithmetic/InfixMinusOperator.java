@@ -24,7 +24,6 @@ import com.ezylang.evalex.operators.AbstractOperator;
 import com.ezylang.evalex.operators.InfixOperator;
 import com.ezylang.evalex.parser.Token;
 import java.time.Duration;
-import java.time.ZoneId;
 
 /** Subtraction of two numbers. */
 @InfixOperator(precedence = OPERATOR_PRECEDENCE_ADDITIVE)
@@ -47,16 +46,8 @@ public class InfixMinusOperator extends AbstractOperator {
     } else if (leftOperand.isDateTimeValue() && rightOperand.isDateTimeValue()) {
       return new EvaluationValue(
           Duration.ofMillis(
-              leftOperand
-                      .getDateTimeValue()
-                      .atZone(ZoneId.systemDefault())
-                      .toInstant()
-                      .toEpochMilli()
-                  - rightOperand
-                      .getDateTimeValue()
-                      .atZone(ZoneId.systemDefault())
-                      .toInstant()
-                      .toEpochMilli()));
+              leftOperand.getDateTimeValue().toEpochMilli()
+                  - rightOperand.getDateTimeValue().toEpochMilli()));
 
     } else if (leftOperand.isDateTimeValue() && rightOperand.isDurationValue()) {
       return new EvaluationValue(

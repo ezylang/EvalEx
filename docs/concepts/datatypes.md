@@ -14,7 +14,7 @@ EvalEx supports the following data types:
 | NUMBER          | java.math.BigDecimal              |
 | BOOLEAN         | java.lang.Boolean                 |
 | STRING          | java.lang.String                  |
-| DATE_TIME       | java.time.LocalDateTime           |
+| DATE_TIME       | java.time.Instant                 |
 | DURATION        | java.time.Duration                |
 | ARRAY           | java.util.List                    |
 | STRUCTURE       | java.util.Map                     |
@@ -65,7 +65,7 @@ object.
 
 ### DATE_TIME
 
-Any instance of _java.time.LocalDate_, _java.time.Instant_ or _java.time.ZoneDateTime_ will automatically be converted to
+Any instance of _java.time.LocalDate_, _java.time.LocalDateTime_, _java.time.ZoneDateTime_ or _java.time.OffsetDateTime_ will automatically be converted to
 a _DATE_TIME_ datatype. Conversion will be done by using the current time zone id on the input
 object.
 

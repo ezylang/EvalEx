@@ -23,25 +23,60 @@ import com.ezylang.evalex.parser.Token;
 import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
+import java.util.Optional;
 
 @FunctionParameter(name = "value", isVarArg = true)
 public class DateTimeParseFunction extends AbstractFunction {
   @Override
   public EvaluationValue evaluate(
       Expression expression, Token functionToken, EvaluationValue... parameterValues) {
-    LocalDateTime dateTime;
+    ZoneId zoneId = expression.getConfiguration().getDefaultZoneId();
+    Instant instant;
+
     if (parameterValues.length < 2) {
-      dateTime = LocalDateTime.parse(parameterValues[0].getStringValue());
+      instant = parse(parameterValues[0].getStringValue(), null, zoneId);
     } else {
-      DateTimeFormatter formatter =
-          DateTimeFormatter.ofPattern(parameterValues[1].getStringValue());
-      try {
-        dateTime = LocalDateTime.parse(parameterValues[0].getStringValue(), formatter);
-      } catch (DateTimeParseException ex) {
-        LocalDate localDate = LocalDate.parse(parameterValues[0].getStringValue(), formatter);
-        dateTime = localDate.atStartOfDay();
-      }
+      instant =
+          parse(parameterValues[0].getStringValue(), parameterValues[1].getStringValue(), zoneId);
     }
-    return new EvaluationValue(dateTime);
+    return new EvaluationValue(instant);
+  }
+
+  private Instant parse(String value, String format, ZoneId zoneId) {
+    return parseInstant(value)
+        .or(() -> parseLocalDateTime(value, format, zoneId))
+        .or(() -> parseDate(value, format))
+        .orElseThrow(() -> new IllegalArgumentException("Unable to parse date/time: " + value));
+  }
+
+  private Optional<Instant> parseLocalDateTime(String value, String format, ZoneId zoneId) {
+    try {
+      DateTimeFormatter formatter =
+          (format == null
+              ? DateTimeFormatter.ISO_LOCAL_DATE_TIME
+              : DateTimeFormatter.ofPattern(format));
+      return Optional.of(LocalDateTime.parse(value, formatter).atZone(zoneId).toInstant());
+    } catch (DateTimeParseException ex) {
+      return Optional.empty();
+    }
+  }
+
+  private Optional<Instant> parseDate(String value, String format) {
+    try {
+      DateTimeFormatter formatter =
+          (format == null ? DateTimeFormatter.ISO_LOCAL_DATE : DateTimeFormatter.ofPattern(format));
+      LocalDate localDate = LocalDate.parse(value, formatter);
+      return Optional.of(localDate.atStartOfDay().atOffset(ZoneOffset.UTC).toInstant());
+    } catch (DateTimeParseException ex) {
+      return Optional.empty();
+    }
+  }
+
+  private Optional<Instant> parseInstant(String value) {
+    try {
+      return Optional.of(Instant.parse(value));
+    } catch (DateTimeParseException ex) {
+      return Optional.empty();
+    }
   }
 }
