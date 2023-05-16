@@ -41,6 +41,16 @@ public abstract class BaseEvaluationTest {
         .isEqualTo(expectedResult);
   }
 
+  protected void assertExpressionThrows(
+      String expression, String message, ExpressionConfiguration expressionConfiguration)
+      throws EvaluationException, ParseException {
+    try {
+      evaluate(expression, expressionConfiguration);
+    } catch (Exception ex) {
+      assertThat(ex.getMessage()).isEqualTo(message);
+    }
+  }
+
   private EvaluationValue evaluate(String expressionString, ExpressionConfiguration configuration)
       throws EvaluationException, ParseException {
     Expression expression = new Expression(expressionString, configuration);

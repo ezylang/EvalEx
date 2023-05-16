@@ -23,6 +23,7 @@ import com.ezylang.evalex.data.EvaluationValue;
 import com.ezylang.evalex.operators.AbstractOperator;
 import com.ezylang.evalex.operators.InfixOperator;
 import com.ezylang.evalex.parser.Token;
+import java.time.Duration;
 
 /** Subtraction of two numbers. */
 @InfixOperator(precedence = OPERATOR_PRECEDENCE_ADDITIVE)
@@ -41,6 +42,24 @@ public class InfixMinusOperator extends AbstractOperator {
               .getNumberValue()
               .subtract(
                   rightOperand.getNumberValue(), expression.getConfiguration().getMathContext()));
+
+    } else if (leftOperand.isDateTimeValue() && rightOperand.isDateTimeValue()) {
+      return new EvaluationValue(
+          Duration.ofMillis(
+              leftOperand.getDateTimeValue().toEpochMilli()
+                  - rightOperand.getDateTimeValue().toEpochMilli()));
+
+    } else if (leftOperand.isDateTimeValue() && rightOperand.isDurationValue()) {
+      return new EvaluationValue(
+          leftOperand.getDateTimeValue().minus(rightOperand.getDurationValue()));
+    } else if (leftOperand.isDurationValue() && rightOperand.isDurationValue()) {
+      return new EvaluationValue(
+          leftOperand.getDurationValue().minus(rightOperand.getDurationValue()));
+    } else if (leftOperand.isDateTimeValue() && rightOperand.isNumberValue()) {
+      return new EvaluationValue(
+          leftOperand
+              .getDateTimeValue()
+              .minus(Duration.ofMillis(rightOperand.getNumberValue().longValue())));
     } else {
       throw EvaluationException.ofUnsupportedDataTypeInOperation(operatorToken);
     }

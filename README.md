@@ -15,7 +15,7 @@ strings.
 
 ## Key Features:
 
-- Supports numerical, boolean, string, array and structure expressions, operations and variables.
+- Supports numerical, boolean, string, date time, duration, array and structure expressions, operations and variables.
 - Array and structure support: Arrays and structures can be mixed, building arbitrary data
   structures.
 - Uses BigDecimal for numerical calculations.

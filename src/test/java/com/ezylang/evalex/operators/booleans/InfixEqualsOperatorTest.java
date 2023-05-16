@@ -44,7 +44,10 @@ class InfixEqualsOperatorTest extends BaseEvaluationTest {
         "\"abc\"=\"abc\" : true",
         "\"abc\"=\"xyz\" : false",
         "1+2=4-1 : true",
-        "-5.2=-5.2 :true"
+        "-5.2=-5.2 : true",
+        "DT_DATE_TIME(2022,10,30)=DT_DATE_TIME(2022,10,30) : true",
+        "DT_DATE_TIME(2022,10,30)=DT_DATE_TIME(2022,10,01) : false",
+        "DT_DURATION_PARSE(\"PT24H\")=DT_DURATION_PARSE(\"P1D\") : true",
       })
   void testInfixEqualsLiterals(String expression, String expectedResult)
       throws EvaluationException, ParseException {
