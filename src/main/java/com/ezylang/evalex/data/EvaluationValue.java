@@ -55,7 +55,9 @@ public class EvaluationValue implements Comparable<EvaluationValue> {
      * Used for lazy parameter evaluation, stored as an {@link ASTNode}, which can be evaluated on
      * demand.
      */
-    EXPRESSION_NODE
+    EXPRESSION_NODE,
+    /** A null value */
+    NULL
   }
 
   Object value;
@@ -100,6 +102,9 @@ public class EvaluationValue implements Comparable<EvaluationValue> {
     if (number != null) {
       this.dataType = DataType.NUMBER;
       this.value = number;
+    } else if (value == null) {
+      this.dataType = DataType.NULL;
+      this.value = null;
     } else if (value instanceof CharSequence) {
       this.dataType = DataType.STRING;
       this.value = ((CharSequence) value).toString();
@@ -274,6 +279,10 @@ public class EvaluationValue implements Comparable<EvaluationValue> {
     return getDataType() == DataType.EXPRESSION_NODE;
   }
 
+  public boolean isNullValue() {
+    return getDataType() == DataType.NULL;
+  }
+
   /**
    * Creates a {@link DataType#NUMBER} value from a {@link String}.
    *
@@ -309,6 +318,8 @@ public class EvaluationValue implements Comparable<EvaluationValue> {
         return (Boolean.TRUE.equals(value) ? BigDecimal.ONE : BigDecimal.ZERO);
       case STRING:
         return Boolean.parseBoolean((String) value) ? BigDecimal.ONE : BigDecimal.ZERO;
+      case NULL:
+        return null;
       default:
         return BigDecimal.ZERO;
     }
@@ -326,10 +337,14 @@ public class EvaluationValue implements Comparable<EvaluationValue> {
    * @return The {@link String} representation of the value.
    */
   public String getStringValue() {
-    if (getDataType() == DataType.NUMBER) {
-      return ((BigDecimal) value).toPlainString();
+    switch (getDataType()) {
+      case NUMBER:
+        return ((BigDecimal) value).toPlainString();
+      case NULL:
+        return null;
+      default:
+        return value.toString();
     }
-    return value.toString();
   }
 
   /**
@@ -351,6 +366,8 @@ public class EvaluationValue implements Comparable<EvaluationValue> {
         return (Boolean) value;
       case STRING:
         return Boolean.parseBoolean((String) value);
+      case NULL:
+        return null;
       default:
         return false;
     }
@@ -427,6 +444,8 @@ public class EvaluationValue implements Comparable<EvaluationValue> {
   public List<EvaluationValue> getArrayValue() {
     if (isArrayValue()) {
       return (List<EvaluationValue>) value;
+    } else if (isNullValue()) {
+      return null;
     } else {
       return Collections.emptyList();
     }
@@ -442,6 +461,8 @@ public class EvaluationValue implements Comparable<EvaluationValue> {
   public Map<String, EvaluationValue> getStructureValue() {
     if (isStructureValue()) {
       return (Map<String, EvaluationValue>) value;
+    } else if (isNullValue()) {
+      return null;
     } else {
       return Collections.emptyMap();
     }
@@ -463,6 +484,8 @@ public class EvaluationValue implements Comparable<EvaluationValue> {
         return getNumberValue().compareTo(toCompare.getNumberValue());
       case BOOLEAN:
         return getBooleanValue().compareTo(toCompare.getBooleanValue());
+      case NULL:
+        throw new NullPointerException("Can not compare a null value");
       case DATE_TIME:
         return getDateTimeValue().compareTo(toCompare.getDateTimeValue());
       case DURATION:

@@ -300,6 +300,7 @@ public class ExpressionConfiguration {
         new EvaluationValue(
             new BigDecimal(
                 "2.71828182845904523536028747135266249775724709369995957496696762772407663")));
+    constants.put("NULL", new EvaluationValue(null));
 
     return constants;
   }

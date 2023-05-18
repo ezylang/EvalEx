@@ -19,6 +19,7 @@ EvalEx supports the following data types:
 | ARRAY           | java.util.List                    |
 | STRUCTURE       | java.util.Map                     |
 | EXPRESSION_NODE | com.ezylang.evalex.parser.ASTNode |
+| NULL            | null                              |
 
 Data is stored in an _EvaluationValue_, which holds the value and the data type.
 
@@ -206,3 +207,20 @@ System.out.println(result); // prints 14
 Note that the above expression is not evaluated as "2 * 4 + 3", which would result in 11.
 Instead, the sub-expression "4 + 3" is calculated first, when it comes to finding the value of the
 variable _b_. Resulting in calculation of "2 * 7", which is 14.
+
+### NULL
+
+A representation for _null_ objects.
+
+This allows the handling of nulls inside the expression itself (for example using the _IF()_ function), 
+in case it can not be guaranteed that the passed variable values are not null before passing them.
+
+```java
+Expression expression = new Expression("if(name == null, "unknown", name)");
+
+EvaluationValue result = expression
+    .with("name", null)
+    .evaluate();
+
+System.out.println(result); // prints unknown
+```
