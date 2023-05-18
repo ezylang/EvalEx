@@ -53,9 +53,8 @@ class DateTimeFunctionsTest extends BaseEvaluationTest {
       value = {
         "DT_PARSE(\"NOT A DATE\") | Unable to parse date/time: NOT A DATE",
       })
-  void testDateTimeParseFailure(String expression, String message)
-      throws EvaluationException, ParseException {
-    assertExpressionThrows(expression, message, DateTimeTestConfiguration);
+  void testDateTimeParseFailure(String expression, String message) {
+    assertExpressionThrowsException(expression, message, DateTimeTestConfiguration);
   }
 
   @ParameterizedTest
@@ -81,9 +80,8 @@ class DateTimeFunctionsTest extends BaseEvaluationTest {
       value = {
         "DT_ZONED_PARSE(\"NOT A DATE\") | Unable to parse zoned date/time: NOT A DATE",
       })
-  void testZonedDateTimeParseFailure(String expression, String message)
-      throws EvaluationException, ParseException {
-    assertExpressionThrows(expression, message, DateTimeTestConfiguration);
+  void testZonedDateTimeParseFailure(String expression, String message) {
+    assertExpressionThrowsException(expression, message, DateTimeTestConfiguration);
   }
 
   @ParameterizedTest

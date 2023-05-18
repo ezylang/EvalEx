@@ -32,6 +32,15 @@ import lombok.Value;
 @Value
 public class EvaluationValue implements Comparable<EvaluationValue> {
 
+  /** Return value for a null {@link DataType#BOOLEAN}. */
+  private static final Boolean NULL_BOOLEAN = null;
+
+  /** Return value for a null {@link DataType#ARRAY}. */
+  private static final List<EvaluationValue> NULL_ARRAY = null;
+
+  /** Return value for a null {@link DataType#STRUCTURE}. */
+  private static final Map<String, EvaluationValue> NULL_STRUCTURE = null;
+
   /** The supported data types. */
   public enum DataType {
     /** A string of characters, stored as {@link String}. */
@@ -367,7 +376,7 @@ public class EvaluationValue implements Comparable<EvaluationValue> {
       case STRING:
         return Boolean.parseBoolean((String) value);
       case NULL:
-        return null;
+        return NULL_BOOLEAN;
       default:
         return false;
     }
@@ -445,7 +454,7 @@ public class EvaluationValue implements Comparable<EvaluationValue> {
     if (isArrayValue()) {
       return (List<EvaluationValue>) value;
     } else if (isNullValue()) {
-      return null;
+      return NULL_ARRAY;
     } else {
       return Collections.emptyList();
     }
@@ -462,7 +471,7 @@ public class EvaluationValue implements Comparable<EvaluationValue> {
     if (isStructureValue()) {
       return (Map<String, EvaluationValue>) value;
     } else if (isNullValue()) {
-      return null;
+      return NULL_STRUCTURE;
     } else {
       return Collections.emptyMap();
     }
