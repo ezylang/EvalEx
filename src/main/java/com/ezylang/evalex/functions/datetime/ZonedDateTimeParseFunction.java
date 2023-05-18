@@ -15,34 +15,17 @@
 */
 package com.ezylang.evalex.functions.datetime;
 
-import com.ezylang.evalex.Expression;
-import com.ezylang.evalex.data.EvaluationValue;
-import com.ezylang.evalex.functions.AbstractFunction;
 import com.ezylang.evalex.functions.FunctionParameter;
-import com.ezylang.evalex.parser.Token;
-import java.time.*;
+import java.time.Instant;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.Optional;
 
 @FunctionParameter(name = "value", isVarArg = true)
-public class ZonedDateTimeParseFunction extends AbstractFunction {
-  @Override
-  public EvaluationValue evaluate(
-      Expression expression, Token functionToken, EvaluationValue... parameterValues) {
-    ZoneId zoneId = expression.getConfiguration().getDefaultZoneId();
-    Instant instant;
-
-    if (parameterValues.length < 2) {
-      instant = parse(parameterValues[0].getStringValue(), null, zoneId);
-    } else {
-      instant =
-          parse(parameterValues[0].getStringValue(), parameterValues[1].getStringValue(), zoneId);
-    }
-    return new EvaluationValue(instant);
-  }
-
-  private Instant parse(String value, String format, ZoneId zoneId) {
+public class ZonedDateTimeParseFunction extends AbstractDateTimeParseFunction {
+  protected Instant parse(String value, String format, ZoneId zoneId) {
     return parseZonedDateTime(value, format, zoneId)
         .orElseThrow(
             () -> new IllegalArgumentException("Unable to parse zoned date/time: " + value));
