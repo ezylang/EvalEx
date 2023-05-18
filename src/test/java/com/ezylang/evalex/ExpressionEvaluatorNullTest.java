@@ -19,9 +19,11 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import com.ezylang.evalex.parser.ParseException;
+import java.util.HashMap;
+import java.util.Map;
 import org.junit.jupiter.api.Test;
 
-public class ExpressionEvaluatorNullTest extends BaseExpressionEvaluatorTest {
+class ExpressionEvaluatorNullTest extends BaseExpressionEvaluatorTest {
 
   @Test
   void testNullEquals() throws ParseException, EvaluationException {
@@ -50,6 +52,16 @@ public class ExpressionEvaluatorNullTest extends BaseExpressionEvaluatorTest {
   }
 
   @Test
+  void testHandleWithMaps() throws EvaluationException, ParseException {
+    Expression expression = createExpression("a == null && b == null");
+    Map<String, Object> values = new HashMap<>();
+    values.put("a", null);
+    values.put("b", null);
+
+    assertExpressionHasExpectedResult(expression.withValues(values), "true");
+  }
+
+  @Test
   void testFailWithNoHandling() {
     Expression expression1 = createExpression("a * 5").with("a", null);
     assertThatThrownBy(expression1::evaluate)
@@ -57,12 +69,10 @@ public class ExpressionEvaluatorNullTest extends BaseExpressionEvaluatorTest {
         .hasMessage("Unsupported data types in operation");
 
     Expression expression2 = createExpression("FLOOR(a)").with("a", null);
-    assertThatThrownBy(expression2::evaluate)
-        .isInstanceOf(NullPointerException.class);
+    assertThatThrownBy(expression2::evaluate).isInstanceOf(NullPointerException.class);
 
     Expression expression3 = createExpression("a > 5").with("a", null);
-    assertThatThrownBy(expression3::evaluate)
-        .isInstanceOf(NullPointerException.class);
+    assertThatThrownBy(expression3::evaluate).isInstanceOf(NullPointerException.class);
   }
 
   private void assertExpressionHasExpectedResult(Expression expression, String expectedResult)

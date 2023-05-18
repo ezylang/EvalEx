@@ -24,11 +24,7 @@ import com.ezylang.evalex.parser.Token.TokenType;
 import java.math.BigDecimal;
 import java.math.MathContext;
 import java.time.*;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
+import java.util.*;
 import org.junit.jupiter.api.Test;
 
 class EvaluationValueTest {
@@ -51,7 +47,8 @@ class EvaluationValueTest {
     assertThat(value.isArrayValue()).isFalse();
     assertThat(value.isExpressionNode()).isFalse();
     assertThat(value.isNullValue()).isFalse();
-    assertDataIsCorrect(value, "Hello World", BigDecimal.ZERO, false, String.class);
+    assertDataIsCorrect(
+        value, "Hello World", BigDecimal.ZERO, false, Instant.EPOCH, Duration.ZERO, String.class);
     assertDataIsCorrect(
         value, "Hello World", BigDecimal.ZERO, false, Instant.EPOCH, Duration.ZERO, String.class);
   }
@@ -91,7 +88,8 @@ class EvaluationValueTest {
     assertThat(value.isArrayValue()).isFalse();
     assertThat(value.isExpressionNode()).isFalse();
     assertThat(value.isNullValue()).isFalse();
-    assertDataIsCorrect(value, "true", BigDecimal.ONE, true, Boolean.class);
+    assertDataIsCorrect(
+        value, "true", BigDecimal.ONE, true, Instant.EPOCH, Duration.ZERO, Boolean.class);
     assertDataIsCorrect(
         value, "true", BigDecimal.ONE, true, Instant.EPOCH, Duration.ZERO, Boolean.class);
   }
@@ -135,7 +133,6 @@ class EvaluationValueTest {
 
   @Test
   void testLocalDate() {
-    ZoneId zoneId = ZoneId.of("UTC+2");
     LocalDate localDate = LocalDate.parse("2022-10-30");
     EvaluationValue value = new EvaluationValue(localDate);
 
