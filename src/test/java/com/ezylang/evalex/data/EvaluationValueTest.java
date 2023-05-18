@@ -50,6 +50,8 @@ class EvaluationValueTest {
     assertThat(value.isStructureValue()).isFalse();
     assertThat(value.isArrayValue()).isFalse();
     assertThat(value.isExpressionNode()).isFalse();
+    assertThat(value.isNullValue()).isFalse();
+    assertDataIsCorrect(value, "Hello World", BigDecimal.ZERO, false, String.class);
     assertDataIsCorrect(
         value, "Hello World", BigDecimal.ZERO, false, Instant.EPOCH, Duration.ZERO, String.class);
   }
@@ -88,6 +90,8 @@ class EvaluationValueTest {
     assertThat(value.isStructureValue()).isFalse();
     assertThat(value.isArrayValue()).isFalse();
     assertThat(value.isExpressionNode()).isFalse();
+    assertThat(value.isNullValue()).isFalse();
+    assertDataIsCorrect(value, "true", BigDecimal.ONE, true, Boolean.class);
     assertDataIsCorrect(
         value, "true", BigDecimal.ONE, true, Instant.EPOCH, Duration.ZERO, Boolean.class);
   }
@@ -352,6 +356,7 @@ class EvaluationValueTest {
     assertThat(value.isStructureValue()).isFalse();
     assertThat(value.isStringValue()).isFalse();
     assertThat(value.isExpressionNode()).isFalse();
+    assertThat(value.isNullValue()).isFalse();
 
     assertThat(value.getArrayValue()).hasSize(2);
     assertThat(value.getArrayValue().get(0).getStringValue()).isEqualTo("1");
@@ -368,6 +373,13 @@ class EvaluationValueTest {
   }
 
   @Test
+  void testArrayNull() {
+    EvaluationValue value = new EvaluationValue(null);
+
+    assertThat(value.getArrayValue()).isNull();
+  }
+
+  @Test
   void testStructure() {
     Map<String, Object> structure = new HashMap<>();
     structure.put("a", "Hello");
@@ -380,6 +392,7 @@ class EvaluationValueTest {
     assertThat(value.isStringValue()).isFalse();
     assertThat(value.isArrayValue()).isFalse();
     assertThat(value.isExpressionNode()).isFalse();
+    assertThat(value.isNullValue()).isFalse();
 
     assertThat(value.getStructureValue()).hasSize(2);
     assertThat(value.getStructureValue().get("a").getStringValue()).isEqualTo("Hello");
@@ -395,6 +408,13 @@ class EvaluationValueTest {
   }
 
   @Test
+  void testStructureNull() {
+    EvaluationValue value = new EvaluationValue(null);
+
+    assertThat(value.getStructureValue()).isNull();
+  }
+
+  @Test
   void testExpressionNode() {
     ASTNode node = new ASTNode(new Token(1, "a", TokenType.VARIABLE_OR_CONSTANT));
     EvaluationValue value = new EvaluationValue(node);
@@ -405,6 +425,7 @@ class EvaluationValueTest {
     assertThat(value.isStructureValue()).isFalse();
     assertThat(value.isArrayValue()).isFalse();
     assertThat(value.isStringValue()).isFalse();
+    assertThat(value.isNullValue()).isFalse();
 
     assertDataIsCorrect(
         value,
@@ -455,6 +476,27 @@ class EvaluationValueTest {
         .isEqualByComparingTo("3.99");
   }
 
+  @Test
+  void testNull() {
+    EvaluationValue value = new EvaluationValue(null);
+
+    assertThat(value.isStringValue()).isFalse();
+    assertThat(value.isNumberValue()).isFalse();
+    assertThat(value.isBooleanValue()).isFalse();
+    assertThat(value.isStructureValue()).isFalse();
+    assertThat(value.isArrayValue()).isFalse();
+    assertThat(value.isExpressionNode()).isFalse();
+    assertThat(value.isNullValue()).isTrue();
+    assertDataIsCorrect(value, null, null, null);
+  }
+
+  private void assertDataIsCorrect(
+      EvaluationValue value, String stringValue, BigDecimal numberValue, Boolean booleanValue) {
+    assertThat(value.getStringValue()).isEqualTo(stringValue);
+    assertThat(value.getNumberValue()).isEqualTo(numberValue);
+    assertThat(value.getBooleanValue()).isEqualTo(booleanValue);
+  }
+
   private void assertDataIsCorrect(
       EvaluationValue value,
       String stringValue,
@@ -463,6 +505,7 @@ class EvaluationValueTest {
       Instant dateTimeValue,
       Duration durationValue,
       Class<?> valueInstance) {
+    assertDataIsCorrect(value, stringValue, numberValue, booleanValue);
     assertThat(value.getStringValue()).isEqualTo(stringValue);
     assertThat(value.getNumberValue()).isEqualTo(numberValue);
     assertThat(value.getBooleanValue()).isEqualTo(booleanValue);
