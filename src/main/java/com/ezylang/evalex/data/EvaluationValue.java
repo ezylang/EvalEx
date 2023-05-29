@@ -112,7 +112,7 @@ public class EvaluationValue implements Comparable<EvaluationValue> {
     } else if (value instanceof Map) {
       this.dataType = DataType.STRUCTURE;
       this.value = convertMapStructure((Map<?, ?>) value);
-    } else if(value instanceof EvaluationValue) {
+    } else if (value instanceof EvaluationValue) {
       this.dataType = ((EvaluationValue) value).getDataType();
       this.value = ((EvaluationValue) value).getValue();
     } else {
