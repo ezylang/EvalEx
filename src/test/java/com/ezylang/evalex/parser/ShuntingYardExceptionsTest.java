@@ -151,7 +151,9 @@ class ShuntingYardExceptionsTest extends BaseParserTest {
         "Hello 1 + 1",
         "Hello World",
         "Hello 1",
-        "1 2"
+        "1 2",
+        "e.1",
+        "E.1"
       })
   void testTooManyOperands(String expressionString) {
     Expression expression = new Expression(expressionString);

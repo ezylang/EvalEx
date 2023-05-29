@@ -351,33 +351,54 @@ public class Tokenizer {
   }
 
   private Token parseNumberLiteral() throws ParseException {
-    int tokenStartIndex = currentColumnIndex;
-    StringBuilder tokenValue = new StringBuilder();
     int nextChar = peekNextChar();
     if (currentChar == '0' && (nextChar == 'x' || nextChar == 'X')) {
-      // hexadecimal number, consume "0x"
-      tokenValue.append((char) currentChar);
-      consumeChar();
-      tokenValue.append((char) currentChar);
-      consumeChar();
-      while (currentChar != -1 && isAtHexChar()) {
-        tokenValue.append((char) currentChar);
-        consumeChar();
-      }
+      return parseHexNumberLiteral();
     } else {
-      // decimal number
-      int lastChar = -1;
-      while (currentChar != -1 && isAtNumberChar()) {
-        tokenValue.append((char) currentChar);
-        lastChar = currentChar;
-        consumeChar();
+      return parseDecimalNumberLiteral();
+    }
+  }
+
+  private Token parseDecimalNumberLiteral() throws ParseException {
+    int tokenStartIndex = currentColumnIndex;
+    StringBuilder tokenValue = new StringBuilder();
+
+    int lastChar = -1;
+    boolean scientificNotation = false;
+    while (currentChar != -1 && isAtNumberChar()) {
+      if (currentChar == 'e' || currentChar == 'E') {
+        scientificNotation = true;
       }
-      // illegal scientific format literal
-      if (lastChar == 'e' || lastChar == 'E' || lastChar == '+' || lastChar == '-') {
-        throw new ParseException(
-            new Token(tokenStartIndex, tokenValue.toString(), TokenType.NUMBER_LITERAL),
-            "Illegal scientific format");
-      }
+      tokenValue.append((char) currentChar);
+      lastChar = currentChar;
+      consumeChar();
+    }
+    // illegal scientific format literal
+    if (scientificNotation
+        && (lastChar == 'e'
+            || lastChar == 'E'
+            || lastChar == '+'
+            || lastChar == '-'
+            || lastChar == '.')) {
+      throw new ParseException(
+          new Token(tokenStartIndex, tokenValue.toString(), TokenType.NUMBER_LITERAL),
+          "Illegal scientific format");
+    }
+    return new Token(tokenStartIndex, tokenValue.toString(), TokenType.NUMBER_LITERAL);
+  }
+
+  private Token parseHexNumberLiteral() {
+    int tokenStartIndex = currentColumnIndex;
+    StringBuilder tokenValue = new StringBuilder();
+
+    // hexadecimal number, consume "0x"
+    tokenValue.append((char) currentChar);
+    consumeChar();
+    tokenValue.append((char) currentChar);
+    consumeChar();
+    while (currentChar != -1 && isAtHexChar()) {
+      tokenValue.append((char) currentChar);
+      consumeChar();
     }
     return new Token(tokenStartIndex, tokenValue.toString(), TokenType.NUMBER_LITERAL);
   }
@@ -485,7 +506,7 @@ public class Tokenizer {
   private boolean isAtNumberChar() {
     int previousChar = peekPreviousChar();
 
-    if (previousChar == 'e' || previousChar == 'E') {
+    if ((previousChar == 'e' || previousChar == 'E') && currentChar != '.') {
       return Character.isDigit(currentChar) || currentChar == '+' || currentChar == '-';
     }
 
