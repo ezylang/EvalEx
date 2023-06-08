@@ -14,9 +14,12 @@ EvalEx supports the following data types:
 | NUMBER          | java.math.BigDecimal              |
 | BOOLEAN         | java.lang.Boolean                 |
 | STRING          | java.lang.String                  |
+| DATE_TIME       | java.time.Instant                 |
+| DURATION        | java.time.Duration                |
 | ARRAY           | java.util.List                    |
 | STRUCTURE       | java.util.Map                     |
 | EXPRESSION_NODE | com.ezylang.evalex.parser.ASTNode |
+| NULL            | null                              |
 
 Data is stored in an _EvaluationValue_, which holds the value and the data type.
 
@@ -60,6 +63,16 @@ Expression expression = new Expression("stringValue && numberValue")
 Any instance of _java.lang.CharSequence_ or _java.lang.Character_ will automatically be converted to
 a _STRING_ datatype. Conversion will be done by invoking the _toString()_ method on the input
 object.
+
+### DATE_TIME
+
+Any instance of _java.time.LocalDate_, _java.time.LocalDateTime_, _java.time.ZoneDateTime_ or _java.time.OffsetDateTime_ will automatically be converted to
+a _DATE_TIME_ datatype. Conversion will be done by using the current time zone id on the input
+object.
+
+### DURATION
+
+Duration are stored as a _java.time.Duration_. The duration values are useful for calculations with _DATE_TIME_ values.
 
 ### ARRAY
 
@@ -194,3 +207,20 @@ System.out.println(result); // prints 14
 Note that the above expression is not evaluated as "2 * 4 + 3", which would result in 11.
 Instead, the sub-expression "4 + 3" is calculated first, when it comes to finding the value of the
 variable _b_. Resulting in calculation of "2 * 7", which is 14.
+
+### NULL
+
+A representation for _null_ objects.
+
+This allows the handling of nulls inside the expression itself (for example using the _IF()_ function), 
+in case it can not be guaranteed that the passed variable values are not null before passing them.
+
+```java
+Expression expression = new Expression("if(name == null, "unknown", name)");
+
+EvaluationValue result = expression
+    .with("name", null)
+    .evaluate();
+
+System.out.println(result); // prints unknown
+```

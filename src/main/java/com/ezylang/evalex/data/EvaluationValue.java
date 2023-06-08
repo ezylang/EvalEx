@@ -19,11 +19,8 @@ import com.ezylang.evalex.parser.ASTNode;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.math.MathContext;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.time.*;
+import java.util.*;
 import java.util.Map.Entry;
 import lombok.Value;
 
@@ -35,6 +32,15 @@ import lombok.Value;
 @Value
 public class EvaluationValue implements Comparable<EvaluationValue> {
 
+  /** Return value for a null {@link DataType#BOOLEAN}. */
+  private static final Boolean NULL_BOOLEAN = null;
+
+  /** Return value for a null {@link DataType#ARRAY}. */
+  private static final List<EvaluationValue> NULL_ARRAY = null;
+
+  /** Return value for a null {@link DataType#STRUCTURE}. */
+  private static final Map<String, EvaluationValue> NULL_STRUCTURE = null;
+
   /** The supported data types. */
   public enum DataType {
     /** A string of characters, stored as {@link String}. */
@@ -43,6 +49,10 @@ public class EvaluationValue implements Comparable<EvaluationValue> {
     NUMBER,
     /** A boolean, stored as {@link Boolean}. */
     BOOLEAN,
+    /** A date time value, stored as {@link java.time.Instant}. */
+    DATE_TIME,
+    /** A period value, stored as {@link java.time.Duration}. */
+    DURATION,
     /** A list evaluation values. Stored as {@link java.util.List<EvaluationValue>}. */
     ARRAY,
     /**
@@ -54,7 +64,9 @@ public class EvaluationValue implements Comparable<EvaluationValue> {
      * Used for lazy parameter evaluation, stored as an {@link ASTNode}, which can be evaluated on
      * demand.
      */
-    EXPRESSION_NODE
+    EXPRESSION_NODE,
+    /** A null value */
+    NULL
   }
 
   Object value;
@@ -78,6 +90,11 @@ public class EvaluationValue implements Comparable<EvaluationValue> {
    *   <tr><td>Float, float</td><td>BigDecimal *</td></tr>
    *   <tr><td>CharSequence , String</td><td>String</td></tr>
    *   <tr><td>Boolean, boolean</td><td>Boolean</td></tr>
+   *   <tr><td>Instant, instant</td><td>Instant</td></tr>
+   *   <tr><td>ZonedDateTime, zonedDateTime</td><td>Instant</td></tr>
+   *   <tr><td>LocalDate, localDate</td><td>Instant</td></tr>
+   *   <tr><td>OffsetDateTime, offsetDateTime</td><td>Instant</td></tr>
+   *   <tr><td>Duration, duration</td><td>Duration</td></tr>
    *   <tr><td>ASTNode</td><td>ASTNode</td></tr>
    *   <tr><td>List&lt;?&gt;</td><td>List&lt;EvaluationValue&gt; - each entry will be converted</td></tr>
    *   <tr><td>Map&lt?,?&gt;</td><td>Map&lt;String&gt;&lt;EvaluationValue&gt; - each entry will be converted.</td></tr>
@@ -94,6 +111,9 @@ public class EvaluationValue implements Comparable<EvaluationValue> {
     if (number != null) {
       this.dataType = DataType.NUMBER;
       this.value = number;
+    } else if (value == null) {
+      this.dataType = DataType.NULL;
+      this.value = null;
     } else if (value instanceof CharSequence) {
       this.dataType = DataType.STRING;
       this.value = ((CharSequence) value).toString();
@@ -102,6 +122,21 @@ public class EvaluationValue implements Comparable<EvaluationValue> {
       this.value = ((Character) value).toString();
     } else if (value instanceof Boolean) {
       this.dataType = DataType.BOOLEAN;
+      this.value = value;
+    } else if (value instanceof Instant) {
+      this.dataType = DataType.DATE_TIME;
+      this.value = value;
+    } else if (value instanceof ZonedDateTime) {
+      this.dataType = DataType.DATE_TIME;
+      this.value = ((ZonedDateTime) value).toInstant();
+    } else if (value instanceof OffsetDateTime) {
+      this.dataType = DataType.DATE_TIME;
+      this.value = ((OffsetDateTime) value).toInstant();
+    } else if (value instanceof LocalDate) {
+      this.dataType = DataType.DATE_TIME;
+      this.value = ((LocalDate) value).atStartOfDay().atOffset(ZoneOffset.UTC).toInstant();
+    } else if (value instanceof Duration) {
+      this.dataType = DataType.DURATION;
       this.value = value;
     } else if (value instanceof ASTNode) {
       this.dataType = DataType.EXPRESSION_NODE;
@@ -124,6 +159,11 @@ public class EvaluationValue implements Comparable<EvaluationValue> {
   public EvaluationValue(double value, MathContext mathContext) {
     this.dataType = DataType.NUMBER;
     this.value = new BigDecimal(Double.toString(value), mathContext);
+  }
+
+  public EvaluationValue(LocalDateTime value, ZoneId zoneId) {
+    this.dataType = DataType.DATE_TIME;
+    this.value = value.atZone(zoneId).toInstant();
   }
 
   /**
@@ -205,6 +245,23 @@ public class EvaluationValue implements Comparable<EvaluationValue> {
   }
 
   /**
+   * Checks if the value is of type {@link DataType#DATE_TIME}.
+   *
+   * @return <code>true</code> or <code>false</code>.
+   */
+  public boolean isDateTimeValue() {
+    return getDataType() == DataType.DATE_TIME;
+  }
+
+  /**
+   * Checks if the value is of type {@link DataType#DURATION}.
+   *
+   * @return <code>true</code> or <code>false</code>.
+   */
+  public boolean isDurationValue() {
+    return getDataType() == DataType.DURATION;
+  }
+  /**
    * Checks if the value is of type {@link DataType#ARRAY}.
    *
    * @return <code>true</code> or <code>false</code>.
@@ -229,6 +286,10 @@ public class EvaluationValue implements Comparable<EvaluationValue> {
    */
   public boolean isExpressionNode() {
     return getDataType() == DataType.EXPRESSION_NODE;
+  }
+
+  public boolean isNullValue() {
+    return getDataType() == DataType.NULL;
   }
 
   /**
@@ -266,6 +327,8 @@ public class EvaluationValue implements Comparable<EvaluationValue> {
         return (Boolean.TRUE.equals(value) ? BigDecimal.ONE : BigDecimal.ZERO);
       case STRING:
         return Boolean.parseBoolean((String) value) ? BigDecimal.ONE : BigDecimal.ZERO;
+      case NULL:
+        return null;
       default:
         return BigDecimal.ZERO;
     }
@@ -283,10 +346,14 @@ public class EvaluationValue implements Comparable<EvaluationValue> {
    * @return The {@link String} representation of the value.
    */
   public String getStringValue() {
-    if (getDataType() == DataType.NUMBER) {
-      return ((BigDecimal) value).toPlainString();
+    switch (getDataType()) {
+      case NUMBER:
+        return ((BigDecimal) value).toPlainString();
+      case NULL:
+        return null;
+      default:
+        return value.toString();
     }
-    return value.toString();
   }
 
   /**
@@ -308,8 +375,71 @@ public class EvaluationValue implements Comparable<EvaluationValue> {
         return (Boolean) value;
       case STRING:
         return Boolean.parseBoolean((String) value);
+      case NULL:
+        return NULL_BOOLEAN;
       default:
         return false;
+    }
+  }
+
+  /**
+   * Gets a {@link Instant} representation of the value. If possible and needed, a conversion will
+   * be made.
+   *
+   * <ul>
+   *   <li>Any number value will return the instant from the epoc value.
+   *   <li>Any string with the string representation of a LocalDateTime (ex: <code>
+   *       "2018-11-30T18:35:24.00"</code>) (case ignored) will return the current LocalDateTime.
+   *   <li>The date {@link Instant#EPOCH} will return if a conversion error occurs or in all other
+   *       cases.
+   * </ul>
+   *
+   * @return The {@link Instant} representation of the value.
+   */
+  public Instant getDateTimeValue() {
+    try {
+      switch (getDataType()) {
+        case NUMBER:
+          return Instant.ofEpochMilli(((BigDecimal) value).longValue());
+        case DATE_TIME:
+          return (Instant) value;
+        case STRING:
+          return Instant.parse((String) value);
+        default:
+          return Instant.EPOCH;
+      }
+    } catch (DateTimeException ex) {
+      return Instant.EPOCH;
+    }
+  }
+
+  /**
+   * Gets a {@link Duration} representation of the value. If possible and needed, a conversion will
+   * be made.
+   *
+   * <ul>
+   *   <li>Any non-zero number value will return the duration from the millisecond.
+   *   <li>Any string with the string representation of an {@link Duration} (ex: <code>
+   *       "PnDTnHnMn.nS"</code>) (case ignored) will return the current instant.
+   *   <li>The {@link Duration#ZERO} will return if a conversion error occurs or in all other cases.
+   * </ul>
+   *
+   * @return The {@link Duration} representation of the value.
+   */
+  public Duration getDurationValue() {
+    try {
+      switch (getDataType()) {
+        case NUMBER:
+          return Duration.ofMillis(((BigDecimal) value).longValue());
+        case DURATION:
+          return (Duration) value;
+        case STRING:
+          return Duration.parse((String) value);
+        default:
+          return Duration.ZERO;
+      }
+    } catch (DateTimeException ex) {
+      return Duration.ZERO;
     }
   }
 
@@ -323,6 +453,8 @@ public class EvaluationValue implements Comparable<EvaluationValue> {
   public List<EvaluationValue> getArrayValue() {
     if (isArrayValue()) {
       return (List<EvaluationValue>) value;
+    } else if (isNullValue()) {
+      return NULL_ARRAY;
     } else {
       return Collections.emptyList();
     }
@@ -338,6 +470,8 @@ public class EvaluationValue implements Comparable<EvaluationValue> {
   public Map<String, EvaluationValue> getStructureValue() {
     if (isStructureValue()) {
       return (Map<String, EvaluationValue>) value;
+    } else if (isNullValue()) {
+      return NULL_STRUCTURE;
     } else {
       return Collections.emptyMap();
     }
@@ -359,6 +493,12 @@ public class EvaluationValue implements Comparable<EvaluationValue> {
         return getNumberValue().compareTo(toCompare.getNumberValue());
       case BOOLEAN:
         return getBooleanValue().compareTo(toCompare.getBooleanValue());
+      case NULL:
+        throw new NullPointerException("Can not compare a null value");
+      case DATE_TIME:
+        return getDateTimeValue().compareTo(toCompare.getDateTimeValue());
+      case DURATION:
+        return getDurationValue().compareTo(toCompare.getDurationValue());
       default:
         return getStringValue().compareTo(toCompare.getStringValue());
     }

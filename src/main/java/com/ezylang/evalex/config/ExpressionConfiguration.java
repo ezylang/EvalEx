@@ -19,78 +19,19 @@ import com.ezylang.evalex.data.DataAccessorIfc;
 import com.ezylang.evalex.data.EvaluationValue;
 import com.ezylang.evalex.data.MapBasedDataAccessor;
 import com.ezylang.evalex.functions.FunctionIfc;
-import com.ezylang.evalex.functions.basic.AbsFunction;
-import com.ezylang.evalex.functions.basic.CeilingFunction;
-import com.ezylang.evalex.functions.basic.FactFunction;
-import com.ezylang.evalex.functions.basic.FloorFunction;
-import com.ezylang.evalex.functions.basic.IfFunction;
-import com.ezylang.evalex.functions.basic.Log10Function;
-import com.ezylang.evalex.functions.basic.LogFunction;
-import com.ezylang.evalex.functions.basic.MaxFunction;
-import com.ezylang.evalex.functions.basic.MinFunction;
-import com.ezylang.evalex.functions.basic.NotFunction;
-import com.ezylang.evalex.functions.basic.RandomFunction;
-import com.ezylang.evalex.functions.basic.RoundFunction;
-import com.ezylang.evalex.functions.basic.SqrtFunction;
-import com.ezylang.evalex.functions.basic.SumFunction;
+import com.ezylang.evalex.functions.basic.*;
+import com.ezylang.evalex.functions.datetime.*;
 import com.ezylang.evalex.functions.string.StringContains;
 import com.ezylang.evalex.functions.string.StringLowerFunction;
 import com.ezylang.evalex.functions.string.StringUpperFunction;
-import com.ezylang.evalex.functions.trigonometric.AcosFunction;
-import com.ezylang.evalex.functions.trigonometric.AcosHFunction;
-import com.ezylang.evalex.functions.trigonometric.AcosRFunction;
-import com.ezylang.evalex.functions.trigonometric.AcotFunction;
-import com.ezylang.evalex.functions.trigonometric.AcotHFunction;
-import com.ezylang.evalex.functions.trigonometric.AcotRFunction;
-import com.ezylang.evalex.functions.trigonometric.AsinFunction;
-import com.ezylang.evalex.functions.trigonometric.AsinHFunction;
-import com.ezylang.evalex.functions.trigonometric.AsinRFunction;
-import com.ezylang.evalex.functions.trigonometric.Atan2Function;
-import com.ezylang.evalex.functions.trigonometric.Atan2RFunction;
-import com.ezylang.evalex.functions.trigonometric.AtanFunction;
-import com.ezylang.evalex.functions.trigonometric.AtanHFunction;
-import com.ezylang.evalex.functions.trigonometric.AtanRFunction;
-import com.ezylang.evalex.functions.trigonometric.CosFunction;
-import com.ezylang.evalex.functions.trigonometric.CosHFunction;
-import com.ezylang.evalex.functions.trigonometric.CosRFunction;
-import com.ezylang.evalex.functions.trigonometric.CotFunction;
-import com.ezylang.evalex.functions.trigonometric.CotHFunction;
-import com.ezylang.evalex.functions.trigonometric.CotRFunction;
-import com.ezylang.evalex.functions.trigonometric.CscFunction;
-import com.ezylang.evalex.functions.trigonometric.CscHFunction;
-import com.ezylang.evalex.functions.trigonometric.CscRFunction;
-import com.ezylang.evalex.functions.trigonometric.DegFunction;
-import com.ezylang.evalex.functions.trigonometric.RadFunction;
-import com.ezylang.evalex.functions.trigonometric.SecFunction;
-import com.ezylang.evalex.functions.trigonometric.SecHFunction;
-import com.ezylang.evalex.functions.trigonometric.SecRFunction;
-import com.ezylang.evalex.functions.trigonometric.SinFunction;
-import com.ezylang.evalex.functions.trigonometric.SinHFunction;
-import com.ezylang.evalex.functions.trigonometric.SinRFunction;
-import com.ezylang.evalex.functions.trigonometric.TanFunction;
-import com.ezylang.evalex.functions.trigonometric.TanHFunction;
-import com.ezylang.evalex.functions.trigonometric.TanRFunction;
+import com.ezylang.evalex.functions.trigonometric.*;
 import com.ezylang.evalex.operators.OperatorIfc;
-import com.ezylang.evalex.operators.arithmetic.InfixDivisionOperator;
-import com.ezylang.evalex.operators.arithmetic.InfixMinusOperator;
-import com.ezylang.evalex.operators.arithmetic.InfixModuloOperator;
-import com.ezylang.evalex.operators.arithmetic.InfixMultiplicationOperator;
-import com.ezylang.evalex.operators.arithmetic.InfixPlusOperator;
-import com.ezylang.evalex.operators.arithmetic.InfixPowerOfOperator;
-import com.ezylang.evalex.operators.arithmetic.PrefixMinusOperator;
-import com.ezylang.evalex.operators.arithmetic.PrefixPlusOperator;
-import com.ezylang.evalex.operators.booleans.InfixAndOperator;
-import com.ezylang.evalex.operators.booleans.InfixEqualsOperator;
-import com.ezylang.evalex.operators.booleans.InfixGreaterEqualsOperator;
-import com.ezylang.evalex.operators.booleans.InfixGreaterOperator;
-import com.ezylang.evalex.operators.booleans.InfixLessEqualsOperator;
-import com.ezylang.evalex.operators.booleans.InfixLessOperator;
-import com.ezylang.evalex.operators.booleans.InfixNotEqualsOperator;
-import com.ezylang.evalex.operators.booleans.InfixOrOperator;
-import com.ezylang.evalex.operators.booleans.PrefixNotOperator;
+import com.ezylang.evalex.operators.arithmetic.*;
+import com.ezylang.evalex.operators.booleans.*;
 import java.math.BigDecimal;
 import java.math.MathContext;
 import java.math.RoundingMode;
+import java.time.ZoneId;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Map;
@@ -120,7 +61,7 @@ import lombok.Getter;
  *            Map.entry("update", new UpdateFunction()));
  * </pre>
  */
-@Builder
+@Builder(toBuilder = true)
 public class ExpressionConfiguration {
 
   /** The standard set constants for EvalEx. */
@@ -221,7 +162,17 @@ public class ExpressionConfiguration {
           // string functions
           Map.entry("STR_CONTAINS", new StringContains()),
           Map.entry("STR_LOWER", new StringLowerFunction()),
-          Map.entry("STR_UPPER", new StringUpperFunction()));
+          Map.entry("STR_UPPER", new StringUpperFunction()),
+          // date time functions
+          Map.entry("DT_DATE_TIME", new DateTimeFunction()),
+          Map.entry("DT_PARSE", new DateTimeParseFunction()),
+          Map.entry("DT_ZONED_PARSE", new ZonedDateTimeParseFunction()),
+          Map.entry("DT_FORMAT", new DateTimeFormatFunction()),
+          Map.entry("DT_EPOCH", new DateTimeToEpochFunction()),
+          Map.entry("DT_DATE_TIME_EPOCH", new DateTimeFromEpochFunction()),
+          Map.entry("DT_DURATION_MILLIS", new DurationFromMillisFunction()),
+          Map.entry("DT_DURATION_DAYS", new DurationFromDaysFunction()),
+          Map.entry("DT_DURATION_PARSE", new DurationParseFunction()));
 
   /** The math context to use. */
   @Builder.Default @Getter private final MathContext mathContext = DEFAULT_MATH_CONTEXT;
@@ -276,6 +227,8 @@ public class ExpressionConfiguration {
    */
   @Builder.Default @Getter private final boolean allowOverwriteConstants = true;
 
+  /** Set the default zone id. By default, the system default zone id is used. */
+  @Builder.Default @Getter private final ZoneId defaultZoneId = ZoneId.systemDefault();
   /**
    * Convenience method to create a default configuration.
    *
@@ -347,6 +300,7 @@ public class ExpressionConfiguration {
         new EvaluationValue(
             new BigDecimal(
                 "2.71828182845904523536028747135266249775724709369995957496696762772407663")));
+    constants.put("NULL", new EvaluationValue(null));
 
     return constants;
   }

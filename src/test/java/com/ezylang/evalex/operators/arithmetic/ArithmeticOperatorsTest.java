@@ -19,7 +19,9 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import com.ezylang.evalex.BaseEvaluationTest;
 import com.ezylang.evalex.EvaluationException;
+import com.ezylang.evalex.config.TestConfigurationProvider;
 import com.ezylang.evalex.parser.ParseException;
+import java.time.ZoneId;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
@@ -84,9 +86,28 @@ class ArithmeticOperatorsTest extends BaseEvaluationTest {
         "1-89282 : -89281",
         "1.54321-1.5432 : 0.00001"
       })
-  void testInfixMinus(String expression, String expectedResult)
+  void testInfixMinusNumber(String expression, String expectedResult)
       throws EvaluationException, ParseException {
     assertExpressionHasExpectedResult(expression, expectedResult);
+  }
+
+  @ParameterizedTest
+  @CsvSource(
+      delimiter = '|',
+      value = {
+        "DT_DATE_TIME(2022,10,30,11,50,30)-2000 | 2022-10-30T09:50:28Z",
+        "DT_DATE_TIME(2022,10,30,11,50,30)-DT_DATE_TIME(2022,10,30,11,50,28) | PT2S",
+        "DT_DATE_TIME(2022,10,30,11,50,30)-DT_DURATION_PARSE(\"PT2S\") | 2022-10-30T09:50:28Z",
+        "DT_DURATION_PARSE(\"PT5S\")-DT_DURATION_PARSE(\"PT2S\") | PT3S"
+      })
+  void testInfixMinusDateTime(String expression, String expectedResult)
+      throws EvaluationException, ParseException {
+    assertExpressionHasExpectedResult(
+        expression,
+        expectedResult,
+        TestConfigurationProvider.StandardConfigurationWithAdditionalTestOperators.toBuilder()
+            .defaultZoneId(ZoneId.of("UTC+2"))
+            .build());
   }
 
   @ParameterizedTest
@@ -163,6 +184,24 @@ class ArithmeticOperatorsTest extends BaseEvaluationTest {
   void testInfixPlusStrings(String expression, String expectedResult)
       throws EvaluationException, ParseException {
     assertExpressionHasExpectedResult(expression, expectedResult);
+  }
+
+  @ParameterizedTest
+  @CsvSource(
+      delimiter = '|',
+      value = {
+        "DT_DATE_TIME(2022,10,30,11,50,30)+2000 | 2022-10-30T09:50:32Z",
+        "DT_DATE_TIME(2022,10,30,11,50,30)+DT_DURATION_PARSE(\"PT2S\") | 2022-10-30T09:50:32Z",
+        "DT_DURATION_PARSE(\"PT5S\")+DT_DURATION_PARSE(\"PT2S\") | PT7S"
+      })
+  void testInfixPlusDateTime(String expression, String expectedResult)
+      throws EvaluationException, ParseException {
+    assertExpressionHasExpectedResult(
+        expression,
+        expectedResult,
+        TestConfigurationProvider.StandardConfigurationWithAdditionalTestOperators.toBuilder()
+            .defaultZoneId(ZoneId.of("UTC+2"))
+            .build());
   }
 
   @ParameterizedTest

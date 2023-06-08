@@ -131,6 +131,14 @@ Another option to have EvalEx use your data is to define a custom data accessor.
 
 See chapter [Data Access](../customization/data_access.html) for details.
 
+### Null value Handling
+
+Operations and Functions that can not handle null will throw either a _NullPointerException_
+or an _EvaluationException_ when encountering null.
+
+When passing null as variable values is a possibility the expression should be written to handle null
+itself, for example using the _IF()_ function.
+
 ### Exception Handling
 
 In EvalEx, there are two general exceptions:
