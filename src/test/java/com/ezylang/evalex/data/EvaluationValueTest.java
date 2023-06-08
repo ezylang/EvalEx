@@ -18,7 +18,10 @@ package com.ezylang.evalex.data;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
+import com.ezylang.evalex.EvaluationException;
+import com.ezylang.evalex.Expression;
 import com.ezylang.evalex.parser.ASTNode;
+import com.ezylang.evalex.parser.ParseException;
 import com.ezylang.evalex.parser.Token;
 import com.ezylang.evalex.parser.Token.TokenType;
 import java.math.BigDecimal;
@@ -272,6 +275,27 @@ class EvaluationValueTest {
 
     assertThat(new EvaluationValue(3.9876, new MathContext(3)).getNumberValue())
         .isEqualByComparingTo("3.99");
+  }
+
+  @Test
+  void nestedEvaluationValue() {
+    try {
+      EvaluationValue value1 = new EvaluationValue("Hello");
+      EvaluationValue value2 = new EvaluationValue("World");
+
+      Map<String, EvaluationValue> structure = new HashMap<>();
+      structure.put("a", value1);
+      structure.put("b", value2);
+
+      EvaluationValue structureMap = new EvaluationValue(structure);
+
+      Expression exp = new Expression("value.a == \"Hello\"").with("value", structureMap);
+
+      EvaluationValue result = exp.evaluate();
+      assertThat(result.getBooleanValue()).isTrue();
+    } catch (EvaluationException | ParseException e) {
+      e.printStackTrace();
+    }
   }
 
   private void assertDataIsCorrect(
