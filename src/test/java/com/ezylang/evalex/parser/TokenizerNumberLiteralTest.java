@@ -83,7 +83,7 @@ class TokenizerNumberLiteralTest extends BaseParserTest {
   }
 
   @ParameterizedTest
-  @ValueSource(strings = {"2e", "2E", "2e+", "2E+", "2e-", "2E-", "2e."})
+  @ValueSource(strings = {"2e", "2E", "2e+", "2E+", "2e-", "2E-", "2e.", "2E.", "2ex", "2Ex"})
   void testScientificLiteralsParseException(String expression) {
     assertThatThrownBy(() -> new Tokenizer(expression, configuration).parse())
         .isInstanceOf(ParseException.class)
