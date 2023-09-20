@@ -15,9 +15,7 @@
 */
 package com.ezylang.evalex.config;
 
-import com.ezylang.evalex.data.DataAccessorIfc;
-import com.ezylang.evalex.data.EvaluationValue;
-import com.ezylang.evalex.data.MapBasedDataAccessor;
+import com.ezylang.evalex.data.*;
 import com.ezylang.evalex.functions.FunctionIfc;
 import com.ezylang.evalex.functions.basic.*;
 import com.ezylang.evalex.functions.datetime.*;
@@ -74,6 +72,9 @@ public class ExpressionConfiguration {
   /** The default math context has a precision of 68 and {@link RoundingMode#HALF_EVEN}. */
   public static final MathContext DEFAULT_MATH_CONTEXT =
       new MathContext(68, RoundingMode.HALF_EVEN);
+
+  /** The default zone id is the systemd default zone ID. */
+  public static final ZoneId DEFAULT_ZONE_ID = ZoneId.systemDefault();
 
   /** The operator dictionary holds all operators that will be allowed in an expression. */
   @Builder.Default
@@ -227,8 +228,14 @@ public class ExpressionConfiguration {
    */
   @Builder.Default @Getter private final boolean allowOverwriteConstants = true;
 
-  /** Set the default zone id. By default, the system default zone id is used. */
-  @Builder.Default @Getter private final ZoneId defaultZoneId = ZoneId.systemDefault();
+  /** The time zone id. By default, the system default zone id is used. */
+  @Builder.Default @Getter private final ZoneId zoneId = DEFAULT_ZONE_ID;
+
+  /** The converter to use when converting different data types to an {@link EvaluationValue}. */
+  @Builder.Default @Getter
+  private final EvaluationValueConverterIfc evaluationValueConverter =
+      new DefaultEvaluationValueConverter();
+
   /**
    * Convenience method to create a default configuration.
    *
@@ -243,14 +250,12 @@ public class ExpressionConfiguration {
    *
    * @param operators variable number of arguments with a map entry holding the operator name and
    *     implementation. <br>
-   *     Example:
-   *     <pre>
-   *                                                        ExpressionConfiguration.defaultConfiguration()
-   *                                                           .withAdditionalOperators(
-   *                                                               Map.entry("++", new PrefixPlusPlusOperator()),
-   *                                                               Map.entry("++", new PostfixPlusPlusOperator()));
-   *                                                        </pre>
-   *
+   *     Example: <code>
+   *        ExpressionConfiguration.defaultConfiguration()
+   *          .withAdditionalOperators(
+   *            Map.entry("++", new PrefixPlusPlusOperator()),
+   *            Map.entry("++", new PostfixPlusPlusOperator()));
+   *     </code>
    * @return The modified configuration, to allow chaining of methods.
    */
   @SafeVarargs
@@ -266,14 +271,12 @@ public class ExpressionConfiguration {
    *
    * @param functions variable number of arguments with a map entry holding the functions name and
    *     implementation. <br>
-   *     Example:
-   *     <pre>
-   *                                                        ExpressionConfiguration.defaultConfiguration()
-   *                                                           .withAdditionalFunctions(
-   *                                                               Map.entry("save", new SaveFunction()),
-   *                                                               Map.entry("update", new UpdateFunction()));
-   *                                                        </pre>
-   *
+   *     Example: <code>
+   *        ExpressionConfiguration.defaultConfiguration()
+   *          .withAdditionalFunctions(
+   *            Map.entry("save", new SaveFunction()),
+   *            Map.entry("update", new UpdateFunction()));
+   *     </code>
    * @return The modified configuration, to allow chaining of methods.
    */
   @SafeVarargs
@@ -288,19 +291,19 @@ public class ExpressionConfiguration {
 
     Map<String, EvaluationValue> constants = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
 
-    constants.put("TRUE", new EvaluationValue(true));
-    constants.put("FALSE", new EvaluationValue(false));
+    constants.put("TRUE", EvaluationValue.booleanValue(true));
+    constants.put("FALSE", EvaluationValue.booleanValue(false));
     constants.put(
         "PI",
-        new EvaluationValue(
+        EvaluationValue.numberValue(
             new BigDecimal(
                 "3.1415926535897932384626433832795028841971693993751058209749445923078164062862089986280348253421170679")));
     constants.put(
         "E",
-        new EvaluationValue(
+        EvaluationValue.numberValue(
             new BigDecimal(
                 "2.71828182845904523536028747135266249775724709369995957496696762772407663")));
-    constants.put("NULL", new EvaluationValue(null));
+    constants.put("NULL", EvaluationValue.nullValue());
 
     return constants;
   }

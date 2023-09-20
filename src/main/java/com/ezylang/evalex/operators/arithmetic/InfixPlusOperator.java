@@ -37,23 +37,23 @@ public class InfixPlusOperator extends AbstractOperator {
     EvaluationValue rightOperand = operands[1];
 
     if (leftOperand.isNumberValue() && rightOperand.isNumberValue()) {
-      return new EvaluationValue(
+      return expression.convertValue(
           leftOperand
               .getNumberValue()
               .add(rightOperand.getNumberValue(), expression.getConfiguration().getMathContext()));
     } else if (leftOperand.isDateTimeValue() && rightOperand.isDurationValue()) {
-      return new EvaluationValue(
+      return expression.convertValue(
           leftOperand.getDateTimeValue().plus(rightOperand.getDurationValue()));
     } else if (leftOperand.isDurationValue() && rightOperand.isDurationValue()) {
-      return new EvaluationValue(
+      return expression.convertValue(
           leftOperand.getDurationValue().plus(rightOperand.getDurationValue()));
     } else if (leftOperand.isDateTimeValue() && rightOperand.isNumberValue()) {
-      return new EvaluationValue(
+      return expression.convertValue(
           leftOperand
               .getDateTimeValue()
               .plus(Duration.ofMillis(rightOperand.getNumberValue().longValue())));
     } else {
-      return new EvaluationValue(leftOperand.getStringValue() + rightOperand.getStringValue());
+      return expression.convertValue(leftOperand.getStringValue() + rightOperand.getStringValue());
     }
   }
 }

@@ -35,7 +35,7 @@ public class RoundFunction extends AbstractFunction {
     EvaluationValue value = parameterValues[0];
     EvaluationValue precision = parameterValues[1];
 
-    return new EvaluationValue(
+    return expression.convertValue(
         value
             .getNumberValue()
             .setScale(

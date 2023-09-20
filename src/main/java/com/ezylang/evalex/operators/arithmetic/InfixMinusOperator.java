@@ -37,26 +37,26 @@ public class InfixMinusOperator extends AbstractOperator {
     EvaluationValue rightOperand = operands[1];
 
     if (leftOperand.isNumberValue() && rightOperand.isNumberValue()) {
-      return new EvaluationValue(
+      return expression.convertValue(
           leftOperand
               .getNumberValue()
               .subtract(
                   rightOperand.getNumberValue(), expression.getConfiguration().getMathContext()));
 
     } else if (leftOperand.isDateTimeValue() && rightOperand.isDateTimeValue()) {
-      return new EvaluationValue(
+      return expression.convertValue(
           Duration.ofMillis(
               leftOperand.getDateTimeValue().toEpochMilli()
                   - rightOperand.getDateTimeValue().toEpochMilli()));
 
     } else if (leftOperand.isDateTimeValue() && rightOperand.isDurationValue()) {
-      return new EvaluationValue(
+      return expression.convertValue(
           leftOperand.getDateTimeValue().minus(rightOperand.getDurationValue()));
     } else if (leftOperand.isDurationValue() && rightOperand.isDurationValue()) {
-      return new EvaluationValue(
+      return expression.convertValue(
           leftOperand.getDurationValue().minus(rightOperand.getDurationValue()));
     } else if (leftOperand.isDateTimeValue() && rightOperand.isNumberValue()) {
-      return new EvaluationValue(
+      return expression.convertValue(
           leftOperand
               .getDateTimeValue()
               .minus(Duration.ofMillis(rightOperand.getNumberValue().longValue())));

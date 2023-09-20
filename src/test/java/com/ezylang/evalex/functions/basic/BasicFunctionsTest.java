@@ -187,16 +187,19 @@ class BasicFunctionsTest extends BaseEvaluationTest {
     // somehow, code coverage for the NotFunction traditional tests does not work on Google build
     NotFunction notFunction = new NotFunction();
     Expression expressionMock = Mockito.mock(Expression.class);
+    Mockito.when(expressionMock.convertValue(true)).thenReturn(EvaluationValue.booleanValue(true));
+    Mockito.when(expressionMock.convertValue(false))
+        .thenReturn(EvaluationValue.booleanValue(false));
     Token token = new Token(1, "NOT", TokenType.FUNCTION, notFunction);
 
     assertThat(
             notFunction
-                .evaluate(expressionMock, token, new EvaluationValue(true))
+                .evaluate(expressionMock, token, EvaluationValue.booleanValue(true))
                 .getBooleanValue())
         .isFalse();
     assertThat(
             notFunction
-                .evaluate(expressionMock, token, new EvaluationValue(false))
+                .evaluate(expressionMock, token, EvaluationValue.booleanValue(false))
                 .getBooleanValue())
         .isTrue();
   }

@@ -29,6 +29,6 @@ public class DurationFromDaysFunction extends AbstractFunction {
   public EvaluationValue evaluate(
       Expression expression, Token functionToken, EvaluationValue... parameterValues) {
     BigDecimal days = parameterValues[0].getNumberValue();
-    return new EvaluationValue(Duration.ofDays(days.longValue()));
+    return expression.convertValue(Duration.ofDays(days.longValue()));
   }
 }

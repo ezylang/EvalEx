@@ -31,6 +31,6 @@ public class FloorFunction extends AbstractFunction {
 
     EvaluationValue value = parameterValues[0];
 
-    return new EvaluationValue(value.getNumberValue().setScale(0, RoundingMode.FLOOR));
+    return expression.convertValue(value.getNumberValue().setScale(0, RoundingMode.FLOOR));
   }
 }

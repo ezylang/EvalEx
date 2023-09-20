@@ -37,6 +37,6 @@ public class FactFunction extends AbstractFunction {
               new BigDecimal(i, expression.getConfiguration().getMathContext()),
               expression.getConfiguration().getMathContext());
     }
-    return new EvaluationValue(factorial);
+    return expression.convertValue(factorial);
   }
 }

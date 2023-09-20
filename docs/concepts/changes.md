@@ -2,7 +2,7 @@
 layout: default
 title: Major Changes
 parent: Concepts
-nav_order: 4
+nav_order: 5
 ---
 
 ## Major Changes From Version 2 to 3

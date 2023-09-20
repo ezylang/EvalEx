@@ -30,6 +30,6 @@ public class InfixNotEqualsOperator extends AbstractOperator {
   @Override
   public EvaluationValue evaluate(
       Expression expression, Token operatorToken, EvaluationValue... operands) {
-    return new EvaluationValue(!operands[0].equals(operands[1]));
+    return expression.convertValue(!operands[0].equals(operands[1]));
   }
 }

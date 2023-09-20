@@ -26,7 +26,7 @@ public abstract class AbstractDateTimeParseFunction extends AbstractFunction {
   @Override
   public EvaluationValue evaluate(
       Expression expression, Token functionToken, EvaluationValue... parameterValues) {
-    ZoneId zoneId = expression.getConfiguration().getDefaultZoneId();
+    ZoneId zoneId = expression.getConfiguration().getZoneId();
     Instant instant;
 
     if (parameterValues.length < 2) {
@@ -35,7 +35,7 @@ public abstract class AbstractDateTimeParseFunction extends AbstractFunction {
       instant =
           parse(parameterValues[0].getStringValue(), parameterValues[1].getStringValue(), zoneId);
     }
-    return new EvaluationValue(instant);
+    return expression.convertValue(instant);
   }
 
   protected abstract Instant parse(String value, String format, ZoneId zoneId);

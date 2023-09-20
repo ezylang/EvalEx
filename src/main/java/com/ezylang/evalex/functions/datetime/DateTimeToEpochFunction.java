@@ -26,6 +26,6 @@ public class DateTimeToEpochFunction extends AbstractFunction {
   @Override
   public EvaluationValue evaluate(
       Expression expression, Token functionToken, EvaluationValue... parameterValues) {
-    return new EvaluationValue(parameterValues[0].getDateTimeValue().toEpochMilli());
+    return expression.convertValue(parameterValues[0].getDateTimeValue().toEpochMilli());
   }
 }

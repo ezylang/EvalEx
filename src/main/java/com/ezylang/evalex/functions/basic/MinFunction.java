@@ -34,6 +34,6 @@ public class MinFunction extends AbstractFunction {
         min = parameter.getNumberValue();
       }
     }
-    return new EvaluationValue(min);
+    return expression.convertValue(min);
   }
 }

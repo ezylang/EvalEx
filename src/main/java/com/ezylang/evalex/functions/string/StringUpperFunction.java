@@ -27,6 +27,6 @@ public class StringUpperFunction extends AbstractFunction {
   @Override
   public EvaluationValue evaluate(
       Expression expression, Token functionToken, EvaluationValue... parameterValues) {
-    return new EvaluationValue(parameterValues[0].getStringValue().toUpperCase());
+    return expression.convertValue(parameterValues[0].getStringValue().toUpperCase());
   }
 }

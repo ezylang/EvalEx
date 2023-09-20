@@ -36,8 +36,8 @@ public class DateTimeFunction extends AbstractFunction {
     int second = parameterValues.length >= 6 ? parameterValues[5].getNumberValue().intValue() : 0;
     int nanoOfs = parameterValues.length >= 7 ? parameterValues[6].getNumberValue().intValue() : 0;
 
-    ZoneId zoneId = expression.getConfiguration().getDefaultZoneId();
-    return new EvaluationValue(
+    ZoneId zoneId = expression.getConfiguration().getZoneId();
+    return expression.convertValue(
         LocalDateTime.of(year, month, day, hour, minute, second, nanoOfs)
             .atZone(zoneId)
             .toInstant());

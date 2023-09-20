@@ -31,6 +31,6 @@ public class NotFunction extends AbstractFunction {
 
     boolean result = parameterValues[0].getBooleanValue();
 
-    return new EvaluationValue(!result);
+    return expression.convertValue(!result);
   }
 }
