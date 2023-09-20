@@ -146,9 +146,7 @@ class DateTimeConverterTest {
   @Test
   void testException() {
     assertThatThrownBy(
-            () -> {
-              converter.convert("hello", defaultConfiguration);
-            })
+            () -> converter.convert("hello", defaultConfiguration))
         .isInstanceOf(IllegalArgumentException.class)
         .hasMessage("Unsupported data type 'java.lang.String'");
   }

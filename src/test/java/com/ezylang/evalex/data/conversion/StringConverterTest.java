@@ -61,9 +61,7 @@ class StringConverterTest {
   @Test
   void testException() {
     assertThatThrownBy(
-            () -> {
-              converter.convert(7, defaultConfiguration);
-            })
+            () -> converter.convert(7, defaultConfiguration))
         .isInstanceOf(IllegalArgumentException.class)
         .hasMessage("Unsupported data type 'java.lang.Integer'");
   }

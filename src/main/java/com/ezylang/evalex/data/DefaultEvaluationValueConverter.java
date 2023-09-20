@@ -72,6 +72,10 @@ public class DefaultEvaluationValueConverter implements EvaluationValueConverter
       return EvaluationValue.nullValue();
     }
 
+    if (object instanceof EvaluationValue) {
+      return (EvaluationValue) object;
+    }
+
     for (ConverterIfc converter : converters) {
       if (converter.canConvert(object)) {
         return converter.convert(object, configuration);
