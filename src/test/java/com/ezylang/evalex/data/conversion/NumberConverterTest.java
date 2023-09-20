@@ -115,8 +115,7 @@ class NumberConverterTest {
 
   @Test
   void testException() {
-    assertThatThrownBy(
-            () -> converter.convert("not a number", defaultConfiguration))
+    assertThatThrownBy(() -> converter.convert("not a number", defaultConfiguration))
         .isInstanceOf(IllegalArgumentException.class)
         .hasMessage("Unsupported data type 'java.lang.String'");
   }
