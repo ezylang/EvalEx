@@ -28,6 +28,6 @@ public class DurationParseFunction extends AbstractFunction {
   public EvaluationValue evaluate(
       Expression expression, Token functionToken, EvaluationValue... parameterValues) {
     String text = parameterValues[0].getStringValue();
-    return new EvaluationValue(Duration.parse(text));
+    return expression.convertValue(Duration.parse(text));
   }
 }

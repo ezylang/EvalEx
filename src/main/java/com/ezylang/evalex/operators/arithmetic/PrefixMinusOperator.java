@@ -33,7 +33,7 @@ public class PrefixMinusOperator extends AbstractOperator {
     EvaluationValue operand = operands[0];
 
     if (operand.isNumberValue()) {
-      return new EvaluationValue(
+      return expression.convertValue(
           operand.getNumberValue().negate(expression.getConfiguration().getMathContext()));
     } else {
       throw EvaluationException.ofUnsupportedDataTypeInOperation(operatorToken);

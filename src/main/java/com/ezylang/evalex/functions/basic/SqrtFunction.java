@@ -40,7 +40,7 @@ public class SqrtFunction extends AbstractFunction {
     MathContext mathContext = expression.getConfiguration().getMathContext();
 
     if (x.compareTo(BigDecimal.ZERO) == 0) {
-      return new EvaluationValue(BigDecimal.ZERO);
+      return expression.convertValue(BigDecimal.ZERO);
     }
     BigInteger n = x.movePointRight(mathContext.getPrecision() << 1).toBigInteger();
 
@@ -56,6 +56,6 @@ public class SqrtFunction extends AbstractFunction {
       test = ix.subtract(ixPrev).abs();
     } while (test.compareTo(BigInteger.ZERO) != 0 && test.compareTo(BigInteger.ONE) != 0);
 
-    return new EvaluationValue(new BigDecimal(ix, mathContext.getPrecision()));
+    return expression.convertValue(new BigDecimal(ix, mathContext.getPrecision()));
   }
 }

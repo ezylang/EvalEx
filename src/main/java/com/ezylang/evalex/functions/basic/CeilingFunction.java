@@ -31,6 +31,6 @@ public class CeilingFunction extends AbstractFunction {
 
     EvaluationValue value = parameterValues[0];
 
-    return new EvaluationValue(value.getNumberValue().setScale(0, RoundingMode.CEILING));
+    return expression.convertValue(value.getNumberValue().setScale(0, RoundingMode.CEILING));
   }
 }

@@ -28,7 +28,7 @@ class DateTimeFunctionsTest extends BaseEvaluationTest {
 
   private static final ExpressionConfiguration DateTimeTestConfiguration =
       TestConfigurationProvider.StandardConfigurationWithAdditionalTestOperators.toBuilder()
-          .defaultZoneId(ZoneId.of("UTC+2"))
+          .zoneId(ZoneId.of("UTC+2"))
           .build();
 
   @ParameterizedTest

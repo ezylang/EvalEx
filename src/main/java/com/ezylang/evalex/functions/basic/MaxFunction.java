@@ -34,6 +34,6 @@ public class MaxFunction extends AbstractFunction {
         max = parameter.getNumberValue();
       }
     }
-    return new EvaluationValue(max);
+    return expression.convertValue(max);
   }
 }
