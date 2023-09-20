@@ -32,6 +32,6 @@ public class SumFunction extends AbstractFunction {
     for (EvaluationValue parameter : parameterValues) {
       sum = sum.add(parameter.getNumberValue(), expression.getConfiguration().getMathContext());
     }
-    return new EvaluationValue(sum);
+    return expression.convertValue(sum);
   }
 }

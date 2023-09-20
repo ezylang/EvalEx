@@ -106,7 +106,7 @@ class ArithmeticOperatorsTest extends BaseEvaluationTest {
         expression,
         expectedResult,
         TestConfigurationProvider.StandardConfigurationWithAdditionalTestOperators.toBuilder()
-            .defaultZoneId(ZoneId.of("UTC+2"))
+            .zoneId(ZoneId.of("UTC+2"))
             .build());
   }
 
@@ -200,7 +200,7 @@ class ArithmeticOperatorsTest extends BaseEvaluationTest {
         expression,
         expectedResult,
         TestConfigurationProvider.StandardConfigurationWithAdditionalTestOperators.toBuilder()
-            .defaultZoneId(ZoneId.of("UTC+2"))
+            .zoneId(ZoneId.of("UTC+2"))
             .build());
   }
 

@@ -18,6 +18,7 @@ package com.ezylang.evalex.data;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
+import com.ezylang.evalex.config.ExpressionConfiguration;
 import com.ezylang.evalex.parser.ASTNode;
 import com.ezylang.evalex.parser.Token;
 import com.ezylang.evalex.parser.Token.TokenType;
@@ -132,34 +133,73 @@ class EvaluationValueTest {
   }
 
   @Test
-  void testLocalDate() {
-    LocalDate localDate = LocalDate.parse("2022-10-30");
-    EvaluationValue value = new EvaluationValue(localDate);
+  void testLocalDateCETDaylightSavingTime() {
+    LocalDate localDate = LocalDate.parse("2022-10-20");
+    EvaluationValue value =
+        new EvaluationValue(
+            localDate, ExpressionConfiguration.builder().zoneId(ZoneId.of("CET")).build());
 
     assertThat(value.isDateTimeValue()).isTrue();
     assertDataIsCorrect(
         value,
-        "2022-10-30T00:00:00Z",
+        "2022-10-19T22:00:00Z",
         BigDecimal.ZERO,
         false,
-        Instant.parse("2022-10-30T00:00:00Z"),
+        localDate.atStartOfDay().atZone(ZoneId.of("CET")).toInstant(),
         Duration.ZERO,
         Instant.class);
   }
 
   @Test
-  void testLocalDateTime() {
-    ZoneId zoneId = ZoneId.of("UTC+2");
-    LocalDateTime localDateTime = LocalDateTime.parse("2022-10-30T11:20:30");
-    EvaluationValue value = new EvaluationValue(localDateTime, zoneId);
+  void testLocalDateCETNoDaylightSavingTime() {
+    LocalDate localDate = LocalDate.parse("2022-11-30");
+    EvaluationValue value =
+        new EvaluationValue(
+            localDate, ExpressionConfiguration.builder().zoneId(ZoneId.of("CET")).build());
 
     assertThat(value.isDateTimeValue()).isTrue();
     assertDataIsCorrect(
         value,
-        "2022-10-30T09:20:30Z",
+        "2022-11-29T23:00:00Z",
         BigDecimal.ZERO,
         false,
-        localDateTime.atZone(zoneId).toInstant(),
+        localDate.atStartOfDay().atZone(ZoneId.of("CET")).toInstant(),
+        Duration.ZERO,
+        Instant.class);
+  }
+
+  @Test
+  void testLocalDateTimeDaylightSavingTime() {
+    LocalDateTime localDateTime = LocalDateTime.parse("2022-10-20T11:20:30");
+    EvaluationValue value =
+        new EvaluationValue(
+            localDateTime, ExpressionConfiguration.builder().zoneId(ZoneId.of("CET")).build());
+
+    assertThat(value.isDateTimeValue()).isTrue();
+    assertDataIsCorrect(
+        value,
+        "2022-10-20T09:20:30Z",
+        BigDecimal.ZERO,
+        false,
+        localDateTime.atZone(ZoneId.of("CET")).toInstant(),
+        Duration.ZERO,
+        Instant.class);
+  }
+
+  @Test
+  void testLocalDateTimeNoDaylightSavingTime() {
+    LocalDateTime localDateTime = LocalDateTime.parse("2022-11-20T11:20:30");
+    EvaluationValue value =
+        new EvaluationValue(
+            localDateTime, ExpressionConfiguration.builder().zoneId(ZoneId.of("CET")).build());
+
+    assertThat(value.isDateTimeValue()).isTrue();
+    assertDataIsCorrect(
+        value,
+        "2022-11-20T10:20:30Z",
+        BigDecimal.ZERO,
+        false,
+        localDateTime.atZone(ZoneId.of("CET")).toInstant(),
         Duration.ZERO,
         Instant.class);
   }

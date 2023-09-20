@@ -42,7 +42,7 @@ public class TestConfigurationProvider {
     public EvaluationValue evaluate(
         Expression expression, Token functionToken, EvaluationValue... parameterValues) {
       // dummy implementation
-      return new EvaluationValue("OK");
+      return expression.convertValue("OK");
     }
   }
 

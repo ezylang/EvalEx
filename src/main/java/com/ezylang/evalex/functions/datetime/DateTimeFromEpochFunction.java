@@ -29,6 +29,6 @@ public class DateTimeFromEpochFunction extends AbstractFunction {
   public EvaluationValue evaluate(
       Expression expression, Token functionToken, EvaluationValue... parameterValues) {
     BigDecimal millis = parameterValues[0].getNumberValue();
-    return new EvaluationValue(Instant.ofEpochMilli(millis.longValue()));
+    return expression.convertValue(Instant.ofEpochMilli(millis.longValue()));
   }
 }

@@ -36,7 +36,7 @@ Available through the _ExpressionConfiguration.StandardFunctionsDictionary_ cons
 | STR_LOWER(value)                | Converts the given value to lower case                                |
 | STR_UPPER(value)                | Converts the given value to upper case                                |
 
-### trigonometric Functions
+### Trigonometric Functions
 
 | Name         | Description                                                                                    |
 |--------------|------------------------------------------------------------------------------------------------|
@@ -75,7 +75,7 @@ Available through the _ExpressionConfiguration.StandardFunctionsDictionary_ cons
 | TANH(value)  | Returns the hyperbolic tangent of a value                                                      |
 | TANR(value)  | Returns the tangent of an angle (in radians)                                                   |
 
-### DateTime Functions
+### Date Time Functions
 
 | Name                                                          | Description                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              |
 |---------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|

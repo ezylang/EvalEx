@@ -36,7 +36,7 @@ public class InfixMultiplicationOperator extends AbstractOperator {
     EvaluationValue rightOperand = operands[1];
 
     if (leftOperand.isNumberValue() && rightOperand.isNumberValue()) {
-      return new EvaluationValue(
+      return expression.convertValue(
           leftOperand
               .getNumberValue()
               .multiply(

@@ -19,18 +19,9 @@ import com.ezylang.evalex.config.ExpressionConfiguration;
 import com.ezylang.evalex.data.DataAccessorIfc;
 import com.ezylang.evalex.data.EvaluationValue;
 import com.ezylang.evalex.functions.FunctionIfc;
-import com.ezylang.evalex.parser.ASTNode;
-import com.ezylang.evalex.parser.ParseException;
-import com.ezylang.evalex.parser.ShuntingYardConverter;
-import com.ezylang.evalex.parser.Token;
-import com.ezylang.evalex.parser.Tokenizer;
+import com.ezylang.evalex.parser.*;
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.TreeMap;
-import java.util.TreeSet;
+import java.util.*;
 import lombok.Getter;
 
 /**
@@ -100,7 +91,7 @@ public class Expression {
         result = EvaluationValue.numberOfString(token.getValue(), configuration.getMathContext());
         break;
       case STRING_LITERAL:
-        result = new EvaluationValue(token.getValue());
+        result = EvaluationValue.stringValue(token.getValue());
         break;
       case VARIABLE_OR_CONSTANT:
         result = getVariableOrConstant(token);
@@ -158,7 +149,7 @@ public class Expression {
     List<EvaluationValue> parameterResults = new ArrayList<>();
     for (int i = 0; i < startNode.getParameters().size(); i++) {
       if (token.getFunctionDefinition().isParameterLazy(i)) {
-        parameterResults.add(new EvaluationValue(startNode.getParameters().get(i)));
+        parameterResults.add(convertValue(startNode.getParameters().get(i)));
       } else {
         parameterResults.add(evaluateSubtree(startNode.getParameters().get(i)));
       }
@@ -219,7 +210,7 @@ public class Expression {
     if (configuration.isStripTrailingZeros()) {
       bigDecimal = bigDecimal.stripTrailingZeros();
     }
-    return new EvaluationValue(bigDecimal);
+    return EvaluationValue.numberValue(bigDecimal);
   }
 
   /**
@@ -266,7 +257,7 @@ public class Expression {
             String.format("Can't set value for constant '%s'", variable));
       }
     }
-    getDataAccessor().setData(variable, new EvaluationValue(value));
+    getDataAccessor().setData(variable, convertValue(value));
     return this;
   }
 
@@ -322,7 +313,18 @@ public class Expression {
    * @return An {@link EvaluationValue} of type {@link EvaluationValue.DataType#NUMBER}.
    */
   public EvaluationValue convertDoubleValue(double value) {
-    return new EvaluationValue(value, configuration.getMathContext());
+    return convertValue(value);
+  }
+
+  /**
+   * Converts an object value to an {@link EvaluationValue} by considering the configuration {@link
+   * EvaluationValue(Object, ExpressionConfiguration)}.
+   *
+   * @param value The object value to covert.
+   * @return An {@link EvaluationValue} of the detected type and value.
+   */
+  public EvaluationValue convertValue(Object value) {
+    return new EvaluationValue(value, configuration);
   }
 
   /**

@@ -15,13 +15,17 @@
 */
 package com.ezylang.evalex.data;
 
+import com.ezylang.evalex.config.ExpressionConfiguration;
 import com.ezylang.evalex.parser.ASTNode;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.math.MathContext;
-import java.time.*;
-import java.util.*;
-import java.util.Map.Entry;
+import java.time.DateTimeException;
+import java.time.Duration;
+import java.time.Instant;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
 import lombok.Value;
 
 /**
@@ -74,144 +78,146 @@ public class EvaluationValue implements Comparable<EvaluationValue> {
   DataType dataType;
 
   /**
-   * Creates a new evaluation value by taking a good guess on the provided Java class and converting
-   * it to one of the supported types.
+   * Creates a new evaluation value by using the default converter and configuration.
    *
-   * <table>
-   *   <tr>
-   *     <th>Input type</th><th>Storage Type</th>
-   *   </tr>
-   *   <tr><td>BigDecimal</td><td>BigDecimal</td></tr>
-   *   <tr><td>Long, long</td><td>BigDecimal</td></tr>
-   *   <tr><td>Integer, int</td><td>BigDecimal</td></tr>
-   *   <tr><td>Short, short</td><td>BigDecimal</td></tr>
-   *   <tr><td>Byte, byte</td><td>BigDecimal</td></tr>
-   *   <tr><td>Double, double</td><td>BigDecimal *</td></tr>
-   *   <tr><td>Float, float</td><td>BigDecimal *</td></tr>
-   *   <tr><td>CharSequence , String</td><td>String</td></tr>
-   *   <tr><td>Boolean, boolean</td><td>Boolean</td></tr>
-   *   <tr><td>Instant, instant</td><td>Instant</td></tr>
-   *   <tr><td>ZonedDateTime, zonedDateTime</td><td>Instant</td></tr>
-   *   <tr><td>LocalDate, localDate</td><td>Instant</td></tr>
-   *   <tr><td>OffsetDateTime, offsetDateTime</td><td>Instant</td></tr>
-   *   <tr><td>Duration, duration</td><td>Duration</td></tr>
-   *   <tr><td>ASTNode</td><td>ASTNode</td></tr>
-   *   <tr><td>List&lt;?&gt;</td><td>List&lt;EvaluationValue&gt; - each entry will be converted</td></tr>
-   *   <tr><td>Map&lt?,?&gt;</td><td>Map&lt;String&gt;&lt;EvaluationValue&gt; - each entry will be converted.</td></tr>
-   * </table>
-   *
-   * <i>* Be careful with conversion problems when using float or double, which are fractional
-   * numbers. A (float)0.1 is e.g. converted to 0.10000000149011612</i>
-   *
-   * @param value One of the supported data types.
+   * @param value Any object that the default converter can convert.
    * @throws IllegalArgumentException if the data type can't be mapped.
+   * @see DefaultEvaluationValueConverter
+   * @deprecated Use {@link EvaluationValue(Object, ExpressionConfiguration)} instead.
    */
+  @Deprecated(since = "3.1.0", forRemoval = true)
   public EvaluationValue(Object value) {
-    BigDecimal number = convertToBigDecimal(value);
-    if (number != null) {
-      this.dataType = DataType.NUMBER;
-      this.value = number;
-    } else if (value == null) {
-      this.dataType = DataType.NULL;
-      this.value = null;
-    } else if (value instanceof CharSequence) {
-      this.dataType = DataType.STRING;
-      this.value = ((CharSequence) value).toString();
-    } else if (value instanceof Character) {
-      this.dataType = DataType.STRING;
-      this.value = ((Character) value).toString();
-    } else if (value instanceof Boolean) {
-      this.dataType = DataType.BOOLEAN;
-      this.value = value;
-    } else if (value instanceof Instant) {
-      this.dataType = DataType.DATE_TIME;
-      this.value = value;
-    } else if (value instanceof ZonedDateTime) {
-      this.dataType = DataType.DATE_TIME;
-      this.value = ((ZonedDateTime) value).toInstant();
-    } else if (value instanceof OffsetDateTime) {
-      this.dataType = DataType.DATE_TIME;
-      this.value = ((OffsetDateTime) value).toInstant();
-    } else if (value instanceof LocalDate) {
-      this.dataType = DataType.DATE_TIME;
-      this.value = ((LocalDate) value).atStartOfDay().atOffset(ZoneOffset.UTC).toInstant();
-    } else if (value instanceof Duration) {
-      this.dataType = DataType.DURATION;
-      this.value = value;
-    } else if (value instanceof ASTNode) {
-      this.dataType = DataType.EXPRESSION_NODE;
-      this.value = value;
-    } else if (value instanceof List) {
-      this.dataType = DataType.ARRAY;
-      this.value = convertToList((List<?>) value);
-    } else if (value instanceof Map) {
-      this.dataType = DataType.STRUCTURE;
-      this.value = convertMapStructure((Map<?, ?>) value);
-    } else {
-      throw new IllegalArgumentException(
-          "Unsupported data type '" + value.getClass().getName() + "'");
-    }
+    this(value, ExpressionConfiguration.defaultConfiguration());
   }
 
+  /**
+   * Creates a new evaluation value by using the configured converter and configuration.
+   *
+   * @param value One of the supported data types.
+   * @param configuration The expression configuration to use.
+   * @throws IllegalArgumentException if the data type can't be mapped.
+   * @see ExpressionConfiguration#getEvaluationValueConverter()
+   */
+  public EvaluationValue(Object value, ExpressionConfiguration configuration) {
+
+    EvaluationValue converted =
+        configuration.getEvaluationValueConverter().convertObject(value, configuration);
+
+    this.value = converted.getValue();
+    this.dataType = converted.getDataType();
+  }
+
+  /**
+   * Private constructor to directly create an instance with a given type and value.
+   *
+   * @param value The value to set, no conversion will be done.
+   * @param dataType The data type to set.
+   */
+  private EvaluationValue(Object value, DataType dataType) {
+    this.dataType = dataType;
+    this.value = value;
+  }
+
+  /**
+   * Creates a new null value.
+   *
+   * @return A new null value.
+   */
+  public static EvaluationValue nullValue() {
+    return new EvaluationValue(null, DataType.NULL);
+  }
+
+  /**
+   * Creates a new number value.
+   *
+   * @param value The BigDecimal value to use.
+   * @return the new number value.
+   */
+  public static EvaluationValue numberValue(BigDecimal value) {
+    return new EvaluationValue(value, DataType.NUMBER);
+  }
+
+  /**
+   * Creates a new string value.
+   *
+   * @param value The String value to use.
+   * @return the new string value.
+   */
+  public static EvaluationValue stringValue(String value) {
+    return new EvaluationValue(value, DataType.STRING);
+  }
+
+  /**
+   * Creates a new boolean value.
+   *
+   * @param value The Boolean value to use.
+   * @return the new boolean value.
+   */
+  public static EvaluationValue booleanValue(Boolean value) {
+    return new EvaluationValue(value, DataType.BOOLEAN);
+  }
+
+  /**
+   * Creates a new date-time value.
+   *
+   * @param value The Instant value to use.
+   * @return the new date-time value.
+   */
+  public static EvaluationValue dateTimeValue(Instant value) {
+    return new EvaluationValue(value, DataType.DATE_TIME);
+  }
+
+  /**
+   * Creates a new duration value.
+   *
+   * @param value The Duration value to use.
+   * @return the new duration value.
+   */
+  public static EvaluationValue durationValue(Duration value) {
+    return new EvaluationValue(value, DataType.DURATION);
+  }
+
+  /**
+   * Creates a new expression node value.
+   *
+   * @param value The ASTNode value to use.
+   * @return the new expression node value.
+   */
+  public static EvaluationValue expressionNodeValue(ASTNode value) {
+    return new EvaluationValue(value, DataType.EXPRESSION_NODE);
+  }
+
+  /**
+   * Creates a new array value.
+   *
+   * @param value The List value to use.
+   * @return the new array value.
+   */
+  public static EvaluationValue arrayValue(List<?> value) {
+    return new EvaluationValue(value, DataType.ARRAY);
+  }
+
+  /**
+   * Creates a new structure value.
+   *
+   * @param value The Map value to use.
+   * @return the new structure value.
+   */
+  public static EvaluationValue structureValue(Map<?, ?> value) {
+    return new EvaluationValue(value, DataType.STRUCTURE);
+  }
+
+  /**
+   * Creates a new evaluation value from a double value using the specified {@link MathContext}.
+   *
+   * @param value The double value.
+   * @param mathContext The math context to use.
+   * @deprecated since 3.1.0 - Use {@link EvaluationValue(Object, ExpressionConfiguration)}.
+   */
+  @Deprecated(since = "3.1.0", forRemoval = true)
   public EvaluationValue(double value, MathContext mathContext) {
     this.dataType = DataType.NUMBER;
     this.value = new BigDecimal(Double.toString(value), mathContext);
-  }
-
-  public EvaluationValue(LocalDateTime value, ZoneId zoneId) {
-    this.dataType = DataType.DATE_TIME;
-    this.value = value.atZone(zoneId).toInstant();
-  }
-
-  /**
-   * Converts a {@link Map} of objects to a {@link Map} of {@link EvaluationValue} values.
-   *
-   * @return A {@link Map} of {@link EvaluationValue} values.
-   */
-  private Map<String, EvaluationValue> convertMapStructure(Map<?, ?> value) {
-    Map<String, EvaluationValue> structure = new HashMap<>();
-    for (Entry<?, ?> entry : value.entrySet()) {
-      String name = entry.getKey().toString();
-      structure.put(name, new EvaluationValue(entry.getValue()));
-    }
-    return structure;
-  }
-
-  /**
-   * Converts a {@link List} of objects to a {@link List} of {@link EvaluationValue} values.
-   *
-   * @return A {@link List} of {@link EvaluationValue} values.
-   */
-  private List<EvaluationValue> convertToList(List<?> value) {
-    List<EvaluationValue> array = new ArrayList<>();
-    value.forEach(element -> array.add(new EvaluationValue(element)));
-    return array;
-  }
-
-  /**
-   * Check and convert, if an {@link Object} can be converted to a {@link BigDecimal} value.
-   *
-   * @return A {@link BigDecimal} value of the object, or <code>null</code> if it can't be
-   *     converted.
-   */
-  private BigDecimal convertToBigDecimal(Object value) {
-    if (value instanceof BigDecimal) {
-      return (BigDecimal) value;
-    } else if (value instanceof Double) {
-      return BigDecimal.valueOf((double) value);
-    } else if (value instanceof Float) {
-      return BigDecimal.valueOf((float) value);
-    } else if (value instanceof Integer) {
-      return BigDecimal.valueOf((int) value);
-    } else if (value instanceof Long) {
-      return BigDecimal.valueOf((long) value);
-    } else if (value instanceof Short) {
-      return BigDecimal.valueOf((short) value);
-    } else if (value instanceof Byte) {
-      return BigDecimal.valueOf((byte) value);
-    } else {
-      return null;
-    }
   }
 
   /**
@@ -298,9 +304,9 @@ public class EvaluationValue implements Comparable<EvaluationValue> {
   public static EvaluationValue numberOfString(String value, MathContext mathContext) {
     if (value.startsWith("0x") || value.startsWith("0X")) {
       BigInteger hexToInteger = new BigInteger(value.substring(2), 16);
-      return new EvaluationValue(new BigDecimal(hexToInteger, mathContext));
+      return EvaluationValue.numberValue(new BigDecimal(hexToInteger, mathContext));
     } else {
-      return new EvaluationValue(new BigDecimal(value, mathContext));
+      return EvaluationValue.numberValue(new BigDecimal(value, mathContext));
     }
   }
 

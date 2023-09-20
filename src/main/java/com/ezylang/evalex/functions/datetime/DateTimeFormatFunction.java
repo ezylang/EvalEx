@@ -29,7 +29,7 @@ public class DateTimeFormatFunction extends AbstractFunction {
   public EvaluationValue evaluate(
       Expression expression, Token functionToken, EvaluationValue... parameterValues) {
     String formatted;
-    ZoneId zoneId = expression.getConfiguration().getDefaultZoneId();
+    ZoneId zoneId = expression.getConfiguration().getZoneId();
     if (parameterValues.length < 2) {
       formatted = parameterValues[0].getDateTimeValue().atZone(zoneId).toLocalDateTime().toString();
     } else {
@@ -38,6 +38,6 @@ public class DateTimeFormatFunction extends AbstractFunction {
       formatted =
           parameterValues[0].getDateTimeValue().atZone(zoneId).toLocalDateTime().format(formatter);
     }
-    return new EvaluationValue(formatted);
+    return expression.convertValue(formatted);
   }
 }

@@ -29,7 +29,7 @@ public class AbsFunction extends AbstractFunction {
   public EvaluationValue evaluate(
       Expression expression, Token functionToken, EvaluationValue... parameterValues) {
 
-    return new EvaluationValue(
+    return expression.convertValue(
         parameterValues[0].getNumberValue().abs(expression.getConfiguration().getMathContext()));
   }
 }

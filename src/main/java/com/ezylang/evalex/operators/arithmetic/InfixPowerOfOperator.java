@@ -66,7 +66,7 @@ public class InfixPowerOfOperator extends AbstractOperator {
       if (signOf2 == -1) {
         result = BigDecimal.ONE.divide(result, mathContext.getPrecision(), RoundingMode.HALF_UP);
       }
-      return new EvaluationValue(result);
+      return expression.convertValue(result);
     } else {
       throw EvaluationException.ofUnsupportedDataTypeInOperation(operatorToken);
     }

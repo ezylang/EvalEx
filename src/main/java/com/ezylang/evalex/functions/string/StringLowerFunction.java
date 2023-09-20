@@ -27,6 +27,6 @@ public class StringLowerFunction extends AbstractFunction {
   @Override
   public EvaluationValue evaluate(
       Expression expression, Token functionToken, EvaluationValue... parameterValues) {
-    return new EvaluationValue(parameterValues[0].getStringValue().toLowerCase());
+    return expression.convertValue(parameterValues[0].getStringValue().toLowerCase());
   }
 }

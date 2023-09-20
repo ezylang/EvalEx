@@ -29,6 +29,6 @@ public class DurationFromMillisFunction extends AbstractFunction {
   public EvaluationValue evaluate(
       Expression expression, Token functionToken, EvaluationValue... parameterValues) {
     BigDecimal millis = parameterValues[0].getNumberValue();
-    return new EvaluationValue(Duration.ofMillis(millis.longValue()));
+    return expression.convertValue(Duration.ofMillis(millis.longValue()));
   }
 }
