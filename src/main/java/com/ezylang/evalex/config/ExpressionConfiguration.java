@@ -16,6 +16,8 @@
 package com.ezylang.evalex.config;
 
 import com.ezylang.evalex.data.*;
+import com.ezylang.evalex.data.conversion.DefaultEvaluationValueConverter;
+import com.ezylang.evalex.data.conversion.EvaluationValueConverterIfc;
 import com.ezylang.evalex.functions.FunctionIfc;
 import com.ezylang.evalex.functions.basic.*;
 import com.ezylang.evalex.functions.datetime.*;

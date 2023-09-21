@@ -67,7 +67,7 @@ class FunctionTest {
     @Override
     public EvaluationValue evaluate(
         Expression expression, Token functionToken, EvaluationValue... parameterValues) {
-      return new EvaluationValue("OK");
+      return EvaluationValue.stringValue("OK");
     }
   }
 
@@ -78,7 +78,7 @@ class FunctionTest {
     @Override
     public EvaluationValue evaluate(
         Expression expression, Token functionToken, EvaluationValue... parameterValues) {
-      return new EvaluationValue("OK");
+      return EvaluationValue.stringValue("OK");
     }
   }
 }

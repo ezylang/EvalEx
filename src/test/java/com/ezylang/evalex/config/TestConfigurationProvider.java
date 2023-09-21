@@ -53,7 +53,7 @@ public class TestConfigurationProvider {
         Expression expression, Token operatorToken, EvaluationValue... operands) {
       // dummy implementation
       EvaluationValue operand = operands[0];
-      return new EvaluationValue(operand.getNumberValue().add(BigDecimal.ONE));
+      return EvaluationValue.numberValue(operand.getNumberValue().add(BigDecimal.ONE));
     }
   }
 
@@ -64,7 +64,7 @@ public class TestConfigurationProvider {
         Expression expression, Token operatorToken, EvaluationValue... operands) {
       // dummy implementation
       EvaluationValue operand = operands[0];
-      return new EvaluationValue(operand.getNumberValue().add(BigDecimal.ONE));
+      return EvaluationValue.numberValue(operand.getNumberValue().add(BigDecimal.ONE));
     }
   }
 
@@ -74,7 +74,7 @@ public class TestConfigurationProvider {
     public EvaluationValue evaluate(
         Expression expression, Token operatorToken, EvaluationValue... operands) {
       // dummy implementation
-      return new EvaluationValue("?");
+      return EvaluationValue.stringValue("?");
     }
   }
 }
