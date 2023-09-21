@@ -132,8 +132,8 @@ class ExpressionConfigurationTest {
     Map<String, EvaluationValue> constants =
         new HashMap<>() {
           {
-            put("A", new EvaluationValue("a"));
-            put("B", new EvaluationValue("b"));
+            put("A", EvaluationValue.stringValue("a"));
+            put("B", EvaluationValue.stringValue("b"));
           }
         };
     ExpressionConfiguration configuration =

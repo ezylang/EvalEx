@@ -19,6 +19,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import com.ezylang.evalex.config.ExpressionConfiguration;
+import com.ezylang.evalex.data.conversion.DefaultEvaluationValueConverter;
 import org.junit.jupiter.api.Test;
 
 class DefaultEvaluationValueConverterTest {

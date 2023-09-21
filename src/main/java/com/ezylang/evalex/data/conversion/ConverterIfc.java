@@ -18,9 +18,7 @@ package com.ezylang.evalex.data.conversion;
 import com.ezylang.evalex.config.ExpressionConfiguration;
 import com.ezylang.evalex.data.EvaluationValue;
 
-/**
- * Converter interface used by the {@link com.ezylang.evalex.data.DefaultEvaluationValueConverter}.
- */
+/** Converter interface used by the {@link DefaultEvaluationValueConverter}. */
 public interface ConverterIfc {
 
   /**

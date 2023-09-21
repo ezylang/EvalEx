@@ -62,7 +62,8 @@ class TokenizerLiteralOperatorsTest extends BaseParserTest {
     @Override
     public EvaluationValue evaluate(
         Expression expression, Token operatorToken, EvaluationValue... operands) {
-      return new EvaluationValue(operands[0].getBooleanValue() && operands[1].getBooleanValue());
+      return EvaluationValue.booleanValue(
+          operands[0].getBooleanValue() && operands[1].getBooleanValue());
     }
   }
 
@@ -71,7 +72,8 @@ class TokenizerLiteralOperatorsTest extends BaseParserTest {
     @Override
     public EvaluationValue evaluate(
         Expression expression, Token operatorToken, EvaluationValue... operands) {
-      return new EvaluationValue(operands[0].getBooleanValue() || operands[1].getBooleanValue());
+      return EvaluationValue.booleanValue(
+          operands[0].getBooleanValue() || operands[1].getBooleanValue());
     }
   }
 
@@ -80,7 +82,7 @@ class TokenizerLiteralOperatorsTest extends BaseParserTest {
     @Override
     public EvaluationValue evaluate(
         Expression expression, Token operatorToken, EvaluationValue... operands) {
-      return new EvaluationValue(!operands[0].getBooleanValue());
+      return EvaluationValue.booleanValue(!operands[0].getBooleanValue());
     }
   }
 
@@ -89,7 +91,7 @@ class TokenizerLiteralOperatorsTest extends BaseParserTest {
     @Override
     public EvaluationValue evaluate(
         Expression expression, Token operatorToken, EvaluationValue... operands) {
-      return new EvaluationValue(!operands[0].getBooleanValue());
+      return EvaluationValue.booleanValue(!operands[0].getBooleanValue());
     }
   }
 }

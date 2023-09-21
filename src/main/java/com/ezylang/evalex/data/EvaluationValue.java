@@ -16,6 +16,7 @@
 package com.ezylang.evalex.data;
 
 import com.ezylang.evalex.config.ExpressionConfiguration;
+import com.ezylang.evalex.data.conversion.DefaultEvaluationValueConverter;
 import com.ezylang.evalex.parser.ASTNode;
 import java.math.BigDecimal;
 import java.math.BigInteger;

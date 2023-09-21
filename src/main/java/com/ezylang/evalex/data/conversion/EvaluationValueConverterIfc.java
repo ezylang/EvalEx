@@ -13,9 +13,10 @@
   See the License for the specific language governing permissions and
   limitations under the License.
 */
-package com.ezylang.evalex.data;
+package com.ezylang.evalex.data.conversion;
 
 import com.ezylang.evalex.config.ExpressionConfiguration;
+import com.ezylang.evalex.data.EvaluationValue;
 
 /**
  * Converter interface to be implemented by configurable evaluation value converters. Converts an

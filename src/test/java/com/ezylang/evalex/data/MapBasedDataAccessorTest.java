@@ -26,9 +26,9 @@ class MapBasedDataAccessorTest {
   void testSetGetData() {
     DataAccessorIfc dataAccessor = new MapBasedDataAccessor();
 
-    EvaluationValue num = new EvaluationValue(new BigDecimal("123"));
-    EvaluationValue string = new EvaluationValue("hello");
-    EvaluationValue bool = new EvaluationValue(true);
+    EvaluationValue num = EvaluationValue.numberValue(new BigDecimal("123"));
+    EvaluationValue string = EvaluationValue.stringValue("hello");
+    EvaluationValue bool = EvaluationValue.booleanValue(true);
 
     dataAccessor.setData("num", num);
     dataAccessor.setData("string", string);
@@ -43,7 +43,7 @@ class MapBasedDataAccessorTest {
   void testCaseInsensitivity() {
     DataAccessorIfc dataAccessor = new MapBasedDataAccessor();
 
-    EvaluationValue num = new EvaluationValue(new BigDecimal("123"));
+    EvaluationValue num = EvaluationValue.numberValue(new BigDecimal("123"));
     dataAccessor.setData("Hello", num);
 
     assertThat(dataAccessor.getData("Hello")).isEqualTo(num);

@@ -15,6 +15,7 @@
 */
 package com.ezylang.evalex.data;
 
+import static com.ezylang.evalex.config.ExpressionConfiguration.defaultConfiguration;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
@@ -35,14 +36,15 @@ class EvaluationValueTest {
 
   @Test
   void testUnsupportedDataType() {
-    assertThatThrownBy(() -> new EvaluationValue(Locale.FRANCE))
+    final ExpressionConfiguration configuration = defaultConfiguration();
+    assertThatThrownBy(() -> new EvaluationValue(Locale.FRANCE, configuration))
         .isInstanceOf(IllegalArgumentException.class)
         .hasMessage("Unsupported data type 'java.util.Locale'");
   }
 
   @Test
   void testString() {
-    EvaluationValue value = new EvaluationValue("Hello World");
+    EvaluationValue value = new EvaluationValue("Hello World", defaultConfiguration());
 
     assertThat(value.isStringValue()).isTrue();
     assertThat(value.isNumberValue()).isFalse();
@@ -57,7 +59,8 @@ class EvaluationValueTest {
 
   @Test
   void testStringBuilder() {
-    EvaluationValue value = new EvaluationValue(new StringBuilder("Hello StringBuilder World"));
+    EvaluationValue value =
+        new EvaluationValue(new StringBuilder("Hello StringBuilder World"), defaultConfiguration());
 
     assertThat(value.isStringValue()).isTrue();
     assertDataIsCorrect(
@@ -72,7 +75,7 @@ class EvaluationValueTest {
 
   @Test
   void testCharacter() {
-    EvaluationValue value = new EvaluationValue('a');
+    EvaluationValue value = new EvaluationValue('a', defaultConfiguration());
 
     assertThat(value.isStringValue()).isTrue();
     assertDataIsCorrect(
@@ -81,7 +84,7 @@ class EvaluationValueTest {
 
   @Test
   void testBooleanTrue() {
-    EvaluationValue value = new EvaluationValue(true);
+    EvaluationValue value = new EvaluationValue(true, defaultConfiguration());
 
     assertThat(value.isBooleanValue()).isTrue();
     assertThat(value.isNumberValue()).isFalse();
@@ -96,7 +99,7 @@ class EvaluationValueTest {
 
   @Test
   void testBooleanFalse() {
-    EvaluationValue value = new EvaluationValue(false);
+    EvaluationValue value = new EvaluationValue(false, defaultConfiguration());
 
     assertThat(value.isBooleanValue()).isTrue();
     assertDataIsCorrect(
@@ -105,7 +108,7 @@ class EvaluationValueTest {
 
   @Test
   void testBooleanString() {
-    EvaluationValue value = new EvaluationValue("true");
+    EvaluationValue value = new EvaluationValue("true", defaultConfiguration());
 
     assertThat(value.isStringValue()).isTrue();
     assertDataIsCorrect(
@@ -114,7 +117,7 @@ class EvaluationValueTest {
 
   @Test
   void testBooleanNumberZero() {
-    EvaluationValue value = new EvaluationValue(BigDecimal.ZERO);
+    EvaluationValue value = new EvaluationValue(BigDecimal.ZERO, defaultConfiguration());
 
     assertThat(value.isNumberValue()).isTrue();
     assertDataIsCorrect(
@@ -124,7 +127,7 @@ class EvaluationValueTest {
   @Test
   void testInstant() {
     Instant instant = Instant.parse("2022-10-30T00:00:00Z");
-    EvaluationValue value = new EvaluationValue(instant);
+    EvaluationValue value = new EvaluationValue(instant, defaultConfiguration());
 
     assertThat(value.isDateTimeValue()).isTrue();
     assertDataIsCorrect(
@@ -207,7 +210,7 @@ class EvaluationValueTest {
   void testZonedDateTime() {
     ZonedDateTime zonedDateTime =
         ZonedDateTime.of(LocalDateTime.of(2022, 10, 30, 11, 20, 30), ZoneId.of("GMT+05:30"));
-    EvaluationValue value = new EvaluationValue(zonedDateTime);
+    EvaluationValue value = new EvaluationValue(zonedDateTime, defaultConfiguration());
 
     assertThat(value.isDateTimeValue()).isTrue();
     assertDataIsCorrect(
@@ -224,7 +227,7 @@ class EvaluationValueTest {
   void testOffsetDateTime() {
     OffsetDateTime offsetDateTime =
         OffsetDateTime.of(LocalDateTime.of(2022, 10, 30, 11, 20, 30), ZoneOffset.of("+05:30"));
-    EvaluationValue value = new EvaluationValue(offsetDateTime);
+    EvaluationValue value = new EvaluationValue(offsetDateTime, defaultConfiguration());
 
     assertThat(value.isDateTimeValue()).isTrue();
     assertDataIsCorrect(
@@ -239,7 +242,7 @@ class EvaluationValueTest {
 
   @Test
   void testStringDateTime() {
-    EvaluationValue value = new EvaluationValue("2022-10-30T11:20:30Z");
+    EvaluationValue value = new EvaluationValue("2022-10-30T11:20:30Z", defaultConfiguration());
 
     assertThat(value.isDateTimeValue()).isFalse();
     assertDataIsCorrect(
@@ -254,7 +257,7 @@ class EvaluationValueTest {
 
   @Test
   void testDuration() {
-    EvaluationValue value = new EvaluationValue(Duration.ofMinutes(1));
+    EvaluationValue value = new EvaluationValue(Duration.ofMinutes(1), defaultConfiguration());
 
     assertThat(value.isDurationValue()).isTrue();
     assertDataIsCorrect(
@@ -269,7 +272,7 @@ class EvaluationValueTest {
 
   @Test
   void testStringDuration() {
-    EvaluationValue value = new EvaluationValue("PT24H");
+    EvaluationValue value = new EvaluationValue("PT24H", defaultConfiguration());
 
     assertThat(value.isDurationValue()).isFalse();
     assertDataIsCorrect(
@@ -278,7 +281,7 @@ class EvaluationValueTest {
 
   @Test
   void testBigDecimal() {
-    EvaluationValue value = new EvaluationValue(new BigDecimal("123.5"));
+    EvaluationValue value = new EvaluationValue(new BigDecimal("123.5"), defaultConfiguration());
 
     assertThat(value.isNumberValue()).isTrue();
     assertDataIsCorrect(
@@ -293,7 +296,7 @@ class EvaluationValueTest {
 
   @Test
   void testFloat() {
-    EvaluationValue value = new EvaluationValue((float) 4.5);
+    EvaluationValue value = new EvaluationValue((float) 4.5, defaultConfiguration());
 
     assertThat(value.isNumberValue()).isTrue();
     assertDataIsCorrect(
@@ -308,7 +311,7 @@ class EvaluationValueTest {
 
   @Test
   void testDouble() {
-    EvaluationValue value = new EvaluationValue(8.5);
+    EvaluationValue value = new EvaluationValue(8.5, defaultConfiguration());
 
     assertThat(value.isNumberValue()).isTrue();
     assertDataIsCorrect(
@@ -323,7 +326,7 @@ class EvaluationValueTest {
 
   @Test
   void testLong() {
-    EvaluationValue value = new EvaluationValue(6L);
+    EvaluationValue value = new EvaluationValue(6L, defaultConfiguration());
 
     assertThat(value.isNumberValue()).isTrue();
     assertDataIsCorrect(
@@ -338,7 +341,7 @@ class EvaluationValueTest {
 
   @Test
   void testInteger() {
-    EvaluationValue value = new EvaluationValue(5);
+    EvaluationValue value = new EvaluationValue(5, defaultConfiguration());
 
     assertThat(value.isNumberValue()).isTrue();
     assertDataIsCorrect(
@@ -353,7 +356,7 @@ class EvaluationValueTest {
 
   @Test
   void testShort() {
-    EvaluationValue value = new EvaluationValue((short) 4);
+    EvaluationValue value = new EvaluationValue((short) 4, defaultConfiguration());
 
     assertThat(value.isNumberValue()).isTrue();
     assertDataIsCorrect(
@@ -368,7 +371,7 @@ class EvaluationValueTest {
 
   @Test
   void testByte() {
-    EvaluationValue value = new EvaluationValue((byte) 3);
+    EvaluationValue value = new EvaluationValue((byte) 3, defaultConfiguration());
 
     assertThat(value.isNumberValue()).isTrue();
     assertDataIsCorrect(
@@ -384,7 +387,8 @@ class EvaluationValueTest {
   @Test
   void testArray() {
     EvaluationValue value =
-        new EvaluationValue(Arrays.asList(new BigDecimal(1), new BigDecimal(2)));
+        new EvaluationValue(
+            Arrays.asList(new BigDecimal(1), new BigDecimal(2)), defaultConfiguration());
 
     assertThat(value.isArrayValue()).isTrue();
     assertThat(value.isNumberValue()).isFalse();
@@ -403,14 +407,14 @@ class EvaluationValueTest {
 
   @Test
   void testArrayEmpty() {
-    EvaluationValue value = new EvaluationValue(new BigDecimal(1));
+    EvaluationValue value = new EvaluationValue(new BigDecimal(1), defaultConfiguration());
 
     assertThat(value.getArrayValue()).isEmpty();
   }
 
   @Test
   void testArrayNull() {
-    EvaluationValue value = new EvaluationValue(null);
+    EvaluationValue value = new EvaluationValue(null, defaultConfiguration());
 
     assertThat(value.getArrayValue()).isNull();
   }
@@ -420,7 +424,7 @@ class EvaluationValueTest {
     Map<String, Object> structure = new HashMap<>();
     structure.put("a", "Hello");
     structure.put("b", new BigDecimal(99));
-    EvaluationValue value = new EvaluationValue(structure);
+    EvaluationValue value = new EvaluationValue(structure, defaultConfiguration());
 
     assertThat(value.isStructureValue()).isTrue();
     assertThat(value.isNumberValue()).isFalse();
@@ -438,14 +442,14 @@ class EvaluationValueTest {
 
   @Test
   void testStructureEmpty() {
-    EvaluationValue value = new EvaluationValue(new BigDecimal(1));
+    EvaluationValue value = new EvaluationValue(new BigDecimal(1), defaultConfiguration());
 
     assertThat(value.getStructureValue()).isEmpty();
   }
 
   @Test
   void testStructureNull() {
-    EvaluationValue value = new EvaluationValue(null);
+    EvaluationValue value = new EvaluationValue(null, defaultConfiguration());
 
     assertThat(value.getStructureValue()).isNull();
   }
@@ -453,7 +457,7 @@ class EvaluationValueTest {
   @Test
   void testExpressionNode() {
     ASTNode node = new ASTNode(new Token(1, "a", TokenType.VARIABLE_OR_CONSTANT));
-    EvaluationValue value = new EvaluationValue(node);
+    EvaluationValue value = new EvaluationValue(node, defaultConfiguration());
 
     assertThat(value.isExpressionNode()).isTrue();
     assertThat(value.isNumberValue()).isFalse();
@@ -475,7 +479,7 @@ class EvaluationValueTest {
 
   @Test
   void testExpressionNodeReturnsNull() {
-    EvaluationValue value = new EvaluationValue(false);
+    EvaluationValue value = new EvaluationValue(false, defaultConfiguration());
     assertThat(value.getExpressionNode()).isNull();
   }
 
@@ -490,31 +494,31 @@ class EvaluationValueTest {
 
   @Test
   void testCompare() {
-    assertThat(new EvaluationValue("Hello")).isEqualByComparingTo(new EvaluationValue("Hello"));
-    assertThat(new EvaluationValue(123)).isEqualByComparingTo(new EvaluationValue(123));
-    assertThat(new EvaluationValue(true)).isEqualByComparingTo(new EvaluationValue(true));
+    assertThat(new EvaluationValue("Hello", defaultConfiguration()))
+        .isEqualByComparingTo(new EvaluationValue("Hello", defaultConfiguration()));
+    assertThat(new EvaluationValue(123, defaultConfiguration()))
+        .isEqualByComparingTo(new EvaluationValue(123, defaultConfiguration()));
+    assertThat(new EvaluationValue(true, defaultConfiguration()))
+        .isEqualByComparingTo(new EvaluationValue(true, defaultConfiguration()));
 
-    assertThat(new EvaluationValue("Hello")).isGreaterThan(new EvaluationValue("Hell"));
-    assertThat(new EvaluationValue(124)).isGreaterThan(new EvaluationValue(123));
-    assertThat(new EvaluationValue(true)).isGreaterThan(new EvaluationValue(false));
+    assertThat(new EvaluationValue("Hello", defaultConfiguration()))
+        .isGreaterThan(new EvaluationValue("Hell", defaultConfiguration()));
+    assertThat(new EvaluationValue(124, defaultConfiguration()))
+        .isGreaterThan(new EvaluationValue(123, defaultConfiguration()));
+    assertThat(new EvaluationValue(true, defaultConfiguration()))
+        .isGreaterThan(new EvaluationValue(false, defaultConfiguration()));
 
-    assertThat(new EvaluationValue("Hell")).isLessThan(new EvaluationValue("Hello"));
-    assertThat(new EvaluationValue(123)).isLessThan(new EvaluationValue(124));
-    assertThat(new EvaluationValue(false)).isLessThan(new EvaluationValue(true));
-  }
-
-  @Test
-  void testDoubleMathContext() {
-    assertThat(new EvaluationValue(3.9876, MathContext.DECIMAL64).getNumberValue())
-        .isEqualByComparingTo("3.9876");
-
-    assertThat(new EvaluationValue(3.9876, new MathContext(3)).getNumberValue())
-        .isEqualByComparingTo("3.99");
+    assertThat(new EvaluationValue("Hell", defaultConfiguration()))
+        .isLessThan(new EvaluationValue("Hello", defaultConfiguration()));
+    assertThat(new EvaluationValue(123, defaultConfiguration()))
+        .isLessThan(new EvaluationValue(124, defaultConfiguration()));
+    assertThat(new EvaluationValue(false, defaultConfiguration()))
+        .isLessThan(new EvaluationValue(true, defaultConfiguration()));
   }
 
   @Test
   void testNull() {
-    EvaluationValue value = new EvaluationValue(null);
+    EvaluationValue value = new EvaluationValue(null, defaultConfiguration());
 
     assertThat(value.isStringValue()).isFalse();
     assertThat(value.isNumberValue()).isFalse();
@@ -529,14 +533,14 @@ class EvaluationValueTest {
   @Test
   void nestedEvaluationValue() {
     try {
-      EvaluationValue value1 = new EvaluationValue("Hello");
-      EvaluationValue value2 = new EvaluationValue("World");
+      EvaluationValue value1 = new EvaluationValue("Hello", defaultConfiguration());
+      EvaluationValue value2 = new EvaluationValue("World", defaultConfiguration());
 
       Map<String, EvaluationValue> structure = new HashMap<>();
       structure.put("a", value1);
       structure.put("b", value2);
 
-      EvaluationValue structureMap = new EvaluationValue(structure);
+      EvaluationValue structureMap = new EvaluationValue(structure, defaultConfiguration());
 
       Expression exp = new Expression("value.a == \"Hello\"").with("value", structureMap);
 
@@ -545,6 +549,26 @@ class EvaluationValueTest {
     } catch (EvaluationException | ParseException e) {
       e.printStackTrace();
     }
+  }
+
+  @Test
+  @SuppressWarnings("removal")
+  void testDeprecatedDoubleMathContext() {
+    EvaluationValue evaluationValue64 =
+        new EvaluationValue(3.9876, MathContext.DECIMAL64); // NOSONAR - deprecated
+    assertThat(evaluationValue64.getNumberValue()).isEqualByComparingTo("3.9876");
+
+    EvaluationValue evaluationValue3 =
+        new EvaluationValue(3.9876, new MathContext(3)); // NOSONAR - deprecated
+    assertThat(evaluationValue3.getNumberValue()).isEqualByComparingTo("3.99");
+  }
+
+  @Test
+  @SuppressWarnings("removal")
+  void testDeprecatedConstructor() {
+    EvaluationValue value = new EvaluationValue("124"); // NOSONAR - deprecated
+    assertThat(value.isStringValue()).isTrue();
+    assertThat(value.getStringValue()).isEqualTo("124");
   }
 
   private void assertDataIsCorrect(

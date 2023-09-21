@@ -13,10 +13,10 @@
   See the License for the specific language governing permissions and
   limitations under the License.
 */
-package com.ezylang.evalex.data;
+package com.ezylang.evalex.data.conversion;
 
 import com.ezylang.evalex.config.ExpressionConfiguration;
-import com.ezylang.evalex.data.conversion.*;
+import com.ezylang.evalex.data.EvaluationValue;
 import java.util.Arrays;
 import java.util.List;
 
