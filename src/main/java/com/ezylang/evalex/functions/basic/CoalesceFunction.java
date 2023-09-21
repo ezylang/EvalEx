@@ -20,20 +20,21 @@ import com.ezylang.evalex.data.EvaluationValue;
 import com.ezylang.evalex.functions.AbstractFunction;
 import com.ezylang.evalex.functions.FunctionParameter;
 import com.ezylang.evalex.parser.Token;
-import java.math.BigDecimal;
 
-/** Returns the minimum value of all parameters. */
+/**
+ * Returns the first non-null parameter, or {@link EvaluationValue#nullValue()} if all parameters
+ * are null.
+ */
 @FunctionParameter(name = "value", isVarArg = true)
-public class MinFunction extends AbstractFunction {
+public class CoalesceFunction extends AbstractFunction {
   @Override
   public EvaluationValue evaluate(
       Expression expression, Token functionToken, EvaluationValue... parameterValues) {
-    BigDecimal min = null;
     for (EvaluationValue parameter : parameterValues) {
-      if (min == null || parameter.getNumberValue().compareTo(min) < 0) {
-        min = parameter.getNumberValue();
+      if (!parameter.isNullValue()) {
+        return parameter;
       }
     }
-    return expression.convertValue(min);
+    return EvaluationValue.nullValue();
   }
 }

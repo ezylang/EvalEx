@@ -113,6 +113,7 @@ public class ExpressionConfiguration {
           // basic functions
           Map.entry("ABS", new AbsFunction()),
           Map.entry("CEILING", new CeilingFunction()),
+          Map.entry("COALESCE", new CoalesceFunction()),
           Map.entry("FACT", new FactFunction()),
           Map.entry("FLOOR", new FloorFunction()),
           Map.entry("IF", new IfFunction()),
