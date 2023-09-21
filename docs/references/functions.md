@@ -15,6 +15,7 @@ Available through the _ExpressionConfiguration.StandardFunctionsDictionary_ cons
 |--------------------------------------------|-------------------------------------------------------------------------------------------------------------------------|
 | ABS(value)                                 | Absolute (non-negative) value                                                                                           |
 | CEILING(value)                             | Rounds the given value an integer using the rounding mode CEILING                                                       |
+| COALESCE(value, ...)                       | Returns the first non-null parameter, or NULL if all parameters are null                                                |
 | FACT(base)                                 | Calculates the factorial of a base value                                                                                |
 | FLOOR(value)                               | Rounds the given value an integer using the rounding mode FLOOR                                                         |
 | IF(condition, resultIfTrue, resultIfFalse) | Conditional evaluation function. If _condition_ is true, the _resultIfTrue_ is returned, else the _resultIfFalse_ value |

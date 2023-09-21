@@ -22,6 +22,7 @@ import com.ezylang.evalex.BaseEvaluationTest;
 import com.ezylang.evalex.EvaluationException;
 import com.ezylang.evalex.Expression;
 import com.ezylang.evalex.config.ExpressionConfiguration;
+import com.ezylang.evalex.config.TestConfigurationProvider;
 import com.ezylang.evalex.data.EvaluationValue;
 import com.ezylang.evalex.parser.ParseException;
 import com.ezylang.evalex.parser.Token;
@@ -319,5 +320,32 @@ class BasicFunctionsTest extends BaseEvaluationTest {
     assertThatThrownBy(() -> new Expression("LOG10(0)").evaluate())
         .isInstanceOf(EvaluationException.class)
         .hasMessage("Parameter must not be zero");
+  }
+
+  @ParameterizedTest
+  @CsvSource(
+      delimiter = ':',
+      value = {
+        "COALESCE(null,1) : 1",
+        "COALESCE(null,\"abc\",1,null,2,3) : abc",
+        "COALESCE(1,null) : 1",
+        "COALESCE(null,null,null,null,1.1) : 1.1",
+        "COALESCE(null,null,null) :",
+        "COALESCE(null) :"
+      })
+  void testCoalesce(String expression, String expectedResult)
+      throws EvaluationException, ParseException {
+    EvaluationValue evaluationValue =
+        new Expression(
+                expression,
+                TestConfigurationProvider.StandardConfigurationWithAdditionalTestOperators)
+            .evaluate();
+
+    if (expectedResult == null) {
+      assertThat(evaluationValue.isNullValue()).isTrue();
+    } else {
+      assertThat(evaluationValue.isNullValue()).isFalse();
+      assertThat(evaluationValue.getStringValue()).isEqualTo(expectedResult);
+    }
   }
 }
