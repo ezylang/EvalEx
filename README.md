@@ -121,7 +121,7 @@ System.out.println(expression.evaluate().getStringValue()); // prints Hello Fran
 
 ### Arrays (also multidimensional) are supported and can be passed as Java _Lists_.
 
-See the [Documentation](https://ezylang.github.io/pages-playground/concepts/datatypes.html#array)
+See the [Documentation](https://ezylang.github.io/EvalEx/concepts/datatypes.html#array)
 for more details.
 
 ```java
@@ -139,7 +139,7 @@ System.out.println(result.getNumberValue()); // prints 4
 ### Structures are supported and can be passed as Java _Maps_.
 
 Arrays and Structures can be combined to build arbitrary data structures. See
-the [Documentation](https://ezylang.github.io/pages-playground/concepts/datatypes.html#structure)
+the [Documentation](https://ezylang.github.io/EvalEx/concepts/datatypes.html#structure)
 for more details.
 
 ```java
