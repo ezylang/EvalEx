@@ -24,12 +24,15 @@ import com.ezylang.evalex.operators.PostfixOperator;
 import com.ezylang.evalex.operators.PrefixOperator;
 import com.ezylang.evalex.parser.Token;
 import java.math.BigDecimal;
+import java.time.ZoneId;
 import java.util.Map;
 
 public class TestConfigurationProvider {
 
   public static final ExpressionConfiguration StandardConfigurationWithAdditionalTestOperators =
-      ExpressionConfiguration.defaultConfiguration()
+      ExpressionConfiguration.builder()
+          .zoneId(ZoneId.of("Europe/Berlin"))
+          .build()
           .withAdditionalOperators(
               Map.entry("++", new PrefixPlusPlusOperator()),
               Map.entry("++", new PostfixPlusPlusOperator()),

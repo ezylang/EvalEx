@@ -18,8 +18,12 @@ package com.ezylang.evalex.data.conversion;
 import com.ezylang.evalex.config.ExpressionConfiguration;
 import com.ezylang.evalex.data.EvaluationValue;
 import java.time.*;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.TemporalAccessor;
+import java.time.temporal.TemporalQueries;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 /** Converter to convert to the DATE_TIME data type. */
 public class DateTimeConverter implements ConverterIfc {
@@ -47,6 +51,41 @@ public class DateTimeConverter implements ConverterIfc {
       throw illegalArgument(object);
     }
     return EvaluationValue.dateTimeValue(instant);
+  }
+
+  /**
+   * Tries to parse a date-time string by trying out each format in the list. The first matching
+   * result is returned. If none of the formats can be used to parse the string, <code>null</code>
+   * is returned.
+   *
+   * @param value The string to parse.
+   * @param zoneId The {@link ZoneId} to use for parsing.
+   * @param formatters The list of formatters.
+   * @return A parsed {@link Instant} if parsing was successful, else <code>null</code>.
+   */
+  public Instant parseDateTime(String value, ZoneId zoneId, List<DateTimeFormatter> formatters) {
+    for (DateTimeFormatter formatter : formatters) {
+      try {
+        return parseToInstant(value, zoneId, formatter);
+      } catch (DateTimeException ignored) {
+        // ignore
+      }
+    }
+    return null;
+  }
+
+  private Instant parseToInstant(String value, ZoneId zoneId, DateTimeFormatter formatter) {
+    TemporalAccessor ta = formatter.parse(value);
+    ZoneId parsedZoneId = ta.query(TemporalQueries.zone());
+    if (parsedZoneId == null) {
+      LocalDate parsedDate = ta.query(TemporalQueries.localDate());
+      LocalTime parsedTime = ta.query(TemporalQueries.localTime());
+      if (parsedTime == null) {
+        parsedTime = parsedDate.atStartOfDay().toLocalTime();
+      }
+      ta = ZonedDateTime.of(parsedDate, parsedTime, zoneId);
+    }
+    return Instant.from(ta);
   }
 
   @Override

@@ -16,7 +16,6 @@
 package com.ezylang.evalex;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import com.ezylang.evalex.config.ExpressionConfiguration;
 import com.ezylang.evalex.config.TestConfigurationProvider;
@@ -40,11 +39,6 @@ public abstract class BaseEvaluationTest {
       throws EvaluationException, ParseException {
     assertThat(evaluate(expression, expressionConfiguration).getStringValue())
         .isEqualTo(expectedResult);
-  }
-
-  protected void assertExpressionThrowsException(
-      String expression, String message, ExpressionConfiguration expressionConfiguration) {
-    assertThatThrownBy(() -> evaluate(expression, expressionConfiguration)).hasMessage(message);
   }
 
   private EvaluationValue evaluate(String expressionString, ExpressionConfiguration configuration)

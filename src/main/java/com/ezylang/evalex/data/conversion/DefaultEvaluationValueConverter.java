@@ -41,8 +41,8 @@ import java.util.List;
  *   <tr><td>Date</td><td>DateTimeConverter</td></tr>
  *   <tr><td>Calendar</td><td>DateTimeConverter</td></tr>
  *   <tr><td>ZonedDateTime</td><td>DateTimeConverter</td></tr>
- *   <tr><td>LocalDate</td><td>DateTimeConverter - the configured zone id will be used for conversion</td></tr>
- *   <tr><td>LocalDateTime</td><td>DateTimeConverter - the configured zone id will be used for conversion</td></tr>
+ *   <tr><td>LocalDate</td><td>DateTimeConverter - the configured zone ID will be used for conversion</td></tr>
+ *   <tr><td>LocalDateTime</td><td>DateTimeConverter - the configured zone ID will be used for conversion</td></tr>
  *   <tr><td>OffsetDateTime</td><td>DateTimeConverter</td></tr>
  *   <tr><td>Duration</td><td>DurationConverter</td></tr>
  *   <tr><td>ASTNode</td><td>ASTNode</td></tr>

@@ -15,7 +15,9 @@
 */
 package com.ezylang.evalex.config;
 
-import com.ezylang.evalex.data.*;
+import com.ezylang.evalex.data.DataAccessorIfc;
+import com.ezylang.evalex.data.EvaluationValue;
+import com.ezylang.evalex.data.MapBasedDataAccessor;
 import com.ezylang.evalex.data.conversion.DefaultEvaluationValueConverter;
 import com.ezylang.evalex.data.conversion.EvaluationValueConverterIfc;
 import com.ezylang.evalex.functions.FunctionIfc;
@@ -32,10 +34,8 @@ import java.math.BigDecimal;
 import java.math.MathContext;
 import java.math.RoundingMode;
 import java.time.ZoneId;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Map;
-import java.util.TreeMap;
+import java.time.format.DateTimeFormatter;
+import java.util.*;
 import java.util.function.Supplier;
 import lombok.Builder;
 import lombok.Getter;
@@ -75,8 +75,25 @@ public class ExpressionConfiguration {
   public static final MathContext DEFAULT_MATH_CONTEXT =
       new MathContext(68, RoundingMode.HALF_EVEN);
 
-  /** The default zone id is the systemd default zone ID. */
-  public static final ZoneId DEFAULT_ZONE_ID = ZoneId.systemDefault();
+  /**
+   * The default date time formatters used when parsing a date string. Each format will be tried and
+   * the first matching will be used.
+   *
+   * <ul>
+   *   <li>{@link DateTimeFormatter#ISO_DATE_TIME}
+   *   <li>{@link DateTimeFormatter#ISO_DATE}
+   *   <li>{@link DateTimeFormatter#ISO_LOCAL_DATE_TIME}
+   *   <li>{@link DateTimeFormatter#ISO_LOCAL_DATE}
+   * </ul>
+   */
+  protected static final List<DateTimeFormatter> DEFAULT_DATE_TIME_FORMATTERS =
+      new ArrayList<>(
+          List.of(
+              DateTimeFormatter.ISO_DATE_TIME,
+              DateTimeFormatter.ISO_DATE,
+              DateTimeFormatter.ISO_LOCAL_DATE_TIME,
+              DateTimeFormatter.ISO_LOCAL_DATE,
+              DateTimeFormatter.RFC_1123_DATE_TIME));
 
   /** The operator dictionary holds all operators that will be allowed in an expression. */
   @Builder.Default
@@ -168,14 +185,13 @@ public class ExpressionConfiguration {
           Map.entry("STR_LOWER", new StringLowerFunction()),
           Map.entry("STR_UPPER", new StringUpperFunction()),
           // date time functions
-          Map.entry("DT_DATE_TIME", new DateTimeFunction()),
-          Map.entry("DT_PARSE", new DateTimeParseFunction()),
-          Map.entry("DT_ZONED_PARSE", new ZonedDateTimeParseFunction()),
-          Map.entry("DT_FORMAT", new DateTimeFormatFunction()),
-          Map.entry("DT_EPOCH", new DateTimeToEpochFunction()),
-          Map.entry("DT_DATE_TIME_EPOCH", new DateTimeFromEpochFunction()),
-          Map.entry("DT_DURATION_MILLIS", new DurationFromMillisFunction()),
-          Map.entry("DT_DURATION_DAYS", new DurationFromDaysFunction()),
+          Map.entry("DT_DATE_NEW", new DateTimeNewFunction()),
+          Map.entry("DT_DATE_PARSE", new DateTimeParseFunction()),
+          Map.entry("DT_DATE_FORMAT", new DateTimeFormatFunction()),
+          Map.entry("DT_DATE_TO_EPOCH", new DateTimeToEpochFunction()),
+          Map.entry("DT_DURATION_NEW", new DurationNewFunction()),
+          Map.entry("DT_DURATION_FROM_MILLIS", new DurationFromMillisFunction()),
+          Map.entry("DT_DURATION_TO_MILLIS", new DurationToMillisFunction()),
           Map.entry("DT_DURATION_PARSE", new DurationParseFunction()));
 
   /** The math context to use. */
@@ -231,8 +247,17 @@ public class ExpressionConfiguration {
    */
   @Builder.Default @Getter private final boolean allowOverwriteConstants = true;
 
-  /** The time zone id. By default, the system default zone id is used. */
-  @Builder.Default @Getter private final ZoneId zoneId = DEFAULT_ZONE_ID;
+  /** The time zone id. By default, the system default zone ID is used. */
+  @Builder.Default @Getter private final ZoneId zoneId = ZoneId.systemDefault();
+
+  /**
+   * The date-time formatters. When parsing, each format will be tried and the first matching will
+   * be used. For formatting, only the first will be used.
+   *
+   * <p>By default, the {@link ExpressionConfiguration#DEFAULT_DATE_TIME_FORMATTERS} are used.
+   */
+  @Builder.Default @Getter
+  private final List<DateTimeFormatter> dateTimeFormatters = DEFAULT_DATE_TIME_FORMATTERS;
 
   /** The converter to use when converting different data types to an {@link EvaluationValue}. */
   @Builder.Default @Getter
