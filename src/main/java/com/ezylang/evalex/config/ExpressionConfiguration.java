@@ -333,6 +333,13 @@ public class ExpressionConfiguration {
                 "2.71828182845904523536028747135266249775724709369995957496696762772407663")));
     constants.put("NULL", EvaluationValue.nullValue());
 
+    constants.put(
+        "DT_FORMAT_ISO_DATE_TIME",
+        EvaluationValue.stringValue("yyyy-MM-dd'T'HH:mm:ss[.SSS][XXX]['['VV']']"));
+    constants.put(
+        "DT_FORMAT_LOCAL_DATE_TIME", EvaluationValue.stringValue("yyyy-MM-dd'T'HH:mm:ss[.SSS]"));
+    constants.put("DT_FORMAT_LOCAL_DATE", EvaluationValue.stringValue("yyyy-MM-dd"));
+
     return constants;
   }
 }

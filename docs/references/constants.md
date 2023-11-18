@@ -9,12 +9,14 @@ parent: References
 
 Available through the _ExpressionConfiguration.StandardConstants_ constant:
 
-| Name  | Value                                                         |
-|-------|---------------------------------------------------------------|
-| TRUE  | Boolean.TRUE                                                  |
-| FALSE | Boolean.FALSE                                                 |
-| PI    | 3.14159265358979323846264338327950288419716939937510582097... |
-| E     | 2.71828182845904523536028747135266249775724709369995957496... |
-| NULL  | null                                                          |
-
+| Name                      | Value                                                         |
+|---------------------------|---------------------------------------------------------------|
+| TRUE                      | Boolean.TRUE                                                  |
+| FALSE                     | Boolean.FALSE                                                 |
+| PI                        | 3.14159265358979323846264338327950288419716939937510582097... |
+| E                         | 2.71828182845904523536028747135266249775724709369995957496... |
+| NULL                      | null                                                          |
+| DT_FORMAT_ISO_DATE_TIME   | yyyy-MM-dd'T'HH:mm:ss[.SSS][XXX]['['VV']']                    |
+| DT_FORMAT_LOCAL_DATE_TIME | yyyy-MM-dd'T'HH:mm:ss[.SSS]                                   |
+| DT_FORMAT_LOCAL_DATE      | yyyy-MM-dd                                                    |
 

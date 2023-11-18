@@ -32,14 +32,17 @@ class ExpressionEvaluatorConstantsTest extends BaseExpressionEvaluatorTest {
 
   @ParameterizedTest
   @CsvSource(
-      delimiter = ':',
+      delimiter = '|',
       value = {
-        "TRUE : true",
-        "true : true",
-        "False : false",
-        "PI : "
+        "TRUE | true",
+        "true | true",
+        "False | false",
+        "PI | "
             + " 3.1415926535897932384626433832795028841971693993751058209749445923078164062862089986280348253421170679",
-        "e : 2.71828182845904523536028747135266249775724709369995957496696762772407663",
+        "e | 2.71828182845904523536028747135266249775724709369995957496696762772407663",
+        "DT_FORMAT_ISO_DATE_TIME | yyyy-MM-dd'T'HH:mm:ss[.SSS][XXX]['['VV']']",
+        "DT_FORMAT_LOCAL_DATE_TIME | yyyy-MM-dd'T'HH:mm:ss[.SSS]",
+        "DT_FORMAT_LOCAL_DATE | yyyy-MM-dd"
       })
   void testDefaultConstants(String expression, String expectedResult)
       throws ParseException, EvaluationException {
