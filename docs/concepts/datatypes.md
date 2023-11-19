@@ -66,9 +66,10 @@ object.
 
 ### DATE_TIME
 
-Any instance of _java.time.LocalDate_, _java.time.LocalDateTime_, _java.time.ZoneDateTime_ or _java.time.OffsetDateTime_ will automatically be converted to
-a _DATE_TIME_ datatype. Conversion will be done by using the current time zone id on the input
-object.
+Any instance of _java.time.Instant_, _java.time.LocalDate_, _java.time.LocalDateTime_, _java.time.ZoneDateTime_,
+_java.time.OffsetDateTime_, _java.util.Date_ or _java.util.Calendar_, will automatically be converted to
+a _DATE_TIME_ datatype. If the conversion requires a time zone and no time zone is given in the input object,
+then the configured time zone is used.
 
 ### DURATION
 

@@ -232,6 +232,11 @@ public class ExpressionConfiguration {
   /**
    * If specified, all results from operations and functions will be rounded to the specified number
    * of decimal digits, using the MathContexts rounding mode.
+   *
+   * <p>Automatic scaling is disabled by default. When enabled, EvalEx will round all input
+   * variables, constants, intermediate operation and function results and the final result to the
+   * specified number of decimal digits, using the current rounding mode. Using a value of
+   * _DECIMAL_PLACES_ROUNDING_UNLIMITED_ will disable automatic scaling.
    */
   @Builder.Default @Getter
   private final int decimalPlacesRounding = DECIMAL_PLACES_ROUNDING_UNLIMITED;

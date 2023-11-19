@@ -282,4 +282,10 @@ class DateTimeFunctionsTest extends BaseEvaluationTest {
       throws EvaluationException, ParseException {
     assertExpressionHasExpectedResult(expression, expectedResult);
   }
+
+  @Test
+  void testDurationString() throws EvaluationException, ParseException {
+    assertExpressionHasExpectedResult(
+        "\"Value: \" + DT_DURATION_PARSE(\"P1DT3H4M5S\")", "Value: PT27H4M5S");
+  }
 }

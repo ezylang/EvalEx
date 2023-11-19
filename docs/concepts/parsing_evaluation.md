@@ -108,8 +108,7 @@ EvaluationValue result = expression.withValues(values).evaluate();
 System.out.println(result.getNumberValue()); // prints 6.00
 ```
 
-The data conversion of the passed values will automatically be performed through the created
-_EvaluationObject_.
+The data conversion of the passed values will automatically be performed through a customizable converter.
 
 The map can also hold data of different types:
 ```java
@@ -117,12 +116,12 @@ Expression expression = new Expression("a+b+c");
 
 Map<String, Object> values = new HashMap<>();
 values.put("a", true);
-values.put("b", " ");
+values.put("b", " : ");
 values.put("c", 24.7);
 
 EvaluationValue result = expression.withValues(values).evaluate();
 
-System.out.println(result.getStringValue()); // prints "true 24.7"
+System.out.println(result.getStringValue()); // prints "true : 24.7"
 ```
 
 See chapter [Data Types](datatypes.html) for details on the conversion.

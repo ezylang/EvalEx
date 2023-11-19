@@ -24,6 +24,12 @@ import com.ezylang.evalex.parser.Token;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 
+/**
+ * Function to format a DATE_TIME vale. Required parameter is the DATE_TIME value to format. First
+ * optional parameter is the format to use, using a pattern used by {@link DateTimeFormatter}. If no
+ * format is given, the first format defined in the configured formats is used. Second optional
+ * parameter is the zone-id to use wit formatting. Default is the configured zone-id.
+ */
 @FunctionParameter(name = "parameters", isVarArg = true)
 public class DateTimeFormatFunction extends AbstractFunction {
   @Override

@@ -23,6 +23,11 @@ import com.ezylang.evalex.functions.FunctionParameter;
 import com.ezylang.evalex.parser.Token;
 import java.time.Duration;
 
+/**
+ * Function to create a new Duration. First parameter is required and specifies the number of days.
+ * All other parameters are optional and specify hours, minutes, seconds, milliseconds and
+ * nanoseconds.
+ */
 @FunctionParameter(name = "parameters", isVarArg = true)
 public class DurationNewFunction extends AbstractFunction {
   @Override

@@ -15,9 +15,11 @@ documentation for more information.
 Most notably new features:
 
 * Better boolean support.
-* Full support for string operations and functions.
-* Full support for multidimensional arrays.
-* Full support for nestable structures.
+* Support for string operations and functions.
+* Support for date-time and duration values and operations.
+* Support for _null_ values.
+* Support for multidimensional arrays.
+* Support for nestable structures.
 * Structures and arrays can be combined to work with arbitrary data structures.
 * New data access support, connecting expressions with you data made easy.
 * New configuration concept.
