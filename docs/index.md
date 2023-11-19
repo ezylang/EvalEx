@@ -38,7 +38,7 @@ the [Discussions area](https://github.com/ezylang/EvalEx/discussions).
 ## Download / Including
 
 You can download the binaries, source code and JavaDoc jars from
-[Maven Central](https://search.maven.org/search?q=a:%22EvalEx%22).\
+[Maven Central](https://central.sonatype.com/artifact/com.ezylang/EvalEx).\
 You will find there also copy/paste templates for including EvalEx in your project with build
 systems like Maven or Gradle.
 
