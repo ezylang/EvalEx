@@ -53,7 +53,7 @@ EvalEx supports all rounding modes defined in _java.math.RoundingMode_:
 
 The default rounding mode in EvalEx is _HALF_EVEN_.
 
-### Configuring Precision, Rounding Mode and Automatic Scaling
+### Configuring Precision, Rounding Mode and Automatic Rounding
 
 Precision and rounding mode are configured through the _ExpressionConfiguration_ by specifying
 the _java.math.MathContext_:
@@ -66,12 +66,12 @@ ExpressionConfiguration configuration =
         .build();
 ```
 
-Automatic scaling is disabled by default. When enabled, EvalEx will round all input variables,
+Automatic rounding is disabled by default. When enabled, EvalEx will round all input variables,
 intermediate operation and function results and the final result to the specified number of decimal
 digits, using the current rounding mode:
 
 ```java
-// set precision to 32 and rounding mode to HALF_UP
+// set automatic rounding
 ExpressionConfiguration configuration =
     ExpressionConfiguration.builder()
         .decimalPlacesRounding(2)
@@ -87,3 +87,20 @@ System.out.println(
         .getNumberValue());        
 ```
 
+If only the final result should be rounded, this can be configured using the _decimalPlacesResult_:
+
+```java
+// set rounding of final result
+ExpressionConfiguration configuration =
+    ExpressionConfiguration.builder()
+        .decimalPlacesResult(3)
+        .build();
+
+Expression expression = new Expression("1.22222+1.22222+1.22222", configuration);
+
+// prints 3.667
+System.out.println(
+    expression
+        .evaluate()
+        .getNumberValue());        
+```
