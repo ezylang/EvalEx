@@ -15,6 +15,7 @@
 */
 package com.ezylang.evalex.functions.datetime;
 
+import com.ezylang.evalex.EvaluationException;
 import com.ezylang.evalex.Expression;
 import com.ezylang.evalex.data.EvaluationValue;
 import com.ezylang.evalex.functions.AbstractFunction;
@@ -23,21 +24,46 @@ import com.ezylang.evalex.parser.Token;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 
-@FunctionParameter(name = "value", isVarArg = true)
+/**
+ * Function to format a DATE_TIME vale. Required parameter is the DATE_TIME value to format. First
+ * optional parameter is the format to use, using a pattern used by {@link DateTimeFormatter}. If no
+ * format is given, the first format defined in the configured formats is used. Second optional
+ * parameter is the zone-id to use wit formatting. Default is the configured zone-id.
+ */
+@FunctionParameter(name = "parameters", isVarArg = true)
 public class DateTimeFormatFunction extends AbstractFunction {
   @Override
   public EvaluationValue evaluate(
-      Expression expression, Token functionToken, EvaluationValue... parameterValues) {
-    String formatted;
-    ZoneId zoneId = expression.getConfiguration().getZoneId();
-    if (parameterValues.length < 2) {
-      formatted = parameterValues[0].getDateTimeValue().atZone(zoneId).toLocalDateTime().toString();
-    } else {
-      DateTimeFormatter formatter =
-          DateTimeFormatter.ofPattern(parameterValues[1].getStringValue());
-      formatted =
-          parameterValues[0].getDateTimeValue().atZone(zoneId).toLocalDateTime().format(formatter);
+      Expression expression, Token functionToken, EvaluationValue... parameterValues)
+      throws EvaluationException {
+
+    DateTimeFormatter formatter = expression.getConfiguration().getDateTimeFormatters().get(0);
+    if (parameterValues.length > 1) {
+      formatter = DateTimeFormatter.ofPattern(parameterValues[1].getStringValue());
     }
-    return expression.convertValue(formatted);
+
+    ZoneId zoneId = expression.getConfiguration().getZoneId();
+    if (parameterValues.length == 3) {
+      zoneId = ZoneIdConverter.convert(functionToken, parameterValues[2].getStringValue());
+    }
+
+    return expression.convertValue(
+        parameterValues[0].getDateTimeValue().atZone(zoneId).format(formatter));
+  }
+
+  @Override
+  public void validatePreEvaluation(Token token, EvaluationValue... parameterValues)
+      throws EvaluationException {
+    super.validatePreEvaluation(token, parameterValues);
+    if (parameterValues.length > 3) {
+      throw new EvaluationException(token, "Too many parameters");
+    }
+    if (!parameterValues[0].isDateTimeValue()) {
+      throw new EvaluationException(
+          token,
+          String.format(
+              "Unable to format a '%s' type as a date-time",
+              parameterValues[0].getDataType().name()));
+    }
   }
 }

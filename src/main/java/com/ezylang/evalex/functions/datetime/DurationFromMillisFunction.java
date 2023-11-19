@@ -23,6 +23,7 @@ import com.ezylang.evalex.parser.Token;
 import java.math.BigDecimal;
 import java.time.Duration;
 
+/** Converts the given milliseconds to a DURATION value. */
 @FunctionParameter(name = "value")
 public class DurationFromMillisFunction extends AbstractFunction {
   @Override

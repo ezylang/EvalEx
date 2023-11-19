@@ -23,7 +23,7 @@ import java.math.BigDecimal;
 import java.time.Duration;
 import org.junit.jupiter.api.Test;
 
-class DuratinCoverterTest {
+class DurationConverterTest {
 
   private final ExpressionConfiguration defaultConfiguration =
       ExpressionConfiguration.defaultConfiguration();

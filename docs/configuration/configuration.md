@@ -54,6 +54,18 @@ The supplier is called whenever a new Expression is created, so that each expres
 instance of an accessor. Custom implementations of the supplier and data accessor may allow
 expressions to share the same space.
 
+### Date Time Formatters
+
+The date-time formatters. When parsing, each format will be tried and the first matching will be used.
+For formatting, only the first will be used.\
+By default, the _ExpressionConfiguration.DEFAULT_DATE_TIME_FORMATTERS_ are used:
+
+* _DateTimeFormatter.ISO_DATE_TIME_
+* _DateTimeFormatter.ISO_DATE_
+* _DateTimeFormatter.ISO_LOCAL_DATE_TIME_
+* _DateTimeFormatter.ISO_LOCAL_DATE_
+* _DateTimeFormatter.RFC_1123_DATE_TIME_
+
 ### Decimal Places Rounding
 
 Specifies the amount of decimal places to round to in each operation or function.
@@ -65,6 +77,11 @@ Specifies the default constants that can be used in every expression as a _Map_ 
 name and _EvaluationValue_ as value. Each expression has a case-insensitive copy of the default
 constants.
 See the reference chapter for a list: [Default Constants](../references/constants.html)
+
+### Evaluation Value Converter
+
+The converter to use when converting different data types to an _EvaluationValue_.
+The _DefaultEvaluationValueConverter_ is used by default. 
 
 ### Function Dictionary
 
@@ -135,3 +152,13 @@ E.g. a _BigDecimal_ result of _9.0_ will become _9_ and _-2.120000_ will become 
 Specifies if the structure separator ('.') operator is allowed (default is true). If set to false,
 the expression will throw a _ParseException_, if the a '.' is encountered in the expression and also
 no operator or function is defined for this character.
+
+### Zone Id
+
+The time zone id. By default, the system default zone ID is used.
+```java
+ExpressionConfiguration configuration=ExpressionConfiguration.builder()
+        .zoneId(ZoneId.of("Europe/Berlin"))
+        .build();
+```
+

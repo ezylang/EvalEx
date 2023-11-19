@@ -22,6 +22,10 @@ import com.ezylang.evalex.functions.FunctionParameter;
 import com.ezylang.evalex.parser.Token;
 import java.time.Duration;
 
+/**
+ * Converts the given ISO-8601 duration string representation to a duration value. E.g. "P2DT3H4M"
+ * parses 2 days, 3 hours and 4 minutes.
+ */
 @FunctionParameter(name = "value")
 public class DurationParseFunction extends AbstractFunction {
   @Override

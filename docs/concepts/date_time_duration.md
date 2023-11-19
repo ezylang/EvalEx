@@ -15,9 +15,14 @@ _java.time.Duration_ values.
 A _DATE_TIME_ instant is instantaneous point on the time-line, it holds no information about the time zone.
 Time zones come into play, when converting local dates-times to instants and vice versa.
 The same instant can have different local date-time values, depending on the destination time zone.
+
+Functions and operations that require a time zone use either the configured time zone or a zone-id parameter.
+Time zones are specified using _java.time.ZoneId_.
+
 The precision of a _DATE_TIME_ is up to nanoseconds.
 
 A _DURATION_ is a certain amount of time, like e.g. "3 hours, 15 minutes and 6 seconds".
+The textual representation of a _DURATION_ value is the IS-8601 format, e.g. "P2DT3H4M" means 2 days, 3 hours and 4 minutes
 The smallest amount of a duration is 1 nanosecond.
 
 ### Arithmetic operations with _DATE_TIME_ and _DURATION_.
@@ -34,7 +39,7 @@ The outcome of the operation depends on the operator types:
 
 All other combinations of _DATE_TIME_ and _DURATION_ with other types will do a string concatenation.
 
-Example. Adding a duration to a date-time:
+Example: Adding a duration to a date-time:
 ```java
 Instant start = Instant.parse("2023-12-03T23:15:30.00Z");
 Duration duration = Duration.ofHours(3);
@@ -58,7 +63,7 @@ System.out.println(result); // will print "EvaluationValue(value=2023-12-04T02:1
 
 All other combinations of _DATE_TIME_ and _DURATION_ with other types will throw an _EvaluationException_.
 
-Example. Find out the duration between two date-times:
+Example: Find out the duration between two date-times:
 ```java
 Instant start = Instant.parse("2023-12-05T11:20:00.00Z");
 Instant end = Instant.parse("2023-12-04T23:15:30.00Z");
@@ -71,7 +76,7 @@ EvaluationValue result = expression
 System.out.println(result); // will print "EvaluationValue(value=PT12H4M30S, dataType=DURATION)"
 ```
 
-The string representation of a duration is here in SO format, meaning 12 hours, 4 minutes and 30 seconds.
+The string representation of a duration is here in ISO-8601 format, meaning 12 hours, 4 minutes and 30 seconds.
 
 ### Passing other Date-Time Types as variables
 
@@ -95,3 +100,15 @@ functions to work with date-times. Most of them allow to create, parse and forma
 See Chapter [Date Time Functions](../references/functions.html#date-time-Functions)
 
 ### Configuration Changes
+
+There are two new configuration parameters for date-time handling.
+* Date time formatters: The formatters to use when parsing or formatting date-time values.
+* Zone id: The time zone id. By default, the system default zone ID is used.
+
+See Chapter [configuration](../configuration/configuration.html)
+
+### New Constants
+
+There are also some new constants for common formatter patterns.
+
+See Chapter [Standard Constants](../references/constants.html#standard-constants)

@@ -1,5 +1,5 @@
 /*
-  Copyright 2012-2022 Udo Klimaschewski
+  Copyright 2012-2023 Udo Klimaschewski
 
   Licensed under the Apache License, Version 2.0 (the "License");
   you may not use this file except in compliance with the License.
@@ -15,50 +15,67 @@
 */
 package com.ezylang.evalex.functions.datetime;
 
+import com.ezylang.evalex.EvaluationException;
+import com.ezylang.evalex.Expression;
+import com.ezylang.evalex.data.EvaluationValue;
+import com.ezylang.evalex.data.conversion.DateTimeConverter;
+import com.ezylang.evalex.functions.AbstractFunction;
 import com.ezylang.evalex.functions.FunctionParameter;
-import java.time.*;
+import com.ezylang.evalex.parser.Token;
+import java.time.Instant;
+import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeParseException;
-import java.util.Optional;
+import java.util.ArrayList;
+import java.util.List;
 
-@FunctionParameter(name = "value", isVarArg = true)
-public class DateTimeParseFunction extends AbstractDateTimeParseFunction {
+/**
+ * Parses a date-time string to a {@link EvaluationValue.DataType#DATE_TIME} value.
+ *
+ * <p>Optional arguments is the time zone and a list of {@link java.time.format.DateTimeFormatter}
+ * patterns. Each pattern will be tried to convert the string to a date-time. The first matching
+ * pattern will be used. If <code>NULL</code> is specified for the time zone, the currently
+ * configured zone is used. If no formatters a
+ */
+@FunctionParameter(name = "parameters", isVarArg = true)
+public class DateTimeParseFunction extends AbstractFunction {
 
-  protected Instant parse(String value, String format, ZoneId zoneId) {
-    return parseInstant(value)
-        .or(() -> parseLocalDateTime(value, format, zoneId))
-        .or(() -> parseDate(value, format))
-        .orElseThrow(() -> new IllegalArgumentException("Unable to parse date/time: " + value));
-  }
+  @Override
+  public EvaluationValue evaluate(
+      Expression expression, Token functionToken, EvaluationValue... parameterValues)
+      throws EvaluationException {
 
-  private Optional<Instant> parseLocalDateTime(String value, String format, ZoneId zoneId) {
-    try {
-      DateTimeFormatter formatter =
-          (format == null
-              ? DateTimeFormatter.ISO_LOCAL_DATE_TIME
-              : DateTimeFormatter.ofPattern(format));
-      return Optional.of(LocalDateTime.parse(value, formatter).atZone(zoneId).toInstant());
-    } catch (DateTimeParseException ex) {
-      return Optional.empty();
+    String value = parameterValues[0].getStringValue();
+
+    ZoneId zoneId = expression.getConfiguration().getZoneId();
+    if (parameterValues.length > 1 && !parameterValues[1].isNullValue()) {
+      zoneId = ZoneIdConverter.convert(functionToken, parameterValues[1].getStringValue());
     }
-  }
 
-  private Optional<Instant> parseDate(String value, String format) {
-    try {
-      DateTimeFormatter formatter =
-          (format == null ? DateTimeFormatter.ISO_LOCAL_DATE : DateTimeFormatter.ofPattern(format));
-      LocalDate localDate = LocalDate.parse(value, formatter);
-      return Optional.of(localDate.atStartOfDay().atOffset(ZoneOffset.UTC).toInstant());
-    } catch (DateTimeParseException ex) {
-      return Optional.empty();
-    }
-  }
+    List<DateTimeFormatter> formatters;
 
-  private Optional<Instant> parseInstant(String value) {
-    try {
-      return Optional.of(Instant.parse(value));
-    } catch (DateTimeParseException ex) {
-      return Optional.empty();
+    if (parameterValues.length > 2) {
+      formatters = new ArrayList<>();
+      for (int i = 2; i < parameterValues.length; i++) {
+        try {
+          formatters.add(DateTimeFormatter.ofPattern(parameterValues[i].getStringValue()));
+        } catch (IllegalArgumentException ex) {
+          throw new EvaluationException(
+              functionToken,
+              String.format(
+                  "Illegal date-time format in parameter %d: '%s'",
+                  i + 1, parameterValues[i].getStringValue()));
+        }
+      }
+    } else {
+      formatters = expression.getConfiguration().getDateTimeFormatters();
     }
+    DateTimeConverter converter = new DateTimeConverter();
+    Instant instant = converter.parseDateTime(value, zoneId, formatters);
+
+    if (instant == null) {
+      throw new EvaluationException(
+          functionToken, String.format("Unable to parse date-time string '%s'", value));
+    }
+    return EvaluationValue.dateTimeValue(instant);
   }
 }

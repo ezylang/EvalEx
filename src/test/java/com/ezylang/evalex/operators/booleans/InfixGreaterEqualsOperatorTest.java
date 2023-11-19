@@ -41,9 +41,9 @@ class InfixGreaterEqualsOperatorTest extends BaseEvaluationTest {
         "\"9\">=\"9\" : true",
         "-4>=-4 :true",
         "-4>=-5 :true",
-        "DT_DATE_TIME(2022,10,30)>=DT_DATE_TIME(2022,10,30) : true",
-        "DT_DATE_TIME(2022,10,30)>=DT_DATE_TIME(2022,10,28) : true",
-        "DT_DATE_TIME(2022,10,30)>=DT_DATE_TIME(2022,10,31) : false",
+        "DT_DATE_NEW(2022,10,30)>=DT_DATE_NEW(2022,10,30) : true",
+        "DT_DATE_NEW(2022,10,30)>=DT_DATE_NEW(2022,10,28) : true",
+        "DT_DATE_NEW(2022,10,30)>=DT_DATE_NEW(2022,10,31) : false",
         "DT_DURATION_PARSE(\"P2D\")>=DT_DURATION_PARSE(\"PT24H\") : true"
       })
   void testInfixGreaterEqualsLiterals(String expression, String expectedResult)
