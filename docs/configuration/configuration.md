@@ -66,6 +66,13 @@ By default, the _ExpressionConfiguration.DEFAULT_DATE_TIME_FORMATTERS_ are used:
 * _DateTimeFormatter.ISO_LOCAL_DATE_
 * _DateTimeFormatter.RFC_1123_DATE_TIME_
 
+### Decimal Places Result
+
+If specified, only the final result of the evaluation will be rounded to the specified number of decimal digits,
+using the MathContexts rounding mode.
+
+The default value of _DECIMAL_PLACES_ROUNDING_UNLIMITED_ will disable rounding.
+
 ### Decimal Places Rounding
 
 Specifies the amount of decimal places to round to in each operation or function.

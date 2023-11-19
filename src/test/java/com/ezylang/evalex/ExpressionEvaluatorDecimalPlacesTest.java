@@ -163,4 +163,31 @@ class ExpressionEvaluatorDecimalPlacesTest extends BaseExpressionEvaluatorTest {
     Expression expression = new Expression("9.000", config);
     assertThat(expression.evaluate().getNumberValue()).isEqualTo("9.000");
   }
+
+  @Test
+  void testDecimalPlacesResult() throws EvaluationException, ParseException {
+    ExpressionConfiguration config =
+        ExpressionConfiguration.builder().decimalPlacesResult(3).build();
+    Expression expression = new Expression("1.6666+1.6666+1.6666", config);
+
+    assertThat(expression.evaluate().getStringValue()).isEqualTo("5");
+  }
+
+  @Test
+  void testDecimalPlacesResultNoStrip() throws EvaluationException, ParseException {
+    ExpressionConfiguration config =
+        ExpressionConfiguration.builder().decimalPlacesResult(3).stripTrailingZeros(false).build();
+    Expression expression = new Expression("1.6666+1.6666+1.6666", config);
+
+    assertThat(expression.evaluate().getStringValue()).isEqualTo("5.000");
+  }
+
+  @Test
+  void testDecimalPlacesResultAndAuto() throws EvaluationException, ParseException {
+    ExpressionConfiguration config =
+        ExpressionConfiguration.builder().decimalPlacesResult(3).decimalPlacesRounding(2).build();
+    Expression expression = new Expression("1.6666+1.6666+1.6666", config);
+
+    assertThat(expression.evaluate().getStringValue()).isEqualTo("5.01");
+  }
 }

@@ -73,7 +73,22 @@ public class Expression {
    * @throws ParseException If there were problems while parsing the expression.
    */
   public EvaluationValue evaluate() throws EvaluationException, ParseException {
-    return evaluateSubtree(getAbstractSyntaxTree());
+    EvaluationValue result = evaluateSubtree(getAbstractSyntaxTree());
+    if (result.isNumberValue()) {
+      BigDecimal bigDecimal = result.getNumberValue();
+      if (configuration.getDecimalPlacesResult()
+          != ExpressionConfiguration.DECIMAL_PLACES_ROUNDING_UNLIMITED) {
+        bigDecimal = roundValue(bigDecimal, configuration.getDecimalPlacesResult());
+      }
+
+      if (configuration.isStripTrailingZeros()) {
+        bigDecimal = bigDecimal.stripTrailingZeros();
+      }
+
+      result = EvaluationValue.numberValue(bigDecimal);
+    }
+
+    return result;
   }
 
   /**
@@ -128,8 +143,14 @@ public class Expression {
       default:
         throw new EvaluationException(token, "Unexpected evaluation token: " + token);
     }
+    if (result.isNumberValue()
+        && configuration.getDecimalPlacesRounding()
+            != ExpressionConfiguration.DECIMAL_PLACES_ROUNDING_UNLIMITED) {
+      return EvaluationValue.numberValue(
+          roundValue(result.getNumberValue(), configuration.getDecimalPlacesRounding()));
+    }
 
-    return result.isNumberValue() ? roundAndStripZerosIfNeeded(result) : result;
+    return result;
   }
 
   private EvaluationValue getVariableOrConstant(Token token) throws EvaluationException {
@@ -192,25 +213,15 @@ public class Expression {
   }
 
   /**
-   * Rounds the given value, if the decimal places are configured. Also strips trailing decimal
-   * zeros, if configured.
+   * Rounds the given value.
    *
    * @param value The input value.
+   * @param decimalPlaces The number of decimal places to round to.
    * @return The rounded value, or the input value if rounding is not configured or possible.
    */
-  private EvaluationValue roundAndStripZerosIfNeeded(EvaluationValue value) {
-    BigDecimal bigDecimal = value.getNumberValue();
-    if (configuration.getDecimalPlacesRounding()
-        != ExpressionConfiguration.DECIMAL_PLACES_ROUNDING_UNLIMITED) {
-      bigDecimal =
-          bigDecimal.setScale(
-              configuration.getDecimalPlacesRounding(),
-              configuration.getMathContext().getRoundingMode());
-    }
-    if (configuration.isStripTrailingZeros()) {
-      bigDecimal = bigDecimal.stripTrailingZeros();
-    }
-    return EvaluationValue.numberValue(bigDecimal);
+  private BigDecimal roundValue(BigDecimal value, int decimalPlaces) {
+    value = value.setScale(decimalPlaces, configuration.getMathContext().getRoundingMode());
+    return value;
   }
 
   /**
