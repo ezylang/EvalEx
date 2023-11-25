@@ -89,4 +89,19 @@ class TokenizerNumberLiteralTest extends BaseParserTest {
         .isInstanceOf(ParseException.class)
         .hasMessage("Illegal scientific format");
   }
+
+  @ParameterizedTest
+  @ValueSource(strings = {"1..0*2.7*195.0", "123.45.6", "2.1.2..4", ".2.4"})
+  void testMoreThanOneDecimalPointThrowsException(String expression) {
+    assertThatThrownBy(() -> new Tokenizer(expression, configuration).parse())
+        .isInstanceOf(ParseException.class)
+        .hasMessage("Number contains more than one decimal point");
+  }
+
+  @Test
+  void testMisplacedStructureOperator() {
+    assertThatThrownBy(() -> new Tokenizer("..3", configuration).parse())
+        .isInstanceOf(ParseException.class)
+        .hasMessage("Misplaced structure operator");
+  }
 }
