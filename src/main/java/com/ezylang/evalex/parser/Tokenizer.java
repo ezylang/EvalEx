@@ -109,6 +109,11 @@ public class Tokenizer {
   }
 
   private void validateToken(Token currentToken) throws ParseException {
+
+    if (currentToken.getType() == STRUCTURE_SEPARATOR && getPreviousToken() == null) {
+      throw new ParseException(currentToken, "Misplaced structure operator");
+    }
+
     Token previousToken = getPreviousToken();
     if (previousToken != null
         && previousToken.getType() == INFIX_OPERATOR
@@ -365,7 +370,17 @@ public class Tokenizer {
 
     int lastChar = -1;
     boolean scientificNotation = false;
+    boolean dotEncountered = false;
     while (currentChar != -1 && isAtNumberChar()) {
+      if (currentChar == '.' && dotEncountered) {
+        tokenValue.append((char) currentChar);
+        throw new ParseException(
+            new Token(tokenStartIndex, tokenValue.toString(), TokenType.NUMBER_LITERAL),
+            "Number contains more than one decimal point");
+      }
+      if (currentChar == '.') {
+        dotEncountered = true;
+      }
       if (currentChar == 'e' || currentChar == 'E') {
         scientificNotation = true;
       }
@@ -510,7 +525,7 @@ public class Tokenizer {
       return Character.isDigit(currentChar) || currentChar == '+' || currentChar == '-';
     }
 
-    if (previousChar == '.') {
+    if (previousChar == '.' && currentChar != '.') {
       return Character.isDigit(currentChar) || currentChar == 'e' || currentChar == 'E';
     }
 
