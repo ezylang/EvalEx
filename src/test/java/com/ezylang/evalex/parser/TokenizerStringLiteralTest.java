@@ -18,6 +18,7 @@ package com.ezylang.evalex.parser;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import com.ezylang.evalex.Expression;
+import com.ezylang.evalex.config.ExpressionConfiguration;
 import com.ezylang.evalex.parser.Token.TokenType;
 import org.junit.jupiter.api.Test;
 
@@ -95,5 +96,21 @@ class TokenizerStringLiteralTest extends BaseParserTest {
     assertThatThrownBy(() -> new Tokenizer("test \"hello", configuration).parse())
         .isInstanceOf(ParseException.class)
         .hasMessage("Closing quote not found");
+  }
+
+  @Test
+  void testSingleQuoteAllowed() throws ParseException {
+    assertThatThrownBy(() -> new Tokenizer("'hello'", configuration).parse())
+        .isInstanceOf(ParseException.class);
+
+    ExpressionConfiguration config =
+        ExpressionConfiguration.builder().singleQuoteStringLiteralsAllowed(true).build();
+
+    assertAllTokensParsedCorrectly(
+        "'\"Hello\", ' + \"'World'\"",
+        config,
+        new Token(1, "\"Hello\", ", TokenType.STRING_LITERAL),
+        new Token(13, "+", TokenType.INFIX_OPERATOR),
+        new Token(15, "'World'", TokenType.STRING_LITERAL));
   }
 }

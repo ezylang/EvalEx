@@ -222,6 +222,9 @@ public class ExpressionConfiguration {
   /** Support for implicit multiplication, like in (a+b)(b+c) are allowed or not. */
   @Builder.Default @Getter private final boolean implicitMultiplicationAllowed = true;
 
+  /** Support for single quote string literals, like in 'Hello World' are allowed or not. */
+  @Builder.Default @Getter private final boolean singleQuoteStringLiteralsAllowed = false;
+
   /**
    * The power of operator precedence, can be set higher {@link
    * OperatorIfc#OPERATOR_PRECEDENCE_POWER_HIGHER} or to a custom value.

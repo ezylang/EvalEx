@@ -28,6 +28,12 @@ public abstract class BaseParserTest {
       TestConfigurationProvider.StandardConfigurationWithAdditionalTestOperators;
 
   void assertAllTokensParsedCorrectly(String input, Token... expectedTokens) throws ParseException {
+    assertAllTokensParsedCorrectly(input, configuration, expectedTokens);
+  }
+
+  void assertAllTokensParsedCorrectly(
+      String input, ExpressionConfiguration configuration, Token... expectedTokens)
+      throws ParseException {
     List<Token> tokensParsed = new Tokenizer(input, configuration).parse();
 
     assertThat(tokensParsed).containsExactly(expectedTokens);
