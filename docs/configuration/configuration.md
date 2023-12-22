@@ -25,6 +25,7 @@ ExpressionConfiguration configuration=ExpressionConfiguration.builder()
         .powerOfPrecedence(OperatorIfc.OPERATOR_PRECEDENCE_POWER)
         .stripTrailingZeros(true)
         .structuresAllowed(true)
+        .singleQuoteStringLiteralsAllowed(false)
         .build();
 
         Expression expression=new Expression("2.128 + a",configuration);
@@ -88,7 +89,7 @@ See the reference chapter for a list: [Default Constants](../references/constant
 ### Evaluation Value Converter
 
 The converter to use when converting different data types to an _EvaluationValue_.
-The _DefaultEvaluationValueConverter_ is used by default. 
+The _DefaultEvaluationValueConverter_ is used by default.
 
 ### Function Dictionary
 
@@ -163,9 +164,14 @@ no operator or function is defined for this character.
 ### Zone Id
 
 The time zone id. By default, the system default zone ID is used.
+
 ```java
 ExpressionConfiguration configuration=ExpressionConfiguration.builder()
         .zoneId(ZoneId.of("Europe/Berlin"))
         .build();
 ```
 
+### Single Quote String Literals
+
+Specifies if the single quote character (') can be used as a string literal delimiter, not only the
+double quote character (") (default is false). If set to true, the expression will throw a _ParseException_.
