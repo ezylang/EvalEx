@@ -150,6 +150,11 @@ ExpressionConfiguration configuration=ExpressionConfiguration.builder()
         Expression expression=new Expression("-2^2",configuration);
 ```
 
+### Single Quote String Literals
+
+Specifies if the single quote character (') can be used as a string literal delimiter, not only the
+double quote character (") (default is false). If set to false, the expression will throw a _ParseException_.
+
 ### Strip Trailing Zeros
 
 If set to true (default), then the trailing decimal zeros in a number result will be stripped.
@@ -170,8 +175,3 @@ ExpressionConfiguration configuration=ExpressionConfiguration.builder()
         .zoneId(ZoneId.of("Europe/Berlin"))
         .build();
 ```
-
-### Single Quote String Literals
-
-Specifies if the single quote character (') can be used as a string literal delimiter, not only the
-double quote character (") (default is false). If set to true, the expression will throw a _ParseException_.
