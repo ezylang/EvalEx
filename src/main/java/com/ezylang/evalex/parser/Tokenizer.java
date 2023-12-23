@@ -144,7 +144,7 @@ public class Tokenizer {
     }
 
     // we have a token start, identify and parse it
-    if (currentChar == '"') {
+    if (isAtStringLiteralStart()) {
       return parseStringLiteral();
     } else if (currentChar == '(') {
       return parseBraceOpen();
@@ -464,6 +464,7 @@ public class Tokenizer {
   }
 
   Token parseStringLiteral() throws ParseException {
+    int startChar = currentChar;
     int tokenStartIndex = currentColumnIndex;
     StringBuilder tokenValue = new StringBuilder();
     // skip starting quote
@@ -473,7 +474,7 @@ public class Tokenizer {
       if (currentChar == '\\') {
         consumeChar();
         tokenValue.append(escapeCharacter(currentChar));
-      } else if (currentChar == '"') {
+      } else if (currentChar == startChar) {
         inQuote = false;
       } else {
         tokenValue.append((char) currentChar);
@@ -582,6 +583,11 @@ public class Tokenizer {
 
   private boolean isAtIdentifierChar() {
     return Character.isLetter(currentChar) || Character.isDigit(currentChar) || currentChar == '_';
+  }
+
+  private boolean isAtStringLiteralStart() {
+    return currentChar == '"'
+        || currentChar == '\'' && configuration.isSingleQuoteStringLiteralsAllowed();
   }
 
   private void skipBlanks() {

@@ -64,6 +64,10 @@ Any instance of _java.lang.CharSequence_ or _java.lang.Character_ will automatic
 a _STRING_ datatype. Conversion will be done by invoking the _toString()_ method on the input
 object.
 
+By default, the string literal delimiter is the double quote character ("). You can also use both
+`"` and `'` as string literal delimiters by changing the configuration. See
+chapter [Configuration](../configuration/configuration.html) for details.
+
 ### DATE_TIME
 
 Any instance of _java.time.Instant_, _java.time.LocalDate_, _java.time.LocalDateTime_, _java.time.ZoneDateTime_,

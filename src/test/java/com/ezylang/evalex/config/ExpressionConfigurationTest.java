@@ -54,6 +54,7 @@ class ExpressionConfigurationTest {
         .isEqualTo(ExpressionConfiguration.DECIMAL_PLACES_ROUNDING_UNLIMITED);
     assertThat(configuration.isStripTrailingZeros()).isTrue();
     assertThat(configuration.isAllowOverwriteConstants()).isTrue();
+    assertThat(configuration.isSingleQuoteStringLiteralsAllowed()).isFalse();
   }
 
   @Test
@@ -156,6 +157,14 @@ class ExpressionConfigurationTest {
         ExpressionConfiguration.builder().structuresAllowed(false).build();
 
     assertThat(configuration.isStructuresAllowed()).isFalse();
+  }
+
+  @Test
+  void testSingleQuoteStringLiteralsAllowed() {
+    ExpressionConfiguration configuration =
+        ExpressionConfiguration.builder().singleQuoteStringLiteralsAllowed(true).build();
+
+    assertThat(configuration.isSingleQuoteStringLiteralsAllowed()).isTrue();
   }
 
   @Test
