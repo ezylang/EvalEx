@@ -152,8 +152,9 @@ ExpressionConfiguration configuration=ExpressionConfiguration.builder()
 
 ### Single Quote String Literals
 
-Specifies if the single quote character (') can be used as a string literal delimiter, not only the
-double quote character (") (default is false). If set to false, the expression will throw a _ParseException_.
+Specifies if the single quote character (') also can be used as a string literal delimiter, not only the
+double quote character (") (default is false).
+If set to false, the parser will throw a _ParseException_, if a single quote is used.
 
 ### Strip Trailing Zeros
 
