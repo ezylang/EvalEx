@@ -18,6 +18,7 @@ package com.ezylang.evalex;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import com.ezylang.evalex.config.ExpressionConfiguration;
+import com.ezylang.evalex.data.EvaluationValue;
 import com.ezylang.evalex.parser.ParseException;
 import java.math.BigDecimal;
 import java.util.HashMap;
@@ -189,5 +190,21 @@ class ExpressionEvaluatorDecimalPlacesTest extends BaseExpressionEvaluatorTest {
     Expression expression = new Expression("1.6666+1.6666+1.6666", config);
 
     assertThat(expression.evaluate().getStringValue()).isEqualTo("5.01");
+  }
+
+  @Test
+  void testEqualsIgnoresScale() throws EvaluationException, ParseException {
+    Expression expression = new Expression("a == b");
+    EvaluationValue result = expression.with("a", 70).and("b", 70.0).evaluate();
+
+    assertThat(result.getBooleanValue()).isTrue();
+  }
+
+  @Test
+  void testNotEqualsIgnoresScale() throws EvaluationException, ParseException {
+    Expression expression = new Expression("a != b");
+    EvaluationValue result = expression.with("a", 70).and("b", 70.0).evaluate();
+
+    assertThat(result.getBooleanValue()).isFalse();
   }
 }
