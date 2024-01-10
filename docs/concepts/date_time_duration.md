@@ -31,6 +31,7 @@ The infix plus and minus operators can be used to do calculations with _DATE_TIM
 The outcome of the operation depends on the operator types:
 
 #### Addition
+
 | Left Operand | Right Operand | Result                                                                 |
 |--------------|---------------|------------------------------------------------------------------------|
 | _DATE_TIME_  | _DURATION_    | A new _DATE_TIME_ where the duration is added to the date.             |
@@ -54,6 +55,7 @@ System.out.println(result); // will print "EvaluationValue(value=2023-12-04T02:1
 ```
 
 #### Subtraction
+
 | Left Operand | Right Operand | Result                                                                      |
 |--------------|---------------|-----------------------------------------------------------------------------|
 | _DATE_TIME_  | _DATE_TIME_   | A duration which reflects the difference between the two date-times.        |
