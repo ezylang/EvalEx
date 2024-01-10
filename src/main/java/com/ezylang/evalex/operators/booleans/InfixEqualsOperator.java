@@ -30,6 +30,12 @@ public class InfixEqualsOperator extends AbstractOperator {
   @Override
   public EvaluationValue evaluate(
       Expression expression, Token operatorToken, EvaluationValue... operands) {
-    return expression.convertValue(operands[0].equals(operands[1]));
+    if (operands[0].isNullValue() && operands[1].isNullValue()) {
+      return EvaluationValue.booleanValue(true);
+    }
+    if (operands[0].isNullValue() || operands[1].isNullValue()) {
+      return EvaluationValue.booleanValue(false);
+    }
+    return expression.convertValue(operands[0].compareTo(operands[1]) == 0);
   }
 }

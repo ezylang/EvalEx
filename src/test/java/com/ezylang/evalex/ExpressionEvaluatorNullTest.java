@@ -26,17 +26,27 @@ import org.junit.jupiter.api.Test;
 class ExpressionEvaluatorNullTest extends BaseExpressionEvaluatorTest {
 
   @Test
-  void testNullEquals() throws ParseException, EvaluationException {
+  void testSecondNullEquals() throws ParseException, EvaluationException {
     Expression expression = createExpression("a == null");
     assertExpressionHasExpectedResult(expression.with("a", null), "true");
-    assertExpressionHasExpectedResult(expression.with("a", 99), "false");
   }
 
   @Test
-  void testNullNotEquals() throws ParseException, EvaluationException {
+  void testSecondNullNotEquals() throws ParseException, EvaluationException {
     Expression expression = new Expression("a != null");
     assertExpressionHasExpectedResult(expression.with("a", null), "false");
-    assertExpressionHasExpectedResult(expression.with("a", 99), "true");
+  }
+
+  @Test
+  void testFirstNullEquals() throws ParseException, EvaluationException {
+    Expression expression = createExpression("null == a");
+    assertExpressionHasExpectedResult(expression.with("a", null), "true");
+  }
+
+  @Test
+  void testFirstNullNotEquals() throws ParseException, EvaluationException {
+    Expression expression = new Expression("null != a");
+    assertExpressionHasExpectedResult(expression.with("a", null), "false");
   }
 
   @Test
