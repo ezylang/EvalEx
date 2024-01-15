@@ -54,6 +54,26 @@ class InfixNotEqualsOperatorTest extends BaseEvaluationTest {
     assertExpressionHasExpectedResult(expression, expectedResult);
   }
 
+  @ParameterizedTest
+  @CsvSource(
+      delimiter = ':',
+      value = {
+        "1!=\"1\" : true",
+        "\"1\"!=1 : true",
+        "true!=\"1\" : true",
+        "\"1\"!=true : true",
+        "false!=\"1\" : true",
+        "\"1\"!=false : true",
+        "DT_DATE_NEW(2022,10,30)!=1 : true",
+        "1!=DT_DATE_NEW(2022,10,30) : true",
+        "DT_DURATION_PARSE(\"PT24H\")!=1 : true",
+        "1!=DT_DURATION_PARSE(\"PT24H\") : true",
+      })
+  void testInfixNotEqualsTypesDiffer(String expression, String expectedResult)
+      throws EvaluationException, ParseException {
+    assertExpressionHasExpectedResult(expression, expectedResult);
+  }
+
   @Test
   void testInfixNotEqualsVariables() throws EvaluationException, ParseException {
     Expression expression = new Expression("a!=b");
