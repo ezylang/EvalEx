@@ -22,16 +22,16 @@ Operation definition is made in two parts:
 
 To ease some common implementation routines, a custom operator usually extends the
 _AbstractOperator_ class.
-As an example, we can look at the boolean "AND" operator:
+As an example, we can look at the boolean "GREATER" operator:
 
 ```java
-@InfixOperator(precedence = OPERATOR_PRECEDENCE_AND)
-public class InfixAndOperator extends AbstractOperator {
+@InfixOperator(precedence = OPERATOR_PRECEDENCE_COMPARISON)
+public class InfixGreaterOperator extends AbstractOperator {
 
   @Override
   public EvaluationValue evaluate(
-      Expression expression, Token operatorToken, EvaluationValue... operands) {
-    return new EvaluationValue(operands[0].getBooleanValue() && operands[1].getBooleanValue());
+          Expression expression, Token operatorToken, EvaluationValue... operands) {
+    return expression.convertValue(operands[0].compareTo(operands[1]) > 0);
   }
 }
 ```
@@ -66,6 +66,34 @@ precedence are evaluated.
 Precedence and associativity can be specified with the operator annotation.
 
 There is a collection of predefined operator precedences in the _OperatorIfc_ interface.
+
+#### Lazy Operands Evaluation
+
+Infix operators can optionally be defined to allow lazy evaluation. Without lazy evaluation,
+the value received by the operator would already have been evaluated.
+
+Lazy evaluation can be helpful for certain situations where sometimes you may want to skip
+part of the expression without affecting the result. One example is where you want to implement
+[short-circuit evaluation](https://en.wikipedia.org/wiki/Short-circuit_evaluation). Consider an expression
+"a != NULL && a > 0", in case "a" has a `NULL` value, the right side of the expression can be skipped
+or an error will be thrown saying `NULL` is not comparable.
+
+Note that currently only infix operators allow lazy evaluation. The "AND" operator demonstrates this:
+
+```java
+@InfixOperator(precedence = OPERATOR_PRECEDENCE_AND, operandsLazy = true)
+public class InfixAndOperator extends AbstractOperator {
+
+  @Override
+  public EvaluationValue evaluate(
+          Expression expression, Token operatorToken, EvaluationValue... operands)
+          throws EvaluationException {
+    return expression.convertValue(
+            expression.evaluateSubtree(operands[0].getExpressionNode()).getBooleanValue()
+                    && expression.evaluateSubtree(operands[1].getExpressionNode()).getBooleanValue());
+  }
+}
+```
 
 ### Adding the Operator
 

@@ -30,6 +30,8 @@ public abstract class AbstractOperator implements OperatorIfc {
 
   private final boolean leftAssociative;
 
+  private final boolean operandsLazy;
+
   OperatorType type;
 
   /**
@@ -44,14 +46,17 @@ public abstract class AbstractOperator implements OperatorIfc {
       this.type = OperatorType.INFIX_OPERATOR;
       this.precedence = infixAnnotation.precedence();
       this.leftAssociative = infixAnnotation.leftAssociative();
+      this.operandsLazy = infixAnnotation.operandsLazy();
     } else if (prefixAnnotation != null) {
       this.type = PREFIX_OPERATOR;
       this.precedence = prefixAnnotation.precedence();
       this.leftAssociative = prefixAnnotation.leftAssociative();
+      this.operandsLazy = false;
     } else if (postfixAnnotation != null) {
       this.type = OperatorType.POSTFIX_OPERATOR;
       this.precedence = postfixAnnotation.precedence();
       this.leftAssociative = postfixAnnotation.leftAssociative();
+      this.operandsLazy = false;
     } else {
       throw new OperatorAnnotationNotFoundException(this.getClass().getName());
     }
@@ -65,6 +70,11 @@ public abstract class AbstractOperator implements OperatorIfc {
   @Override
   public boolean isLeftAssociative() {
     return leftAssociative;
+  }
+
+  @Override
+  public boolean isOperandLazy() {
+    return operandsLazy;
   }
 
   @Override

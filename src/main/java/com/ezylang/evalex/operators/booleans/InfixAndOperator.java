@@ -17,6 +17,7 @@ package com.ezylang.evalex.operators.booleans;
 
 import static com.ezylang.evalex.operators.OperatorIfc.OPERATOR_PRECEDENCE_AND;
 
+import com.ezylang.evalex.EvaluationException;
 import com.ezylang.evalex.Expression;
 import com.ezylang.evalex.data.EvaluationValue;
 import com.ezylang.evalex.operators.AbstractOperator;
@@ -24,12 +25,15 @@ import com.ezylang.evalex.operators.InfixOperator;
 import com.ezylang.evalex.parser.Token;
 
 /** Boolean AND of two values. */
-@InfixOperator(precedence = OPERATOR_PRECEDENCE_AND)
+@InfixOperator(precedence = OPERATOR_PRECEDENCE_AND, operandsLazy = true)
 public class InfixAndOperator extends AbstractOperator {
 
   @Override
   public EvaluationValue evaluate(
-      Expression expression, Token operatorToken, EvaluationValue... operands) {
-    return expression.convertValue(operands[0].getBooleanValue() && operands[1].getBooleanValue());
+      Expression expression, Token operatorToken, EvaluationValue... operands)
+      throws EvaluationException {
+    return expression.convertValue(
+        expression.evaluateSubtree(operands[0].getExpressionNode()).getBooleanValue()
+            && expression.evaluateSubtree(operands[1].getExpressionNode()).getBooleanValue());
   }
 }

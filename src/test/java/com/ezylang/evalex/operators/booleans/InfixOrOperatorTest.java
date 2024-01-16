@@ -36,7 +36,8 @@ class InfixOrOperatorTest extends BaseEvaluationTest {
         "\"true\"||\"false\" : true",
         "\"false\"||\"false\" : false",
         "(1==1)||(2==3) : true",
-        "(2>4)||(4<6) :true"
+        "(2>4)||(4<6) :true",
+        "true || NULL < 0 : true"
       })
   void testInfixLessLiterals(String expression, String expectedResult)
       throws EvaluationException, ParseException {

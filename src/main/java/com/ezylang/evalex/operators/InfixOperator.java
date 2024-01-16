@@ -32,4 +32,7 @@ public @interface InfixOperator {
 
   /** Operator associativity, defaults to <code>true</code>. */
   boolean leftAssociative() default true;
+
+  /** Operands are evaluated lazily, defaults to <code>false</code>. */
+  boolean operandsLazy() default false;
 }

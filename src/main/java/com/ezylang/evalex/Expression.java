@@ -19,6 +19,7 @@ import com.ezylang.evalex.config.ExpressionConfiguration;
 import com.ezylang.evalex.data.DataAccessorIfc;
 import com.ezylang.evalex.data.EvaluationValue;
 import com.ezylang.evalex.functions.FunctionIfc;
+import com.ezylang.evalex.operators.OperatorIfc;
 import com.ezylang.evalex.parser.*;
 import java.math.BigDecimal;
 import java.util.*;
@@ -122,14 +123,7 @@ public class Expression {
                 .evaluate(this, token, evaluateSubtree(startNode.getParameters().get(0)));
         break;
       case INFIX_OPERATOR:
-        result =
-            token
-                .getOperatorDefinition()
-                .evaluate(
-                    this,
-                    token,
-                    evaluateSubtree(startNode.getParameters().get(0)),
-                    evaluateSubtree(startNode.getParameters().get(1)));
+        result = evaluateInfixOperator(startNode, token);
         break;
       case ARRAY_INDEX:
         result = evaluateArrayIndex(startNode);
@@ -210,6 +204,22 @@ public class Expression {
     } else {
       throw EvaluationException.ofUnsupportedDataTypeInOperation(startNode.getToken());
     }
+  }
+
+  private EvaluationValue evaluateInfixOperator(ASTNode startNode, Token token)
+      throws EvaluationException {
+    EvaluationValue left;
+    EvaluationValue right;
+
+    OperatorIfc op = token.getOperatorDefinition();
+    if (op.isOperandLazy()) {
+      left = convertValue(startNode.getParameters().get(0));
+      right = convertValue(startNode.getParameters().get(1));
+    } else {
+      left = evaluateSubtree(startNode.getParameters().get(0));
+      right = evaluateSubtree(startNode.getParameters().get(1));
+    }
+    return op.evaluate(this, token, left, right);
   }
 
   /**
