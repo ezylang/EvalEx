@@ -46,7 +46,7 @@ public abstract class AbstractOperator implements OperatorIfc {
       this.type = OperatorType.INFIX_OPERATOR;
       this.precedence = infixAnnotation.precedence();
       this.leftAssociative = infixAnnotation.leftAssociative();
-      this.operandsLazy = infixAnnotation.isLazy();
+      this.operandsLazy = infixAnnotation.operandsLazy();
     } else if (prefixAnnotation != null) {
       this.type = PREFIX_OPERATOR;
       this.precedence = prefixAnnotation.precedence();

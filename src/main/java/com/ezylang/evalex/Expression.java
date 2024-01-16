@@ -207,7 +207,7 @@ public class Expression {
   }
 
   private EvaluationValue evaluateInfixOperator(ASTNode startNode, Token token)
-          throws EvaluationException {
+      throws EvaluationException {
     EvaluationValue left, right;
 
     OperatorIfc op = token.getOperatorDefinition();
