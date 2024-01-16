@@ -112,6 +112,13 @@ public interface OperatorIfc {
   int getPrecedence(ExpressionConfiguration configuration);
 
   /**
+   * Checks if the operand is lazy.
+   *
+   * @return <code>true</code> if operands are defined as lazy.
+   */
+  boolean isOperandLazy();
+
+  /**
    * Performs the operator logic and returns an evaluation result.
    *
    * @param expression The expression, where this function is executed. Can be used to access the
