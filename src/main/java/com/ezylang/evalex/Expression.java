@@ -67,6 +67,17 @@ public class Expression {
   }
 
   /**
+   * Creates a copy with the same expression string, configuration, dataAccessor and syntax tree
+   * from an existing expression. The existing expression will be parsed to populate the syntax tree
+   *
+   * @param expression An existing expression.
+   * @throws ParseException If there were problems while parsing the existing expression.
+   */
+  public Expression(Expression expression) throws ParseException {
+    this(expression.getExpressionString(), expression.getConfiguration());
+    this.abstractSyntaxTree = expression.getAbstractSyntaxTree();
+  }
+  /**
    * Evaluates the expression by parsing it (if not done before) and the evaluating it.
    *
    * @return The evaluation result value.
@@ -309,6 +320,16 @@ public class Expression {
       with(entry.getKey(), entry.getValue());
     }
     return this;
+  }
+
+  /**
+   * Return a copy of the expression using the copy constructor {@link Expression(Expression)}.
+   *
+   * @return The copied Expression instance.
+   * @throws ParseException If there were problems while parsing the existing expression.
+   */
+  public Expression copy() throws ParseException {
+    return new Expression(this);
   }
 
   /**
