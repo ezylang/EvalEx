@@ -204,4 +204,18 @@ class ExpressionTest {
     assertThat(result.getStringValue()).isEqualTo("3");
     assertThat(copiedResult.getStringValue()).isEqualTo("7");
   }
+
+  @Test
+  void testCopyCreatesNewDataAccessor() throws ParseException {
+    Expression expression = new Expression(("a"));
+    Expression expressionCopy = expression.copy();
+
+    expression.getDataAccessor().setData("a", EvaluationValue.stringValue("1"));
+    expressionCopy.getDataAccessor().setData("a", EvaluationValue.stringValue("2"));
+
+    assertThat(expression.getDataAccessor().getData("a"))
+        .isEqualTo(EvaluationValue.stringValue("1"));
+    assertThat(expressionCopy.getDataAccessor().getData("a"))
+        .isEqualTo(EvaluationValue.stringValue("2"));
+  }
 }
