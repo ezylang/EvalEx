@@ -192,4 +192,16 @@ class ExpressionTest {
     Expression expression = new Expression("a+A+b+B+c+C+E+e+PI+x").with("x", 1);
     assertThat(expression.getUndefinedVariables()).containsExactlyInAnyOrder("a", "b", "c");
   }
+
+  @Test
+  void testCopy() throws ParseException, EvaluationException {
+    Expression expression = new Expression("a + b").with("a", 1).and("b", 2);
+    Expression copiedExpression = expression.copy().with("a", 3).and("b", 4);
+
+    EvaluationValue result = expression.evaluate();
+    EvaluationValue copiedResult = copiedExpression.evaluate();
+
+    assertThat(result.getStringValue()).isEqualTo("3");
+    assertThat(copiedResult.getStringValue()).isEqualTo("7");
+  }
 }

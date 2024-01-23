@@ -92,6 +92,19 @@ EvaluationValue result = expression
 System.out.println(result.getNumberValue()); // prints 6.00
 ```
 
+### Expression can be copied and evaluated with a different set of values:
+
+```java
+Expression expression = new Expression("a + b").with("a", 1).and("b", 2);
+Expression copiedExpression = expression.copy().with("a", 3).and("b", 4);
+
+EvaluationValue result = expression.evaluate();
+EvaluationValue copiedResult = copiedExpression.evaluate();
+
+System.out.println(result.getNumberValue()); // prints 3
+System.out.println(copiedResult.getNumberValue()); // prints 7
+```
+
 ### Values can be passed in a map
 
 Instead of specifying the variable values one  by one, they can be set by defining a map with names and values and then
