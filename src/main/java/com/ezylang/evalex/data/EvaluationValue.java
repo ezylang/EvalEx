@@ -374,7 +374,7 @@ public class EvaluationValue implements Comparable<EvaluationValue> {
   public Boolean getBooleanValue() {
     switch (getDataType()) {
       case NUMBER:
-        return !value.equals(BigDecimal.ZERO);
+        return ((BigDecimal) value).compareTo(BigDecimal.ZERO) != 0;
       case BOOLEAN:
         return (Boolean) value;
       case STRING:
