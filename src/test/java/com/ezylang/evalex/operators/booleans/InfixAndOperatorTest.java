@@ -30,6 +30,7 @@ class InfixAndOperatorTest extends BaseEvaluationTest {
         "1&&1 : true",
         "1&&2 : true",
         "0&&1 : false",
+        "0.0&&1 : false",
         "22&&33 : true",
         "\"true\"&&\"true\" : true",
         "\"true\"&&\"false\" : false",
