@@ -83,8 +83,8 @@ Duration are stored as a _java.time.Duration_. The duration values are useful fo
 
 Arrays are stored internally as a _java.util.List&lt;EvaluationValue&gt;_. When passed as a
 variable, the list will be iterated and each entry will be converted using the data type conversion
-rules.
-So, for example, a list of double values will be converted to a list of _EvaluationValue_
+rules. Instances of _java.util.List_ and Java arrays can be passed as parameters.
+So, for example, a list or array of double values will be converted to a list of _EvaluationValue_
 objects of type _NUMBER_, with an internal BigDecimal representation.
 
 Arrays can hold mixed data types:

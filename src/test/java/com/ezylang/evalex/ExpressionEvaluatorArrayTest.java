@@ -111,6 +111,17 @@ class ExpressionEvaluatorArrayTest extends BaseExpressionEvaluatorTest {
   }
 
   @Test
+  void testArrayAndList() throws EvaluationException, ParseException {
+    Expression expression =
+        createExpression("values[i-1] * factors[i-1]")
+            .with("values", List.of(2, 3, 4))
+            .and("factors", new Object[] {2, 4, 6})
+            .and("i", 1);
+
+    assertThat(expression.evaluate().getStringValue()).isEqualTo("4");
+  }
+
+  @Test
   void testThrowsUnsupportedDataTypeForArray() {
     assertThatThrownBy(() -> createExpression("a[0]").with("a", "aString").evaluate())
         .isInstanceOf(EvaluationException.class)

@@ -161,7 +161,7 @@ Expression expression = new Expression("\"Hello \" + name + \", you are \" + age
 System.out.println(expression.evaluate().getStringValue()); // prints Hello Frank, you are 38
 ```
 
-### Arrays (also multidimensional) are supported and can be passed as Java _Lists_.
+### Arrays (also multidimensional) are supported and can be passed as Java _Lists_ or instances of Java arrays.
 
 See the [Documentation](https://ezylang.github.io/EvalEx/concepts/datatypes.html#array)
 for more details.
@@ -171,7 +171,7 @@ Expression expression = new Expression("values[i-1] * factors[i-1]");
 
 EvaluationValue result = expression
     .with("values", List.of(2, 3, 4))
-    .and("factors", List.of(2, 4, 6))
+    .and("factors", new Object[] {2, 4, 6})
     .and("i", 1)
     .evaluate();
 

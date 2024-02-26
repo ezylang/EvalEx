@@ -24,14 +24,23 @@ import java.util.List;
 public class ArrayConverter implements ConverterIfc {
   @Override
   public EvaluationValue convert(Object object, ExpressionConfiguration configuration) {
-    List<EvaluationValue> array = new ArrayList<>();
-    ((List) object).forEach(element -> array.add(new EvaluationValue(element, configuration)));
+    List<EvaluationValue> list = new ArrayList<>();
 
-    return EvaluationValue.arrayValue(array);
+    if (object instanceof Object[]) {
+      for (Object element : (Object[]) object) {
+        list.add(new EvaluationValue(element, configuration));
+      }
+    } else if (object instanceof List) {
+      ((List<?>) object).forEach(element -> list.add(new EvaluationValue(element, configuration)));
+    } else {
+      throw illegalArgument(object);
+    }
+
+    return EvaluationValue.arrayValue(list);
   }
 
   @Override
   public boolean canConvert(Object object) {
-    return object instanceof List;
+    return object instanceof List || object instanceof Object[];
   }
 }
