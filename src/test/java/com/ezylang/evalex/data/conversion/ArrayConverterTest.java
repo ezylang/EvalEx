@@ -16,10 +16,12 @@
 package com.ezylang.evalex.data.conversion;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import com.ezylang.evalex.config.ExpressionConfiguration;
 import com.ezylang.evalex.data.EvaluationValue;
 import java.math.BigDecimal;
+import java.time.Instant;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -62,14 +64,43 @@ class ArrayConverterTest {
   }
 
   @Test
+  void testArrayFromJavaArray() {
+    Instant now = Instant.now();
+    Object[] array =
+        new Object[] {"1", 2, new BigDecimal(3), null, EvaluationValue.dateTimeValue(now)};
+
+    EvaluationValue value = converter.convert(array, defaultConfiguration);
+
+    assertThat(value.isArrayValue()).isTrue();
+    assertThat(value.getArrayValue()).hasSize(5);
+    assertThat(value.getArrayValue().get(0).isStringValue()).isTrue();
+    assertThat(value.getArrayValue().get(0).getStringValue()).isEqualTo("1");
+    assertThat(value.getArrayValue().get(1).isNumberValue()).isTrue();
+    assertThat(value.getArrayValue().get(1).getStringValue()).isEqualTo("2");
+    assertThat(value.getArrayValue().get(2).isNumberValue()).isTrue();
+    assertThat(value.getArrayValue().get(2).getStringValue()).isEqualTo("3");
+    assertThat(value.getArrayValue().get(3).isNullValue()).isTrue();
+    assertThat(value.getArrayValue().get(3).getStringValue()).isNull();
+    assertThat(value.getArrayValue().get(4).isDateTimeValue()).isTrue();
+    assertThat(value.getArrayValue().get(4).getDateTimeValue()).isEqualTo(now);
+  }
+
+  @Test
   void testCanConvert() {
+    assertThat(converter.canConvert(new String[] {"1", "2", "3"})).isTrue();
     assertThat(converter.canConvert(Collections.EMPTY_LIST)).isTrue();
     assertThat(converter.canConvert(Arrays.asList(1, 2, 3))).isTrue();
   }
 
   @Test
   void testCanNotConvert() {
-    assertThat(converter.canConvert(new String[] {"1", "2", "3"})).isFalse();
     assertThat(converter.canConvert(new BigDecimal(1))).isFalse();
+  }
+
+  @Test
+  void testIllegalArgumentException() {
+    assertThatThrownBy(() -> converter.convert("test", defaultConfiguration))
+        .isInstanceOf(IllegalArgumentException.class)
+        .hasMessage("Unsupported data type 'java.lang.String'");
   }
 }
