@@ -56,4 +56,11 @@ class BooleanConverterTest {
     assertThat(converter.canConvert("true")).isFalse();
     assertThat(converter.canConvert(new BigDecimal(1))).isFalse();
   }
+
+  @Test
+  void testNumberToBoolean() {
+    EvaluationValue value = EvaluationValue.numberValue(new BigDecimal("0.0"));
+
+    assertThat(value.getBooleanValue()).isFalse();
+  }
 }
