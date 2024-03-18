@@ -86,10 +86,145 @@ class ArrayConverterTest {
   }
 
   @Test
+  void testLongArray() {
+    long[] array = new long[] {1, 2, 3};
+    EvaluationValue value = converter.convert(array, defaultConfiguration);
+
+    assertThat(value.isArrayValue()).isTrue();
+    assertThat(value.getArrayValue()).hasSize(3);
+    assertThat(value.getArrayValue().get(0).isNumberValue()).isTrue();
+    assertThat(value.getArrayValue().get(0).getStringValue()).isEqualTo("1");
+    assertThat(value.getArrayValue().get(1).isNumberValue()).isTrue();
+    assertThat(value.getArrayValue().get(1).getStringValue()).isEqualTo("2");
+    assertThat(value.getArrayValue().get(2).isNumberValue()).isTrue();
+    assertThat(value.getArrayValue().get(2).getStringValue()).isEqualTo("3");
+  }
+
+  @Test
+  void testIntArray() {
+    int[] array = new int[] {1, 2, 3};
+    EvaluationValue value = converter.convert(array, defaultConfiguration);
+
+    assertThat(value.isArrayValue()).isTrue();
+    assertThat(value.getArrayValue()).hasSize(3);
+    assertThat(value.getArrayValue().get(0).isNumberValue()).isTrue();
+    assertThat(value.getArrayValue().get(0).getStringValue()).isEqualTo("1");
+    assertThat(value.getArrayValue().get(1).isNumberValue()).isTrue();
+    assertThat(value.getArrayValue().get(1).getStringValue()).isEqualTo("2");
+    assertThat(value.getArrayValue().get(2).isNumberValue()).isTrue();
+    assertThat(value.getArrayValue().get(2).getStringValue()).isEqualTo("3");
+  }
+
+  @Test
+  void testShortArray() {
+    short[] array = new short[] {1, 2, 3};
+    EvaluationValue value = converter.convert(array, defaultConfiguration);
+
+    assertThat(value.isArrayValue()).isTrue();
+    assertThat(value.getArrayValue()).hasSize(3);
+    assertThat(value.getArrayValue().get(0).isNumberValue()).isTrue();
+    assertThat(value.getArrayValue().get(0).getStringValue()).isEqualTo("1");
+    assertThat(value.getArrayValue().get(1).isNumberValue()).isTrue();
+    assertThat(value.getArrayValue().get(1).getStringValue()).isEqualTo("2");
+    assertThat(value.getArrayValue().get(2).isNumberValue()).isTrue();
+    assertThat(value.getArrayValue().get(2).getStringValue()).isEqualTo("3");
+  }
+
+  @Test
+  void testDoubleArray() {
+    double[] array = new double[] {1.0, 2.0, 3.0};
+    EvaluationValue value = converter.convert(array, defaultConfiguration);
+
+    assertThat(value.isArrayValue()).isTrue();
+    assertThat(value.getArrayValue()).hasSize(3);
+    assertThat(value.getArrayValue().get(0).isNumberValue()).isTrue();
+    assertThat(value.getArrayValue().get(0).getStringValue()).isEqualTo("1.0");
+    assertThat(value.getArrayValue().get(1).isNumberValue()).isTrue();
+    assertThat(value.getArrayValue().get(1).getStringValue()).isEqualTo("2.0");
+    assertThat(value.getArrayValue().get(2).isNumberValue()).isTrue();
+    assertThat(value.getArrayValue().get(2).getStringValue()).isEqualTo("3.0");
+  }
+
+  @Test
+  void testFloatArray() {
+    float[] array = new float[] {1.0f, 2.0f, 3.0f};
+    EvaluationValue value = converter.convert(array, defaultConfiguration);
+
+    assertThat(value.isArrayValue()).isTrue();
+    assertThat(value.getArrayValue()).hasSize(3);
+    assertThat(value.getArrayValue().get(0).isNumberValue()).isTrue();
+    assertThat(value.getArrayValue().get(0).getStringValue()).isEqualTo("1.0");
+    assertThat(value.getArrayValue().get(1).isNumberValue()).isTrue();
+    assertThat(value.getArrayValue().get(1).getStringValue()).isEqualTo("2.0");
+    assertThat(value.getArrayValue().get(2).isNumberValue()).isTrue();
+    assertThat(value.getArrayValue().get(2).getStringValue()).isEqualTo("3.0");
+  }
+
+  @Test
+  void testBooleanArray() {
+    boolean[] array = new boolean[] {true, false};
+    EvaluationValue value = converter.convert(array, defaultConfiguration);
+
+    assertThat(value.isArrayValue()).isTrue();
+    assertThat(value.getArrayValue()).hasSize(2);
+    assertThat(value.getArrayValue().get(0).isBooleanValue()).isTrue();
+    assertThat(value.getArrayValue().get(0).getBooleanValue()).isTrue();
+    assertThat(value.getArrayValue().get(1).isBooleanValue()).isTrue();
+    assertThat(value.getArrayValue().get(1).getBooleanValue()).isFalse();
+  }
+
+  @Test
+  void testByteArray() {
+    byte[] array = new byte[] {1, 2, 3};
+    EvaluationValue value = converter.convert(array, defaultConfiguration);
+
+    assertThat(value.isArrayValue()).isTrue();
+    assertThat(value.getArrayValue()).hasSize(3);
+    assertThat(value.getArrayValue().get(0).isNumberValue()).isTrue();
+    assertThat(value.getArrayValue().get(0).getStringValue()).isEqualTo("1");
+    assertThat(value.getArrayValue().get(1).isNumberValue()).isTrue();
+    assertThat(value.getArrayValue().get(1).getStringValue()).isEqualTo("2");
+    assertThat(value.getArrayValue().get(2).isNumberValue()).isTrue();
+    assertThat(value.getArrayValue().get(2).getStringValue()).isEqualTo("3");
+  }
+
+  @Test
+  void testCharArray() {
+    char[] array = new char[] {'a', 'b', 'c'};
+    EvaluationValue value = converter.convert(array, defaultConfiguration);
+
+    assertThat(value.isArrayValue()).isTrue();
+    assertThat(value.getArrayValue()).hasSize(3);
+    assertThat(value.getArrayValue().get(0).isStringValue()).isTrue();
+    assertThat(value.getArrayValue().get(0).getStringValue()).isEqualTo("a");
+    assertThat(value.getArrayValue().get(1).isStringValue()).isTrue();
+    assertThat(value.getArrayValue().get(1).getStringValue()).isEqualTo("b");
+    assertThat(value.getArrayValue().get(2).isStringValue()).isTrue();
+    assertThat(value.getArrayValue().get(2).getStringValue()).isEqualTo("c");
+  }
+
+  @Test
+  void testStringArray() {
+    String[] array = new String[] {"hello", "world"};
+    EvaluationValue value = converter.convert(array, defaultConfiguration);
+
+    assertThat(value.isArrayValue()).isTrue();
+    assertThat(value.getArrayValue()).hasSize(2);
+    assertThat(value.getArrayValue().get(0).isStringValue()).isTrue();
+    assertThat(value.getArrayValue().get(0).getStringValue()).isEqualTo("hello");
+    assertThat(value.getArrayValue().get(1).isStringValue()).isTrue();
+    assertThat(value.getArrayValue().get(1).getStringValue()).isEqualTo("world");
+  }
+
+  @Test
   void testCanConvert() {
     assertThat(converter.canConvert(new String[] {"1", "2", "3"})).isTrue();
     assertThat(converter.canConvert(Collections.EMPTY_LIST)).isTrue();
     assertThat(converter.canConvert(Arrays.asList(1, 2, 3))).isTrue();
+    assertThat(converter.canConvert(new Integer[] {1, 2, 3})).isTrue();
+    assertThat(converter.canConvert(new int[] {1, 2, 3})).isTrue();
+    assertThat(converter.canConvert(new double[] {1.0, 2.0, 3.0})).isTrue();
+    assertThat(converter.canConvert(new boolean[] {true, false})).isTrue();
   }
 
   @Test
