@@ -49,6 +49,6 @@ class DefaultEvaluationValueConverterTest {
     final Error error = new Error();
     assertThatThrownBy(() -> converter.convertObject(error, defaultConfiguration))
         .isInstanceOf(IllegalArgumentException.class)
-        .hasMessage("Unsupported data type 'java.util.Optional'");
+        .hasMessage("Unsupported data type 'java.lang.Error'");
   }
 }
