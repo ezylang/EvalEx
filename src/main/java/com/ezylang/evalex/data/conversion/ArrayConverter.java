@@ -26,7 +26,7 @@ public class ArrayConverter implements ConverterIfc {
   public EvaluationValue convert(Object object, ExpressionConfiguration configuration) {
     List<EvaluationValue> list = new ArrayList<>();
 
-    if (object instanceof Object[]) {
+    if (object.getClass().isArray()) {
       for (Object element : (Object[]) object) {
         list.add(new EvaluationValue(element, configuration));
       }
@@ -41,6 +41,6 @@ public class ArrayConverter implements ConverterIfc {
 
   @Override
   public boolean canConvert(Object object) {
-    return object instanceof List || object instanceof Object[];
+    return object instanceof List || object.getClass().isArray();
   }
 }
