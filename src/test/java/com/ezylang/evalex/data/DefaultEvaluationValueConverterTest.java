@@ -46,8 +46,9 @@ class DefaultEvaluationValueConverterTest {
 
   @Test
   void testException() {
-    assertThatThrownBy(() -> converter.convertObject(new int[] {1, 2, 3}, defaultConfiguration))
+    final Error error = new Error();
+    assertThatThrownBy(() -> converter.convertObject(error, defaultConfiguration))
         .isInstanceOf(IllegalArgumentException.class)
-        .hasMessage("Unsupported data type '[I'");
+        .hasMessage("Unsupported data type 'java.lang.Error'");
   }
 }

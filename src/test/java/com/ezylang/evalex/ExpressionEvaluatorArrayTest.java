@@ -122,6 +122,19 @@ class ExpressionEvaluatorArrayTest extends BaseExpressionEvaluatorTest {
   }
 
   @Test
+  void testArrayTypes() throws EvaluationException, ParseException {
+    Expression expression =
+        createExpression("decimals[1] + integers[1] + doubles[1] + strings[1] + booleans[1]")
+            .with("decimals", new BigDecimal[] {new BigDecimal(1), new BigDecimal(2)})
+            .and("integers", new Integer[] {1, 2})
+            .and("doubles", new Double[] {1.1, 2.2})
+            .and("strings", new String[] {" Hello ", " World "})
+            .and("booleans", new Boolean[] {true, false});
+
+    assertThat(expression.evaluate().getStringValue()).isEqualTo("6.2 World false");
+  }
+
+  @Test
   void testThrowsUnsupportedDataTypeForArray() {
     assertThatThrownBy(() -> createExpression("a[0]").with("a", "aString").evaluate())
         .isInstanceOf(EvaluationException.class)
