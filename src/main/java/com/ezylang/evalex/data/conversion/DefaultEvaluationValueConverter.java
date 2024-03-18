@@ -66,6 +66,7 @@ public class DefaultEvaluationValueConverter implements EvaluationValueConverter
           new ArrayConverter(),
           new StructureConverter());
 
+  @Override
   public EvaluationValue convertObject(Object object, ExpressionConfiguration configuration) {
 
     if (object == null) {

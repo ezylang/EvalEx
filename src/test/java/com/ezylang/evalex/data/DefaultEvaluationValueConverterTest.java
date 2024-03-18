@@ -20,7 +20,6 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import com.ezylang.evalex.config.ExpressionConfiguration;
 import com.ezylang.evalex.data.conversion.DefaultEvaluationValueConverter;
-import java.util.Optional;
 import org.junit.jupiter.api.Test;
 
 class DefaultEvaluationValueConverterTest {
@@ -47,7 +46,8 @@ class DefaultEvaluationValueConverterTest {
 
   @Test
   void testException() {
-    assertThatThrownBy(() -> converter.convertObject(Optional.of(1), defaultConfiguration))
+    final Error error = new Error();
+    assertThatThrownBy(() -> converter.convertObject(error, defaultConfiguration))
         .isInstanceOf(IllegalArgumentException.class)
         .hasMessage("Unsupported data type 'java.util.Optional'");
   }
