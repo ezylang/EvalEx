@@ -17,23 +17,20 @@ package com.ezylang.evalex.functions.basic;
 
 import com.ezylang.evalex.Expression;
 import com.ezylang.evalex.data.EvaluationValue;
-import com.ezylang.evalex.functions.AbstractFunction;
 import com.ezylang.evalex.functions.FunctionParameter;
 import com.ezylang.evalex.parser.Token;
 import java.math.BigDecimal;
 
 /** Returns the maximum value of all parameters. */
 @FunctionParameter(name = "value", isVarArg = true)
-public class MaxFunction extends AbstractFunction {
+public class MaxFunction extends AbstractMinMaxFunction {
   @Override
   public EvaluationValue evaluate(
       Expression expression, Token functionToken, EvaluationValue... parameterValues) {
-    BigDecimal max = null;
+    BigDecimal min = null;
     for (EvaluationValue parameter : parameterValues) {
-      if (max == null || parameter.getNumberValue().compareTo(max) > 0) {
-        max = parameter.getNumberValue();
-      }
+      min = findMinOrMax(min, parameter, false);
     }
-    return expression.convertValue(max);
+    return expression.convertValue(min);
   }
 }

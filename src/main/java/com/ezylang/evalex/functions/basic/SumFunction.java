@@ -30,8 +30,24 @@ public class SumFunction extends AbstractFunction {
       Expression expression, Token functionToken, EvaluationValue... parameterValues) {
     BigDecimal sum = BigDecimal.ZERO;
     for (EvaluationValue parameter : parameterValues) {
-      sum = sum.add(parameter.getNumberValue(), expression.getConfiguration().getMathContext());
+      sum =
+          sum.add(
+              recursiveSum(parameter, expression), expression.getConfiguration().getMathContext());
     }
     return expression.convertValue(sum);
+  }
+
+  private BigDecimal recursiveSum(EvaluationValue parameter, Expression expression) {
+    BigDecimal sum = BigDecimal.ZERO;
+    if (parameter.isArrayValue()) {
+      for (EvaluationValue element : parameter.getArrayValue()) {
+        sum =
+            sum.add(
+                recursiveSum(element, expression), expression.getConfiguration().getMathContext());
+      }
+    } else {
+      sum = sum.add(parameter.getNumberValue(), expression.getConfiguration().getMathContext());
+    }
+    return sum;
   }
 }

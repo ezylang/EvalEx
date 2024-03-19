@@ -21,13 +21,13 @@ Available through the _ExpressionConfiguration.StandardFunctionsDictionary_ cons
 | IF(condition, resultIfTrue, resultIfFalse) | Conditional evaluation function. If _condition_ is true, the _resultIfTrue_ is returned, else the _resultIfFalse_ value |
 | LOG(value)                                 | The natural logarithm (base e) of a value                                                                               |
 | LOG10(value)                               | The base 10 logarithm of a value                                                                                        |
-| MAX(value, ...)                            | Returns the maximum value of all parameters                                                                             |
-| MIN(value, ...)                            | Returns the maximum value of all parameters                                                                             |
+| MAX(value, ...)                            | Returns the maximum value of all parameters. If a parameter is of type _ARRAY_, the maximum of all elements is used.    |
+| MIN(value, ...)                            | Returns the minimum value of all parameters. If a parameter is of type _ARRAY_, the minimum of all elements is used.    |
 | NOT(value)                                 | Boolean negation, implemented as a function (for compatibility)                                                         |
 | RANDOM()                                   | Produces a random value between 0 and 1                                                                                 |
 | ROUND(value, scale)                        | Rounds the given value to the specified scale, using the current rounding mode                                          |
 | SQRT(value)                                | Square root function                                                                                                    |
-| SUM(value, ...)                            | Returns the sum of all parameters                                                                                       |
+| SUM(value, ...)                            | Returns the sum of all parameters. If a parameter is of type _ARRAY_, the sum of all elements is calculated.            |
 
 ### String Functions
 
