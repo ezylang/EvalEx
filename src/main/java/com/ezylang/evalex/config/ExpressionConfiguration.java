@@ -23,9 +23,7 @@ import com.ezylang.evalex.data.conversion.EvaluationValueConverterIfc;
 import com.ezylang.evalex.functions.FunctionIfc;
 import com.ezylang.evalex.functions.basic.*;
 import com.ezylang.evalex.functions.datetime.*;
-import com.ezylang.evalex.functions.string.StringContains;
-import com.ezylang.evalex.functions.string.StringLowerFunction;
-import com.ezylang.evalex.functions.string.StringUpperFunction;
+import com.ezylang.evalex.functions.string.*;
 import com.ezylang.evalex.functions.trigonometric.*;
 import com.ezylang.evalex.operators.OperatorIfc;
 import com.ezylang.evalex.operators.arithmetic.*;
@@ -182,7 +180,9 @@ public class ExpressionConfiguration {
           Map.entry("TANR", new TanRFunction()),
           // string functions
           Map.entry("STR_CONTAINS", new StringContains()),
+          Map.entry("STR_ENDS_WITH", new StringEndsWithFunction()),
           Map.entry("STR_LOWER", new StringLowerFunction()),
+          Map.entry("STR_STARTS_WITH", new StringStartsWithFunction()),
           Map.entry("STR_UPPER", new StringUpperFunction()),
           // date time functions
           Map.entry("DT_DATE_NEW", new DateTimeNewFunction()),
