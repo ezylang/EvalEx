@@ -23,6 +23,7 @@ import com.ezylang.evalex.parser.Token;
 
 /**
  * Returns true if the string ends with the substring (case-sensitive).
+ *
  * @author oswaldobapvicjr
  */
 @FunctionParameter(name = "string")
