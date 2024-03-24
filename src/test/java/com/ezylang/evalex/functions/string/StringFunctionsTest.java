@@ -71,4 +71,36 @@ class StringFunctionsTest extends BaseEvaluationTest {
       throws EvaluationException, ParseException {
     assertExpressionHasExpectedResult(expression, expectedResult);
   }
+
+  @ParameterizedTest
+  @CsvSource(
+      delimiter = ':',
+      value = {
+        "STR_STARTS_WITH(\"\", \"\") : true",
+        "STR_STARTS_WITH(\"a\", \"a\") : true",
+        "STR_STARTS_WITH(\"Hello World\", \"Hello\") : true",
+        "STR_STARTS_WITH(\"Hello World\", \"hello\") : false",
+        "STR_STARTS_WITH(\"Hello world\", \"text\") : false",
+        "STR_STARTS_WITH(\"\", \"text\") : false"
+      })
+  void testStartsWith(String expression, String expectedResult)
+      throws EvaluationException, ParseException {
+    assertExpressionHasExpectedResult(expression, expectedResult);
+  }
+
+  @ParameterizedTest
+  @CsvSource(
+      delimiter = ':',
+      value = {
+        "STR_ENDS_WITH(\"\", \"\") : true",
+        "STR_ENDS_WITH(\"a\", \"a\") : true",
+        "STR_ENDS_WITH(\"Hello World\", \"World\") : true",
+        "STR_ENDS_WITH(\"Hello World\", \"world\") : false",
+        "STR_ENDS_WITH(\"Hello world\", \"text\") : false",
+        "STR_ENDS_WITH(\"\", \"text\") : false"
+      })
+  void testEndsWith(String expression, String expectedResult)
+      throws EvaluationException, ParseException {
+    assertExpressionHasExpectedResult(expression, expectedResult);
+  }
 }

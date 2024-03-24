@@ -31,11 +31,13 @@ Available through the _ExpressionConfiguration.StandardFunctionsDictionary_ cons
 
 ### String Functions
 
-| Name                            | Description                                                                 |
-|---------------------------------|-----------------------------------------------------------------------|
-| STR_CONTAINS(string, substring) | Returns true, if the string contains the substring (case-insensitive) |
-| STR_LOWER(value)                | Converts the given value to lower case                                |
-| STR_UPPER(value)                | Converts the given value to upper case                                |
+| Name                               | Description                                                           |
+|------------------------------------|-----------------------------------------------------------------------|
+| STR_CONTAINS(string, substring)    | Returns true if the string contains the substring (case-insensitive)  |
+| STR_ENDS_WITH(string, substring)   | Returns true if the string ends with the substring (case-sensitive)   |
+| STR_LOWER(value)                   | Converts the given value to lower case                                |
+| STR_STARTS_WITH(string, substring) | Returns true if the string starts with the substring (case-sensitive) |
+| STR_UPPER(value)                   | Converts the given value to upper case                                |
 
 ### Trigonometric Functions
 
