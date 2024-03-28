@@ -23,7 +23,6 @@ import com.ezylang.evalex.Expression;
 import com.ezylang.evalex.config.ExpressionConfiguration;
 import com.ezylang.evalex.config.TestConfigurationProvider;
 import com.ezylang.evalex.parser.ParseException;
-import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.TimeZone;
@@ -242,10 +241,16 @@ class DateTimeFunctionsTest extends BaseEvaluationTest {
     assertExpressionHasExpectedResult(expression, expectedResult);
   }
 
-  @Test
-  void testDateTimeNow() throws EvaluationException, ParseException {
-    assertExpressionHasExpectedResult(
-        "DT_DATE_NOW()", Instant.now().toString(), DateTimeTestConfiguration);
+  @ParameterizedTest
+  @CsvSource(
+      delimiter = '|',
+      value = {
+        "DT_DATE_NOW() > DT_DATE_TODAY() | true",
+        "DT_DATE_NOW() > (DT_DATE_TODAY() + DT_DURATION_PARSE(\"P1D\")) | false"
+      })
+  void testDateTimeNow(String expression, String expectedResult)
+      throws EvaluationException, ParseException {
+    assertExpressionHasExpectedResult(expression, expectedResult);
   }
 
   @Test
