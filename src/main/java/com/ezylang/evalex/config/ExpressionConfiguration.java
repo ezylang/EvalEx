@@ -188,6 +188,8 @@ public class ExpressionConfiguration {
           Map.entry("DT_DATE_NEW", new DateTimeNewFunction()),
           Map.entry("DT_DATE_PARSE", new DateTimeParseFunction()),
           Map.entry("DT_DATE_FORMAT", new DateTimeFormatFunction()),
+          Map.entry("DT_DATE_NOW", new DateTimeNowFunction()),
+          Map.entry("DT_DATE_TODAY", new DateTimeTodayFunction()),
           Map.entry("DT_DATE_TO_EPOCH", new DateTimeToEpochFunction()),
           Map.entry("DT_DURATION_NEW", new DurationNewFunction()),
           Map.entry("DT_DURATION_FROM_MILLIS", new DurationFromMillisFunction()),
