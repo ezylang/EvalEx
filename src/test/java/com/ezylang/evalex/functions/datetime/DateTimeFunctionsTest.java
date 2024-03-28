@@ -23,7 +23,12 @@ import com.ezylang.evalex.Expression;
 import com.ezylang.evalex.config.ExpressionConfiguration;
 import com.ezylang.evalex.config.TestConfigurationProvider;
 import com.ezylang.evalex.parser.ParseException;
+
+import java.time.Instant;
+import java.time.LocalDate;
 import java.time.ZoneId;
+import java.util.TimeZone;
+
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
@@ -31,9 +36,17 @@ import org.junit.jupiter.params.provider.ValueSource;
 
 class DateTimeFunctionsTest extends BaseEvaluationTest {
 
+  private static final ZoneId DEFAULT_ZONE_ID = ZoneId.of("Europe/Berlin");
+
+  static {
+      // Let the default time-zone be set programmatically to standardize
+      // tests dependent on the default time-zone
+      TimeZone.setDefault(TimeZone.getTimeZone(DEFAULT_ZONE_ID));
+  }
+
   private static final ExpressionConfiguration DateTimeTestConfiguration =
       TestConfigurationProvider.StandardConfigurationWithAdditionalTestOperators.toBuilder()
-          .zoneId(ZoneId.of("Europe/Berlin"))
+          .zoneId(DEFAULT_ZONE_ID)
           .build();
 
   @ParameterizedTest
@@ -229,6 +242,19 @@ class DateTimeFunctionsTest extends BaseEvaluationTest {
   void testDateTimeToEpoch(String expression, String expectedResult)
       throws EvaluationException, ParseException {
     assertExpressionHasExpectedResult(expression, expectedResult);
+  }
+
+  @Test
+  void testDateTimeNow() throws EvaluationException, ParseException {
+    assertExpressionHasExpectedResult(
+        "DT_DATE_NOW()", Instant.now().toString(), DateTimeTestConfiguration);
+  }
+
+  @Test
+  void testDateTimeToday() throws EvaluationException, ParseException {
+    String expected = LocalDate.now().atStartOfDay(DEFAULT_ZONE_ID).toInstant().toString();
+    assertExpressionHasExpectedResult(
+        "DT_DATE_TODAY()", expected, DateTimeTestConfiguration);
   }
 
   @ParameterizedTest
