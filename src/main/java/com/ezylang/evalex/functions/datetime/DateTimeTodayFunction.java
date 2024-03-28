@@ -15,22 +15,26 @@
 */
 package com.ezylang.evalex.functions.datetime;
 
-import java.time.Instant;
-import java.time.LocalDate;
-import java.time.ZoneId;
-
 import com.ezylang.evalex.Expression;
 import com.ezylang.evalex.data.EvaluationValue;
 import com.ezylang.evalex.functions.AbstractFunction;
 import com.ezylang.evalex.parser.Token;
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.ZoneId;
 
 /**
- * Produces a new DATE_TIME that represents the current date, at midnight (00:00), in the
- * system default time-zone.
- * <p>
- * It is useful for DATE_TIME comparison, when the current time must not be considered.
- * For example, in the expression:
- * <blockquote>{@code IF(expiryDate > DT_DATE_TODAY(), "expired", "valid")}</blockquote>
+ * Produces a new DATE_TIME that represents the current date, at midnight (00:00), in the system
+ * default time-zone.
+ *
+ * <p>It is useful for DATE_TIME comparison, when the current time must not be considered. For
+ * example, in the expression:
+ *
+ * <blockquote>
+ *
+ * {@code IF(expiryDate > DT_DATE_TODAY(), "expired", "valid")}
+ *
+ * </blockquote>
  *
  * @author oswaldobapvicjr
  */

@@ -15,20 +15,24 @@
 */
 package com.ezylang.evalex.functions.datetime;
 
-import java.time.Instant;
-
 import com.ezylang.evalex.Expression;
 import com.ezylang.evalex.data.EvaluationValue;
 import com.ezylang.evalex.functions.AbstractFunction;
 import com.ezylang.evalex.parser.Token;
+import java.time.Instant;
 
 /**
  * Produces a new DATE_TIME that represents the current date and time.
- * <p>
- * It is useful to calculate a value based on the current date and time. For example, if
- * you know the start DATE_TIME of a running process, you might use the following
- * expression to find the DURATION that represents the process age:
- * <blockquote>{@code DT_DATE_NOW() - startDateTime}</blockquote>
+ *
+ * <p>It is useful to calculate a value based on the current date and time. For example, if you know
+ * the start DATE_TIME of a running process, you might use the following expression to find the
+ * DURATION that represents the process age:
+ *
+ * <blockquote>
+ *
+ * {@code DT_DATE_NOW() - startDateTime}
+ *
+ * </blockquote>
  *
  * @author oswaldobapvicjr
  */
