@@ -22,7 +22,7 @@ import com.ezylang.evalex.functions.FunctionParameter;
 import com.ezylang.evalex.parser.Token;
 import java.math.RoundingMode;
 
-/** Rounds the given value an integer using the rounding mode {@link RoundingMode#FLOOR} */
+/** Rounds the given value to an integer using the rounding mode {@link RoundingMode#FLOOR} */
 @FunctionParameter(name = "value")
 public class FloorFunction extends AbstractFunction {
   @Override

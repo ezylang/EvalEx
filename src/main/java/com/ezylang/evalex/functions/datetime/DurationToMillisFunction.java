@@ -21,7 +21,7 @@ import com.ezylang.evalex.functions.AbstractFunction;
 import com.ezylang.evalex.functions.FunctionParameter;
 import com.ezylang.evalex.parser.Token;
 
-/** Converts a DURATION value to teh amount of milliseconds. */
+/** Converts a DURATION value to the amount of milliseconds. */
 @FunctionParameter(name = "value")
 public class DurationToMillisFunction extends AbstractFunction {
   @Override

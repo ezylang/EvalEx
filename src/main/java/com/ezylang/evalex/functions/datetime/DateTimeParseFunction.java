@@ -17,6 +17,7 @@ package com.ezylang.evalex.functions.datetime;
 
 import com.ezylang.evalex.EvaluationException;
 import com.ezylang.evalex.Expression;
+import com.ezylang.evalex.config.ExpressionConfiguration;
 import com.ezylang.evalex.data.EvaluationValue;
 import com.ezylang.evalex.data.conversion.DateTimeConverter;
 import com.ezylang.evalex.functions.AbstractFunction;
@@ -31,10 +32,11 @@ import java.util.List;
 /**
  * Parses a date-time string to a {@link EvaluationValue.DataType#DATE_TIME} value.
  *
- * <p>Optional arguments is the time zone and a list of {@link java.time.format.DateTimeFormatter}
+ * <p>Optional arguments are the time zone and a list of {@link java.time.format.DateTimeFormatter}
  * patterns. Each pattern will be tried to convert the string to a date-time. The first matching
  * pattern will be used. If <code>NULL</code> is specified for the time zone, the currently
- * configured zone is used. If no formatters a
+ * configured zone is used. If no formatter is specified, the function will use the formatters
+ * defined at the {@link ExpressionConfiguration}.
  */
 @FunctionParameter(name = "parameters", isVarArg = true)
 public class DateTimeParseFunction extends AbstractFunction {

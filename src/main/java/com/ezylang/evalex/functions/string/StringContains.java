@@ -21,7 +21,7 @@ import com.ezylang.evalex.functions.AbstractFunction;
 import com.ezylang.evalex.functions.FunctionParameter;
 import com.ezylang.evalex.parser.Token;
 
-/** Returns true, if the string contains the substring (case-insensitive). */
+/** Returns true if the string contains the substring (case-insensitive). */
 @FunctionParameter(name = "string")
 @FunctionParameter(name = "substring")
 public class StringContains extends AbstractFunction {
