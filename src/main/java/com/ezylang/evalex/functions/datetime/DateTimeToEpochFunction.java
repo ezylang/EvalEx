@@ -21,7 +21,7 @@ import com.ezylang.evalex.functions.AbstractFunction;
 import com.ezylang.evalex.functions.FunctionParameter;
 import com.ezylang.evalex.parser.Token;
 
-/** Function to convert a DATE_TIME value to milliseconds sind the epoch of 1970-01-01T00:00:00Z. */
+/** Function to convert a DATE_TIME value to milliseconds in the epoch of 1970-01-01T00:00:00Z. */
 @FunctionParameter(name = "value")
 public class DateTimeToEpochFunction extends AbstractFunction {
   @Override

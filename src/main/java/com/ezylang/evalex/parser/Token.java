@@ -23,7 +23,7 @@ import lombok.ToString;
 import lombok.Value;
 
 /**
- * A token represents a singe part of an expression, like an operator, number literal, or a brace.
+ * A token represents a single part of an expression, like an operator, number literal, or a brace.
  * Each token has a unique type, a value (its representation) and a position (starting with 1) in
  * the original expression string.
  *

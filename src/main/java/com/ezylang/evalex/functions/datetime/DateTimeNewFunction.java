@@ -29,8 +29,8 @@ import java.util.Set;
 import java.util.TimeZone;
 
 /**
- * Creates a new DATE_TIME value with the given parameters. IIf only one parameter is given, it is
- * treated as th time in milliseconds from the epoch of 1970-01-01T00:00:00Z and a corresponding
+ * Creates a new DATE_TIME value with the given parameters. If only one parameter is given, it is
+ * treated as the time in milliseconds from the epoch of 1970-01-01T00:00:00Z and a corresponding
  * date/time value is created. Else, A minimum of three parameters (year, month, day) must be
  * specified. Optionally the hour, minute, second and nanosecond can be specified. If the last
  * parameter is a string value, it is treated as a zone ID. If no zone ID is specified, the
