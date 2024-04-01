@@ -30,7 +30,7 @@ import java.time.Instant;
  *
  * <blockquote>
  *
- * {@code DT_DATE_NOW() - startDateTime}
+ * {@code DT_NOW() - startDateTime}
  *
  * </blockquote>
  *

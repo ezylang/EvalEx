@@ -79,6 +79,13 @@ class BasicFunctionsTest extends BaseEvaluationTest {
     assertExpressionHasExpectedResult(expression, expectedResult);
   }
 
+  @Test
+  void testMaxThrowsException() {
+    assertThatThrownBy(() -> new Expression("MAX()").evaluate())
+        .isInstanceOf(ParseException.class)
+        .hasMessage("Not enough parameters for function");
+  }
+
   @ParameterizedTest
   @CsvSource(
       delimiter = ':',
@@ -91,6 +98,13 @@ class BasicFunctionsTest extends BaseEvaluationTest {
   void testMin(String expression, String expectedResult)
       throws EvaluationException, ParseException {
     assertExpressionHasExpectedResult(expression, expectedResult);
+  }
+
+  @Test
+  void testMinThrowsException() {
+    assertThatThrownBy(() -> new Expression("MIN()").evaluate())
+        .isInstanceOf(ParseException.class)
+        .hasMessage("Not enough parameters for function");
   }
 
   @ParameterizedTest

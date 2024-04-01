@@ -34,7 +34,7 @@ import java.time.ZoneId;
  *
  * <blockquote>
  *
- * {@code IF(expiryDate > DT_DATE_TODAY(), "expired", "valid")}
+ * {@code IF(expiryDate > DT_TODAY(), "expired", "valid")}
  *
  * </blockquote>
  *
