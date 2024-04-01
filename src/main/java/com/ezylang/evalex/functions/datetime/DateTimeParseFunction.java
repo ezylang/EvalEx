@@ -36,6 +36,7 @@ import java.util.List;
  * pattern will be used. If <code>NULL</code> is specified for the time zone, the currently
  * configured zone is used. If no formatters a
  */
+@FunctionParameter(name = "value")
 @FunctionParameter(name = "parameters", isVarArg = true)
 public class DateTimeParseFunction extends AbstractFunction {
 

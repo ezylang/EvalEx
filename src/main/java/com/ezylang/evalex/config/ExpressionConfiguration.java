@@ -188,13 +188,13 @@ public class ExpressionConfiguration {
           Map.entry("DT_DATE_NEW", new DateTimeNewFunction()),
           Map.entry("DT_DATE_PARSE", new DateTimeParseFunction()),
           Map.entry("DT_DATE_FORMAT", new DateTimeFormatFunction()),
-          Map.entry("DT_DATE_NOW", new DateTimeNowFunction()),
-          Map.entry("DT_DATE_TODAY", new DateTimeTodayFunction()),
           Map.entry("DT_DATE_TO_EPOCH", new DateTimeToEpochFunction()),
           Map.entry("DT_DURATION_NEW", new DurationNewFunction()),
           Map.entry("DT_DURATION_FROM_MILLIS", new DurationFromMillisFunction()),
           Map.entry("DT_DURATION_TO_MILLIS", new DurationToMillisFunction()),
-          Map.entry("DT_DURATION_PARSE", new DurationParseFunction()));
+          Map.entry("DT_DURATION_PARSE", new DurationParseFunction()),
+          Map.entry("DT_NOW", new DateTimeNowFunction()),
+          Map.entry("DT_TODAY", new DateTimeTodayFunction()));
 
   /** The math context to use. */
   @Builder.Default @Getter private final MathContext mathContext = DEFAULT_MATH_CONTEXT;
