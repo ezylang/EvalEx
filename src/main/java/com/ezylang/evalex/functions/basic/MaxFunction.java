@@ -22,6 +22,7 @@ import com.ezylang.evalex.parser.Token;
 import java.math.BigDecimal;
 
 /** Returns the maximum value of all parameters. */
+@FunctionParameter(name = "firstValue")
 @FunctionParameter(name = "value", isVarArg = true)
 public class MaxFunction extends AbstractMinMaxFunction {
   @Override

@@ -82,7 +82,7 @@ public interface FunctionIfc {
 
   /**
    * Returns the count of non-var-arg parameters defined by this function. If the function has
-   * var-args, the the result is the count of parameter definitions - 1.
+   * var-args, the result is the count of parameter definitions - 1.
    *
    * @return the count of non-var-arg parameters defined by this function.
    */

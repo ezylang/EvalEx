@@ -11,23 +11,23 @@ Available through the _ExpressionConfiguration.StandardFunctionsDictionary_ cons
 
 ### Basic Functions
 
-| Name                                       | Description                                                                                                             |
-|--------------------------------------------|-------------------------------------------------------------------------------------------------------------------------|
-| ABS(value)                                 | Absolute (non-negative) value                                                                                           |
-| CEILING(value)                             | Rounds the given value an integer using the rounding mode CEILING                                                       |
-| COALESCE(value, ...)                       | Returns the first non-null parameter, or NULL if all parameters are null                                                |
-| FACT(base)                                 | Calculates the factorial of a base value                                                                                |
-| FLOOR(value)                               | Rounds the given value an integer using the rounding mode FLOOR                                                         |
-| IF(condition, resultIfTrue, resultIfFalse) | Conditional evaluation function. If _condition_ is true, the _resultIfTrue_ is returned, else the _resultIfFalse_ value |
-| LOG(value)                                 | The natural logarithm (base e) of a value                                                                               |
-| LOG10(value)                               | The base 10 logarithm of a value                                                                                        |
-| MAX(value, ...)                            | Returns the maximum value of all parameters. If a parameter is of type _ARRAY_, the maximum of all elements is used.    |
-| MIN(value, ...)                            | Returns the minimum value of all parameters. If a parameter is of type _ARRAY_, the minimum of all elements is used.    |
-| NOT(value)                                 | Boolean negation, implemented as a function (for compatibility)                                                         |
-| RANDOM()                                   | Produces a random value between 0 and 1                                                                                 |
-| ROUND(value, scale)                        | Rounds the given value to the specified scale, using the current rounding mode                                          |
-| SQRT(value)                                | Square root function                                                                                                    |
-| SUM(value, ...)                            | Returns the sum of all parameters. If a parameter is of type _ARRAY_, the sum of all elements is calculated.            |
+| Name                                       | Description                                                                                                                |
+|--------------------------------------------|----------------------------------------------------------------------------------------------------------------------------|
+| ABS(value)                                 | Absolute (non-negative) value                                                                                              |
+| CEILING(value)                             | Rounds the given value an integer using the rounding mode CEILING                                                          |
+| COALESCE(value, ...)                       | Returns the first non-null parameter, or NULL if all parameters are null                                                   |
+| FACT(base)                                 | Calculates the factorial of a base value                                                                                   |
+| FLOOR(value)                               | Rounds the given value an integer using the rounding mode FLOOR                                                            |
+| IF(condition, resultIfTrue, resultIfFalse) | Conditional evaluation function. If _condition_ is true, the _resultIfTrue_ is returned, else the _resultIfFalse_ value    |
+| LOG(value)                                 | The natural logarithm (base e) of a value                                                                                  |
+| LOG10(value)                               | The base 10 logarithm of a value                                                                                           |
+| MAX(value, ...)                            | Returns the maximum value of all parameters. If a parameter is of type _ARRAY_, the maximum of all elements is calculated. |
+| MIN(value, ...)                            | Returns the minimum value of all parameters. If a parameter is of type _ARRAY_, the minimum of all elements is calculated. |
+| NOT(value)                                 | Boolean negation, implemented as a function (for compatibility)                                                            |
+| RANDOM()                                   | Produces a random value between 0 and 1                                                                                    |
+| ROUND(value, scale)                        | Rounds the given value to the specified scale, using the current rounding mode                                             |
+| SQRT(value)                                | Square root function                                                                                                       |
+| SUM(value, ...)                            | Returns the sum of all parameters. If a parameter is of type _ARRAY_, the sum of all elements is calculated.               |
 
 ### String Functions
 
@@ -82,7 +82,7 @@ Available through the _ExpressionConfiguration.StandardFunctionsDictionary_ cons
 
 | Name                                                                           | Description                                                                                                                                                                                                                                                             |
 |--------------------------------------------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| DT_DATE_NEW(year, month, day [,hour, minute, second, millis, nanos] [,zoneId]) | Returns a new DATE_TIME value with the given parameters. Any optional time zone (string) can be specified, e.g. "Europe/Berlin", or "GMT+02:00". If no zone id is specified, the configured zone id is used.                                                            |
+| DT_DATE_NEW(year, month, day [,hour, minute, second, millis, nanos] [,zoneId]) | Returns a new DATE_TIME value with the given parameters. An optional time zone (string) can be specified, e.g. "Europe/Berlin", or "GMT+02:00". If no zone id is specified, the configured zone id is used.                                                             |
 | DT_DATE_NEW(millis)                                                            | Returns a new DATE_TIME from the epoch of 1970-01-01T00:00:00Z in milliseconds.                                                                                                                                                                                         |
 | DT_DATE_PARSE(value [,zoneId] [,format, ...])                                  | Converts the given string value to a date time value by using the optional time zone and formats. All formats are used until the first matching format. Without a format, the configured formats are used. Time zone can be NULL, the the configured time zone is used. |
 | DT_DATE_FORMAT(value, [,format] [,zoneId])                                     | Formats the given date-time to a string using the given optional format and time zone. Without a format, the first configured format is used. The zone id defaults to the configured zone id.                                                                           |
@@ -91,5 +91,5 @@ Available through the _ExpressionConfiguration.StandardFunctionsDictionary_ cons
 | DT_DURATION_PARSE(value)                                                       | Converts the given ISO-8601 duration string representation to a duration value. E.g. "P2DT3H4M" parses 2 days, 3 hours and 4 minutes.                                                                                                                                   | 
 | DT_DURATION_FROM_MILLIS(millis)                                                | Returns a new DURATION value with the given milliseconds.                                                                                                                                                                                                               |
 | DT_DURATION_TO_MILLIS(value)                                                   | Converts the given duration to a milliseconds value.                                                                                                                                                                                                                    | 
-| DT_DATE_NOW()                                                                  | Produces a new DATE_TIME that represents the current date and time.                                                                                                                                                                                                     |
-| DT_DATE_TODAY([zoneId])                                                        | Produces a new DATE_TIME that represents the current date, at midnight (00:00). An optional time zone (string) can be specified, e.g. "America/Sao_Paulo", or "GMT-03:00". If no zone id is specified, the configured zone id is used.                                  |
+| DT_NOW()                                                                       | Produces a new DATE_TIME that represents the current moment in time.                                                                                                                                                                                                    |
+| DT_TODAY([zoneId])                                                             | Produces a new DATE_TIME that represents the current date, at midnight (00:00). An optional time zone (string) can be specified, e.g. "America/Sao_Paulo", or "GMT-03:00". If no zone id is specified, the configured zone id is used.                                  |
