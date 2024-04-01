@@ -30,6 +30,7 @@ import java.time.format.DateTimeFormatter;
  * format is given, the first format defined in the configured formats is used. Second optional
  * parameter is the zone-id to use with formatting. Default is the configured zone-id.
  */
+@FunctionParameter(name = "value")
 @FunctionParameter(name = "parameters", isVarArg = true)
 public class DateTimeFormatFunction extends AbstractFunction {
   @Override

@@ -41,6 +41,11 @@ public abstract class BaseEvaluationTest {
         .isEqualTo(expectedResult);
   }
 
+  protected EvaluationValue evaluate(String expression) throws EvaluationException, ParseException {
+    return evaluate(
+        expression, TestConfigurationProvider.StandardConfigurationWithAdditionalTestOperators);
+  }
+
   private EvaluationValue evaluate(String expressionString, ExpressionConfiguration configuration)
       throws EvaluationException, ParseException {
     Expression expression = new Expression(expressionString, configuration);

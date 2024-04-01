@@ -15,7 +15,9 @@
 */
 package com.ezylang.evalex.functions.datetime;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.assertj.core.api.Assertions.within;
 
 import com.ezylang.evalex.BaseEvaluationTest;
 import com.ezylang.evalex.EvaluationException;
@@ -23,7 +25,10 @@ import com.ezylang.evalex.Expression;
 import com.ezylang.evalex.config.ExpressionConfiguration;
 import com.ezylang.evalex.config.TestConfigurationProvider;
 import com.ezylang.evalex.parser.ParseException;
+import java.time.Instant;
+import java.time.LocalDate;
 import java.time.ZoneId;
+import java.time.temporal.ChronoUnit;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
@@ -31,9 +36,11 @@ import org.junit.jupiter.params.provider.ValueSource;
 
 class DateTimeFunctionsTest extends BaseEvaluationTest {
 
+  private static final ZoneId DEFAULT_ZONE_ID = ZoneId.of("Europe/Berlin");
+
   private static final ExpressionConfiguration DateTimeTestConfiguration =
       TestConfigurationProvider.StandardConfigurationWithAdditionalTestOperators.toBuilder()
-          .zoneId(ZoneId.of("Europe/Berlin"))
+          .zoneId(DEFAULT_ZONE_ID)
           .build();
 
   @ParameterizedTest
@@ -229,6 +236,27 @@ class DateTimeFunctionsTest extends BaseEvaluationTest {
   void testDateTimeToEpoch(String expression, String expectedResult)
       throws EvaluationException, ParseException {
     assertExpressionHasExpectedResult(expression, expectedResult);
+  }
+
+  @Test
+  void testDateTimeNow() throws EvaluationException, ParseException {
+    Instant expectedTime = Instant.now();
+    Instant actualTime = evaluate("DT_NOW()").getDateTimeValue();
+    assertThat(actualTime).isCloseTo(expectedTime, within(1, ChronoUnit.SECONDS));
+  }
+
+  @Test
+  void testDateTimeTodayDefaultTimeZone() throws EvaluationException, ParseException {
+    Instant expectedTime = LocalDate.now().atStartOfDay(DEFAULT_ZONE_ID).toInstant();
+    Instant actualTime = evaluate("DT_TODAY()").getDateTimeValue();
+    assertThat(actualTime).isEqualTo(expectedTime);
+  }
+
+  @Test
+  void testDateTimeTodayDifferentTimeZone() throws EvaluationException, ParseException {
+    Instant expectedTime = LocalDate.now().atStartOfDay(ZoneId.of("America/Sao_Paulo")).toInstant();
+    Instant actualTime = evaluate("DT_TODAY(\"America/Sao_Paulo\")").getDateTimeValue();
+    assertThat(actualTime).isEqualTo(expectedTime);
   }
 
   @ParameterizedTest

@@ -38,6 +38,7 @@ import java.util.List;
  * configured zone is used. If no formatter is specified, the function will use the formatters
  * defined at the {@link ExpressionConfiguration}.
  */
+@FunctionParameter(name = "value")
 @FunctionParameter(name = "parameters", isVarArg = true)
 public class DateTimeParseFunction extends AbstractFunction {
 

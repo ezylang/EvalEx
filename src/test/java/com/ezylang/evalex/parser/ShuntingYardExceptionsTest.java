@@ -125,7 +125,8 @@ class ShuntingYardExceptionsTest extends BaseParserTest {
 
   @Test
   void testFunctionNotEnoughParametersForVarArgs() {
-    Expression expression = new Expression("MIN()");
+    // The DT_DATE_PARSE() function has a required parameter and var-args
+    Expression expression = new Expression("DT_DATE_PARSE()");
 
     assertThatThrownBy(expression::evaluate)
         .isInstanceOf(ParseException.class)

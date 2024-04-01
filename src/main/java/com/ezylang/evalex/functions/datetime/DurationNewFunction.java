@@ -28,6 +28,7 @@ import java.time.Duration;
  * All other parameters are optional and specify hours, minutes, seconds, milliseconds and
  * nanoseconds.
  */
+@FunctionParameter(name = "days")
 @FunctionParameter(name = "parameters", isVarArg = true)
 public class DurationNewFunction extends AbstractFunction {
   @Override
