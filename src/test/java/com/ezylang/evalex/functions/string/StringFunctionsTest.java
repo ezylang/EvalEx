@@ -18,10 +18,15 @@ package com.ezylang.evalex.functions.string;
 import com.ezylang.evalex.BaseEvaluationTest;
 import com.ezylang.evalex.EvaluationException;
 import com.ezylang.evalex.parser.ParseException;
+import java.util.Locale;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 
 class StringFunctionsTest extends BaseEvaluationTest {
+
+  static {
+    Locale.setDefault(Locale.ENGLISH);
+  }
 
   @ParameterizedTest
   @CsvSource(
@@ -109,7 +114,7 @@ class StringFunctionsTest extends BaseEvaluationTest {
       delimiter = ':',
       value = {
         "STR_FORMAT(\"Welcome to %s!\", \"EvalEx\") : Welcome to EvalEx!",
-        "STR_FORMAT(\"%s is %.2f\", \"Result\", 11.1) : Result is 11,10",
+        "STR_FORMAT(\"%s is %.2f\", \"Result\", 11.1) : Result is 11.10",
         "STR_FORMAT(\"%1$s_%3$s_%2$s\", \"foo\", \"baz\", \"bar\") : foo_bar_baz",
         "STR_FORMAT(\"%03.0f\", 1) : 001",
         "STR_FORMAT(\"No format\") : No format",
