@@ -181,6 +181,7 @@ public class ExpressionConfiguration {
           // string functions
           Map.entry("STR_CONTAINS", new StringContains()),
           Map.entry("STR_ENDS_WITH", new StringEndsWithFunction()),
+          Map.entry("STR_FORMAT", new StringFormatFunction()),
           Map.entry("STR_LOWER", new StringLowerFunction()),
           Map.entry("STR_STARTS_WITH", new StringStartsWithFunction()),
           Map.entry("STR_UPPER", new StringUpperFunction()),
