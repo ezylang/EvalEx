@@ -18,6 +18,7 @@ package com.ezylang.evalex.data.conversion;
 import com.ezylang.evalex.config.ExpressionConfiguration;
 import com.ezylang.evalex.data.EvaluationValue;
 import java.math.BigDecimal;
+import java.math.BigInteger;
 
 /** Converter to convert to the NUMBER data type. */
 public class NumberConverter implements ConverterIfc {
@@ -28,6 +29,8 @@ public class NumberConverter implements ConverterIfc {
 
     if (object instanceof BigDecimal) {
       bigDecimal = (BigDecimal) object;
+    } else if (object instanceof BigInteger) {
+      bigDecimal = new BigDecimal((BigInteger) object, configuration.getMathContext());
     } else if (object instanceof Double) {
       bigDecimal = new BigDecimal(Double.toString((double) object), configuration.getMathContext());
     } else if (object instanceof Float) {
@@ -50,6 +53,7 @@ public class NumberConverter implements ConverterIfc {
   @Override
   public boolean canConvert(Object object) {
     return (object instanceof BigDecimal
+        || object instanceof BigInteger
         || object instanceof Double
         || object instanceof Float
         || object instanceof Integer

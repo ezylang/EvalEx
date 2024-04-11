@@ -21,6 +21,8 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import com.ezylang.evalex.config.ExpressionConfiguration;
 import com.ezylang.evalex.data.EvaluationValue;
 import java.math.BigDecimal;
+import java.math.BigInteger;
+
 import org.junit.jupiter.api.Test;
 
 class NumberConverterTest {
@@ -33,6 +35,16 @@ class NumberConverterTest {
   @Test
   void testBigDecimal() {
     BigDecimal value = new BigDecimal("23");
+
+    EvaluationValue converted = converter.convert(value, defaultConfiguration);
+
+    assertThat(converted.getDataType()).isEqualTo(EvaluationValue.DataType.NUMBER);
+    assertThat(converted.getValue()).isEqualTo(value);
+  }
+
+  @Test
+  void testBigInteger() {
+    BigInteger value = new BigInteger("23");
 
     EvaluationValue converted = converter.convert(value, defaultConfiguration);
 
@@ -99,6 +111,7 @@ class NumberConverterTest {
   @Test
   void testCanConvert() {
     assertThat(converter.canConvert(new BigDecimal(8))).isTrue();
+    assertThat(converter.canConvert(new BigInteger("5"))).isTrue();
     assertThat(converter.canConvert(Double.parseDouble("3.0"))).isTrue();
     assertThat(converter.canConvert(Float.parseFloat("2.0"))).isTrue();
     assertThat(converter.canConvert(3)).isTrue();
