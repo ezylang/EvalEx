@@ -15,17 +15,20 @@ Example usage, showing all default configuration values:
 ExpressionConfiguration configuration=ExpressionConfiguration.builder()
         .allowOverwriteConstants(true)
         .arraysAllowed(true)
+        .dateTimeFormatters(ExpressionConfiguration.DEFAULT_DATE_TIME_FORMATTERS)
         .dataAccessorSupplier(MapBasedDataAccessor::new)
         .decimalPlacesRounding(ExpressionConfiguration.DECIMAL_PLACES_ROUNDING_UNLIMITED)
         .defaultConstants(ExpressionConfiguration.StandardConstants)
         .functionDictionary(ExpressionConfiguration.StandardFunctionsDictionary)
         .implicitMultiplicationAllowed(true)
+        .locale(Locale.getDefault())
         .mathContext(ExpressionConfiguration.DEFAULT_MATH_CONTEXT)
         .operatorDictionary(ExpressionConfiguration.StandardOperatorsDictionary)
         .powerOfPrecedence(OperatorIfc.OPERATOR_PRECEDENCE_POWER)
         .stripTrailingZeros(true)
         .structuresAllowed(true)
         .singleQuoteStringLiteralsAllowed(false)
+        .zoneId(ZoneId.systemDefault())
         .build();
 
         Expression expression=new Expression("2.128 + a",configuration);
@@ -112,6 +115,10 @@ An expression like "2(a+b)" will be expanded to "2*(a+b)".
 
 By default, implicit multiplication is enabled. It can be disabled with this configuration
 parameter.
+
+### Locale
+
+The locale to use for number and date time formatting. By default, the system default locale is used.
 
 ### Math Context
 

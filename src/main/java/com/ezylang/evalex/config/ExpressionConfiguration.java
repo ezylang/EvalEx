@@ -270,6 +270,9 @@ public class ExpressionConfiguration {
   /** The time zone id. By default, the system default zone ID is used. */
   @Builder.Default @Getter private final ZoneId zoneId = ZoneId.systemDefault();
 
+  /** The locale. By default, the system default locale is used. */
+  @Builder.Default @Getter private final Locale locale = Locale.getDefault();
+
   /**
    * The date-time formatters. When parsing, each format will be tried and the first matching will
    * be used. For formatting, only the first will be used.
