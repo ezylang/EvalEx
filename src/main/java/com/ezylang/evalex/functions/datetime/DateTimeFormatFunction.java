@@ -40,7 +40,9 @@ public class DateTimeFormatFunction extends AbstractFunction {
 
     DateTimeFormatter formatter = expression.getConfiguration().getDateTimeFormatters().get(0);
     if (parameterValues.length > 1) {
-      formatter = DateTimeFormatter.ofPattern(parameterValues[1].getStringValue());
+      formatter =
+          DateTimeFormatter.ofPattern(parameterValues[1].getStringValue())
+              .withLocale(expression.getConfiguration().getLocale());
     }
 
     ZoneId zoneId = expression.getConfiguration().getZoneId();

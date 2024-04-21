@@ -25,6 +25,7 @@ import com.ezylang.evalex.operators.PrefixOperator;
 import com.ezylang.evalex.parser.Token;
 import java.math.BigDecimal;
 import java.time.ZoneId;
+import java.util.Locale;
 import java.util.Map;
 
 public class TestConfigurationProvider {
@@ -32,12 +33,24 @@ public class TestConfigurationProvider {
   public static final ExpressionConfiguration StandardConfigurationWithAdditionalTestOperators =
       ExpressionConfiguration.builder()
           .zoneId(ZoneId.of("Europe/Berlin"))
+          .locale(Locale.US)
           .build()
           .withAdditionalOperators(
               Map.entry("++", new PrefixPlusPlusOperator()),
               Map.entry("++", new PostfixPlusPlusOperator()),
               Map.entry("?", new PostfixQuestionOperator()))
           .withAdditionalFunctions(Map.entry("TEST", new DummyFunction()));
+
+  public static ExpressionConfiguration GermanConfiguration =
+      ExpressionConfiguration.builder()
+          .zoneId(ZoneId.of("Europe/Berlin"))
+          .locale(Locale.GERMAN)
+          .build();
+  public static ExpressionConfiguration ChicagoConfiguration =
+      ExpressionConfiguration.builder()
+          .zoneId(ZoneId.of("America/Chicago"))
+          .locale(Locale.ENGLISH)
+          .build();
 
   @FunctionParameter(name = "input", isVarArg = true)
   public static class DummyFunction extends AbstractFunction {

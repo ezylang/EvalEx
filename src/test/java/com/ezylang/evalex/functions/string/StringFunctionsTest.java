@@ -17,16 +17,12 @@ package com.ezylang.evalex.functions.string;
 
 import com.ezylang.evalex.BaseEvaluationTest;
 import com.ezylang.evalex.EvaluationException;
+import com.ezylang.evalex.config.TestConfigurationProvider;
 import com.ezylang.evalex.parser.ParseException;
-import java.util.Locale;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 
 class StringFunctionsTest extends BaseEvaluationTest {
-
-  static {
-    Locale.setDefault(Locale.ENGLISH);
-  }
 
   @ParameterizedTest
   @CsvSource(
@@ -113,6 +109,7 @@ class StringFunctionsTest extends BaseEvaluationTest {
   @CsvSource(
       delimiter = ':',
       value = {
+        "STR_FORMAT(\"True False %b %b\", true, false) : True False true false",
         "STR_FORMAT(\"Welcome to %s!\", \"EvalEx\") : Welcome to EvalEx!",
         "STR_FORMAT(\"%s is %.2f\", \"Result\", 11.1) : Result is 11.10",
         "STR_FORMAT(\"%1$s_%3$s_%2$s\", \"foo\", \"baz\", \"bar\") : foo_bar_baz",
@@ -122,5 +119,36 @@ class StringFunctionsTest extends BaseEvaluationTest {
   void testFormat(String expression, String expectedResult)
       throws EvaluationException, ParseException {
     assertExpressionHasExpectedResult(expression, expectedResult);
+  }
+
+  @ParameterizedTest
+  @CsvSource(
+      delimiter = '|',
+      value = {
+        "STR_FORMAT(\"Float %.2f\", 11.1) | Float 11,10",
+        "STR_FORMAT(\"Float %.4f\", 12345678.987) | Float 12345678,9870",
+        "STR_FORMAT(\"%TD\", DT_DATE_NEW(2024, 4, 21)) | 04/21/24",
+        "STR_FORMAT(\"%Tc\", DT_DATE_NEW(2024, 4, 21, 11, 35, 59)) | SO. APR. 21 11:35:59 MESZ"
+            + " 2024",
+      })
+  void testFormatBerlin(String expression, String expectedResult)
+      throws EvaluationException, ParseException {
+    assertExpressionHasExpectedResult(
+        expression, expectedResult, TestConfigurationProvider.GermanConfiguration);
+  }
+
+  @ParameterizedTest
+  @CsvSource(
+      delimiter = '|',
+      value = {
+        "STR_FORMAT(\"Float %.2f\", 11.1) | Float 11.10",
+        "STR_FORMAT(\"Float %.4f\", 12345678.987) | Float 12345678.9870",
+        "STR_FORMAT(\"%TD\", DT_DATE_NEW(2024, 4, 21)) | 04/21/24",
+        "STR_FORMAT(\"%Tc\", DT_DATE_NEW(2024, 4, 21, 11, 35, 59)) | SUN APR 21 11:35:59 CDT 2024",
+      })
+  void testFormatChicago(String expression, String expectedResult)
+      throws EvaluationException, ParseException {
+    assertExpressionHasExpectedResult(
+        expression, expectedResult, TestConfigurationProvider.ChicagoConfiguration);
   }
 }

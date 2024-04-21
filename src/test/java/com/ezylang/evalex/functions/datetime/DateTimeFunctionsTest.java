@@ -29,6 +29,7 @@ import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.temporal.ChronoUnit;
+import java.util.Locale;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
@@ -315,5 +316,27 @@ class DateTimeFunctionsTest extends BaseEvaluationTest {
   void testDurationString() throws EvaluationException, ParseException {
     assertExpressionHasExpectedResult(
         "\"Value: \" + DT_DURATION_PARSE(\"P1DT3H4M5S\")", "Value: PT27H4M5S");
+  }
+
+  @Test
+  void testFormatBerlin() throws EvaluationException, ParseException {
+    assertExpressionHasExpectedResult(
+        "DT_DATE_FORMAT(DT_DATE_NEW(2022,10,30,11,50,20), \"EEE, d MMM yyyy HH:mm:ss Z\")",
+        "So., 30 Okt. 2022 11:50:20 +0100",
+        ExpressionConfiguration.builder()
+            .locale(Locale.GERMAN)
+            .zoneId(ZoneId.of("Europe/Berlin"))
+            .build());
+  }
+
+  @Test
+  void testFormatChicago() throws EvaluationException, ParseException {
+    assertExpressionHasExpectedResult(
+        "DT_DATE_FORMAT(DT_DATE_NEW(2022,10,30,11,50,20), \"EEE, d MMM yyyy HH:mm:ss Z\")",
+        "Sun, 30 Oct 2022 11:50:20 -0500",
+        ExpressionConfiguration.builder()
+            .locale(Locale.US)
+            .zoneId(ZoneId.of("America/Chicago"))
+            .build());
   }
 }

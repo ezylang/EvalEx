@@ -24,7 +24,9 @@ import com.ezylang.evalex.data.MapBasedDataAccessor;
 import com.ezylang.evalex.operators.OperatorIfc;
 import com.ezylang.evalex.operators.arithmetic.InfixPlusOperator;
 import java.math.MathContext;
+import java.time.ZoneId;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -54,6 +56,8 @@ class ExpressionConfigurationTest {
         .isEqualTo(ExpressionConfiguration.DECIMAL_PLACES_ROUNDING_UNLIMITED);
     assertThat(configuration.isStripTrailingZeros()).isTrue();
     assertThat(configuration.isAllowOverwriteConstants()).isTrue();
+    assertThat(configuration.getZoneId()).isEqualTo(ZoneId.systemDefault());
+    assertThat(configuration.getLocale()).isEqualTo(Locale.getDefault());
     assertThat(configuration.isSingleQuoteStringLiteralsAllowed()).isFalse();
   }
 
@@ -165,6 +169,48 @@ class ExpressionConfigurationTest {
         ExpressionConfiguration.builder().singleQuoteStringLiteralsAllowed(true).build();
 
     assertThat(configuration.isSingleQuoteStringLiteralsAllowed()).isTrue();
+  }
+
+  @Test
+  void testDecimalPlacesRounding() {
+    ExpressionConfiguration configuration =
+        ExpressionConfiguration.builder().decimalPlacesRounding(2).build();
+
+    assertThat(configuration.getDecimalPlacesRounding()).isEqualTo(2);
+  }
+
+  @Test
+  void testStripTrailingZeros() {
+    ExpressionConfiguration configuration =
+        ExpressionConfiguration.builder().stripTrailingZeros(false).build();
+
+    assertThat(configuration.isStripTrailingZeros()).isFalse();
+  }
+
+  @Test
+  void testAllowOverwriteConstants() {
+    ExpressionConfiguration configuration =
+        ExpressionConfiguration.builder().allowOverwriteConstants(false).build();
+
+    assertThat(configuration.isAllowOverwriteConstants()).isFalse();
+  }
+
+  @Test
+  void testZoneId() {
+    ZoneId zoneId = ZoneId.of("Asia/Shanghai");
+    ExpressionConfiguration configuration =
+        ExpressionConfiguration.builder().zoneId(zoneId).build();
+
+    assertThat(configuration.getZoneId()).isEqualTo(zoneId);
+  }
+
+  @Test
+  void testLocale() {
+    Locale locale = Locale.CHINA;
+    ExpressionConfiguration configuration =
+        ExpressionConfiguration.builder().locale(locale).build();
+
+    assertThat(configuration.getLocale()).isEqualTo(locale);
   }
 
   @Test

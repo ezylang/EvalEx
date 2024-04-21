@@ -16,14 +16,19 @@
 package com.ezylang.evalex.functions.string;
 
 import com.ezylang.evalex.Expression;
+import com.ezylang.evalex.config.ExpressionConfiguration;
 import com.ezylang.evalex.data.EvaluationValue;
 import com.ezylang.evalex.functions.AbstractFunction;
 import com.ezylang.evalex.functions.FunctionParameter;
 import com.ezylang.evalex.parser.Token;
+import java.time.Instant;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.stream.IntStream;
 
 /**
- * Returns a formatted string using the specified format string and arguments.
+ * Returns a formatted string using the specified format string and arguments, using the configured
+ * locale.
  *
  * <p>For example:
  *
@@ -44,17 +49,37 @@ public class StringFormatFunction extends AbstractFunction {
   public EvaluationValue evaluate(
       Expression expression, Token functionToken, EvaluationValue... parameterValues) {
     String format = parameterValues[0].getStringValue();
-    Object[] arguments = getArguments(parameterValues);
-    return expression.convertValue(String.format(format, arguments));
+    Object[] arguments = getFormatArguments(parameterValues, expression.getConfiguration());
+    return expression.convertValue(
+        String.format(expression.getConfiguration().getLocale(), format, arguments));
   }
 
-  private Object[] getArguments(EvaluationValue[] parameterValues) {
+  private Object[] getFormatArguments(
+      EvaluationValue[] parameterValues, ExpressionConfiguration configuration) {
     if (parameterValues.length > 1) {
-      return IntStream.range(1, parameterValues.length)
-          .mapToObj(i -> parameterValues[i])
-          .map(EvaluationValue::getValue)
-          .toArray();
+      return convertParametersToObjects(parameterValues, configuration);
     }
     return new Object[0];
+  }
+
+  private Object[] convertParametersToObjects(
+      EvaluationValue[] parameterValues, ExpressionConfiguration configuration) {
+    return IntStream.range(1, parameterValues.length)
+        .mapToObj(i -> convertParameterToObject(parameterValues[i], configuration))
+        .toArray();
+  }
+
+  private Object convertParameterToObject(
+      EvaluationValue parameterValue, ExpressionConfiguration configuration) {
+    if (parameterValue.isDateTimeValue()) {
+      return convertInstantToLocalDateTime(
+          parameterValue.getDateTimeValue(), configuration.getZoneId());
+    } else {
+      return parameterValue.getValue();
+    }
+  }
+
+  private ZonedDateTime convertInstantToLocalDateTime(Instant instant, ZoneId zoneId) {
+    return instant.atZone(zoneId);
   }
 }
