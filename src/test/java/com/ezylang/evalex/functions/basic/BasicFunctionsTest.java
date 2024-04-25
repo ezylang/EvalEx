@@ -362,4 +362,30 @@ class BasicFunctionsTest extends BaseEvaluationTest {
       assertThat(evaluationValue.getStringValue()).isEqualTo(expectedResult);
     }
   }
+
+  @ParameterizedTest
+  @CsvSource(
+      delimiter = ':',
+      value = {
+        "AVERAGE(99) : 99",
+        "AVERAGE(1,2) : 1.5",
+        "AVERAGE(1,3) : 2",
+        "AVERAGE(1.999,2) : 1.9995",
+        "AVERAGE(-5,0,5) : 0",
+        "AVERAGE(10,15,32) : 19",
+        "AVERAGE(7,9,27,2) : 11.25",
+        "AVERAGE(7,9,27,2,5) : 10",
+        "AVERAGE(-7,-9,-27,-2,-5) : -10"
+      })
+  void testAverage(String expression, String expectedResult)
+      throws EvaluationException, ParseException {
+    assertExpressionHasExpectedResult(expression, expectedResult);
+  }
+
+  @Test
+  void testAverageThrowsException() {
+    assertThatThrownBy(() -> new Expression("AVERAGE()").evaluate())
+        .isInstanceOf(ParseException.class)
+        .hasMessage("Not enough parameters for function");
+  }
 }
