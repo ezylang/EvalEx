@@ -14,6 +14,7 @@ Available through the _ExpressionConfiguration.StandardFunctionsDictionary_ cons
 | Name                                       | Description                                                                                                                |
 |--------------------------------------------|----------------------------------------------------------------------------------------------------------------------------|
 | ABS(value)                                 | Absolute (non-negative) value                                                                                              |
+| AVERAGE(value, ...)                        | Returns the average (arithmetic mean) of all parameters.                                                                   |
 | CEILING(value)                             | Rounds the given value an integer using the rounding mode CEILING                                                          |
 | COALESCE(value, ...)                       | Returns the first non-null parameter, or NULL if all parameters are null                                                   |
 | FACT(base)                                 | Calculates the factorial of a base value                                                                                   |
