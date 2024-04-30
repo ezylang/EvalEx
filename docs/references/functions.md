@@ -11,24 +11,25 @@ Available through the _ExpressionConfiguration.StandardFunctionsDictionary_ cons
 
 ### Basic Functions
 
-| Name                                       | Description                                                                                                                |
-|--------------------------------------------|----------------------------------------------------------------------------------------------------------------------------|
-| ABS(value)                                 | Absolute (non-negative) value                                                                                              |
-| AVERAGE(value, ...)                        | Returns the average (arithmetic mean) of all parameters.                                                                   |
-| CEILING(value)                             | Rounds the given value an integer using the rounding mode CEILING                                                          |
-| COALESCE(value, ...)                       | Returns the first non-null parameter, or NULL if all parameters are null                                                   |
-| FACT(base)                                 | Calculates the factorial of a base value                                                                                   |
-| FLOOR(value)                               | Rounds the given value an integer using the rounding mode FLOOR                                                            |
-| IF(condition, resultIfTrue, resultIfFalse) | Conditional evaluation function. If _condition_ is true, the _resultIfTrue_ is returned, else the _resultIfFalse_ value    |
-| LOG(value)                                 | The natural logarithm (base e) of a value                                                                                  |
-| LOG10(value)                               | The base 10 logarithm of a value                                                                                           |
-| MAX(value, ...)                            | Returns the maximum value of all parameters. If a parameter is of type _ARRAY_, the maximum of all elements is calculated. |
-| MIN(value, ...)                            | Returns the minimum value of all parameters. If a parameter is of type _ARRAY_, the minimum of all elements is calculated. |
-| NOT(value)                                 | Boolean negation, implemented as a function (for compatibility)                                                            |
-| RANDOM()                                   | Produces a random value between 0 and 1                                                                                    |
-| ROUND(value, scale)                        | Rounds the given value to the specified scale, using the current rounding mode                                             |
-| SQRT(value)                                | Square root function                                                                                                       |
-| SUM(value, ...)                            | Returns the sum of all parameters. If a parameter is of type _ARRAY_, the sum of all elements is calculated.               |
+| Name                                                                      | Description                                                                                                                                     |
+|---------------------------------------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------|
+| ABS(value)                                                                | Absolute (non-negative) value                                                                                                                   |
+| AVERAGE(value, ...)                                                       | Returns the average (arithmetic mean) of all parameters.                                                                                        |
+| CEILING(value)                                                            | Rounds the given value an integer using the rounding mode CEILING                                                                               |
+| COALESCE(value, ...)                                                      | Returns the first non-null parameter, or NULL if all parameters are null                                                                        |
+| FACT(base)                                                                | Calculates the factorial of a base value                                                                                                        |
+| FLOOR(value)                                                              | Rounds the given value an integer using the rounding mode FLOOR                                                                                 |
+| IF(condition, resultIfTrue, resultIfFalse)                                | Conditional evaluation function. If _condition_ is true, the _resultIfTrue_ is returned, else the _resultIfFalse_ value                         |
+| LOG(value)                                                                | The natural logarithm (base e) of a value                                                                                                       |
+| LOG10(value)                                                              | The base 10 logarithm of a value                                                                                                                |
+| MAX(value, ...)                                                           | Returns the maximum value of all parameters. If a parameter is of type _ARRAY_, the maximum of all elements is calculated.                      |
+| MIN(value, ...)                                                           | Returns the minimum value of all parameters. If a parameter is of type _ARRAY_, the minimum of all elements is calculated.                      |
+| NOT(value)                                                                | Boolean negation, implemented as a function (for compatibility)                                                                                 |
+| RANDOM()                                                                  | Produces a random value between 0 and 1                                                                                                         |
+| ROUND(value, scale)                                                       | Rounds the given value to the specified scale, using the current rounding mode                                                                  |
+| SQRT(value)                                                               | Square root function                                                                                                                            |
+| SUM(value, ...)                                                           | Returns the sum of all parameters. If a parameter is of type _ARRAY_, the sum of all elements is calculated.                                    |
+| SWITCH(expression, value1, result1, [value2-N, result2-N ...], [default]) | Returns the _result_ correponding to the first matching _value_ in the specified _expression_ or an optional _default_ value if no match found. |
 
 ### String Functions
 
