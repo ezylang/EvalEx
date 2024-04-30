@@ -35,7 +35,10 @@ import lombok.Value;
  * corresponding object type.
  */
 @Value
-public class EvaluationValue implements Comparable<EvaluationValue> {
+public final class EvaluationValue implements Comparable<EvaluationValue> {
+
+  /** A pre-built, immutable, null value. */
+  private static final EvaluationValue NULL_VALUE = new EvaluationValue(null, DataType.NULL);
 
   /** Return value for a null {@link DataType#BOOLEAN}. */
   private static final Boolean NULL_BOOLEAN = null;
@@ -120,12 +123,12 @@ public class EvaluationValue implements Comparable<EvaluationValue> {
   }
 
   /**
-   * Creates a new null value.
+   * Returns a null value (immutable).
    *
-   * @return A new null value.
+   * @return A null value.
    */
   public static EvaluationValue nullValue() {
-    return new EvaluationValue(null, DataType.NULL);
+    return NULL_VALUE;
   }
 
   /**
