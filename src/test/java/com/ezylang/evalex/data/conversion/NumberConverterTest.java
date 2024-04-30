@@ -22,7 +22,6 @@ import com.ezylang.evalex.config.ExpressionConfiguration;
 import com.ezylang.evalex.data.EvaluationValue;
 import java.math.BigDecimal;
 import java.math.BigInteger;
-
 import org.junit.jupiter.api.Test;
 
 class NumberConverterTest {
@@ -49,7 +48,7 @@ class NumberConverterTest {
     EvaluationValue converted = converter.convert(value, defaultConfiguration);
 
     assertThat(converted.getDataType()).isEqualTo(EvaluationValue.DataType.NUMBER);
-    assertThat(converted.getValue()).isEqualTo(value);
+    assertThat(converted.getNumberValue().toPlainString()).isEqualTo("23");
   }
 
   @Test
