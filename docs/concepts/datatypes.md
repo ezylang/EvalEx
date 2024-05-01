@@ -34,6 +34,7 @@ automatically be converted from one of the following Java data types:
 - byte
 - double
 - float
+- java.math.BigInteger
 
 Be careful when passing double or float values, as these have to be converted from their
 floating-point arithmetic representation to a BigDecimal representation, which stores values a
