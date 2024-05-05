@@ -142,8 +142,9 @@ public class ExpressionConfiguration {
           Map.entry("NOT", new NotFunction()),
           Map.entry("RANDOM", new RandomFunction()),
           Map.entry("ROUND", new RoundFunction()),
-          Map.entry("SUM", new SumFunction()),
           Map.entry("SQRT", new SqrtFunction()),
+          Map.entry("SUM", new SumFunction()),
+          Map.entry("SWITCH", new SwitchFunction()),
           // trigonometric
           Map.entry("ACOS", new AcosFunction()),
           Map.entry("ACOSH", new AcosHFunction()),

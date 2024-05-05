@@ -69,6 +69,31 @@ class BasicFunctionsTest extends BaseEvaluationTest {
   @CsvSource(
       delimiter = ':',
       value = {
+        "SWITCH(1,     1, \"one\", 2, \"two\") : one",
+        "SWITCH(1+1,   1, \"one\", 2, \"two\") : two",
+        "SWITCH(9 ,    1, \"one\", 2, \"two\") : ",
+        "SWITCH(9-8,   1, \"one\", 2, \"two\", \"n/a\") : one",
+        "SWITCH(2,     1, \"one\", 2, \"two\", \"n/a\") : two",
+        "SWITCH(\"a\", 1, \"one\", 2, \"two\", \"n/a\") : n/a",
+        "SWITCH(true,  true, \"Y\", \"N\") : Y",
+        "SWITCH(false, true, \"Y\", \"N\") : N",
+        "SWITCH(0,     true, \"Y\", \"N\") : N",
+        "SWITCH(null,  5,    50, 90) : 90",
+        "SWITCH(null,  null, 50, 90) : 50",
+        // The following divisions by zero are not supposed to occur due to lazy parameters
+        "SWITCH(\"BR\", \"BR\", \"result\"+123, \"DE\", 3/0, 2/0) : result123",
+        "SWITCH(\"DE\", \"BR\", 3/0, \"DE\", \"result\"+\"ABC\", 2/0) : resultABC",
+        "SWITCH(1000+900+10, 1909+1, \"OK\", 10/0, \"impossible\") : OK"
+      })
+  void testSwitch(String expression, String expectedResult)
+      throws EvaluationException, ParseException {
+    assertExpressionHasExpectedResult(expression, expectedResult);
+  }
+
+  @ParameterizedTest
+  @CsvSource(
+      delimiter = ':',
+      value = {
         "MAX(99) : 99",
         "MAX(2,1) : 2",
         "MAX(1,9,-5,6,3,7) : 9",
