@@ -30,12 +30,7 @@ class ExpressionEvaluatorStructureTest extends BaseExpressionEvaluatorTest {
 
   @Test
   void testStructureScientificNumberDistinction() throws EvaluationException, ParseException {
-    Map<String, BigDecimal> structure =
-        new HashMap<>() {
-          {
-            put("environment_id", new BigDecimal(12345));
-          }
-        };
+    Map<String, BigDecimal> structure = Map.of("environment_id", new BigDecimal(12345));
     Expression expression = new Expression("order.environment_id").with("order", structure);
 
     assertThat(expression.evaluate().getStringValue()).isEqualTo("12345");
@@ -59,12 +54,7 @@ class ExpressionEvaluatorStructureTest extends BaseExpressionEvaluatorTest {
 
   @Test
   void testSimpleStructure() throws ParseException, EvaluationException {
-    Map<String, BigDecimal> structure =
-        new HashMap<>() {
-          {
-            put("b", new BigDecimal(99));
-          }
-        };
+    Map<String, BigDecimal> structure = Map.of("b", new BigDecimal(99));
 
     Expression expression = createExpression("a.b").with("a", structure);
 
@@ -75,12 +65,7 @@ class ExpressionEvaluatorStructureTest extends BaseExpressionEvaluatorTest {
   void testTripleStructure() throws ParseException, EvaluationException {
     Map<String, Map<String, BigDecimal>> structure = new HashMap<>();
 
-    Map<String, BigDecimal> subStructure =
-        new HashMap<>() {
-          {
-            put("c", new BigDecimal(95));
-          }
-        };
+    Map<String, BigDecimal> subStructure = Map.of("c", new BigDecimal(95));
 
     structure.put("b", subStructure);
 
@@ -133,12 +118,7 @@ class ExpressionEvaluatorStructureTest extends BaseExpressionEvaluatorTest {
 
   @Test
   void testStructureWithSpaceInNameAndArrayAccess() throws EvaluationException, ParseException {
-    Map<String, List<Integer>> structure =
-        new HashMap<>() {
-          {
-            put("b prop", Arrays.asList(1, 2, 3));
-          }
-        };
+    Map<String, List<Integer>> structure = Map.of("b prop", Arrays.asList(1, 2, 3));
 
     Expression expression = createExpression("a.\"b prop\"[1]").with("a", structure);
 

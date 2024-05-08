@@ -52,12 +52,9 @@ class ExpressionEvaluatorConstantsTest extends BaseExpressionEvaluatorTest {
   @Test
   void testCustomConstantsMixedCase() throws EvaluationException, ParseException {
     Map<String, EvaluationValue> constants =
-        new HashMap<>() {
-          {
-            put("A", EvaluationValue.numberValue(new BigDecimal("2.5")));
-            put("B", EvaluationValue.numberValue(new BigDecimal("3.9")));
-          }
-        };
+        Map.of(
+            "A", EvaluationValue.numberValue(new BigDecimal("2.5")),
+            "B", EvaluationValue.numberValue(new BigDecimal("3.9")));
 
     ExpressionConfiguration configuration =
         ExpressionConfiguration.builder().defaultConstants(constants).build();

@@ -21,7 +21,6 @@ import com.ezylang.evalex.config.ExpressionConfiguration;
 import com.ezylang.evalex.data.EvaluationValue;
 import com.ezylang.evalex.parser.ParseException;
 import java.math.BigDecimal;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import org.junit.jupiter.api.Test;
@@ -65,12 +64,7 @@ class ExpressionEvaluatorDecimalPlacesTest extends BaseExpressionEvaluatorTest {
 
   @Test
   void testDefaultNoRoundingStructure() throws ParseException, EvaluationException {
-    Map<String, BigDecimal> structure =
-        new HashMap<>() {
-          {
-            put("b", new BigDecimal("1.12345"));
-          }
-        };
+    Map<String, BigDecimal> structure = Map.of("b", new BigDecimal("1.12345"));
 
     Expression expression = createExpression("a.b").with("a", structure);
 
@@ -138,12 +132,7 @@ class ExpressionEvaluatorDecimalPlacesTest extends BaseExpressionEvaluatorTest {
   void testCustomRoundingStructure() throws ParseException, EvaluationException {
     ExpressionConfiguration config =
         ExpressionConfiguration.builder().decimalPlacesRounding(3).build();
-    Map<String, BigDecimal> structure =
-        new HashMap<>() {
-          {
-            put("b", new BigDecimal("1.12345"));
-          }
-        };
+    Map<String, BigDecimal> structure = Map.of("b", new BigDecimal("1.12345"));
 
     Expression expression = new Expression("a.b", config).with("a", structure);
 
