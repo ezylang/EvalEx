@@ -531,6 +531,13 @@ class EvaluationValueTest {
   }
 
   @Test
+  void testNullValueSameInstance() {
+    EvaluationValue nullValue1 = EvaluationValue.nullValue();
+    EvaluationValue nullValue2 = EvaluationValue.nullValue();
+    assertThat(nullValue1).isSameAs(nullValue2);
+  }
+
+  @Test
   void nestedEvaluationValue() {
     try {
       EvaluationValue value1 = new EvaluationValue("Hello", defaultConfiguration());
