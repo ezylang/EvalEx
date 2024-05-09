@@ -344,8 +344,8 @@ public class ExpressionConfiguration {
 
     Map<String, EvaluationValue> constants = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
 
-    constants.put("TRUE", EvaluationValue.booleanValue(true));
-    constants.put("FALSE", EvaluationValue.booleanValue(false));
+    constants.put("TRUE", EvaluationValue.TRUE);
+    constants.put("FALSE", EvaluationValue.FALSE);
     constants.put(
         "PI",
         EvaluationValue.numberValue(
