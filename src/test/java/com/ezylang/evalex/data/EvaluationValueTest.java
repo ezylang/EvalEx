@@ -125,6 +125,16 @@ class EvaluationValueTest {
   }
 
   @Test
+  void testBooleanValueSameInstances() {
+    assertThat(EvaluationValue.booleanValue(Boolean.TRUE)).isSameAs(EvaluationValue.TRUE);
+    assertThat(EvaluationValue.booleanValue(true)).isSameAs(EvaluationValue.TRUE);
+
+    assertThat(EvaluationValue.booleanValue(Boolean.FALSE)).isSameAs(EvaluationValue.FALSE);
+    assertThat(EvaluationValue.booleanValue(false)).isSameAs(EvaluationValue.FALSE);
+    assertThat(EvaluationValue.booleanValue(null)).isSameAs(EvaluationValue.FALSE);
+  }
+
+  @Test
   void testInstant() {
     Instant instant = Instant.parse("2022-10-30T00:00:00Z");
     EvaluationValue value = new EvaluationValue(instant, defaultConfiguration());
