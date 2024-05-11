@@ -25,7 +25,6 @@ import com.ezylang.evalex.operators.OperatorIfc;
 import com.ezylang.evalex.operators.arithmetic.InfixPlusOperator;
 import java.math.MathContext;
 import java.time.ZoneId;
-import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 import org.junit.jupiter.api.Test;
@@ -135,12 +134,9 @@ class ExpressionConfigurationTest {
   @Test
   void testCustomConstants() {
     Map<String, EvaluationValue> constants =
-        new HashMap<>() {
-          {
-            put("A", EvaluationValue.stringValue("a"));
-            put("B", EvaluationValue.stringValue("b"));
-          }
-        };
+        Map.of(
+            "A", EvaluationValue.stringValue("a"),
+            "B", EvaluationValue.stringValue("b"));
     ExpressionConfiguration configuration =
         ExpressionConfiguration.builder().defaultConstants(constants).build();
 
