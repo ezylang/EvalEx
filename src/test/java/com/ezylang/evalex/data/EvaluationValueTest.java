@@ -548,24 +548,20 @@ class EvaluationValueTest {
   }
 
   @Test
-  void nestedEvaluationValue() {
-    try {
-      EvaluationValue value1 = EvaluationValue.of("Hello", defaultConfiguration());
-      EvaluationValue value2 = EvaluationValue.of("World", defaultConfiguration());
+  void nestedEvaluationValue() throws EvaluationException, ParseException {
+    EvaluationValue value1 = EvaluationValue.of("Hello", defaultConfiguration());
+    EvaluationValue value2 = EvaluationValue.of("World", defaultConfiguration());
 
-      Map<String, EvaluationValue> structure = new HashMap<>();
-      structure.put("a", value1);
-      structure.put("b", value2);
+    Map<String, EvaluationValue> structure = new HashMap<>();
+    structure.put("a", value1);
+    structure.put("b", value2);
 
-      EvaluationValue structureMap = EvaluationValue.of(structure, defaultConfiguration());
+    EvaluationValue structureMap = EvaluationValue.of(structure, defaultConfiguration());
 
-      Expression exp = new Expression("value.a == \"Hello\"").with("value", structureMap);
+    Expression exp = new Expression("value.a == \"Hello\"").with("value", structureMap);
 
-      EvaluationValue result = exp.evaluate();
-      assertThat(result.getBooleanValue()).isTrue();
-    } catch (EvaluationException | ParseException e) {
-      e.printStackTrace();
-    }
+    EvaluationValue result = exp.evaluate();
+    assertThat(result.getBooleanValue()).isTrue();
   }
 
   @Test

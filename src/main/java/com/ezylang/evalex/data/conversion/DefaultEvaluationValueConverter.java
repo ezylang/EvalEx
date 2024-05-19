@@ -55,7 +55,7 @@ import java.util.List;
  */
 public class DefaultEvaluationValueConverter implements EvaluationValueConverterIfc {
 
-  static List<ConverterIfc> converters =
+  static final List<ConverterIfc> converters =
       Arrays.asList(
           new NumberConverter(),
           new StringConverter(),

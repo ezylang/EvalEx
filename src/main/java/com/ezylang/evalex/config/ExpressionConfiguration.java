@@ -60,6 +60,7 @@ import lombok.Getter;
  * </pre>
  */
 @Builder(toBuilder = true)
+@Getter
 public class ExpressionConfiguration {
 
   /** The standard set constants for EvalEx. */
@@ -95,7 +96,6 @@ public class ExpressionConfiguration {
 
   /** The operator dictionary holds all operators that will be allowed in an expression. */
   @Builder.Default
-  @Getter
   @SuppressWarnings("unchecked")
   private final OperatorDictionaryIfc operatorDictionary =
       MapBasedOperatorDictionary.ofOperators(
@@ -123,7 +123,6 @@ public class ExpressionConfiguration {
 
   /** The function dictionary holds all functions that will be allowed in an expression. */
   @Builder.Default
-  @Getter
   @SuppressWarnings("unchecked")
   private final FunctionDictionaryIfc functionDictionary =
       MapBasedFunctionDictionary.ofFunctions(
@@ -200,7 +199,7 @@ public class ExpressionConfiguration {
           Map.entry("DT_TODAY", new DateTimeTodayFunction()));
 
   /** The math context to use. */
-  @Builder.Default @Getter private final MathContext mathContext = DEFAULT_MATH_CONTEXT;
+  @Builder.Default private final MathContext mathContext = DEFAULT_MATH_CONTEXT;
 
   /**
    * The data accessor is responsible for accessing variable and constant values in an expression.
@@ -208,34 +207,33 @@ public class ExpressionConfiguration {
    * MapBasedDataAccessor} instance for each expression, providing a new storage for each
    * expression.
    */
-  @Builder.Default @Getter
+  @Builder.Default
   private final Supplier<DataAccessorIfc> dataAccessorSupplier = MapBasedDataAccessor::new;
 
   /**
    * Default constants will be added automatically to each expression and can be used in expression
    * evaluation.
    */
-  @Builder.Default @Getter
+  @Builder.Default
   private final Map<String, EvaluationValue> defaultConstants = getStandardConstants();
 
   /** Support for arrays in expressions are allowed or not. */
-  @Builder.Default @Getter private final boolean arraysAllowed = true;
+  @Builder.Default private final boolean arraysAllowed = true;
 
   /** Support for structures in expressions are allowed or not. */
-  @Builder.Default @Getter private final boolean structuresAllowed = true;
+  @Builder.Default private final boolean structuresAllowed = true;
 
   /** Support for implicit multiplication, like in (a+b)(b+c) are allowed or not. */
-  @Builder.Default @Getter private final boolean implicitMultiplicationAllowed = true;
+  @Builder.Default private final boolean implicitMultiplicationAllowed = true;
 
   /** Support for single quote string literals, like in 'Hello World' are allowed or not. */
-  @Builder.Default @Getter private final boolean singleQuoteStringLiteralsAllowed = false;
+  @Builder.Default private final boolean singleQuoteStringLiteralsAllowed = false;
 
   /**
    * The power of operator precedence, can be set higher {@link
    * OperatorIfc#OPERATOR_PRECEDENCE_POWER_HIGHER} or to a custom value.
    */
-  @Builder.Default @Getter
-  private final int powerOfPrecedence = OperatorIfc.OPERATOR_PRECEDENCE_POWER;
+  @Builder.Default private final int powerOfPrecedence = OperatorIfc.OPERATOR_PRECEDENCE_POWER;
 
   /**
    * If specified, only the final result of the evaluation will be rounded to the specified number
@@ -243,8 +241,7 @@ public class ExpressionConfiguration {
    *
    * <p>The default value of _DECIMAL_PLACES_ROUNDING_UNLIMITED_ will disable rounding.
    */
-  @Builder.Default @Getter
-  private final int decimalPlacesResult = DECIMAL_PLACES_ROUNDING_UNLIMITED;
+  @Builder.Default private final int decimalPlacesResult = DECIMAL_PLACES_ROUNDING_UNLIMITED;
 
   /**
    * If specified, all results from operations and functions will be rounded to the specified number
@@ -255,25 +252,24 @@ public class ExpressionConfiguration {
    * specified number of decimal digits, using the current rounding mode. Using a value of
    * _DECIMAL_PLACES_ROUNDING_UNLIMITED_ will disable automatic rounding.
    */
-  @Builder.Default @Getter
-  private final int decimalPlacesRounding = DECIMAL_PLACES_ROUNDING_UNLIMITED;
+  @Builder.Default private final int decimalPlacesRounding = DECIMAL_PLACES_ROUNDING_UNLIMITED;
 
   /**
    * If set to true (default), then the trailing decimal zeros in a number result will be stripped.
    */
-  @Builder.Default @Getter private final boolean stripTrailingZeros = true;
+  @Builder.Default private final boolean stripTrailingZeros = true;
 
   /**
    * If set to true (default), then variables can be set that have the name of a constant. In that
    * case, the constant value will be removed and a variable value will be set.
    */
-  @Builder.Default @Getter private final boolean allowOverwriteConstants = true;
+  @Builder.Default private final boolean allowOverwriteConstants = true;
 
   /** The time zone id. By default, the system default zone ID is used. */
-  @Builder.Default @Getter private final ZoneId zoneId = ZoneId.systemDefault();
+  @Builder.Default private final ZoneId zoneId = ZoneId.systemDefault();
 
   /** The locale. By default, the system default locale is used. */
-  @Builder.Default @Getter private final Locale locale = Locale.getDefault();
+  @Builder.Default private final Locale locale = Locale.getDefault();
 
   /**
    * The date-time formatters. When parsing, each format will be tried and the first matching will
@@ -281,11 +277,11 @@ public class ExpressionConfiguration {
    *
    * <p>By default, the {@link ExpressionConfiguration#DEFAULT_DATE_TIME_FORMATTERS} are used.
    */
-  @Builder.Default @Getter
+  @Builder.Default
   private final List<DateTimeFormatter> dateTimeFormatters = DEFAULT_DATE_TIME_FORMATTERS;
 
   /** The converter to use when converting different data types to an {@link EvaluationValue}. */
-  @Builder.Default @Getter
+  @Builder.Default
   private final EvaluationValueConverterIfc evaluationValueConverter =
       new DefaultEvaluationValueConverter();
 

@@ -409,12 +409,10 @@ public class Tokenizer {
     // hexadecimal number, consume "0x"
     tokenValue.append((char) currentChar);
     consumeChar();
-    tokenValue.append((char) currentChar);
-    consumeChar();
-    while (currentChar != -1 && isAtHexChar()) {
+    do {
       tokenValue.append((char) currentChar);
       consumeChar();
-    }
+    } while (currentChar != -1 && isAtHexChar());
     return new Token(tokenStartIndex, tokenValue.toString(), TokenType.NUMBER_LITERAL);
   }
 
