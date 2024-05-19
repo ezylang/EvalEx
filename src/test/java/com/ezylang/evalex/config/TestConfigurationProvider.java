@@ -41,12 +41,12 @@ public class TestConfigurationProvider {
               Map.entry("?", new PostfixQuestionOperator()))
           .withAdditionalFunctions(Map.entry("TEST", new DummyFunction()));
 
-  public static ExpressionConfiguration GermanConfiguration =
+  public static final ExpressionConfiguration GermanConfiguration =
       ExpressionConfiguration.builder()
           .zoneId(ZoneId.of("Europe/Berlin"))
           .locale(Locale.GERMAN)
           .build();
-  public static ExpressionConfiguration ChicagoConfiguration =
+  public static final ExpressionConfiguration ChicagoConfiguration =
       ExpressionConfiguration.builder()
           .zoneId(ZoneId.of("America/Chicago"))
           .locale(Locale.ENGLISH)

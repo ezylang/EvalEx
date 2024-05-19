@@ -62,7 +62,7 @@ class ExpressionEvaluationMultiThreadedTest {
                 }
               }
             } catch (EvaluationException | ParseException e) {
-              e.printStackTrace();
+              System.err.printf("Exception adding decimals: %s%n", e.getMessage());
               errorCount.getAndIncrement();
             }
           });

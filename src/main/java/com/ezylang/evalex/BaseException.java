@@ -22,12 +22,13 @@ import lombok.ToString;
 /** Base exception class used in EvalEx. */
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = false)
 @ToString
+@Getter
 public class BaseException extends Exception {
 
-  @Getter @EqualsAndHashCode.Include private final int startPosition;
-  @Getter @EqualsAndHashCode.Include private final int endPosition;
-  @Getter @EqualsAndHashCode.Include private final String tokenString;
-  @Getter @EqualsAndHashCode.Include private final String message;
+  @EqualsAndHashCode.Include private final int startPosition;
+  @EqualsAndHashCode.Include private final int endPosition;
+  @EqualsAndHashCode.Include private final String tokenString;
+  @EqualsAndHashCode.Include private final String message;
 
   public BaseException(int startPosition, int endPosition, String tokenString, String message) {
     super(message);
