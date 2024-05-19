@@ -541,6 +541,24 @@ class EvaluationValueTest {
   }
 
   @Test
+  @SuppressWarnings("removal")
+  void testDeprecatedConstructor() {
+    ExpressionConfiguration expressionConfiguration =
+        ExpressionConfiguration.builder().mathContext(new MathContext(3)).build();
+    EvaluationValue evaluationValue =
+        new EvaluationValue(3.9876, expressionConfiguration); // NOSONAR - deprecated
+    assertThat(evaluationValue.getNumberValue()).isEqualByComparingTo("3.99");
+  }
+
+  @Test
+  @SuppressWarnings("removal")
+  void testNullValueSameInstance() {
+    EvaluationValue nullValue1 = EvaluationValue.nullValue(); // NOSONAR - deprecated
+    EvaluationValue nullValue2 = EvaluationValue.nullValue(); // NOSONAR - deprecated
+    assertThat(nullValue1).isSameAs(nullValue2);
+  }
+
+  @Test
   void nestedEvaluationValue() throws EvaluationException, ParseException {
     EvaluationValue value1 = EvaluationValue.of("Hello", defaultConfiguration());
     EvaluationValue value2 = EvaluationValue.of("World", defaultConfiguration());
@@ -555,26 +573,6 @@ class EvaluationValueTest {
 
     EvaluationValue result = exp.evaluate();
     assertThat(result.getBooleanValue()).isTrue();
-  }
-
-  @Test
-  @SuppressWarnings("removal")
-  void testDeprecatedDoubleMathContext() {
-    EvaluationValue evaluationValue64 =
-        new EvaluationValue(3.9876, MathContext.DECIMAL64); // NOSONAR - deprecated
-    assertThat(evaluationValue64.getNumberValue()).isEqualByComparingTo("3.9876");
-
-    EvaluationValue evaluationValue3 =
-        new EvaluationValue(3.9876, new MathContext(3)); // NOSONAR - deprecated
-    assertThat(evaluationValue3.getNumberValue()).isEqualByComparingTo("3.99");
-  }
-
-  @Test
-  @SuppressWarnings("removal")
-  void testDeprecatedConstructor() {
-    EvaluationValue value = new EvaluationValue("124"); // NOSONAR - deprecated
-    assertThat(value.isStringValue()).isTrue();
-    assertThat(value.getStringValue()).isEqualTo("124");
   }
 
   private void assertDataIsCorrect(

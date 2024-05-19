@@ -16,7 +16,6 @@
 package com.ezylang.evalex.data;
 
 import com.ezylang.evalex.config.ExpressionConfiguration;
-import com.ezylang.evalex.data.conversion.DefaultEvaluationValueConverter;
 import com.ezylang.evalex.parser.ASTNode;
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -86,19 +85,6 @@ public class EvaluationValue implements Comparable<EvaluationValue> {
   Object value;
 
   DataType dataType;
-
-  /**
-   * Creates a new evaluation value by using the default converter and configuration.
-   *
-   * @param value Any object that the default converter can convert.
-   * @throws IllegalArgumentException if the data type can't be mapped.
-   * @see DefaultEvaluationValueConverter
-   * @deprecated Use {@link EvaluationValue(Object, ExpressionConfiguration)} instead.
-   */
-  @Deprecated(since = "3.1.0", forRemoval = true)
-  public EvaluationValue(Object value) {
-    this(value, ExpressionConfiguration.defaultConfiguration());
-  }
 
   /**
    * Creates a new evaluation value by using the configured converter and configuration.
@@ -231,19 +217,6 @@ public class EvaluationValue implements Comparable<EvaluationValue> {
    */
   public static EvaluationValue structureValue(Map<?, ?> value) {
     return new EvaluationValue(value, DataType.STRUCTURE);
-  }
-
-  /**
-   * Creates a new evaluation value from a double value using the specified {@link MathContext}.
-   *
-   * @param value The double value.
-   * @param mathContext The math context to use.
-   * @deprecated since 3.1.0 - Use {@link EvaluationValue(Object, ExpressionConfiguration)}.
-   */
-  @Deprecated(since = "3.1.0", forRemoval = true)
-  public EvaluationValue(double value, MathContext mathContext) {
-    this.dataType = DataType.NUMBER;
-    this.value = new BigDecimal(Double.toString(value), mathContext);
   }
 
   /**
