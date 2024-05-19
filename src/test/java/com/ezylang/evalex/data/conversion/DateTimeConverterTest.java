@@ -70,7 +70,7 @@ class DateTimeConverterTest {
   void testLocalDateDaylightSaving() {
     LocalDate localDate = LocalDate.parse("2022-10-20");
 
-    EvaluationValue converted = new EvaluationValue(localDate, cetConfiguration);
+    EvaluationValue converted = EvaluationValue.of(localDate, cetConfiguration);
 
     assertThat(converted.getDataType()).isEqualTo(EvaluationValue.DataType.DATE_TIME);
     assertThat(converted.getValue().toString()).hasToString("2022-10-19T22:00:00Z");
@@ -80,7 +80,7 @@ class DateTimeConverterTest {
   void testLocalDateNoDaylightSaving() {
     LocalDate localDate = LocalDate.parse("2022-11-20");
 
-    EvaluationValue converted = new EvaluationValue(localDate, cetConfiguration);
+    EvaluationValue converted = EvaluationValue.of(localDate, cetConfiguration);
 
     assertThat(converted.getDataType()).isEqualTo(EvaluationValue.DataType.DATE_TIME);
     assertThat(converted.getValue().toString()).hasToString("2022-11-19T23:00:00Z");
@@ -90,7 +90,7 @@ class DateTimeConverterTest {
   void testLocalDateTimeDaylightSaving() {
     LocalDateTime localDateTime = LocalDateTime.parse("2022-10-20T11:21:30");
 
-    EvaluationValue converted = new EvaluationValue(localDateTime, cetConfiguration);
+    EvaluationValue converted = EvaluationValue.of(localDateTime, cetConfiguration);
 
     assertThat(converted.getDataType()).isEqualTo(EvaluationValue.DataType.DATE_TIME);
     assertThat(converted.getValue().toString()).hasToString("2022-10-20T09:21:30Z");
@@ -100,7 +100,7 @@ class DateTimeConverterTest {
   void testLocalDateTimeNoDaylightSaving() {
     LocalDateTime localDateTime = LocalDateTime.parse("2022-11-20T11:21:30");
 
-    EvaluationValue converted = new EvaluationValue(localDateTime, cetConfiguration);
+    EvaluationValue converted = EvaluationValue.of(localDateTime, cetConfiguration);
 
     assertThat(converted.getDataType()).isEqualTo(EvaluationValue.DataType.DATE_TIME);
     assertThat(converted.getValue().toString()).hasToString("2022-11-20T10:21:30Z");

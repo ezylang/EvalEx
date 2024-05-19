@@ -31,10 +31,10 @@ public class InfixNotEqualsOperator extends AbstractOperator {
   public EvaluationValue evaluate(
       Expression expression, Token operatorToken, EvaluationValue... operands) {
     if (operands[0].getDataType() != operands[1].getDataType()) {
-      return EvaluationValue.booleanValue(true);
+      return EvaluationValue.TRUE;
     }
     if (operands[0].isNullValue() && operands[1].isNullValue()) {
-      return EvaluationValue.booleanValue(false);
+      return EvaluationValue.FALSE;
     }
     return expression.convertValue(operands[0].compareTo(operands[1]) != 0);
   }

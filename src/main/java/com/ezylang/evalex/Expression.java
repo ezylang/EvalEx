@@ -367,7 +367,7 @@ public class Expression {
    * @return An {@link EvaluationValue} of the detected type and value.
    */
   public EvaluationValue convertValue(Object value) {
-    return new EvaluationValue(value, configuration);
+    return EvaluationValue.of(value, configuration);
   }
 
   /**

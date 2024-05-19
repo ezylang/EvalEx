@@ -35,7 +35,16 @@ import lombok.Value;
  * corresponding object type.
  */
 @Value
-public class EvaluationValue implements Comparable<EvaluationValue> {
+public final class EvaluationValue implements Comparable<EvaluationValue> {
+
+  /** A pre-built, immutable, null value. */
+  public static final EvaluationValue NULL_VALUE = new EvaluationValue(null, DataType.NULL);
+
+  /** A pre-built, immutable, <code>false</code> boolean value. */
+  public static final EvaluationValue FALSE = new EvaluationValue(false, DataType.BOOLEAN);
+
+  /** A pre-built, immutable, <code>true</code> boolean value. */
+  public static final EvaluationValue TRUE = new EvaluationValue(true, DataType.BOOLEAN);
 
   /** Return value for a null {@link DataType#BOOLEAN}. */
   private static final Boolean NULL_BOOLEAN = null;
@@ -98,7 +107,9 @@ public class EvaluationValue implements Comparable<EvaluationValue> {
    * @param configuration The expression configuration to use.
    * @throws IllegalArgumentException if the data type can't be mapped.
    * @see ExpressionConfiguration#getEvaluationValueConverter()
+   * @deprecated Use {@link EvaluationValue#of(Object, ExpressionConfiguration)} instead.
    */
+  @Deprecated(since = "3.2.0")
   public EvaluationValue(Object value, ExpressionConfiguration configuration) {
 
     EvaluationValue converted =
@@ -120,12 +131,24 @@ public class EvaluationValue implements Comparable<EvaluationValue> {
   }
 
   /**
-   * Creates a new null value.
+   * Creates a new evaluation value by using the configured converter and configuration.
    *
-   * @return A new null value.
+   * @param value One of the supported data types.
+   * @param configuration The expression configuration to use; not null
+   * @throws IllegalArgumentException if the data type can't be mapped.
+   * @see ExpressionConfiguration#getEvaluationValueConverter()
+   */
+  public static EvaluationValue of(Object value, ExpressionConfiguration configuration) {
+    return configuration.getEvaluationValueConverter().convertObject(value, configuration);
+  }
+
+  /**
+   * Returns a null value (immutable).
+   *
+   * @return A null value.
    */
   public static EvaluationValue nullValue() {
-    return new EvaluationValue(null, DataType.NULL);
+    return NULL_VALUE;
   }
 
   /**
@@ -155,7 +178,7 @@ public class EvaluationValue implements Comparable<EvaluationValue> {
    * @return the new boolean value.
    */
   public static EvaluationValue booleanValue(Boolean value) {
-    return new EvaluationValue(value, DataType.BOOLEAN);
+    return value != null && value.booleanValue() ? TRUE : FALSE;
   }
 
   /**

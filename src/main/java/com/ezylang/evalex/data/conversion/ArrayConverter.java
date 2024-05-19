@@ -46,7 +46,7 @@ public class ArrayConverter implements ConverterIfc {
   private static List<EvaluationValue> convertList(
       List<?> object, ExpressionConfiguration configuration) {
     return object.stream()
-        .map(element -> new EvaluationValue(element, configuration))
+        .map(element -> EvaluationValue.of(element, configuration))
         .collect(Collectors.toList());
   }
 
@@ -76,7 +76,7 @@ public class ArrayConverter implements ConverterIfc {
       int[] array, ExpressionConfiguration configuration) {
     List<EvaluationValue> list = new ArrayList<>();
     for (int i : array) {
-      list.add(new EvaluationValue(i, configuration));
+      list.add(EvaluationValue.of(i, configuration));
     }
     return list;
   }
@@ -85,7 +85,7 @@ public class ArrayConverter implements ConverterIfc {
       long[] array, ExpressionConfiguration configuration) {
     List<EvaluationValue> list = new ArrayList<>();
     for (long l : array) {
-      list.add(new EvaluationValue(l, configuration));
+      list.add(EvaluationValue.of(l, configuration));
     }
     return list;
   }
@@ -94,7 +94,7 @@ public class ArrayConverter implements ConverterIfc {
       double[] array, ExpressionConfiguration configuration) {
     List<EvaluationValue> list = new ArrayList<>();
     for (double d : array) {
-      list.add(new EvaluationValue(d, configuration));
+      list.add(EvaluationValue.of(d, configuration));
     }
     return list;
   }
@@ -103,7 +103,7 @@ public class ArrayConverter implements ConverterIfc {
       float[] array, ExpressionConfiguration configuration) {
     List<EvaluationValue> list = new ArrayList<>();
     for (float f : array) {
-      list.add(new EvaluationValue(f, configuration));
+      list.add(EvaluationValue.of(f, configuration));
     }
     return list;
   }
@@ -112,7 +112,7 @@ public class ArrayConverter implements ConverterIfc {
       short[] array, ExpressionConfiguration configuration) {
     List<EvaluationValue> list = new ArrayList<>();
     for (short s : array) {
-      list.add(new EvaluationValue(s, configuration));
+      list.add(EvaluationValue.of(s, configuration));
     }
     return list;
   }
@@ -121,7 +121,7 @@ public class ArrayConverter implements ConverterIfc {
       char[] array, ExpressionConfiguration configuration) {
     List<EvaluationValue> list = new ArrayList<>();
     for (char c : array) {
-      list.add(new EvaluationValue(c, configuration));
+      list.add(EvaluationValue.of(c, configuration));
     }
     return list;
   }
@@ -130,7 +130,7 @@ public class ArrayConverter implements ConverterIfc {
       byte[] array, ExpressionConfiguration configuration) {
     List<EvaluationValue> list = new ArrayList<>();
     for (byte b : array) {
-      list.add(new EvaluationValue(b, configuration));
+      list.add(EvaluationValue.of(b, configuration));
     }
     return list;
   }
@@ -139,7 +139,7 @@ public class ArrayConverter implements ConverterIfc {
       boolean[] array, ExpressionConfiguration configuration) {
     List<EvaluationValue> list = new ArrayList<>();
     for (boolean b : array) {
-      list.add(new EvaluationValue(b, configuration));
+      list.add(EvaluationValue.of(b, configuration));
     }
     return list;
   }
@@ -148,7 +148,7 @@ public class ArrayConverter implements ConverterIfc {
       Object[] array, ExpressionConfiguration configuration) {
     List<EvaluationValue> list = new ArrayList<>();
     for (Object o : array) {
-      list.add(new EvaluationValue(o, configuration));
+      list.add(EvaluationValue.of(o, configuration));
     }
     return list;
   }

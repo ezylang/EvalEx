@@ -27,7 +27,7 @@ public class StructureConverter implements ConverterIfc {
     Map<String, EvaluationValue> structure = new HashMap<>();
     for (Map.Entry<?, ?> entry : ((Map<?, ?>) object).entrySet()) {
       String name = entry.getKey().toString();
-      structure.put(name, new EvaluationValue(entry.getValue(), configuration));
+      structure.put(name, EvaluationValue.of(entry.getValue(), configuration));
     }
     return EvaluationValue.structureValue(structure);
   }
