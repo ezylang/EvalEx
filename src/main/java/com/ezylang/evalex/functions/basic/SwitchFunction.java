@@ -68,7 +68,7 @@ public class SwitchFunction extends AbstractFunction {
       Expression expression, Token functionToken, EvaluationValue... parameterValues)
       throws EvaluationException {
 
-    EvaluationValue result = EvaluationValue.nullValue();
+    EvaluationValue result = EvaluationValue.NULL_VALUE;
 
     // First get the first parameter
     EvaluationValue value = parameterValues[0];

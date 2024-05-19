@@ -22,8 +22,8 @@ import com.ezylang.evalex.functions.FunctionParameter;
 import com.ezylang.evalex.parser.Token;
 
 /**
- * Returns the first non-null parameter, or {@link EvaluationValue#nullValue()} if all parameters
- * are null.
+ * Returns the first non-null parameter, or {@link EvaluationValue#NULL_VALUE} if all parameters are
+ * null.
  */
 @FunctionParameter(name = "value", isVarArg = true)
 public class CoalesceFunction extends AbstractFunction {
@@ -35,6 +35,6 @@ public class CoalesceFunction extends AbstractFunction {
         return parameter;
       }
     }
-    return EvaluationValue.nullValue();
+    return EvaluationValue.NULL_VALUE;
   }
 }
