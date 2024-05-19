@@ -35,7 +35,7 @@ import lombok.Value;
  * corresponding object type.
  */
 @Value
-public final class EvaluationValue implements Comparable<EvaluationValue> {
+public class EvaluationValue implements Comparable<EvaluationValue> {
 
   /** A pre-built, immutable, null value. */
   public static final EvaluationValue NULL_VALUE = new EvaluationValue(null, DataType.NULL);
@@ -143,7 +143,7 @@ public final class EvaluationValue implements Comparable<EvaluationValue> {
   }
 
   /**
-   * Returns a null value (immutable).
+   * Returns an immutable null value.
    *
    * @return A null value.
    */
@@ -178,7 +178,7 @@ public final class EvaluationValue implements Comparable<EvaluationValue> {
    * @return the new boolean value.
    */
   public static EvaluationValue booleanValue(Boolean value) {
-    return value != null && value.booleanValue() ? TRUE : FALSE;
+    return value != null && value ? TRUE : FALSE;
   }
 
   /**
@@ -288,6 +288,7 @@ public final class EvaluationValue implements Comparable<EvaluationValue> {
   public boolean isDurationValue() {
     return getDataType() == DataType.DURATION;
   }
+
   /**
    * Checks if the value is of type {@link DataType#ARRAY}.
    *
