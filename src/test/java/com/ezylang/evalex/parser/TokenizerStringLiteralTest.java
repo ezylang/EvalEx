@@ -21,6 +21,8 @@ import com.ezylang.evalex.Expression;
 import com.ezylang.evalex.config.ExpressionConfiguration;
 import com.ezylang.evalex.parser.Token.TokenType;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 
 class TokenizerStringLiteralTest extends BaseParserTest {
 
@@ -118,34 +120,22 @@ class TokenizerStringLiteralTest extends BaseParserTest {
         new Token(15, "'World'", TokenType.STRING_LITERAL));
   }
 
-  @Test
-  void testErrorUnmatchedSingleQuoteStart() {
+  @ParameterizedTest
+  @CsvSource(
+      delimiter = ':',
+      quoteCharacter = '|',
+      value = {
+        "'hello : Closing quote not found",
+        "test 'hello : Closing quote not found",
+        "test\" : Closing quote not found"
+      })
+  void testUnmatchedQuotes(String input, String expectedMessage) {
     ExpressionConfiguration config =
         ExpressionConfiguration.builder().singleQuoteStringLiteralsAllowed(true).build();
 
-    assertThatThrownBy(() -> new Tokenizer("'hello", config).parse())
+    assertThatThrownBy(() -> new Tokenizer(input, config).parse())
         .isInstanceOf(ParseException.class)
-        .hasMessage("Closing quote not found");
-  }
-
-  @Test
-  void testErrorUnmatchedSingleQuoteOffset() {
-    ExpressionConfiguration config =
-        ExpressionConfiguration.builder().singleQuoteStringLiteralsAllowed(true).build();
-
-    assertThatThrownBy(() -> new Tokenizer("test 'hello", config).parse())
-        .isInstanceOf(ParseException.class)
-        .hasMessage("Closing quote not found");
-  }
-
-  @Test
-  void testErrorUnmatchedDelimiters() {
-    ExpressionConfiguration config =
-        ExpressionConfiguration.builder().singleQuoteStringLiteralsAllowed(true).build();
-
-    assertThatThrownBy(() -> new Tokenizer("'test\"", config).parse())
-        .isInstanceOf(ParseException.class)
-        .hasMessage("Closing quote not found");
+        .hasMessage(expectedMessage);
   }
 
   @Test

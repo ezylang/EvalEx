@@ -34,7 +34,7 @@ class ZoneIdConverterTest {
   }
 
   @Test
-  void testConversionFails() throws Exception {
+  void testConversionFails() {
     Token testToken = new Token(1, "Mars/Olympus_Mons", Token.TokenType.STRING_LITERAL);
 
     assertThatThrownBy(() -> ZoneIdConverter.convert(testToken, testToken.getValue()))
