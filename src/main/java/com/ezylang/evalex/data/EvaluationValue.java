@@ -109,7 +109,7 @@ public class EvaluationValue implements Comparable<EvaluationValue> {
    * @see ExpressionConfiguration#getEvaluationValueConverter()
    * @deprecated Use {@link EvaluationValue#of(Object, ExpressionConfiguration)} instead.
    */
-  @Deprecated(since = "3.2.0")
+  @Deprecated(since = "3.3.0", forRemoval = true)
   public EvaluationValue(Object value, ExpressionConfiguration configuration) {
 
     EvaluationValue converted =
@@ -146,7 +146,9 @@ public class EvaluationValue implements Comparable<EvaluationValue> {
    * Returns an immutable null value.
    *
    * @return A null value.
+   * @deprecated Use {@link EvaluationValue#NULL_VALUE} instead
    */
+  @Deprecated(since = "3.3.0", forRemoval = true)
   public static EvaluationValue nullValue() {
     return NULL_VALUE;
   }

@@ -70,7 +70,7 @@ public class DefaultEvaluationValueConverter implements EvaluationValueConverter
   public EvaluationValue convertObject(Object object, ExpressionConfiguration configuration) {
 
     if (object == null) {
-      return EvaluationValue.nullValue();
+      return EvaluationValue.NULL_VALUE;
     }
 
     if (object instanceof EvaluationValue) {

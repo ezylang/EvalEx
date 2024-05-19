@@ -352,7 +352,7 @@ public class ExpressionConfiguration {
         EvaluationValue.numberValue(
             new BigDecimal(
                 "2.71828182845904523536028747135266249775724709369995957496696762772407663")));
-    constants.put("NULL", EvaluationValue.nullValue());
+    constants.put("NULL", EvaluationValue.NULL_VALUE);
 
     constants.put(
         "DT_FORMAT_ISO_DATE_TIME",

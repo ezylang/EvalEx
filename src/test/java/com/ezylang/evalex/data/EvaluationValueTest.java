@@ -541,13 +541,6 @@ class EvaluationValueTest {
   }
 
   @Test
-  void testNullValueSameInstance() {
-    EvaluationValue nullValue1 = EvaluationValue.nullValue();
-    EvaluationValue nullValue2 = EvaluationValue.nullValue();
-    assertThat(nullValue1).isSameAs(nullValue2);
-  }
-
-  @Test
   void nestedEvaluationValue() throws EvaluationException, ParseException {
     EvaluationValue value1 = EvaluationValue.of("Hello", defaultConfiguration());
     EvaluationValue value2 = EvaluationValue.of("World", defaultConfiguration());
