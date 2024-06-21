@@ -71,6 +71,7 @@ class EvaluationValueTest {
     assertThat(value.isArrayValue()).isFalse();
     assertThat(value.isExpressionNode()).isFalse();
     assertThat(value.isNullValue()).isFalse();
+    assertThat(value.isBinaryValue()).isFalse();
     assertDataIsCorrect(
         value, "Hello World", BigDecimal.ZERO, false, Instant.EPOCH, Duration.ZERO, String.class);
   }
@@ -111,6 +112,7 @@ class EvaluationValueTest {
     assertThat(value.isArrayValue()).isFalse();
     assertThat(value.isExpressionNode()).isFalse();
     assertThat(value.isNullValue()).isFalse();
+    assertThat(value.isBinaryValue()).isFalse();
     assertDataIsCorrect(
         value, "true", BigDecimal.ONE, true, Instant.EPOCH, Duration.ZERO, Boolean.class);
   }
@@ -425,6 +427,7 @@ class EvaluationValueTest {
     assertThat(value.isStringValue()).isFalse();
     assertThat(value.isExpressionNode()).isFalse();
     assertThat(value.isNullValue()).isFalse();
+    assertThat(value.isBinaryValue()).isFalse();
 
     assertThat(value.getArrayValue()).hasSize(2);
     assertThat(value.getArrayValue().get(0).getStringValue()).isEqualTo("1");
@@ -461,6 +464,7 @@ class EvaluationValueTest {
     assertThat(value.isArrayValue()).isFalse();
     assertThat(value.isExpressionNode()).isFalse();
     assertThat(value.isNullValue()).isFalse();
+    assertThat(value.isBinaryValue()).isFalse();
 
     assertThat(value.getStructureValue()).hasSize(2);
     assertThat(value.getStructureValue().get("a").getStringValue()).isEqualTo("Hello");
@@ -494,6 +498,7 @@ class EvaluationValueTest {
     assertThat(value.isArrayValue()).isFalse();
     assertThat(value.isStringValue()).isFalse();
     assertThat(value.isNullValue()).isFalse();
+    assertThat(value.isBinaryValue()).isFalse();
 
     assertDataIsCorrect(
         value,
@@ -555,6 +560,7 @@ class EvaluationValueTest {
     assertThat(value.isArrayValue()).isFalse();
     assertThat(value.isExpressionNode()).isFalse();
     assertThat(value.isNullValue()).isTrue();
+    assertThat(value.isBinaryValue()).isFalse();
     assertDataIsCorrect(value, null, null, null);
   }
 

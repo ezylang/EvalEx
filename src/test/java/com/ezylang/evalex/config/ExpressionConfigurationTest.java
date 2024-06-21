@@ -160,6 +160,14 @@ class ExpressionConfigurationTest {
   }
 
   @Test
+  void testBinaryAllowed() {
+    ExpressionConfiguration configuration =
+        ExpressionConfiguration.builder().binaryAllowed(true).build();
+
+    assertThat(configuration.isArraysAllowed()).isTrue();
+  }
+
+  @Test
   void testSingleQuoteStringLiteralsAllowed() {
     ExpressionConfiguration configuration =
         ExpressionConfiguration.builder().singleQuoteStringLiteralsAllowed(true).build();

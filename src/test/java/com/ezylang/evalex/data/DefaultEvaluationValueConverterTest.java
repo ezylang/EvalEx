@@ -52,6 +52,7 @@ class DefaultEvaluationValueConverterTest {
     EvaluationValue converted = converter.convertObject(rawValue, configuration);
 
     assertThat(converted.getDataType()).isEqualTo(EvaluationValue.DataType.BINARY);
+    assertThat(converted.isBinaryValue()).isTrue();
     assertThat(converted.getValue()).isSameAs(rawValue);
   }
 
