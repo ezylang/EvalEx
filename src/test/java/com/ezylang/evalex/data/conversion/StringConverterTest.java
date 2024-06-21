@@ -48,14 +48,14 @@ class StringConverterTest {
 
   @Test
   void testCanConvert() {
-    assertThat(converter.canConvert("Hello")).isTrue();
-    assertThat(converter.canConvert('P')).isTrue();
+    assertThat(converter.canConvert("Hello", defaultConfiguration)).isTrue();
+    assertThat(converter.canConvert('P', defaultConfiguration)).isTrue();
   }
 
   @Test
   void testCanNotConvert() {
-    assertThat(converter.canConvert(new BigDecimal(3))).isFalse();
-    assertThat(converter.canConvert(true)).isFalse();
+    assertThat(converter.canConvert(new BigDecimal(3), defaultConfiguration)).isFalse();
+    assertThat(converter.canConvert(true, defaultConfiguration)).isFalse();
   }
 
   @Test

@@ -47,14 +47,14 @@ class BooleanConverterTest {
 
   @Test
   void testCanConvert() {
-    assertThat(converter.canConvert(true)).isTrue();
-    assertThat(converter.canConvert(Boolean.valueOf("false"))).isTrue();
+    assertThat(converter.canConvert(true, defaultConfiguration)).isTrue();
+    assertThat(converter.canConvert(Boolean.valueOf("false"), defaultConfiguration)).isTrue();
   }
 
   @Test
   void testCanNotConvert() {
-    assertThat(converter.canConvert("true")).isFalse();
-    assertThat(converter.canConvert(new BigDecimal(1))).isFalse();
+    assertThat(converter.canConvert("true", defaultConfiguration)).isFalse();
+    assertThat(converter.canConvert(new BigDecimal(1), defaultConfiguration)).isFalse();
   }
 
   @Test

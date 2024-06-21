@@ -35,11 +35,29 @@ import org.junit.jupiter.api.Test;
 class EvaluationValueTest {
 
   @Test
-  void testUnsupportedDataType() {
-    final ExpressionConfiguration configuration = defaultConfiguration();
+  void testUnsupportedDataTypeWithBinaryNotAllowed() {
+    final ExpressionConfiguration configuration =
+        ExpressionConfiguration.builder().binaryAllowed(false).build();
     assertThatThrownBy(() -> EvaluationValue.of(Locale.FRANCE, configuration))
         .isInstanceOf(IllegalArgumentException.class)
         .hasMessage("Unsupported data type 'java.util.Locale'");
+  }
+
+  @Test
+  void testUnsupportedDataTypeWithBinaryAllowed() {
+    final ExpressionConfiguration configuration =
+        ExpressionConfiguration.builder().binaryAllowed(true).build();
+    Object rawValue = new Object();
+    EvaluationValue value = EvaluationValue.of(rawValue, configuration);
+    assertThat(value.isStringValue()).isFalse();
+    assertThat(value.isNumberValue()).isFalse();
+    assertThat(value.isBooleanValue()).isFalse();
+    assertThat(value.isStructureValue()).isFalse();
+    assertThat(value.isArrayValue()).isFalse();
+    assertThat(value.isExpressionNode()).isFalse();
+    assertThat(value.isNullValue()).isFalse();
+    assertThat(value.isBinaryValue()).isTrue();
+    assertThat(value.getValue()).isSameAs(rawValue);
   }
 
   @Test

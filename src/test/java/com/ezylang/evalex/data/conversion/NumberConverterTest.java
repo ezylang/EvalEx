@@ -109,20 +109,20 @@ class NumberConverterTest {
 
   @Test
   void testCanConvert() {
-    assertThat(converter.canConvert(new BigDecimal(8))).isTrue();
-    assertThat(converter.canConvert(new BigInteger("5"))).isTrue();
-    assertThat(converter.canConvert(Double.parseDouble("3.0"))).isTrue();
-    assertThat(converter.canConvert(Float.parseFloat("2.0"))).isTrue();
-    assertThat(converter.canConvert(3)).isTrue();
-    assertThat(converter.canConvert(3L)).isTrue();
-    assertThat(converter.canConvert(Short.parseShort("79"))).isTrue();
-    assertThat(converter.canConvert(Byte.parseByte("2"))).isTrue();
+    assertThat(converter.canConvert(new BigDecimal(8), defaultConfiguration)).isTrue();
+    assertThat(converter.canConvert(new BigInteger("5"), defaultConfiguration)).isTrue();
+    assertThat(converter.canConvert(Double.parseDouble("3.0"), defaultConfiguration)).isTrue();
+    assertThat(converter.canConvert(Float.parseFloat("2.0"), defaultConfiguration)).isTrue();
+    assertThat(converter.canConvert(3, defaultConfiguration)).isTrue();
+    assertThat(converter.canConvert(3L, defaultConfiguration)).isTrue();
+    assertThat(converter.canConvert(Short.parseShort("79"), defaultConfiguration)).isTrue();
+    assertThat(converter.canConvert(Byte.parseByte("2"), defaultConfiguration)).isTrue();
   }
 
   @Test
   void testCanNotConvert() {
-    assertThat(converter.canConvert("hello")).isFalse();
-    assertThat(converter.canConvert(true)).isFalse();
+    assertThat(converter.canConvert("hello", defaultConfiguration)).isFalse();
+    assertThat(converter.canConvert(true, defaultConfiguration)).isFalse();
   }
 
   @Test

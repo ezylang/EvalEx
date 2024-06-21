@@ -1,5 +1,5 @@
 /*
-  Copyright 2012-2023 Udo Klimaschewski
+  Copyright 2012-2024 Udo Klimaschewski
 
   Licensed under the Apache License, Version 2.0 (the "License");
   you may not use this file except in compliance with the License.
@@ -19,35 +19,35 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import com.ezylang.evalex.config.ExpressionConfiguration;
 import com.ezylang.evalex.data.EvaluationValue;
-import java.math.BigDecimal;
-import java.time.Duration;
 import org.junit.jupiter.api.Test;
 
-class DurationConverterTest {
+class BinaryConverterTest {
 
-  private final ExpressionConfiguration defaultConfiguration =
-      ExpressionConfiguration.defaultConfiguration();
+  private final ExpressionConfiguration configurationAllowed =
+      ExpressionConfiguration.builder().binaryAllowed(true).build();
 
-  private final DurationConverter converter = new DurationConverter();
+  private final ExpressionConfiguration configurationNotAllowed =
+      ExpressionConfiguration.builder().binaryAllowed(false).build();
+
+  private final BinaryConverter converter = new BinaryConverter();
 
   @Test
-  void testDuration() {
-    Duration duration = Duration.ofMinutes(5);
+  void testObject() {
+    Object object = new Object();
 
-    EvaluationValue converted = converter.convert(duration, defaultConfiguration);
+    EvaluationValue converted = converter.convert(object, configurationAllowed);
 
-    assertThat(converted.getDataType()).isEqualTo(EvaluationValue.DataType.DURATION);
-    assertThat(converted.getValue()).isEqualTo(duration);
+    assertThat(converted.getDataType()).isEqualTo(EvaluationValue.DataType.BINARY);
+    assertThat(converted.getValue()).isSameAs(object);
   }
 
   @Test
   void testCanConvert() {
-    assertThat(converter.canConvert(Duration.ofMinutes(10), defaultConfiguration)).isTrue();
+    assertThat(converter.canConvert(new Object(), configurationAllowed)).isTrue();
   }
 
   @Test
   void testCanNotConvert() {
-    assertThat(converter.canConvert("hello", defaultConfiguration)).isFalse();
-    assertThat(converter.canConvert(new BigDecimal(10), defaultConfiguration)).isFalse();
+    assertThat(converter.canConvert(new Object(), configurationNotAllowed)).isFalse();
   }
 }

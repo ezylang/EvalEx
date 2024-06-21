@@ -48,6 +48,7 @@ import java.util.List;
  *   <tr><td>ASTNode</td><td>ASTNode</td></tr>
  *   <tr><td>List&lt;?&gt;</td><td>ArrayConverter - each entry will be converted</td></tr>
  *   <tr><td>Map&lt?,?&gt;</td><td>StructureConverter - each entry will be converted</td></tr>
+ *   <tr><td>Other types</td><td>BinaryConverter</td></tr>
  * </table>
  *
  * <i>* Be careful with conversion problems when using float or double, which are fractional
@@ -64,7 +65,8 @@ public class DefaultEvaluationValueConverter implements EvaluationValueConverter
           new DurationConverter(),
           new ExpressionNodeConverter(),
           new ArrayConverter(),
-          new StructureConverter());
+          new StructureConverter(),
+          new BinaryConverter());
 
   @Override
   public EvaluationValue convertObject(Object object, ExpressionConfiguration configuration) {
@@ -78,7 +80,7 @@ public class DefaultEvaluationValueConverter implements EvaluationValueConverter
     }
 
     for (ConverterIfc converter : converters) {
-      if (converter.canConvert(object)) {
+      if (converter.canConvert(object, configuration)) {
         return converter.convert(object, configuration);
       }
     }

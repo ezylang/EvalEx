@@ -1,5 +1,5 @@
 /*
-  Copyright 2012-2023 Udo Klimaschewski
+  Copyright 2012-2024 Udo Klimaschewski
 
   Licensed under the Apache License, Version 2.0 (the "License");
   you may not use this file except in compliance with the License.
@@ -17,23 +17,21 @@ package com.ezylang.evalex.data.conversion;
 
 import com.ezylang.evalex.config.ExpressionConfiguration;
 import com.ezylang.evalex.data.EvaluationValue;
-import java.util.HashMap;
-import java.util.Map;
 
-/** Converter to convert to the STRUCTURE data type. */
-public class StructureConverter implements ConverterIfc {
+/**
+ * Converter to convert to the BINARY data type.
+ *
+ * @author oswaldobapvicjr
+ * @since 3.3.0
+ */
+public class BinaryConverter implements ConverterIfc {
   @Override
   public EvaluationValue convert(Object object, ExpressionConfiguration configuration) {
-    Map<String, EvaluationValue> structure = new HashMap<>();
-    for (Map.Entry<?, ?> entry : ((Map<?, ?>) object).entrySet()) {
-      String name = entry.getKey().toString();
-      structure.put(name, EvaluationValue.of(entry.getValue(), configuration));
-    }
-    return EvaluationValue.structureValue(structure);
+    return EvaluationValue.binaryValue(object);
   }
 
   @Override
   public boolean canConvert(Object object, ExpressionConfiguration configuration) {
-    return object instanceof Map;
+    return configuration.isBinaryAllowed();
   }
 }

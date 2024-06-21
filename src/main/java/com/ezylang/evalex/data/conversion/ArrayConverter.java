@@ -39,7 +39,7 @@ public class ArrayConverter implements ConverterIfc {
   }
 
   @Override
-  public boolean canConvert(Object object) {
+  public boolean canConvert(Object object, ExpressionConfiguration configuration) {
     return object instanceof List || object.getClass().isArray();
   }
 

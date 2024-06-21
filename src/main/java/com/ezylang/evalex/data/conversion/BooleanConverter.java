@@ -26,7 +26,7 @@ public class BooleanConverter implements ConverterIfc {
   }
 
   @Override
-  public boolean canConvert(Object object) {
+  public boolean canConvert(Object object, ExpressionConfiguration configuration) {
     return object instanceof Boolean;
   }
 }

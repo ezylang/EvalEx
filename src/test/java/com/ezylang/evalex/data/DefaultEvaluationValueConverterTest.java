@@ -45,9 +45,22 @@ class DefaultEvaluationValueConverterTest {
   }
 
   @Test
-  void testException() {
+  void testDefaultEvaluationWithBinaryAllowed() {
+    ExpressionConfiguration configuration =
+        ExpressionConfiguration.builder().binaryAllowed(true).build();
+    final Object rawValue = new Object();
+    EvaluationValue converted = converter.convertObject(rawValue, configuration);
+
+    assertThat(converted.getDataType()).isEqualTo(EvaluationValue.DataType.BINARY);
+    assertThat(converted.getValue()).isSameAs(rawValue);
+  }
+
+  @Test
+  void testExceptionWithBinaryNotAllowed() {
+    ExpressionConfiguration configuration =
+        ExpressionConfiguration.builder().binaryAllowed(false).build();
     final Error error = new Error();
-    assertThatThrownBy(() -> converter.convertObject(error, defaultConfiguration))
+    assertThatThrownBy(() -> converter.convertObject(error, configuration))
         .isInstanceOf(IllegalArgumentException.class)
         .hasMessage("Unsupported data type 'java.lang.Error'");
   }

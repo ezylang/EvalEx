@@ -218,18 +218,18 @@ class ArrayConverterTest {
 
   @Test
   void testCanConvert() {
-    assertThat(converter.canConvert(new String[] {"1", "2", "3"})).isTrue();
-    assertThat(converter.canConvert(Collections.EMPTY_LIST)).isTrue();
-    assertThat(converter.canConvert(Arrays.asList(1, 2, 3))).isTrue();
-    assertThat(converter.canConvert(new Integer[] {1, 2, 3})).isTrue();
-    assertThat(converter.canConvert(new int[] {1, 2, 3})).isTrue();
-    assertThat(converter.canConvert(new double[] {1.0, 2.0, 3.0})).isTrue();
-    assertThat(converter.canConvert(new boolean[] {true, false})).isTrue();
+    assertThat(converter.canConvert(new String[] {"1", "2", "3"}, defaultConfiguration)).isTrue();
+    assertThat(converter.canConvert(Collections.EMPTY_LIST, defaultConfiguration)).isTrue();
+    assertThat(converter.canConvert(Arrays.asList(1, 2, 3), defaultConfiguration)).isTrue();
+    assertThat(converter.canConvert(new Integer[] {1, 2, 3}, defaultConfiguration)).isTrue();
+    assertThat(converter.canConvert(new int[] {1, 2, 3}, defaultConfiguration)).isTrue();
+    assertThat(converter.canConvert(new double[] {1.0, 2.0, 3.0}, defaultConfiguration)).isTrue();
+    assertThat(converter.canConvert(new boolean[] {true, false}, defaultConfiguration)).isTrue();
   }
 
   @Test
   void testCanNotConvert() {
-    assertThat(converter.canConvert(new BigDecimal(1))).isFalse();
+    assertThat(converter.canConvert(new BigDecimal(1), defaultConfiguration)).isFalse();
   }
 
   @Test

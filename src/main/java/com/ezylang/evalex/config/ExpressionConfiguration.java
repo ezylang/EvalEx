@@ -223,6 +223,13 @@ public class ExpressionConfiguration {
   /** Support for structures in expressions are allowed or not. */
   @Builder.Default private final boolean structuresAllowed = true;
 
+  /**
+   * Support for the BINARY (undefined) data type is allowed or not.
+   *
+   * @since 3.3.0
+   */
+  @Builder.Default private final boolean binaryAllowed = false;
+
   /** Support for implicit multiplication, like in (a+b)(b+c) are allowed or not. */
   @Builder.Default private final boolean implicitMultiplicationAllowed = true;
 

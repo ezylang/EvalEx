@@ -45,12 +45,12 @@ class ExpressionNodeConverterTest {
 
   @Test
   void testCanConvert() {
-    assertThat(converter.canConvert(testNode)).isTrue();
+    assertThat(converter.canConvert(testNode, defaultConfiguration)).isTrue();
   }
 
   @Test
   void testCanNotConvert() {
-    assertThat(converter.canConvert("hello")).isFalse();
-    assertThat(converter.canConvert(new BigDecimal(10))).isFalse();
+    assertThat(converter.canConvert("hello", defaultConfiguration)).isFalse();
+    assertThat(converter.canConvert(new BigDecimal(10), defaultConfiguration)).isFalse();
   }
 }
