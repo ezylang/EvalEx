@@ -80,7 +80,7 @@ public class EvaluationValue implements Comparable<EvaluationValue> {
     EXPRESSION_NODE,
     /** A null value */
     NULL,
-    /** Undefined type, stored as an {@link Object}. */
+    /** Raw (undefined) type, stored as an {@link Object}. */
     BINARY
   }
 
@@ -222,7 +222,7 @@ public class EvaluationValue implements Comparable<EvaluationValue> {
   }
 
   /**
-   * Creates a new binary value.
+   * Creates a new binary (raw) value.
    *
    * @param value The Object to use.
    * @return the new binary value.

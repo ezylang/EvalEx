@@ -224,7 +224,7 @@ public class ExpressionConfiguration {
   @Builder.Default private final boolean structuresAllowed = true;
 
   /**
-   * Support for the BINARY (undefined) data type is allowed or not.
+   * Support for the binary (undefined) data type is allowed or not.
    *
    * @since 3.3.0
    */
