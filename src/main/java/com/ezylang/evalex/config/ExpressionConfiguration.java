@@ -185,6 +185,7 @@ public class ExpressionConfiguration {
           Map.entry("STR_FORMAT", new StringFormatFunction()),
           Map.entry("STR_LOWER", new StringLowerFunction()),
           Map.entry("STR_STARTS_WITH", new StringStartsWithFunction()),
+          Map.entry("STR_TRIM", new StringTrimFunction()),
           Map.entry("STR_UPPER", new StringUpperFunction()),
           // date time functions
           Map.entry("DT_DATE_NEW", new DateTimeNewFunction()),

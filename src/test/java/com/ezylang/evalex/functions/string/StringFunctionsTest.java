@@ -151,4 +151,18 @@ class StringFunctionsTest extends BaseEvaluationTest {
     assertExpressionHasExpectedResult(
         expression, expectedResult, TestConfigurationProvider.ChicagoConfiguration);
   }
+
+  @ParameterizedTest
+  @CsvSource(
+          delimiter = ':',
+          value = {
+                  "STR_TRIM(\" Two whitespace \") : Two whitespace",
+                  "STR_TRIM(\" Left whitespace\") : Left whitespace",
+                  "STR_TRIM(\"Right whitespace  \") : Right whitespace",
+                  "STR_TRIM(\"No whitespace\") : No whitespace"
+          })
+  void testTrimString(String expression, String expectedResult)
+          throws EvaluationException, ParseException {
+      assertExpressionHasExpectedResult(expression, expectedResult);
+  }
 }
