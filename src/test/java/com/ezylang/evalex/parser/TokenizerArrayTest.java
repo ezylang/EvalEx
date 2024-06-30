@@ -52,6 +52,90 @@ class TokenizerArrayTest extends BaseParserTest {
   }
 
   @Test
+  void testArrayEquals() throws ParseException {
+    assertAllTokensParsedCorrectly(
+        "a[1] = 2",
+        new Token(1, "a", TokenType.VARIABLE_OR_CONSTANT),
+        new Token(2, "[", TokenType.ARRAY_OPEN),
+        new Token(3, "1", TokenType.NUMBER_LITERAL),
+        new Token(4, "]", TokenType.ARRAY_CLOSE),
+        new Token(6, "=", TokenType.INFIX_OPERATOR),
+        new Token(8, "2", TokenType.NUMBER_LITERAL));
+  }
+
+  @Test
+  void testArrayGreaterThan() throws ParseException {
+    assertAllTokensParsedCorrectly(
+        "a[1] > 2",
+        new Token(1, "a", TokenType.VARIABLE_OR_CONSTANT),
+        new Token(2, "[", TokenType.ARRAY_OPEN),
+        new Token(3, "1", TokenType.NUMBER_LITERAL),
+        new Token(4, "]", TokenType.ARRAY_CLOSE),
+        new Token(6, ">", TokenType.INFIX_OPERATOR),
+        new Token(8, "2", TokenType.NUMBER_LITERAL));
+  }
+
+  @Test
+  void testArrayLessThan() throws ParseException {
+    assertAllTokensParsedCorrectly(
+        "a[1] < 2",
+        new Token(1, "a", TokenType.VARIABLE_OR_CONSTANT),
+        new Token(2, "[", TokenType.ARRAY_OPEN),
+        new Token(3, "1", TokenType.NUMBER_LITERAL),
+        new Token(4, "]", TokenType.ARRAY_CLOSE),
+        new Token(6, "<", TokenType.INFIX_OPERATOR),
+        new Token(8, "2", TokenType.NUMBER_LITERAL));
+  }
+
+  @Test
+  void testArrayNotEquals() throws ParseException {
+    assertAllTokensParsedCorrectly(
+        "a[1] != 2",
+        new Token(1, "a", TokenType.VARIABLE_OR_CONSTANT),
+        new Token(2, "[", TokenType.ARRAY_OPEN),
+        new Token(3, "1", TokenType.NUMBER_LITERAL),
+        new Token(4, "]", TokenType.ARRAY_CLOSE),
+        new Token(6, "!=", TokenType.INFIX_OPERATOR),
+        new Token(9, "2", TokenType.NUMBER_LITERAL));
+  }
+
+  @Test
+  void testArrayEqualsEquals() throws ParseException {
+    assertAllTokensParsedCorrectly(
+        "a[1] == 2",
+        new Token(1, "a", TokenType.VARIABLE_OR_CONSTANT),
+        new Token(2, "[", TokenType.ARRAY_OPEN),
+        new Token(3, "1", TokenType.NUMBER_LITERAL),
+        new Token(4, "]", TokenType.ARRAY_CLOSE),
+        new Token(6, "==", TokenType.INFIX_OPERATOR),
+        new Token(9, "2", TokenType.NUMBER_LITERAL));
+  }
+
+  @Test
+  void testArrayGreaterEqualsThan() throws ParseException {
+    assertAllTokensParsedCorrectly(
+        "a[1] >= 2",
+        new Token(1, "a", TokenType.VARIABLE_OR_CONSTANT),
+        new Token(2, "[", TokenType.ARRAY_OPEN),
+        new Token(3, "1", TokenType.NUMBER_LITERAL),
+        new Token(4, "]", TokenType.ARRAY_CLOSE),
+        new Token(6, ">=", TokenType.INFIX_OPERATOR),
+        new Token(9, "2", TokenType.NUMBER_LITERAL));
+  }
+
+  @Test
+  void testArrayLessEqualsThan() throws ParseException {
+    assertAllTokensParsedCorrectly(
+        "a[1] <= 2",
+        new Token(1, "a", TokenType.VARIABLE_OR_CONSTANT),
+        new Token(2, "[", TokenType.ARRAY_OPEN),
+        new Token(3, "1", TokenType.NUMBER_LITERAL),
+        new Token(4, "]", TokenType.ARRAY_CLOSE),
+        new Token(6, "<=", TokenType.INFIX_OPERATOR),
+        new Token(9, "2", TokenType.NUMBER_LITERAL));
+  }
+
+  @Test
   void testMissingClosingArray() {
     assertThatThrownBy(() -> new Tokenizer("a[2+4", configuration).parse())
         .isEqualTo(new ParseException(1, 5, "a[2+4", "Closing array not found"));

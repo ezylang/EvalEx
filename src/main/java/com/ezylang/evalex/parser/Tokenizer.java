@@ -349,6 +349,7 @@ public class Tokenizer {
       case STRING_LITERAL:
       case POSTFIX_OPERATOR:
       case NUMBER_LITERAL:
+      case ARRAY_CLOSE:
         return true;
       default:
         return false;
