@@ -19,7 +19,10 @@ EvalEx supports the following data types:
 | ARRAY           | java.util.List                    |
 | STRUCTURE       | java.util.Map                     |
 | EXPRESSION_NODE | com.ezylang.evalex.parser.ASTNode |
+| BINARY[^1]      | java.lang.Object                  |
 | NULL            | null                              |
+
+[^1]: Since 3.3.0
 
 Data is stored in an _EvaluationValue_, which holds the value and the data type.
 
@@ -213,6 +216,18 @@ System.out.println(result); // prints 14
 Note that the above expression is not evaluated as "2 * 4 + 3", which would result in 11.
 Instead, the sub-expression "4 + 3" is calculated first, when it comes to finding the value of the
 variable _b_. Resulting in calculation of "2 * 7", which is 14.
+
+
+### BINARY
+
+A representation for an undefined (raw), non-null object that could not fit in any of the previous
+data types.
+
+This allows for special functions to handle any object type.
+
+The binary data type is **disabled** by default and can be enabled by setting a dedicated property
+in the [Configuration](../configuration/configuration.html).
+
 
 ### NULL
 

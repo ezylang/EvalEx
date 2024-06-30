@@ -35,11 +35,29 @@ import org.junit.jupiter.api.Test;
 class EvaluationValueTest {
 
   @Test
-  void testUnsupportedDataType() {
-    final ExpressionConfiguration configuration = defaultConfiguration();
+  void testUnsupportedDataTypeWithBinaryNotAllowed() {
+    final ExpressionConfiguration configuration =
+        ExpressionConfiguration.builder().binaryAllowed(false).build();
     assertThatThrownBy(() -> EvaluationValue.of(Locale.FRANCE, configuration))
         .isInstanceOf(IllegalArgumentException.class)
         .hasMessage("Unsupported data type 'java.util.Locale'");
+  }
+
+  @Test
+  void testUnsupportedDataTypeWithBinaryAllowed() {
+    final ExpressionConfiguration configuration =
+        ExpressionConfiguration.builder().binaryAllowed(true).build();
+    Object rawValue = new Object();
+    EvaluationValue value = EvaluationValue.of(rawValue, configuration);
+    assertThat(value.isStringValue()).isFalse();
+    assertThat(value.isNumberValue()).isFalse();
+    assertThat(value.isBooleanValue()).isFalse();
+    assertThat(value.isStructureValue()).isFalse();
+    assertThat(value.isArrayValue()).isFalse();
+    assertThat(value.isExpressionNode()).isFalse();
+    assertThat(value.isNullValue()).isFalse();
+    assertThat(value.isBinaryValue()).isTrue();
+    assertThat(value.getValue()).isSameAs(rawValue);
   }
 
   @Test
@@ -53,6 +71,7 @@ class EvaluationValueTest {
     assertThat(value.isArrayValue()).isFalse();
     assertThat(value.isExpressionNode()).isFalse();
     assertThat(value.isNullValue()).isFalse();
+    assertThat(value.isBinaryValue()).isFalse();
     assertDataIsCorrect(
         value, "Hello World", BigDecimal.ZERO, false, Instant.EPOCH, Duration.ZERO, String.class);
   }
@@ -93,6 +112,7 @@ class EvaluationValueTest {
     assertThat(value.isArrayValue()).isFalse();
     assertThat(value.isExpressionNode()).isFalse();
     assertThat(value.isNullValue()).isFalse();
+    assertThat(value.isBinaryValue()).isFalse();
     assertDataIsCorrect(
         value, "true", BigDecimal.ONE, true, Instant.EPOCH, Duration.ZERO, Boolean.class);
   }
@@ -407,6 +427,7 @@ class EvaluationValueTest {
     assertThat(value.isStringValue()).isFalse();
     assertThat(value.isExpressionNode()).isFalse();
     assertThat(value.isNullValue()).isFalse();
+    assertThat(value.isBinaryValue()).isFalse();
 
     assertThat(value.getArrayValue()).hasSize(2);
     assertThat(value.getArrayValue().get(0).getStringValue()).isEqualTo("1");
@@ -443,6 +464,7 @@ class EvaluationValueTest {
     assertThat(value.isArrayValue()).isFalse();
     assertThat(value.isExpressionNode()).isFalse();
     assertThat(value.isNullValue()).isFalse();
+    assertThat(value.isBinaryValue()).isFalse();
 
     assertThat(value.getStructureValue()).hasSize(2);
     assertThat(value.getStructureValue().get("a").getStringValue()).isEqualTo("Hello");
@@ -476,6 +498,7 @@ class EvaluationValueTest {
     assertThat(value.isArrayValue()).isFalse();
     assertThat(value.isStringValue()).isFalse();
     assertThat(value.isNullValue()).isFalse();
+    assertThat(value.isBinaryValue()).isFalse();
 
     assertDataIsCorrect(
         value,
@@ -537,6 +560,7 @@ class EvaluationValueTest {
     assertThat(value.isArrayValue()).isFalse();
     assertThat(value.isExpressionNode()).isFalse();
     assertThat(value.isNullValue()).isTrue();
+    assertThat(value.isBinaryValue()).isFalse();
     assertDataIsCorrect(value, null, null, null);
   }
 

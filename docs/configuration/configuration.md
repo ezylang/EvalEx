@@ -27,6 +27,7 @@ ExpressionConfiguration configuration=ExpressionConfiguration.builder()
         .powerOfPrecedence(OperatorIfc.OPERATOR_PRECEDENCE_POWER)
         .stripTrailingZeros(true)
         .structuresAllowed(true)
+        .binaryAllowed(false)
         .singleQuoteStringLiteralsAllowed(false)
         .zoneId(ZoneId.systemDefault())
         .build();
@@ -44,6 +45,15 @@ the constant value will be removed and a variable value will be set.
 Specifies if the array index function is allowed (default is true). If set to false, the expression
 will throw a _ParseException_, if there is a '[' is encountered in the expression and also no
 operator or function is defined for this character.
+
+### Binary allowed
+
+Specifies if the binary[^1] (raw) data type is allowed for expressions that can not be converted to any
+known data type. 
+
+See chapter [Data Types](../concepts/datatypes.html) for details.
+
+[^1]: Since 3.3.0
 
 ### Data Accessor
 

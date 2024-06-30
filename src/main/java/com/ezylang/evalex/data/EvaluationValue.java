@@ -79,7 +79,9 @@ public class EvaluationValue implements Comparable<EvaluationValue> {
      */
     EXPRESSION_NODE,
     /** A null value */
-    NULL
+    NULL,
+    /** Raw (undefined) type, stored as an {@link Object}. */
+    BINARY
   }
 
   Object value;
@@ -220,6 +222,17 @@ public class EvaluationValue implements Comparable<EvaluationValue> {
   }
 
   /**
+   * Creates a new binary (raw) value.
+   *
+   * @param value The Object to use.
+   * @return the new binary value.
+   * @since 3.3.0
+   */
+  public static EvaluationValue binaryValue(Object value) {
+    return new EvaluationValue(value, DataType.BINARY);
+  }
+
+  /**
    * Checks if the value is of type {@link DataType#NUMBER}.
    *
    * @return <code>true</code> or <code>false</code>.
@@ -293,6 +306,16 @@ public class EvaluationValue implements Comparable<EvaluationValue> {
 
   public boolean isNullValue() {
     return getDataType() == DataType.NULL;
+  }
+
+  /**
+   * Checks if the value is of type {@link DataType#BINARY}.
+   *
+   * @return <code>true</code> or <code>false</code>.
+   * @since 3.3.0
+   */
+  public boolean isBinaryValue() {
+    return getDataType() == DataType.BINARY;
   }
 
   /**

@@ -56,8 +56,11 @@ _EvaluationValue_ will be of one of the types:
 - NUMBER - If the expression resulted in a number.
 - STRING - If the expression resulted in a string.
 - BOOLEAN - If the expression resulted in a boolean value.
+- DATE_TIME - If the expression resulted in a date/time value.
+- DURATION - If the expression resulted in a duration value.
 - ARRAY - If the expression resulted in an array.
 - STRUCTURE - If the expression resulted in a structure.
+- BINARY - If the expression could not be converted to any of the previous types.
 
 The _EvaluationValue_ has methods to check and retrieve/convert the evaluation value.
 
