@@ -23,14 +23,16 @@ import com.ezylang.evalex.functions.FunctionParameter;
 import com.ezylang.evalex.parser.Token;
 
 /**
- * Returns the given string without whitespace.
+ * Returns the given string with all leading and trailing space removed.
  *
  * @author LeonardoSoaresDev
  */
 @FunctionParameter(name = "string")
 public class StringTrimFunction extends AbstractFunction {
-    @Override
-    public EvaluationValue evaluate(Expression expression, Token functionToken, EvaluationValue... parameterValues) throws EvaluationException {
-        return expression.convertValue(parameterValues[0].getStringValue().trim());
-    }
+  @Override
+  public EvaluationValue evaluate(
+      Expression expression, Token functionToken, EvaluationValue... parameterValues)
+      throws EvaluationException {
+    return expression.convertValue(parameterValues[0].getStringValue().trim());
+  }
 }

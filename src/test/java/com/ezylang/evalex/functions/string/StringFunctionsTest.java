@@ -154,15 +154,15 @@ class StringFunctionsTest extends BaseEvaluationTest {
 
   @ParameterizedTest
   @CsvSource(
-          delimiter = ':',
-          value = {
-                  "STR_TRIM(\" Two whitespace \") : Two whitespace",
-                  "STR_TRIM(\" Left whitespace\") : Left whitespace",
-                  "STR_TRIM(\"Right whitespace  \") : Right whitespace",
-                  "STR_TRIM(\"No whitespace\") : No whitespace"
-          })
+      delimiter = ':',
+      value = {
+        "STR_TRIM(\" Two whitespace \") : Two whitespace",
+        "STR_TRIM(\" Left whitespace\") : Left whitespace",
+        "STR_TRIM(\"Right whitespace  \") : Right whitespace",
+        "STR_TRIM(\"No whitespace\") : No whitespace"
+      })
   void testTrimString(String expression, String expectedResult)
-          throws EvaluationException, ParseException {
-      assertExpressionHasExpectedResult(expression, expectedResult);
+      throws EvaluationException, ParseException {
+    assertExpressionHasExpectedResult(expression, expectedResult);
   }
 }

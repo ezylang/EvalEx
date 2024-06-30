@@ -40,7 +40,7 @@ Available through the _ExpressionConfiguration.StandardFunctionsDictionary_ cons
 | STR_FORMAT(format [,argument, ...]) | Returns a formatted string using the specified format string and arguments, using the configured locale |
 | STR_LOWER(value)                    | Converts the given value to lower case                                                                  |
 | STR_STARTS_WITH(string, substring)  | Returns true if the string starts with the substring (case-sensitive)                                   |
-| STR_TRIM(string)                    | Returns the given string without whitespace                                                             |
+| STR_TRIM(string)                    | Returns the given string with all leading and trailing space removed.                                   |
 | STR_UPPER(value)                    | Converts the given value to upper case                                                                  |
 
 ### Trigonometric Functions
