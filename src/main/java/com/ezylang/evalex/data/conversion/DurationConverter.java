@@ -27,7 +27,7 @@ public class DurationConverter implements ConverterIfc {
   }
 
   @Override
-  public boolean canConvert(Object object, ExpressionConfiguration configuration) {
+  public boolean canConvert(Object object) {
     return object instanceof Duration;
   }
 }

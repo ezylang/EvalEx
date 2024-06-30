@@ -128,19 +128,19 @@ class DateTimeConverterTest {
 
   @Test
   void testCanConvert() {
-    assertThat(converter.canConvert(Instant.now(), defaultConfiguration)).isTrue();
-    assertThat(converter.canConvert(ZonedDateTime.now(), defaultConfiguration)).isTrue();
-    assertThat(converter.canConvert(OffsetDateTime.now(), defaultConfiguration)).isTrue();
-    assertThat(converter.canConvert(LocalDate.now(), defaultConfiguration)).isTrue();
-    assertThat(converter.canConvert(LocalDateTime.now(), defaultConfiguration)).isTrue();
-    assertThat(converter.canConvert(new Date(), defaultConfiguration)).isTrue();
-    assertThat(converter.canConvert(Calendar.getInstance(), defaultConfiguration)).isTrue();
+    assertThat(converter.canConvert(Instant.now())).isTrue();
+    assertThat(converter.canConvert(ZonedDateTime.now())).isTrue();
+    assertThat(converter.canConvert(OffsetDateTime.now())).isTrue();
+    assertThat(converter.canConvert(LocalDate.now())).isTrue();
+    assertThat(converter.canConvert(LocalDateTime.now())).isTrue();
+    assertThat(converter.canConvert(new Date())).isTrue();
+    assertThat(converter.canConvert(Calendar.getInstance())).isTrue();
   }
 
   @Test
   void testCanNotConvert() {
-    assertThat(converter.canConvert("hello", defaultConfiguration)).isFalse();
-    assertThat(converter.canConvert(new BigDecimal(1), defaultConfiguration)).isFalse();
+    assertThat(converter.canConvert("hello")).isFalse();
+    assertThat(converter.canConvert(new BigDecimal(1))).isFalse();
   }
 
   @Test

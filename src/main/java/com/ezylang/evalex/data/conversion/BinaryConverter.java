@@ -31,7 +31,7 @@ public class BinaryConverter implements ConverterIfc {
   }
 
   @Override
-  public boolean canConvert(Object object, ExpressionConfiguration configuration) {
-    return configuration.isBinaryAllowed();
+  public boolean canConvert(Object object) {
+    return true;
   }
 }

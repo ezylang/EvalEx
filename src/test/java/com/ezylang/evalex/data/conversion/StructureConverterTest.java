@@ -66,12 +66,12 @@ class StructureConverterTest {
 
   @Test
   void testCanConvert() {
-    assertThat(converter.canConvert(Collections.EMPTY_MAP, defaultConfiguration)).isTrue();
+    assertThat(converter.canConvert(Collections.EMPTY_MAP)).isTrue();
   }
 
   @Test
   void testCanNotConvert() {
-    assertThat(converter.canConvert(new int[] {1, 2, 3}, defaultConfiguration)).isFalse();
-    assertThat(converter.canConvert(new BigDecimal(1), defaultConfiguration)).isFalse();
+    assertThat(converter.canConvert(new int[] {1, 2, 3})).isFalse();
+    assertThat(converter.canConvert(new BigDecimal(1))).isFalse();
   }
 }

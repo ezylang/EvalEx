@@ -51,7 +51,7 @@ public class NumberConverter implements ConverterIfc {
   }
 
   @Override
-  public boolean canConvert(Object object, ExpressionConfiguration configuration) {
+  public boolean canConvert(Object object) {
     return (object instanceof BigDecimal
         || object instanceof BigInteger
         || object instanceof Double

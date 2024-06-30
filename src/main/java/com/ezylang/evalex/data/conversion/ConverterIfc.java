@@ -34,10 +34,9 @@ public interface ConverterIfc {
    * Checks, if a given object can be converted by this converter.
    *
    * @param object The object to convert.
-   * @param configuration The current expression configuration.
    * @return <code>true</code> if the object can be converted, false otherwise.
    */
-  boolean canConvert(Object object, ExpressionConfiguration configuration);
+  boolean canConvert(Object object);
 
   default IllegalArgumentException illegalArgument(Object object) {
     return new IllegalArgumentException(

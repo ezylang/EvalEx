@@ -42,12 +42,12 @@ class DurationConverterTest {
 
   @Test
   void testCanConvert() {
-    assertThat(converter.canConvert(Duration.ofMinutes(10), defaultConfiguration)).isTrue();
+    assertThat(converter.canConvert(Duration.ofMinutes(10))).isTrue();
   }
 
   @Test
   void testCanNotConvert() {
-    assertThat(converter.canConvert("hello", defaultConfiguration)).isFalse();
-    assertThat(converter.canConvert(new BigDecimal(10), defaultConfiguration)).isFalse();
+    assertThat(converter.canConvert("hello")).isFalse();
+    assertThat(converter.canConvert(new BigDecimal(10))).isFalse();
   }
 }

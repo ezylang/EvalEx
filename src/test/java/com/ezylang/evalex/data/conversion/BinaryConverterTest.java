@@ -23,11 +23,8 @@ import org.junit.jupiter.api.Test;
 
 class BinaryConverterTest {
 
-  private final ExpressionConfiguration configurationAllowed =
-      ExpressionConfiguration.builder().binaryAllowed(true).build();
-
-  private final ExpressionConfiguration configurationNotAllowed =
-      ExpressionConfiguration.builder().binaryAllowed(false).build();
+  private final ExpressionConfiguration defaultConfiguration =
+      ExpressionConfiguration.defaultConfiguration();
 
   private final BinaryConverter converter = new BinaryConverter();
 
@@ -35,7 +32,7 @@ class BinaryConverterTest {
   void testObject() {
     Object object = new Object();
 
-    EvaluationValue converted = converter.convert(object, configurationAllowed);
+    EvaluationValue converted = converter.convert(object, defaultConfiguration);
 
     assertThat(converted.getDataType()).isEqualTo(EvaluationValue.DataType.BINARY);
     assertThat(converted.getValue()).isSameAs(object);
@@ -43,11 +40,6 @@ class BinaryConverterTest {
 
   @Test
   void testCanConvert() {
-    assertThat(converter.canConvert(new Object(), configurationAllowed)).isTrue();
-  }
-
-  @Test
-  void testCanNotConvert() {
-    assertThat(converter.canConvert(new Object(), configurationNotAllowed)).isFalse();
+    assertThat(converter.canConvert(new Object())).isTrue();
   }
 }

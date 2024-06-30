@@ -89,7 +89,7 @@ public class DateTimeConverter implements ConverterIfc {
   }
 
   @Override
-  public boolean canConvert(Object object, ExpressionConfiguration configuration) {
+  public boolean canConvert(Object object) {
     return (object instanceof Instant
         || object instanceof ZonedDateTime
         || object instanceof OffsetDateTime
