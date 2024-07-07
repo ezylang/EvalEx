@@ -83,6 +83,10 @@ public class DefaultEvaluationValueConverter implements EvaluationValueConverter
       }
     }
 
+    if (configuration.isBinaryAllowed()) {
+      return EvaluationValue.binaryValue(object);
+    }
+
     throw new IllegalArgumentException(
         "Unsupported data type '" + object.getClass().getName() + "'");
   }
