@@ -151,4 +151,26 @@ class ExpressionEvaluatorArrayTest extends BaseExpressionEvaluatorTest {
         .isInstanceOf(EvaluationException.class)
         .hasMessage("Unsupported data types in operation");
   }
+
+  @Test
+  void testArrayIndexOutOfBounds() {
+    assertThatThrownBy(
+            () -> {
+              List<?> array = List.of("Hello");
+              createExpression("a[1]").with("a", array).evaluate();
+            })
+        .isInstanceOf(EvaluationException.class)
+        .hasMessage("Index 1 out of bounds for array of length 1");
+  }
+
+  @Test
+  void testArrayNegativeIndex() {
+    assertThatThrownBy(
+            () -> {
+              List<?> array = List.of("Hello");
+              createExpression("a[-1]").with("a", array).evaluate();
+            })
+        .isInstanceOf(EvaluationException.class)
+        .hasMessage("Index -1 out of bounds for array of length 1");
+  }
 }

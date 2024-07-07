@@ -196,6 +196,14 @@ public class Expression {
     EvaluationValue index = evaluateSubtree(startNode.getParameters().get(1));
 
     if (array.isArrayValue() && index.isNumberValue()) {
+      if (index.getNumberValue().intValue() < 0
+          || index.getNumberValue().intValue() >= array.getArrayValue().size()) {
+        throw new EvaluationException(
+            startNode.getToken(),
+            String.format(
+                "Index %d out of bounds for array of length %d",
+                index.getNumberValue().intValue(), array.getArrayValue().size()));
+      }
       return array.getArrayValue().get(index.getNumberValue().intValue());
     } else {
       throw EvaluationException.ofUnsupportedDataTypeInOperation(startNode.getToken());

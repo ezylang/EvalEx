@@ -312,6 +312,7 @@ public class Tokenizer {
       case INFIX_OPERATOR:
       case COMMA:
       case PREFIX_OPERATOR:
+      case ARRAY_OPEN:
         return true;
       default:
         return false;
