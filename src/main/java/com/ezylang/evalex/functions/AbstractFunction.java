@@ -15,6 +15,8 @@
 */
 package com.ezylang.evalex.functions;
 
+import static java.math.BigDecimal.valueOf;
+
 import com.ezylang.evalex.EvaluationException;
 import com.ezylang.evalex.data.EvaluationValue;
 import com.ezylang.evalex.parser.Token;
@@ -28,6 +30,7 @@ import java.util.List;
  */
 public abstract class AbstractFunction implements FunctionIfc {
 
+  protected static final BigDecimal MINUS_ONE = valueOf(-1);
   private final List<FunctionParameterDefinition> functionParameterDefinitions = new ArrayList<>();
 
   private final boolean hasVarArgs;

@@ -15,20 +15,34 @@
 */
 package com.ezylang.evalex.functions.trigonometric;
 
+import static java.math.BigDecimal.ONE;
+
+import com.ezylang.evalex.EvaluationException;
 import com.ezylang.evalex.Expression;
 import com.ezylang.evalex.data.EvaluationValue;
 import com.ezylang.evalex.functions.AbstractFunction;
 import com.ezylang.evalex.functions.FunctionParameter;
 import com.ezylang.evalex.parser.Token;
+import java.math.BigDecimal;
 
 /** Returns the arc-cosine (in degrees). */
 @FunctionParameter(name = "value")
 public class AcosFunction extends AbstractFunction {
   @Override
   public EvaluationValue evaluate(
-      Expression expression, Token functionToken, EvaluationValue... parameterValues) {
+      Expression expression, Token functionToken, EvaluationValue... parameterValues)
+      throws EvaluationException {
 
-    return expression.convertDoubleValue(
-        Math.toDegrees(Math.acos(parameterValues[0].getNumberValue().doubleValue())));
+    BigDecimal parameterValue = parameterValues[0].getNumberValue();
+
+    if (parameterValue.compareTo(ONE) > 0) {
+      throw new EvaluationException(
+          functionToken, "Illegal acos(x) for x > 1: x = " + parameterValue);
+    }
+    if (parameterValue.compareTo(MINUS_ONE) < 0) {
+      throw new EvaluationException(
+          functionToken, "Illegal acos(x) for x < -1: x = " + parameterValue);
+    }
+    return expression.convertDoubleValue(Math.toDegrees(Math.acos(parameterValue.doubleValue())));
   }
 }

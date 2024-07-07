@@ -41,6 +41,20 @@ class TrigonometricFunctionsTest extends BaseEvaluationTest {
     assertExpressionHasExpectedResult(expression, expectedResult);
   }
 
+  @Test
+  void testAcosThrowsExceptionPositive() {
+    assertThatThrownBy(() -> new Expression("ACOS(1.5)").evaluate())
+        .isInstanceOf(EvaluationException.class)
+        .hasMessage("Illegal acos(x) for x > 1: x = 1.5");
+  }
+
+  @Test
+  void testAcosThrowsExceptionNegative() {
+    assertThatThrownBy(() -> new Expression("ACOS(-1.5)").evaluate())
+        .isInstanceOf(EvaluationException.class)
+        .hasMessage("Illegal acos(x) for x < -1: x = -1.5");
+  }
+
   @ParameterizedTest
   @CsvSource(
       delimiter = ':',
@@ -73,6 +87,20 @@ class TrigonometricFunctionsTest extends BaseEvaluationTest {
   void testAcosR(String expression, String expectedResult)
       throws EvaluationException, ParseException {
     assertExpressionHasExpectedResult(expression, expectedResult);
+  }
+
+  @Test
+  void testAcosRThrowsExceptionPositive() {
+    assertThatThrownBy(() -> new Expression("ACOSR(1.5)").evaluate())
+        .isInstanceOf(EvaluationException.class)
+        .hasMessage("Illegal acosr(x) for x > 1: x = 1.5");
+  }
+
+  @Test
+  void testAcosRThrowsExceptionNegative() {
+    assertThatThrownBy(() -> new Expression("ACOSR(-1.5)").evaluate())
+        .isInstanceOf(EvaluationException.class)
+        .hasMessage("Illegal acosr(x) for x < -1: x = -1.5");
   }
 
   @ParameterizedTest

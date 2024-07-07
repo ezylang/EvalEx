@@ -16,7 +16,6 @@
 package com.ezylang.evalex.functions.trigonometric;
 
 import static java.math.BigDecimal.ONE;
-import static java.math.BigDecimal.valueOf;
 
 import com.ezylang.evalex.EvaluationException;
 import com.ezylang.evalex.Expression;
@@ -29,8 +28,6 @@ import java.math.BigDecimal;
 /** Returns the arc-sine (in degrees). */
 @FunctionParameter(name = "value")
 public class AsinFunction extends AbstractFunction {
-
-  private static final BigDecimal MINUS_ONE = valueOf(-1);
 
   @Override
   public EvaluationValue evaluate(
