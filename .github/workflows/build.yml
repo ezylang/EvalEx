@@ -5,9 +5,9 @@ name: Build
 
 on:
   push:
-    branches: [ "main", "3.0.x", "3.1.x", "3.2.0" ]
+    branches: [ "main", "3.0.x", "3.1.x", "3.2.x", "3.3.x" ]
   pull_request:
-    branches: [ "main", "3.0.x", "3.1.x", "3.2.0" ]
+    branches: [ "main", "3.0.x", "3.1.x", "3.2.x", "3.3.x" ]
 
 jobs:
   build:
