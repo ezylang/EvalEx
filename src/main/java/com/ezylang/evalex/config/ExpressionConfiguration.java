@@ -189,6 +189,7 @@ public class ExpressionConfiguration {
           Map.entry("STR_UPPER", new StringUpperFunction()),
           Map.entry("STR_LENGTH", new StringLengthFunction()),
           Map.entry("STR_MATCHES", new StringMatchesFunction()),
+          Map.entry("STR_SUBSTRING", new StringSubstringFunction()),
           // date time functions
           Map.entry("DT_DATE_NEW", new DateTimeNewFunction()),
           Map.entry("DT_DATE_PARSE", new DateTimeParseFunction()),
