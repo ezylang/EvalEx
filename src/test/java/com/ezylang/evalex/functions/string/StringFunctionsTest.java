@@ -165,4 +165,37 @@ class StringFunctionsTest extends BaseEvaluationTest {
       throws EvaluationException, ParseException {
     assertExpressionHasExpectedResult(expression, expectedResult);
   }
+
+  @ParameterizedTest
+  @CsvSource(
+      delimiter = ':',
+      value = {
+        "STR_LENGTH(\"\") : 0",
+        "STR_LENGTH(\"a\") : 1",
+        "STR_LENGTH(\"AbCdEf\") : 6",
+        "STR_LENGTH(\"A1b3C4/?\") : 8",
+        "STR_LENGTH(\"äöüß\") : 4"
+      })
+  void testLength(String expression, String expectedResult)
+      throws EvaluationException, ParseException {
+    assertExpressionHasExpectedResult(expression, expectedResult);
+  }
+
+  @ParameterizedTest
+  @CsvSource(
+      delimiter = ':',
+      value = {
+        "STR_MATCHES(\"\", \"\") : true",
+        "STR_MATCHES(\"a\", \"a\") : true",
+        "STR_MATCHES(\"Hello World\", \"Hello\") : false",
+        "STR_MATCHES(\"Hello World\", \"hello\") : false",
+        "STR_MATCHES(\"Hello world\", \"text\") : false",
+        "STR_MATCHES(\"\", \"text\") : false",
+        "STR_MATCHES(\"Hello World\", \".*World\") : true",
+        "STR_MATCHES(\"Hello World\", \".*world\") : false",
+      })
+  void testMatches(String expression, String expectedResult)
+      throws EvaluationException, ParseException {
+    assertExpressionHasExpectedResult(expression, expectedResult);
+  }
 }
