@@ -42,6 +42,8 @@ Available through the _ExpressionConfiguration.StandardFunctionsDictionary_ cons
 | STR_STARTS_WITH(string, substring)  | Returns true if the string starts with the substring (case-sensitive)                                   |
 | STR_TRIM(string)                    | Returns the given string with all leading and trailing space removed.                                   |
 | STR_UPPER(value)                    | Converts the given value to upper case                                                                  |
+| STR_LENGTH(string)                  | Returns the length of the string                                                                        |
+| STR_MATCHES(string, pattern)        | Returns true if the string matches the RegEx pattern                                                    |
 
 ### Trigonometric Functions
 
