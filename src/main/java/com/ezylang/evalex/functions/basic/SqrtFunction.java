@@ -24,7 +24,7 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.math.MathContext;
 
-/** Square root function, uses the standard {@link BigDecimal#sqrt(MathContext)} implementation. */
+/** Square root function, uses the implementation from <i>The Java Programmers Guide To numerical Computing</i> by Ronald Mak, 2002. */
 @FunctionParameter(name = "value", nonNegative = true)
 public class SqrtFunction extends AbstractFunction {
 
@@ -34,7 +34,7 @@ public class SqrtFunction extends AbstractFunction {
 
     /*
      * From The Java Programmers Guide To numerical Computing
-     * (Ronald Mak, 2003)
+     * (Ronald Mak, 2002)
      */
     BigDecimal x = parameterValues[0].getNumberValue();
     MathContext mathContext = expression.getConfiguration().getMathContext();
