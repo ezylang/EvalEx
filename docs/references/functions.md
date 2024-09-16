@@ -27,7 +27,7 @@ Available through the _ExpressionConfiguration.StandardFunctionsDictionary_ cons
 | NOT(value)                                                                | Boolean negation, implemented as a function (for compatibility)                                                                                 |
 | RANDOM()                                                                  | Produces a random value between 0 and 1                                                                                                         |
 | ROUND(value, scale)                                                       | Rounds the given value to the specified scale, using the current rounding mode                                                                  |
-| SQRT(value)                                                               | Square root function                                                                                                                            |
+| SQRT(value)                                                               | Square root function. Uses the implementation from _The Java Programmers Guide To numerical Computing_ by Ronald Mak, 2002.                     |
 | SUM(value, ...)                                                           | Returns the sum of all parameters. If a parameter is of type _ARRAY_, the sum of all elements is calculated.                                    |
 | SWITCH(expression, value1, result1, [value2-N, result2-N ...], [default]) | Returns the _result_ correponding to the first matching _value_ in the specified _expression_ or an optional _default_ value if no match found. |
 
