@@ -15,10 +15,13 @@
 */
 package com.ezylang.evalex.functions.string;
 
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+
 import com.ezylang.evalex.BaseEvaluationTest;
 import com.ezylang.evalex.EvaluationException;
 import com.ezylang.evalex.config.TestConfigurationProvider;
 import com.ezylang.evalex.parser.ParseException;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 
@@ -164,5 +167,63 @@ class StringFunctionsTest extends BaseEvaluationTest {
   void testTrimString(String expression, String expectedResult)
       throws EvaluationException, ParseException {
     assertExpressionHasExpectedResult(expression, expectedResult);
+  }
+
+  @ParameterizedTest
+  @CsvSource(
+      delimiter = ':',
+      value = {
+        "STR_LENGTH(\"\") : 0",
+        "STR_LENGTH(\"a\") : 1",
+        "STR_LENGTH(\"AbCdEf\") : 6",
+        "STR_LENGTH(\"A1b3C4/?\") : 8",
+        "STR_LENGTH(\"äöüß\") : 4"
+      })
+  void testLength(String expression, String expectedResult)
+      throws EvaluationException, ParseException {
+    assertExpressionHasExpectedResult(expression, expectedResult);
+  }
+
+  @ParameterizedTest
+  @CsvSource(
+      delimiter = ':',
+      value = {
+        "STR_MATCHES(\"\", \"\") : true",
+        "STR_MATCHES(\"a\", \"a\") : true",
+        "STR_MATCHES(\"Hello World\", \"Hello\") : false",
+        "STR_MATCHES(\"Hello World\", \"hello\") : false",
+        "STR_MATCHES(\"Hello world\", \"text\") : false",
+        "STR_MATCHES(\"\", \"text\") : false",
+        "STR_MATCHES(\"Hello World\", \".*World\") : true",
+        "STR_MATCHES(\"Hello World\", \".*world\") : false",
+      })
+  void testMatches(String expression, String expectedResult)
+      throws EvaluationException, ParseException {
+    assertExpressionHasExpectedResult(expression, expectedResult);
+  }
+
+  @ParameterizedTest
+  @CsvSource(
+      delimiter = ':',
+      value = {
+        "STR_SUBSTRING(\"\", 0, 0) : ''",
+        "STR_SUBSTRING(\"Hello World\", 0) : Hello World",
+        "STR_SUBSTRING(\"Hello World\", 6) : World",
+        "STR_SUBSTRING(\"Hello World\", 0, 5) : Hello",
+        "STR_SUBSTRING(\"Hello World\", 6, 11) : World",
+        "STR_SUBSTRING(\"Hello World\", 6, 6) : ''",
+        "STR_SUBSTRING(\"Hello World\", 0, 11) : Hello World",
+        "STR_SUBSTRING(\"Hello World\", 0, 12) : Hello World",
+      })
+  void testSubstring(String expression, String expectedResult)
+      throws EvaluationException, ParseException {
+    assertExpressionHasExpectedResult(expression, expectedResult);
+  }
+
+  @Test
+  void testSubstringEndLessThanStart() {
+    assertThatThrownBy(() -> evaluate("STR_SUBSTRING(\"Hello World\", 6, 5)"))
+        .isInstanceOf(EvaluationException.class)
+        .hasMessage("End index must be greater than or equal to start index");
   }
 }

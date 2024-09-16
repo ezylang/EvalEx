@@ -183,8 +183,11 @@ public class ExpressionConfiguration {
           Map.entry("STR_CONTAINS", new StringContains()),
           Map.entry("STR_ENDS_WITH", new StringEndsWithFunction()),
           Map.entry("STR_FORMAT", new StringFormatFunction()),
+          Map.entry("STR_LENGTH", new StringLengthFunction()),
           Map.entry("STR_LOWER", new StringLowerFunction()),
+          Map.entry("STR_MATCHES", new StringMatchesFunction()),
           Map.entry("STR_STARTS_WITH", new StringStartsWithFunction()),
+          Map.entry("STR_SUBSTRING", new StringSubstringFunction()),
           Map.entry("STR_TRIM", new StringTrimFunction()),
           Map.entry("STR_UPPER", new StringUpperFunction()),
           // date time functions
