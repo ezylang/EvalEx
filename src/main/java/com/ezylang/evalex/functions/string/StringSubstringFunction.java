@@ -35,12 +35,11 @@ public class StringSubstringFunction extends AbstractFunction {
   public void validatePreEvaluation(Token token, EvaluationValue... parameterValues)
       throws EvaluationException {
     super.validatePreEvaluation(token, parameterValues);
-    if (parameterValues.length > 2) {
-      if (parameterValues[2].getNumberValue().intValue()
-          < parameterValues[1].getNumberValue().intValue()) {
-        throw new EvaluationException(
-            token, "End index must be greater than or equal to start index");
-      }
+    if (parameterValues.length > 2
+        && parameterValues[2].getNumberValue().intValue()
+            < parameterValues[1].getNumberValue().intValue()) {
+      throw new EvaluationException(
+          token, "End index must be greater than or equal to start index");
     }
   }
 
