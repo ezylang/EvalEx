@@ -190,6 +190,8 @@ public class ExpressionConfiguration {
           Map.entry("STR_SUBSTRING", new StringSubstringFunction()),
           Map.entry("STR_TRIM", new StringTrimFunction()),
           Map.entry("STR_UPPER", new StringUpperFunction()),
+          Map.entry("STR_LEFT", new StringLeftFunction()),
+          Map.entry("STR_RIGHT", new StringRightFunction()),
           // date time functions
           Map.entry("DT_DATE_NEW", new DateTimeNewFunction()),
           Map.entry("DT_DATE_PARSE", new DateTimeParseFunction()),
