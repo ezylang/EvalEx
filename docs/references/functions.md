@@ -45,6 +45,8 @@ Available through the _ExpressionConfiguration.StandardFunctionsDictionary_ cons
 | STR_SUBSTRING(string, start[, end]) | Returns a substring of the given string, starting at the _start_ index and ending at the _end_ index (the end of the string if not specified) |
 | STR_TRIM(string)                    | Returns the given string with all leading and trailing space removed.                                                                         |
 | STR_UPPER(value)                    | Converts the given value to upper case                                                                                                        |
+| STR_LEFT(value, n)                  | Returns the first n characters from the left of the given string                                                                              |  
+| STR_RIGHT(value, n)                 | Returns the last n characters from the left of the given string                                                                               |
 
 ### Trigonometric Functions
 
