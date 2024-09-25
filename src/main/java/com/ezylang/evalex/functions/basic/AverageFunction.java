@@ -21,10 +21,10 @@ import com.ezylang.evalex.functions.FunctionParameter;
 import com.ezylang.evalex.parser.Token;
 import java.math.BigDecimal;
 import java.math.MathContext;
-import java.util.Arrays;
 
 /**
- * Returns the average (arithmetic mean) of the numeric arguments.
+ * Returns the average (arithmetic mean) of the numeric arguments, with recursive support for arrays
+ * too.
  *
  * @author oswaldo.bapvic.jr
  */
@@ -35,12 +35,46 @@ public class AverageFunction extends AbstractMinMaxFunction {
   public EvaluationValue evaluate(
       Expression expression, Token functionToken, EvaluationValue... parameterValues) {
     MathContext mathContext = expression.getConfiguration().getMathContext();
-    BigDecimal sum =
-        Arrays.stream(parameterValues)
-            .map(EvaluationValue::getNumberValue)
-            .reduce(BigDecimal.ZERO, BigDecimal::add);
-    BigDecimal count = BigDecimal.valueOf(parameterValues.length);
-    BigDecimal average = sum.divide(count, mathContext);
+    BigDecimal average = average(mathContext, parameterValues);
     return expression.convertValue(average);
+  }
+
+  private BigDecimal average(MathContext mathContext, EvaluationValue... parameterValues) {
+    SumAndCount aux = new SumAndCount();
+    for (EvaluationValue parameter : parameterValues) {
+      aux = aux.plus(recursiveSumAndCount(parameter));
+    }
+
+    return aux.sum.divide(aux.count, mathContext);
+  }
+
+  private SumAndCount recursiveSumAndCount(EvaluationValue parameter) {
+    SumAndCount aux = new SumAndCount(BigDecimal.ZERO, BigDecimal.ZERO);
+    if (parameter.isArrayValue()) {
+      for (EvaluationValue element : parameter.getArrayValue()) {
+        aux = aux.plus(recursiveSumAndCount(element));
+      }
+      return aux;
+    }
+    return new SumAndCount(parameter.getNumberValue(), BigDecimal.ONE);
+  }
+
+  private class SumAndCount {
+    private final BigDecimal sum;
+    private final BigDecimal count;
+
+    private SumAndCount() {
+      this.sum = BigDecimal.ZERO;
+      this.count = BigDecimal.ZERO;
+    }
+
+    private SumAndCount(BigDecimal sum, BigDecimal count) {
+      this.sum = sum;
+      this.count = count;
+    }
+
+    private SumAndCount plus(SumAndCount other) {
+      return new SumAndCount(sum.add(other.sum), count.add(other.count));
+    }
   }
 }
