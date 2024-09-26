@@ -64,8 +64,7 @@ public class AverageFunction extends AbstractMinMaxFunction {
     private final BigDecimal count;
 
     private SumAndCount() {
-      this.sum = BigDecimal.ZERO;
-      this.count = BigDecimal.ZERO;
+      this(BigDecimal.ZERO, BigDecimal.ZERO);
     }
 
     private SumAndCount(BigDecimal sum, BigDecimal count) {
