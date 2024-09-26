@@ -23,8 +23,8 @@ import java.math.BigDecimal;
 import java.math.MathContext;
 
 /**
- * Returns the average (arithmetic mean) of the numeric arguments, with recursive support for arrays
- * too.
+ * Returns the average (arithmetic mean) of the numeric arguments, with recursive support for
+ * arrays.
  *
  * @author oswaldo.bapvic.jr
  */
@@ -59,7 +59,7 @@ public class AverageFunction extends AbstractMinMaxFunction {
     return new SumAndCount(parameter.getNumberValue(), BigDecimal.ONE);
   }
 
-  private class SumAndCount {
+  private final class SumAndCount {
     private final BigDecimal sum;
     private final BigDecimal count;
 

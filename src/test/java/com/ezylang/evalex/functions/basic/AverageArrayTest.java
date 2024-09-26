@@ -17,11 +17,10 @@ package com.ezylang.evalex.functions.basic;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import java.util.List;
-
 import com.ezylang.evalex.EvaluationException;
 import com.ezylang.evalex.Expression;
 import com.ezylang.evalex.parser.ParseException;
+import java.util.List;
 import org.junit.jupiter.api.Test;
 
 /**
