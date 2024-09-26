@@ -49,7 +49,7 @@ public class AverageFunction extends AbstractMinMaxFunction {
   }
 
   private SumAndCount recursiveSumAndCount(EvaluationValue parameter) {
-    SumAndCount aux = new SumAndCount(BigDecimal.ZERO, BigDecimal.ZERO);
+    SumAndCount aux = new SumAndCount();
     if (parameter.isArrayValue()) {
       for (EvaluationValue element : parameter.getArrayValue()) {
         aux = aux.plus(recursiveSumAndCount(element));

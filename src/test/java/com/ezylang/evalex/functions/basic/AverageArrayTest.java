@@ -17,6 +17,8 @@ package com.ezylang.evalex.functions.basic;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import java.util.List;
+
 import com.ezylang.evalex.EvaluationException;
 import com.ezylang.evalex.Expression;
 import com.ezylang.evalex.parser.ParseException;
@@ -40,8 +42,8 @@ class AverageArrayTest {
 
   @Test
   void testAverageMultipleArray() throws EvaluationException, ParseException {
-    Integer[] numbers1 = {1, 2, 3};
-    Integer[] numbers2 = {4, 5, 6};
+    List<Number> numbers1 = List.of(1, 2, 3);
+    List<Number> numbers2 = List.of(4, 5, 6);
 
     Expression expression =
         new Expression("AVERAGE(numbers1, numbers2)")
@@ -53,7 +55,7 @@ class AverageArrayTest {
 
   @Test
   void testAverageMixedArrayNumber() throws EvaluationException, ParseException {
-    Integer[] numbers = {1, 2, 3};
+    Double[] numbers = {1.0, 2.0, 3.0};
 
     Expression expression = new Expression("AVERAGE(numbers, 4)").with("numbers", numbers);
 
