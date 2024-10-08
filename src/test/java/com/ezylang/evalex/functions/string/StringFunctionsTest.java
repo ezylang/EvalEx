@@ -226,4 +226,32 @@ class StringFunctionsTest extends BaseEvaluationTest {
         .isInstanceOf(EvaluationException.class)
         .hasMessage("End index must be greater than or equal to start index");
   }
+
+  @ParameterizedTest
+  @CsvSource(
+      delimiter = ':',
+      value = {
+        "STR_LEFT(\"\", 0) : ''",
+        "STR_LEFT(\"Hello World\", 0) : ''",
+        "STR_LEFT(\"Hello World\", 5) : Hello",
+        "STR_LEFT(\"Hello World\", 20) : Hello World"
+      })
+  void testLeftString(String expression, String expectedResult)
+      throws EvaluationException, ParseException {
+    assertExpressionHasExpectedResult(expression, expectedResult);
+  }
+
+  @ParameterizedTest
+  @CsvSource(
+      delimiter = ':',
+      value = {
+        "STR_RIGHT(\"\", 0) : ''",
+        "STR_RIGHT(\"Hello World\", 0) : ''",
+        "STR_RIGHT(\"Hello World\", 5) : World",
+        "STR_RIGHT(\"Hello World\", 20) : Hello World"
+      })
+  void testRightString(String expression, String expectedResult)
+      throws EvaluationException, ParseException {
+    assertExpressionHasExpectedResult(expression, expectedResult);
+  }
 }
