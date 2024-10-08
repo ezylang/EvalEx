@@ -1,5 +1,5 @@
 /*
-  Copyright 2012-2024 Stefan Toengi
+  Copyright 2012-2024 Udo Klimaschewski
 
   Licensed under the Apache License, Version 2.0 (the "License");
   you may not use this file except in compliance with the License.
@@ -45,12 +45,12 @@ public class StringLeftFunction extends AbstractFunction {
    * Evaluates the `LEFT` string function by extracting a substring from the left side of the given
    * string.
    *
-   * @param expression      the current expression being evaluated
-   * @param functionToken   the token representing the function being called
+   * @param expression the current expression being evaluated
+   * @param functionToken the token representing the function being called
    * @param parameterValues the parameters passed to the function; expects exactly two parameters: a
-   *                        string and a numeric value for length
-   * @return the substring extracted from the left side of the input string as an
-   * {@link EvaluationValue}
+   *     string and a numeric value for length
+   * @return the substring extracted from the left side of the input string as an {@link
+   *     EvaluationValue}
    */
   @Override
   public EvaluationValue evaluate(

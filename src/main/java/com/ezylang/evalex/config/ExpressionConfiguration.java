@@ -21,19 +21,109 @@ import com.ezylang.evalex.data.MapBasedDataAccessor;
 import com.ezylang.evalex.data.conversion.DefaultEvaluationValueConverter;
 import com.ezylang.evalex.data.conversion.EvaluationValueConverterIfc;
 import com.ezylang.evalex.functions.FunctionIfc;
-import com.ezylang.evalex.functions.basic.*;
-import com.ezylang.evalex.functions.datetime.*;
-import com.ezylang.evalex.functions.string.*;
-import com.ezylang.evalex.functions.trigonometric.*;
+import com.ezylang.evalex.functions.basic.AbsFunction;
+import com.ezylang.evalex.functions.basic.AverageFunction;
+import com.ezylang.evalex.functions.basic.CeilingFunction;
+import com.ezylang.evalex.functions.basic.CoalesceFunction;
+import com.ezylang.evalex.functions.basic.FactFunction;
+import com.ezylang.evalex.functions.basic.FloorFunction;
+import com.ezylang.evalex.functions.basic.IfFunction;
+import com.ezylang.evalex.functions.basic.Log10Function;
+import com.ezylang.evalex.functions.basic.LogFunction;
+import com.ezylang.evalex.functions.basic.MaxFunction;
+import com.ezylang.evalex.functions.basic.MinFunction;
+import com.ezylang.evalex.functions.basic.NotFunction;
+import com.ezylang.evalex.functions.basic.RandomFunction;
+import com.ezylang.evalex.functions.basic.RoundFunction;
+import com.ezylang.evalex.functions.basic.SqrtFunction;
+import com.ezylang.evalex.functions.basic.SumFunction;
+import com.ezylang.evalex.functions.basic.SwitchFunction;
+import com.ezylang.evalex.functions.datetime.DateTimeFormatFunction;
+import com.ezylang.evalex.functions.datetime.DateTimeNewFunction;
+import com.ezylang.evalex.functions.datetime.DateTimeNowFunction;
+import com.ezylang.evalex.functions.datetime.DateTimeParseFunction;
+import com.ezylang.evalex.functions.datetime.DateTimeToEpochFunction;
+import com.ezylang.evalex.functions.datetime.DateTimeTodayFunction;
+import com.ezylang.evalex.functions.datetime.DurationFromMillisFunction;
+import com.ezylang.evalex.functions.datetime.DurationNewFunction;
+import com.ezylang.evalex.functions.datetime.DurationParseFunction;
+import com.ezylang.evalex.functions.datetime.DurationToMillisFunction;
+import com.ezylang.evalex.functions.string.StringContains;
+import com.ezylang.evalex.functions.string.StringEndsWithFunction;
+import com.ezylang.evalex.functions.string.StringFormatFunction;
+import com.ezylang.evalex.functions.string.StringLeftFunction;
+import com.ezylang.evalex.functions.string.StringLengthFunction;
+import com.ezylang.evalex.functions.string.StringLowerFunction;
+import com.ezylang.evalex.functions.string.StringMatchesFunction;
+import com.ezylang.evalex.functions.string.StringRightFunction;
+import com.ezylang.evalex.functions.string.StringStartsWithFunction;
+import com.ezylang.evalex.functions.string.StringSubstringFunction;
+import com.ezylang.evalex.functions.string.StringTrimFunction;
+import com.ezylang.evalex.functions.string.StringUpperFunction;
+import com.ezylang.evalex.functions.trigonometric.AcosFunction;
+import com.ezylang.evalex.functions.trigonometric.AcosHFunction;
+import com.ezylang.evalex.functions.trigonometric.AcosRFunction;
+import com.ezylang.evalex.functions.trigonometric.AcotFunction;
+import com.ezylang.evalex.functions.trigonometric.AcotHFunction;
+import com.ezylang.evalex.functions.trigonometric.AcotRFunction;
+import com.ezylang.evalex.functions.trigonometric.AsinFunction;
+import com.ezylang.evalex.functions.trigonometric.AsinHFunction;
+import com.ezylang.evalex.functions.trigonometric.AsinRFunction;
+import com.ezylang.evalex.functions.trigonometric.Atan2Function;
+import com.ezylang.evalex.functions.trigonometric.Atan2RFunction;
+import com.ezylang.evalex.functions.trigonometric.AtanFunction;
+import com.ezylang.evalex.functions.trigonometric.AtanHFunction;
+import com.ezylang.evalex.functions.trigonometric.AtanRFunction;
+import com.ezylang.evalex.functions.trigonometric.CosFunction;
+import com.ezylang.evalex.functions.trigonometric.CosHFunction;
+import com.ezylang.evalex.functions.trigonometric.CosRFunction;
+import com.ezylang.evalex.functions.trigonometric.CotFunction;
+import com.ezylang.evalex.functions.trigonometric.CotHFunction;
+import com.ezylang.evalex.functions.trigonometric.CotRFunction;
+import com.ezylang.evalex.functions.trigonometric.CscFunction;
+import com.ezylang.evalex.functions.trigonometric.CscHFunction;
+import com.ezylang.evalex.functions.trigonometric.CscRFunction;
+import com.ezylang.evalex.functions.trigonometric.DegFunction;
+import com.ezylang.evalex.functions.trigonometric.RadFunction;
+import com.ezylang.evalex.functions.trigonometric.SecFunction;
+import com.ezylang.evalex.functions.trigonometric.SecHFunction;
+import com.ezylang.evalex.functions.trigonometric.SecRFunction;
+import com.ezylang.evalex.functions.trigonometric.SinFunction;
+import com.ezylang.evalex.functions.trigonometric.SinHFunction;
+import com.ezylang.evalex.functions.trigonometric.SinRFunction;
+import com.ezylang.evalex.functions.trigonometric.TanFunction;
+import com.ezylang.evalex.functions.trigonometric.TanHFunction;
+import com.ezylang.evalex.functions.trigonometric.TanRFunction;
 import com.ezylang.evalex.operators.OperatorIfc;
-import com.ezylang.evalex.operators.arithmetic.*;
-import com.ezylang.evalex.operators.booleans.*;
+import com.ezylang.evalex.operators.arithmetic.InfixDivisionOperator;
+import com.ezylang.evalex.operators.arithmetic.InfixMinusOperator;
+import com.ezylang.evalex.operators.arithmetic.InfixModuloOperator;
+import com.ezylang.evalex.operators.arithmetic.InfixMultiplicationOperator;
+import com.ezylang.evalex.operators.arithmetic.InfixPlusOperator;
+import com.ezylang.evalex.operators.arithmetic.InfixPowerOfOperator;
+import com.ezylang.evalex.operators.arithmetic.PrefixMinusOperator;
+import com.ezylang.evalex.operators.arithmetic.PrefixPlusOperator;
+import com.ezylang.evalex.operators.booleans.InfixAndOperator;
+import com.ezylang.evalex.operators.booleans.InfixEqualsOperator;
+import com.ezylang.evalex.operators.booleans.InfixGreaterEqualsOperator;
+import com.ezylang.evalex.operators.booleans.InfixGreaterOperator;
+import com.ezylang.evalex.operators.booleans.InfixLessEqualsOperator;
+import com.ezylang.evalex.operators.booleans.InfixLessOperator;
+import com.ezylang.evalex.operators.booleans.InfixNotEqualsOperator;
+import com.ezylang.evalex.operators.booleans.InfixOrOperator;
+import com.ezylang.evalex.operators.booleans.PrefixNotOperator;
 import java.math.BigDecimal;
 import java.math.MathContext;
 import java.math.RoundingMode;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.TreeMap;
 import java.util.function.Supplier;
 import lombok.Builder;
 import lombok.Getter;
@@ -183,15 +273,15 @@ public class ExpressionConfiguration {
           Map.entry("STR_CONTAINS", new StringContains()),
           Map.entry("STR_ENDS_WITH", new StringEndsWithFunction()),
           Map.entry("STR_FORMAT", new StringFormatFunction()),
+          Map.entry("STR_LEFT", new StringLeftFunction()),
           Map.entry("STR_LENGTH", new StringLengthFunction()),
           Map.entry("STR_LOWER", new StringLowerFunction()),
           Map.entry("STR_MATCHES", new StringMatchesFunction()),
+          Map.entry("STR_RIGHT", new StringRightFunction()),
           Map.entry("STR_STARTS_WITH", new StringStartsWithFunction()),
           Map.entry("STR_SUBSTRING", new StringSubstringFunction()),
           Map.entry("STR_TRIM", new StringTrimFunction()),
           Map.entry("STR_UPPER", new StringUpperFunction()),
-          Map.entry("STR_LEFT", new StringLeftFunction()),
-          Map.entry("STR_RIGHT", new StringRightFunction()),
           // date time functions
           Map.entry("DT_DATE_NEW", new DateTimeNewFunction()),
           Map.entry("DT_DATE_PARSE", new DateTimeParseFunction()),
@@ -307,48 +397,6 @@ public class ExpressionConfiguration {
     return ExpressionConfiguration.builder().build();
   }
 
-  /**
-   * Adds additional operators to this configuration.
-   *
-   * @param operators variable number of arguments with a map entry holding the operator name and
-   *     implementation. <br>
-   *     Example: <code>
-   *        ExpressionConfiguration.defaultConfiguration()
-   *          .withAdditionalOperators(
-   *            Map.entry("++", new PrefixPlusPlusOperator()),
-   *            Map.entry("++", new PostfixPlusPlusOperator()));
-   *     </code>
-   * @return The modified configuration, to allow chaining of methods.
-   */
-  @SafeVarargs
-  public final ExpressionConfiguration withAdditionalOperators(
-      Map.Entry<String, OperatorIfc>... operators) {
-    Arrays.stream(operators)
-        .forEach(entry -> operatorDictionary.addOperator(entry.getKey(), entry.getValue()));
-    return this;
-  }
-
-  /**
-   * Adds additional functions to this configuration.
-   *
-   * @param functions variable number of arguments with a map entry holding the functions name and
-   *     implementation. <br>
-   *     Example: <code>
-   *        ExpressionConfiguration.defaultConfiguration()
-   *          .withAdditionalFunctions(
-   *            Map.entry("save", new SaveFunction()),
-   *            Map.entry("update", new UpdateFunction()));
-   *     </code>
-   * @return The modified configuration, to allow chaining of methods.
-   */
-  @SafeVarargs
-  public final ExpressionConfiguration withAdditionalFunctions(
-      Map.Entry<String, FunctionIfc>... functions) {
-    Arrays.stream(functions)
-        .forEach(entry -> functionDictionary.addFunction(entry.getKey(), entry.getValue()));
-    return this;
-  }
-
   private static Map<String, EvaluationValue> getStandardConstants() {
 
     Map<String, EvaluationValue> constants = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
@@ -375,5 +423,45 @@ public class ExpressionConfiguration {
     constants.put("DT_FORMAT_LOCAL_DATE", EvaluationValue.stringValue("yyyy-MM-dd"));
 
     return constants;
+  }
+
+  /**
+   * Adds additional operators to this configuration.
+   *
+   * @param operators variable number of arguments with a map entry holding the operator name and
+   *     implementation. <br>
+   *     Example: <code>
+   *                  ExpressionConfiguration.defaultConfiguration() .withAdditionalOperators(
+   *                  Map.entry("++", new PrefixPlusPlusOperator()), Map.entry("++", new
+   *                  PostfixPlusPlusOperator()));
+   *                  </code>
+   * @return The modified configuration, to allow chaining of methods.
+   */
+  @SafeVarargs
+  public final ExpressionConfiguration withAdditionalOperators(
+      Map.Entry<String, OperatorIfc>... operators) {
+    Arrays.stream(operators)
+        .forEach(entry -> operatorDictionary.addOperator(entry.getKey(), entry.getValue()));
+    return this;
+  }
+
+  /**
+   * Adds additional functions to this configuration.
+   *
+   * @param functions variable number of arguments with a map entry holding the functions name and
+   *     implementation. <br>
+   *     Example: <code>
+   *                  ExpressionConfiguration.defaultConfiguration() .withAdditionalFunctions(
+   *                  Map.entry("save", new SaveFunction()), Map.entry("update", new
+   *                  UpdateFunction()));
+   *                  </code>
+   * @return The modified configuration, to allow chaining of methods.
+   */
+  @SafeVarargs
+  public final ExpressionConfiguration withAdditionalFunctions(
+      Map.Entry<String, FunctionIfc>... functions) {
+    Arrays.stream(functions)
+        .forEach(entry -> functionDictionary.addFunction(entry.getKey(), entry.getValue()));
+    return this;
   }
 }

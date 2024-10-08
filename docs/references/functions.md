@@ -38,15 +38,15 @@ Available through the _ExpressionConfiguration.StandardFunctionsDictionary_ cons
 | STR_CONTAINS(string, substring)     | Returns true if the string contains the substring (case-insensitive)                                                                          |
 | STR_ENDS_WITH(string, substring)    | Returns true if the string ends with the substring (case-sensitive)                                                                           |
 | STR_FORMAT(format [,argument, ...]) | Returns a formatted string using the specified format string and arguments, using the configured locale                                       |
+| STR_LEFT(value, n)                  | Returns the first n characters from the left of the given string                                                                              |  
 | STR_LENGTH(string)                  | Returns the length of the string                                                                                                              |
 | STR_LOWER(value)                    | Converts the given value to lower case                                                                                                        |
 | STR_MATCHES(string, pattern)        | Returns true if the string matches the RegEx pattern                                                                                          |
+| STR_RIGHT(value, n)                 | Returns the last n characters from the left of the given string                                                                               |
 | STR_STARTS_WITH(string, substring)  | Returns true if the string starts with the substring (case-sensitive)                                                                         |
 | STR_SUBSTRING(string, start[, end]) | Returns a substring of the given string, starting at the _start_ index and ending at the _end_ index (the end of the string if not specified) |
 | STR_TRIM(string)                    | Returns the given string with all leading and trailing space removed.                                                                         |
 | STR_UPPER(value)                    | Converts the given value to upper case                                                                                                        |
-| STR_LEFT(value, n)                  | Returns the first n characters from the left of the given string                                                                              |  
-| STR_RIGHT(value, n)                 | Returns the last n characters from the left of the given string                                                                               |
 
 ### Trigonometric Functions
 
