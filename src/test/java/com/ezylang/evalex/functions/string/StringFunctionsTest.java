@@ -206,6 +206,37 @@ class StringFunctionsTest extends BaseEvaluationTest {
   @CsvSource(
       delimiter = ':',
       value = {
+        "STR_SUBSTRING_AFTER(\"myFile.json\", \".\") : json",
+        "STR_SUBSTRING_AFTER(\"2024/07/15\", \"/\") : 07/15",
+        "STR_SUBSTRING_AFTER(\"2024/07/15\", \"20\") : 24/07/15",
+        "STR_SUBSTRING_AFTER(\"test\", \"\") : 'test'",
+        "STR_SUBSTRING_AFTER(\"test\", \"a\") : ''",
+        "STR_SUBSTRING_AFTER(\"\", \"\") : ''"
+      })
+  void testSubstringAfter(String expression, String expectedResult)
+      throws EvaluationException, ParseException {
+    assertExpressionHasExpectedResult(expression, expectedResult);
+  }
+
+  @ParameterizedTest
+  @CsvSource(
+      delimiter = ':',
+      value = {
+        "STR_SUBSTRING_BEFORE(\"myFile.json\", \".\") : myFile",
+        "STR_SUBSTRING_BEFORE(\"2024/07/15\", \"/\") : 2024",
+        "STR_SUBSTRING_BEFORE(\"test\", \"\") : ''",
+        "STR_SUBSTRING_BEFORE(\"test\", \"a\") : 'test'",
+        "STR_SUBSTRING_BEFORE(\"\", \"\") : ''"
+      })
+  void testSubstringBefore(String expression, String expectedResult)
+      throws EvaluationException, ParseException {
+    assertExpressionHasExpectedResult(expression, expectedResult);
+  }
+
+  @ParameterizedTest
+  @CsvSource(
+      delimiter = ':',
+      value = {
         "STR_SUBSTRING(\"\", 0, 0) : ''",
         "STR_SUBSTRING(\"Hello World\", 0) : Hello World",
         "STR_SUBSTRING(\"Hello World\", 6) : World",
