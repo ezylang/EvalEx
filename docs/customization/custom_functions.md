@@ -138,5 +138,5 @@ ExpressionConfiguration configuration =
             Map.entry("MAX_VALUE", new MaxFunction()),
             Map.entry("MIN_VALUE", new MinFunction()));
     
-Expression expression = new Expression("MAX_VALUE(1,2,3) + MIN_VALUE(7,8,9)");
+Expression expression = new Expression("MAX_VALUE(1,2,3) + MIN_VALUE(7,8,9)", configuration);
 ```
