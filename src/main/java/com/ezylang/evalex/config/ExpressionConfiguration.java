@@ -56,6 +56,7 @@ import com.ezylang.evalex.functions.string.StringLengthFunction;
 import com.ezylang.evalex.functions.string.StringLowerFunction;
 import com.ezylang.evalex.functions.string.StringMatchesFunction;
 import com.ezylang.evalex.functions.string.StringRightFunction;
+import com.ezylang.evalex.functions.string.StringSplitFunction;
 import com.ezylang.evalex.functions.string.StringStartsWithFunction;
 import com.ezylang.evalex.functions.string.StringSubstringFunction;
 import com.ezylang.evalex.functions.string.StringTrimFunction;
@@ -278,6 +279,7 @@ public class ExpressionConfiguration {
           Map.entry("STR_LOWER", new StringLowerFunction()),
           Map.entry("STR_MATCHES", new StringMatchesFunction()),
           Map.entry("STR_RIGHT", new StringRightFunction()),
+          Map.entry("STR_SPLIT", new StringSplitFunction()),
           Map.entry("STR_STARTS_WITH", new StringStartsWithFunction()),
           Map.entry("STR_SUBSTRING", new StringSubstringFunction()),
           Map.entry("STR_TRIM", new StringTrimFunction()),

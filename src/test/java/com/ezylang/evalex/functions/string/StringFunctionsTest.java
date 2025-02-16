@@ -206,6 +206,21 @@ class StringFunctionsTest extends BaseEvaluationTest {
   @CsvSource(
       delimiter = ':',
       value = {
+        "STR_SPLIT(\"Hello World\", \" \")[0] : Hello",
+        "STR_SPLIT(\"Hello World\", \" \")[1] : World",
+        "STR_SPLIT(\"myFile.json\", \".\")[0] : myFile",
+        "STR_SPLIT(\"myFile.json\", \".\")[1] : json",
+        "STR_SPLIT(\"Hello World\", \"_\")[0] : Hello World"
+      })
+  void testSplit(String expression, String expectedResult)
+      throws EvaluationException, ParseException {
+    assertExpressionHasExpectedResult(expression, expectedResult);
+  }
+
+  @ParameterizedTest
+  @CsvSource(
+      delimiter = ':',
+      value = {
         "STR_SUBSTRING(\"\", 0, 0) : ''",
         "STR_SUBSTRING(\"Hello World\", 0) : Hello World",
         "STR_SUBSTRING(\"Hello World\", 6) : World",
