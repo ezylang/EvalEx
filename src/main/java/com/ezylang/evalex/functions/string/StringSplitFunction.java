@@ -1,5 +1,5 @@
 /*
-  Copyright 2012-2024 Udo Klimaschewski
+  Copyright 2012-2025 Udo Klimaschewski
 
   Licensed under the Apache License, Version 2.0 (the "License");
   you may not use this file except in compliance with the License.
@@ -21,19 +21,25 @@ import com.ezylang.evalex.data.EvaluationValue;
 import com.ezylang.evalex.functions.AbstractFunction;
 import com.ezylang.evalex.functions.FunctionParameter;
 import com.ezylang.evalex.parser.Token;
+import java.util.regex.Pattern;
 
 /**
- * Returns the substring after the first occurrence of another (separator) string, or an empty
- * string if the first string does not contain the second string.
+ * A function that splits a string into an array, separators specified.
  *
- * <p>For example: {@code STR_SUBSTRING_AFTER("2024/07/15", "/")} returns {@code "07/15"}.
+ * <p>For example:
+ *
+ * <p>
+ *
+ * <pre>
+ * STR_SPLIT("2024/07/15", "/")  = ["2024", "07", "15"]
+ * STR_SPLIT("myFile.json", ".") = ["myFile", "json"]
+ * </pre>
  *
  * @author oswaldobapvicjr
  */
 @FunctionParameter(name = "string")
 @FunctionParameter(name = "separator")
-public class StringSubstringAfterFunction extends AbstractFunction {
-  private static final String STR_EMPTY = "";
+public class StringSplitFunction extends AbstractFunction {
 
   @Override
   public EvaluationValue evaluate(
@@ -41,11 +47,6 @@ public class StringSubstringAfterFunction extends AbstractFunction {
       throws EvaluationException {
     String string = parameterValues[0].getStringValue();
     String separator = parameterValues[1].getStringValue();
-    return expression.convertValue(substringAfter(string, separator));
-  }
-
-  private String substringAfter(String string, String separator) {
-    int position = string.indexOf(separator);
-    return (position == -1) ? STR_EMPTY : string.substring(position + separator.length());
+    return expression.convertValue(string.split(Pattern.quote(separator)));
   }
 }

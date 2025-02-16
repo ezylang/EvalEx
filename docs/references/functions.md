@@ -43,10 +43,9 @@ Available through the _ExpressionConfiguration.StandardFunctionsDictionary_ cons
 | STR_LOWER(value)                        | Converts the given value to lower case                                                                                                        |
 | STR_MATCHES(string, pattern)            | Returns true if the string matches the RegEx pattern                                                                                          |
 | STR_RIGHT(value, n)                     | Returns the last n characters from the left of the given string                                                                               |
+| STR_SPLIT(string, separator)            | Splits the given _string_ into an array, given a _separator_.                                                                                 |
 | STR_STARTS_WITH(string, substring)      | Returns true if the string starts with the substring (case-sensitive)                                                                         |
 | STR_SUBSTRING(string, start[, end])     | Returns a substring of the given string, starting at the _start_ index and ending at the _end_ index (the end of the string if not specified) |
-| STR_SUBSTRING_AFTER(string, separator)  | Returns the substring after the first occurrence of the _separator_ string on the given _string_                                              |
-| STR_SUBSTRING_BEFORE(string, separator) | Returns the substring before the first occurrence of the _separator_ string on the given _string_                                             |
 | STR_TRIM(string)                        | Returns the given string with all leading and trailing space removed.                                                                         |
 | STR_UPPER(value)                        | Converts the given value to upper case                                                                                                        |
 
