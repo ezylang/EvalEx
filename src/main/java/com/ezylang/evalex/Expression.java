@@ -31,8 +31,6 @@ import lombok.Getter;
  * @see <a href="https://github.com/ezylang/EvalEx">EvalEx Homepage</a>
  */
 public class Expression {
-  // TODO make it configurable via ExpressionConfiguration???
-  private static final int MAX_DEPTH = 2_000;
 
   @Getter private final ExpressionConfiguration configuration;
 
@@ -128,7 +126,7 @@ public class Expression {
    * @throws EvaluationException If there were problems while evaluating the expression.
    */
   private EvaluationValue evaluateSubtree(ASTNode startNode, int depth) throws EvaluationException {
-    if (depth > MAX_DEPTH) {
+    if (depth > configuration.getMaxRecursionDepth()) {
       throw new EvaluationException(startNode.getToken(), "Max recursion depth exceeded");
     }
 

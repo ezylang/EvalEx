@@ -58,6 +58,8 @@ class ExpressionConfigurationTest {
     assertThat(configuration.getZoneId()).isEqualTo(ZoneId.systemDefault());
     assertThat(configuration.getLocale()).isEqualTo(Locale.getDefault());
     assertThat(configuration.isSingleQuoteStringLiteralsAllowed()).isFalse();
+    assertThat(configuration.getMaxRecursionDepth())
+        .isEqualTo(ExpressionConfiguration.DEFAULT_MAX_RECURSION_DEPTH);
   }
 
   @Test
@@ -234,5 +236,13 @@ class ExpressionConfigurationTest {
 
     assertThat(configuration.getPowerOfPrecedence())
         .isEqualTo(OperatorIfc.OPERATOR_PRECEDENCE_POWER_HIGHER);
+  }
+
+  @Test
+  void testMaxRecursionDepth() {
+    ExpressionConfiguration configuration =
+        ExpressionConfiguration.builder().maxRecursionDepth(9).build();
+
+    assertThat(configuration.getMaxRecursionDepth()).isEqualTo(9);
   }
 }
