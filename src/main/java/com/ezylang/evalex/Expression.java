@@ -120,8 +120,8 @@ public class Expression {
    * Evaluates only a subtree of the abstract syntax tree.
    *
    * @param startNode The {@link ASTNode} to start evaluation from.
-   * @param depth The current depth, to track recursion level and secure it does not exceed
-   *     MAX_DEPTH
+   * @param depth The current depth, to track recursion level and secure it does not exceed the
+   *     maximum level defined by {@link ExpressionConfiguration#getMaxRecursionDepth()}
    * @return The evaluation result value.
    * @throws EvaluationException If there were problems while evaluating the expression.
    */
