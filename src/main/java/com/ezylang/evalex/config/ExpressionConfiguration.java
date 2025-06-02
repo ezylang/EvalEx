@@ -165,6 +165,9 @@ public class ExpressionConfiguration {
   public static final MathContext DEFAULT_MATH_CONTEXT =
       new MathContext(68, RoundingMode.HALF_EVEN);
 
+  /** The default maximum depth for recursion is 2000 levels. */
+  public static final int DEFAULT_MAX_RECURSION_DEPTH = 2_000;
+
   /**
    * The default date time formatters used when parsing a date string. Each format will be tried and
    * the first matching will be used.
@@ -375,6 +378,9 @@ public class ExpressionConfiguration {
 
   /** The locale. By default, the system default locale is used. */
   @Builder.Default private final Locale locale = Locale.getDefault();
+
+  /** The maximum recursion depth allowed for nested expressions. */
+  @Builder.Default private final int maxRecursionDepth = DEFAULT_MAX_RECURSION_DEPTH;
 
   /**
    * The date-time formatters. When parsing, each format will be tried and the first matching will
