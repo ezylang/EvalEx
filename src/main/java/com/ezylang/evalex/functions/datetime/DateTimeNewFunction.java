@@ -80,6 +80,10 @@ public class DateTimeNewFunction extends AbstractFunction {
 
     int parameterLength = parameterValues.length;
 
+    if (parameterLength == 0) {
+      throw new EvaluationException(token, "Not enough parameters for function");
+    }
+
     if (parameterLength == 1) {
       if (!parameterValues[0].isNumberValue()) {
         throw new EvaluationException(
