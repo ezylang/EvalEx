@@ -106,6 +106,13 @@ class DateTimeFunctionsTest extends BaseEvaluationTest {
         .hasMessage("Time zone with id 'Mars/Olympus-Mons' not found");
   }
 
+  @Test
+  void testDateTimeNewNoParam() {
+    assertThatThrownBy(() -> new Expression("DT_DATE_NEW()").evaluate())
+        .isInstanceOf(EvaluationException.class)
+        .hasMessage("Not enough parameters for function");
+  }
+
   @ParameterizedTest
   @CsvSource(
       delimiter = '|',
