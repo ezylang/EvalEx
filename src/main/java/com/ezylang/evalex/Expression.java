@@ -31,6 +31,7 @@ import lombok.Getter;
  * @see <a href="https://github.com/ezylang/EvalEx">EvalEx Homepage</a>
  */
 public class Expression {
+
   @Getter private final ExpressionConfiguration configuration;
 
   @Getter private final String expressionString;
@@ -86,7 +87,7 @@ public class Expression {
    * @throws ParseException If there were problems while parsing the expression.
    */
   public EvaluationValue evaluate() throws EvaluationException, ParseException {
-    EvaluationValue result = evaluateSubtree(getAbstractSyntaxTree());
+    EvaluationValue result = evaluateSubtree(getAbstractSyntaxTree(), 0);
     if (result.isNumberValue()) {
       BigDecimal bigDecimal = result.getNumberValue();
       if (configuration.getDecimalPlacesResult()
@@ -112,6 +113,23 @@ public class Expression {
    * @throws EvaluationException If there were problems while evaluating the expression.
    */
   public EvaluationValue evaluateSubtree(ASTNode startNode) throws EvaluationException {
+    return evaluateSubtree(startNode, 0);
+  }
+
+  /**
+   * Evaluates only a subtree of the abstract syntax tree.
+   *
+   * @param startNode The {@link ASTNode} to start evaluation from.
+   * @param depth The current depth, to track recursion level and secure it does not exceed the
+   *     maximum level defined by {@link ExpressionConfiguration#getMaxRecursionDepth()}
+   * @return The evaluation result value.
+   * @throws EvaluationException If there were problems while evaluating the expression.
+   */
+  private EvaluationValue evaluateSubtree(ASTNode startNode, int depth) throws EvaluationException {
+    if (depth > configuration.getMaxRecursionDepth()) {
+      throw new EvaluationException(startNode.getToken(), "Max recursion depth exceeded");
+    }
+
     Token token = startNode.getToken();
     EvaluationValue result;
     switch (token.getType()) {
@@ -124,7 +142,7 @@ public class Expression {
       case VARIABLE_OR_CONSTANT:
         result = getVariableOrConstant(token);
         if (result.isExpressionNode()) {
-          result = evaluateSubtree(result.getExpressionNode());
+          result = evaluateSubtree(result.getExpressionNode(), depth + 1);
         }
         break;
       case PREFIX_OPERATOR:
@@ -132,19 +150,20 @@ public class Expression {
         result =
             token
                 .getOperatorDefinition()
-                .evaluate(this, token, evaluateSubtree(startNode.getParameters().get(0)));
+                .evaluate(
+                    this, token, evaluateSubtree(startNode.getParameters().get(0), depth + 1));
         break;
       case INFIX_OPERATOR:
-        result = evaluateInfixOperator(startNode, token);
+        result = evaluateInfixOperator(startNode, token, depth + 1);
         break;
       case ARRAY_INDEX:
-        result = evaluateArrayIndex(startNode);
+        result = evaluateArrayIndex(startNode, depth + 1);
         break;
       case STRUCTURE_SEPARATOR:
-        result = evaluateStructureSeparator(startNode);
+        result = evaluateStructureSeparator(startNode, depth + 1);
         break;
       case FUNCTION:
-        result = evaluateFunction(startNode, token);
+        result = evaluateFunction(startNode, token, depth + 1);
         break;
       default:
         throw new EvaluationException(token, "Unexpected evaluation token: " + token);
@@ -171,14 +190,14 @@ public class Expression {
     return result;
   }
 
-  private EvaluationValue evaluateFunction(ASTNode startNode, Token token)
+  private EvaluationValue evaluateFunction(ASTNode startNode, Token token, int depth)
       throws EvaluationException {
     List<EvaluationValue> parameterResults = new ArrayList<>();
     for (int i = 0; i < startNode.getParameters().size(); i++) {
       if (token.getFunctionDefinition().isParameterLazy(i)) {
         parameterResults.add(convertValue(startNode.getParameters().get(i)));
       } else {
-        parameterResults.add(evaluateSubtree(startNode.getParameters().get(i)));
+        parameterResults.add(evaluateSubtree(startNode.getParameters().get(i), depth + 1));
       }
     }
 
@@ -191,9 +210,10 @@ public class Expression {
     return function.evaluate(this, token, parameters);
   }
 
-  private EvaluationValue evaluateArrayIndex(ASTNode startNode) throws EvaluationException {
-    EvaluationValue array = evaluateSubtree(startNode.getParameters().get(0));
-    EvaluationValue index = evaluateSubtree(startNode.getParameters().get(1));
+  private EvaluationValue evaluateArrayIndex(ASTNode startNode, int depth)
+      throws EvaluationException {
+    EvaluationValue array = evaluateSubtree(startNode.getParameters().get(0), depth + 1);
+    EvaluationValue index = evaluateSubtree(startNode.getParameters().get(1), depth + 1);
 
     if (array.isArrayValue() && index.isNumberValue()) {
       if (index.getNumberValue().intValue() < 0
@@ -210,8 +230,9 @@ public class Expression {
     }
   }
 
-  private EvaluationValue evaluateStructureSeparator(ASTNode startNode) throws EvaluationException {
-    EvaluationValue structure = evaluateSubtree(startNode.getParameters().get(0));
+  private EvaluationValue evaluateStructureSeparator(ASTNode startNode, int depth)
+      throws EvaluationException {
+    EvaluationValue structure = evaluateSubtree(startNode.getParameters().get(0), depth + 1);
     Token nameToken = startNode.getParameters().get(1).getToken();
     String name = nameToken.getValue();
 
@@ -226,7 +247,7 @@ public class Expression {
     }
   }
 
-  private EvaluationValue evaluateInfixOperator(ASTNode startNode, Token token)
+  private EvaluationValue evaluateInfixOperator(ASTNode startNode, Token token, int depth)
       throws EvaluationException {
     EvaluationValue left;
     EvaluationValue right;
@@ -236,8 +257,8 @@ public class Expression {
       left = convertValue(startNode.getParameters().get(0));
       right = convertValue(startNode.getParameters().get(1));
     } else {
-      left = evaluateSubtree(startNode.getParameters().get(0));
-      right = evaluateSubtree(startNode.getParameters().get(1));
+      left = evaluateSubtree(startNode.getParameters().get(0), depth + 1);
+      right = evaluateSubtree(startNode.getParameters().get(1), depth + 1);
     }
     return op.evaluate(this, token, left, right);
   }

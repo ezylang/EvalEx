@@ -218,4 +218,26 @@ class ExpressionTest {
     assertThat(expressionCopy.getDataAccessor().getData("a"))
         .isEqualTo(EvaluationValue.stringValue("2"));
   }
+
+  @Test
+  void testEvaluateStackOverflowIssue() {
+    Expression expression = new Expression(generateNestedExpression(5_000));
+    assertThatThrownBy(() -> expression.evaluate())
+        .isInstanceOf(EvaluationException.class)
+        .hasMessage("Max recursion depth exceeded");
+  }
+
+  public static String generateNestedExpression(int depth) {
+    StringBuilder sb = new StringBuilder();
+    for (int i = 1; i <= depth; i++) {
+      sb.append("(");
+      sb.append(i);
+      sb.append("+");
+    }
+    sb.append("0"); // Base case
+    for (int i = 0; i < depth; i++) {
+      sb.append(")");
+    }
+    return sb.toString();
+  }
 }
