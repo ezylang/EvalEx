@@ -155,9 +155,9 @@ AVERAGE(value, [...])
 
 ### Parameters
 
-| Name         | Description                                                        |
-|--------------|--------------------------------------------------------------------|
-| value, [...] | One or more values or arrays from which the average is calculated. |
+| Name       | Description                                                        |
+|------------|--------------------------------------------------------------------|
+| value, ... | One or more values or arrays from which the average is calculated. |
 
 ### Examples
 
@@ -197,19 +197,12 @@ CEILING(value)
 
 ### Examples
 
-Consider the following variables:
+Consider the following expressions:
 
-| Name   | Value   |
-|--------|---------|
-| `x`    | `4.3`   |
-| `y`    | `-2.7`  |
-
-And the following expressions:
-
-| Expression   | Result |
-|--------------|--------|
-| `CEILING(x)` | `5`    |
-| `CEILING(y)` | `-2`   |
+| Expression     | Result |
+|----------------|--------|
+| `CEILING(4.3)` | `5`    |
+| `CEILING(2.7)` | `-2`   |
 
 [Return to top](#top)
 
@@ -228,9 +221,9 @@ COALESCE(value, [...])
 
 ### Parameters
 
-| Name         | Description                         |
-|--------------|-------------------------------------|
-| value, [...] | One or more values to be evaluated. |
+| Name       | Description                         |
+|------------|-------------------------------------|
+| value, ... | One or more values to be evaluated. |
 
 ### Examples
 
@@ -255,7 +248,7 @@ And the following expressions:
 
 ## FACT
 
-The FACT function calculates the factorial of a base value.
+The FACT function calculates the factorial of a base value, that is, the product of all positive integers from 1 up to that number.
 
 ### Syntax
 
@@ -299,19 +292,12 @@ FLOOR(value)
 
 ### Examples
 
-Consider the following variables:
-
-| Name   | Value  |
-|--------|--------|
-| `x`    | `4.7`  |
-| `y`    | `-2.3` |
-
-And the following expressions:
+Consider the following expressions:
 
 | Expression   | Result |
 |--------------|--------|
-| `FLOOR(x)`   | `4`    |
-| `FLOOR(y)`   | `-3`   |
+| `FLOOR(4.7)` | `4`    |
+| `FLOOR(2.4)` | `-3`   |
 
 [Return to top](#top)
 
@@ -332,7 +318,7 @@ IF(condition, value_if_true, value_if_false)
 |----------------|--------------------------------------------------|
 | condition      | The logical test you want to evaluate.           |
 | value_if_true  | The value returned if the logical test is true.  |
-| value_if_false | The value returned if the logical test if false. |
+| value_if_false | The value returned if the logical test is false. |
 
 
 ### Examples
@@ -425,9 +411,9 @@ MAX(value, [...])
 
 ### Parameters
 
-| Name         | Description                                                         |
-|--------------|---------------------------------------------------------------------|
-| value, [...] | One or more numbers or arrays from which to find the maximum value. |
+| Name       | Description                                                         |
+|------------|---------------------------------------------------------------------|
+| value, ... | One or more numbers or arrays from which to find the maximum value. |
 
 ### Examples
 
@@ -462,9 +448,9 @@ MIN(value, [...])
 
 ### Parameters
 
-| Name         | Description                                                         |
-|--------------|---------------------------------------------------------------------|
-| value, [...] | One or more numbers or arrays from which to find the minimum value. |
+| Name       | Description                                                         |
+|------------|---------------------------------------------------------------------|
+| value, ... | One or more numbers or arrays from which to find the minimum value. |
 
 ### Examples
 
@@ -478,11 +464,11 @@ Consider the following variables:
 
 And the following expressions:
 
-| Expression                 | Result |
-|----------------------------|--------|
-| `MIN(numbers)`             | `3`    |
-| `MIN(x, y)`                | `4`    |
-| `MIN(x, y, numbers)`       | `3`    |
+| Expression            | Result |
+|-----------------------|--------|
+| `MIN(numbers)`        | `3`    |
+| `MIN(x, y)`           | `4`    |
+| `MIN(x, y, numbers)`  | `3`    |
 
 [Return to top](#top)
 
@@ -510,7 +496,7 @@ Consider the following variables:
 | Name    | Value  |
 |---------|--------|
 | `flag`  | `true` |
-| `x`     | `10` |
+| `x`     | `10`   |
 
 And the following expressions:
 
