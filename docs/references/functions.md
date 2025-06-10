@@ -11,25 +11,25 @@ Available through the _ExpressionConfiguration.StandardFunctionsDictionary_ cons
 
 ### Basic Functions
 
-| Name                                                                      | Description                                                                                                                                     |
-|---------------------------------------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------|
-| ABS(value)                                                                | Absolute (non-negative) value                                                                                                                   |
-| AVERAGE(value, ...)                                                       | Returns the average (arithmetic mean) of all parameters. If a parameter is of type _ARRAY_, the average of all elements is calculated.          |
-| CEILING(value)                                                            | Rounds the given value an integer using the rounding mode CEILING                                                                               |
-| COALESCE(value, ...)                                                      | Returns the first non-null parameter, or NULL if all parameters are null                                                                        |
-| FACT(base)                                                                | Calculates the factorial of a base value                                                                                                        |
-| FLOOR(value)                                                              | Rounds the given value an integer using the rounding mode FLOOR                                                                                 |
-| IF(condition, resultIfTrue, resultIfFalse)                                | Conditional evaluation function. If _condition_ is true, the _resultIfTrue_ is returned, else the _resultIfFalse_ value                         |
-| LOG(value)                                                                | The natural logarithm (base e) of a value                                                                                                       |
-| LOG10(value)                                                              | The base 10 logarithm of a value                                                                                                                |
-| MAX(value, ...)                                                           | Returns the maximum value of all parameters. If a parameter is of type _ARRAY_, the maximum of all elements is calculated.                      |
-| MIN(value, ...)                                                           | Returns the minimum value of all parameters. If a parameter is of type _ARRAY_, the minimum of all elements is calculated.                      |
-| NOT(value)                                                                | Boolean negation, implemented as a function (for compatibility)                                                                                 |
-| RANDOM()                                                                  | Produces a random value between 0 and 1                                                                                                         |
-| ROUND(value, scale)                                                       | Rounds the given value to the specified scale, using the current rounding mode                                                                  |
-| SQRT(value)                                                               | Square root function. Uses the implementation from _The Java Programmers Guide To numerical Computing_ by Ronald Mak, 2002.                     |
-| SUM(value, ...)                                                           | Returns the sum of all parameters. If a parameter is of type _ARRAY_, the sum of all elements is calculated.                                    |
-| SWITCH(expression, value1, result1, [value2-N, result2-N ...], [default]) | Returns the _result_ correponding to the first matching _value_ in the specified _expression_ or an optional _default_ value if no match found. |
+| Name                                       | Description                                                                                                                                     |
+|--------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------|
+| ABS(value)                                 | Absolute (non-negative) value                                                                                                                   |
+| AVERAGE(value, ...)                        | Returns the average (arithmetic mean) of all parameters. If a parameter is of type _ARRAY_, the average of all elements is calculated.          |
+| CEILING(value)                             | Rounds the given value an integer using the rounding mode CEILING                                                                               |
+| COALESCE(value, ...)                       | Returns the first non-null parameter, or NULL if all parameters are null                                                                        |
+| FACT(base)                                 | Calculates the factorial of a base value                                                                                                        |
+| FLOOR(value)                               | Rounds the given value an integer using the rounding mode FLOOR                                                                                 |
+| IF(condition, resultIfTrue, resultIfFalse) | Conditional evaluation function. If _condition_ is true, the _resultIfTrue_ is returned, else the _resultIfFalse_ value                         |
+| LOG(value)                                 | The natural logarithm (base e) of a value                                                                                                       |
+| LOG10(value)                               | The base 10 logarithm of a value                                                                                                                |
+| MAX(value, ...)                            | Returns the maximum value of all parameters. If a parameter is of type _ARRAY_, the maximum of all elements is calculated.                      |
+| MIN(value, ...)                            | Returns the minimum value of all parameters. If a parameter is of type _ARRAY_, the minimum of all elements is calculated.                      |
+| NOT(value)                                 | Boolean negation, implemented as a function (for compatibility)                                                                                 |
+| RANDOM()                                   | Produces a random value between 0 and 1                                                                                                         |
+| ROUND(value, scale)                        | Rounds the given value to the specified scale, using the current rounding mode                                                                  |
+| SQRT(value)                                | Square root function. Uses the implementation from _The Java Programmers Guide To numerical Computing_ by Ronald Mak, 2002.                     |
+| SUM(value, ...)                            | Returns the sum of all parameters. If a parameter is of type _ARRAY_, the sum of all elements is calculated.                                    |
+| [SWITCH](#switch)                          | Returns the _result_ correponding to the first matching _value_ in the specified _expression_ or an optional _default_ value if no match found. |
 
 ### String Functions
 
@@ -103,3 +103,46 @@ Available through the _ExpressionConfiguration.StandardFunctionsDictionary_ cons
 | DT_DURATION_TO_MILLIS(value)                                                   | Converts the given duration to a milliseconds value.                                                                                                                                                                                                                               | 
 | DT_NOW()                                                                       | Produces a new DATE_TIME that represents the current moment in time.                                                                                                                                                                                                               |
 | DT_TODAY([zoneId])                                                             | Produces a new DATE_TIME that represents the current date, at midnight (00:00). An optional time zone (string) can be specified, e.g. "America/Sao_Paulo", or "GMT-03:00". If no zone id is specified, the configured zone id is used.                                             |
+
+---
+
+## SWITCH
+
+*Since: 3.3.0*
+
+The SWITCH function provides a way to compare one value against a series of possible values and return a specific result based on the first matching value. It's similar to nested IF statements but can be more concise and easier to read for certain scenarios.
+
+### Syntax
+
+```
+SWITCH(expression, value1, result1, [value2-N, result2-N, ...], [default])
+```
+
+### Parameters
+
+| Name | Description |
+|------|-------------|
+| expression | The value or expression that the function will compare against the provided list of values. |
+| value1, result1, value2, result2, ... | Pairs of values, where the function checks if the expression matches the first value in each pair. |
+| default | An optional default value to be returned if no matching value is found. |
+
+
+### Examples
+
+Consider the following variables:
+
+| Name           | Value   |
+|----------------|---------|
+| `weekday`      | `1`     |
+| `country_code` | `"BRA"` |
+| `status`       | `"x"`   |
+
+And the following expressions:
+
+| Expression                                                   | Result      |
+|--------------------------------------------------------------|-------------|
+| `SWITCH(weekday, 1, "Sunday", 2, "Monday", 3, "Tuesday")`    | `"Sunday"`  |
+| `SWITCH(country_code, "DEU", "Germany", "BRA", "Brazil")`    | `"Brazil"`  |
+| `SWITCH(status, "a", "active", "s", "suspended", "unknown")` | `"unknown"` |
+
+[Return to top](#top)
