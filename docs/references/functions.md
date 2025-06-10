@@ -11,25 +11,25 @@ Available through the _ExpressionConfiguration.StandardFunctionsDictionary_ cons
 
 ### Basic Functions
 
-| Name                                       | Description                                                                                                                                     |
-|--------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------|
-| ABS(value)                                 | Absolute (non-negative) value                                                                                                                   |
-| AVERAGE(value, ...)                        | Returns the average (arithmetic mean) of all parameters. If a parameter is of type _ARRAY_, the average of all elements is calculated.          |
-| CEILING(value)                             | Rounds the given value an integer using the rounding mode CEILING                                                                               |
-| COALESCE(value, ...)                       | Returns the first non-null parameter, or NULL if all parameters are null                                                                        |
-| FACT(base)                                 | Calculates the factorial of a base value                                                                                                        |
-| FLOOR(value)                               | Rounds the given value an integer using the rounding mode FLOOR                                                                                 |
-| IF(condition, resultIfTrue, resultIfFalse) | Conditional evaluation function. If _condition_ is true, the _resultIfTrue_ is returned, else the _resultIfFalse_ value                         |
-| LOG(value)                                 | The natural logarithm (base e) of a value                                                                                                       |
-| LOG10(value)                               | The base 10 logarithm of a value                                                                                                                |
-| MAX(value, ...)                            | Returns the maximum value of all parameters. If a parameter is of type _ARRAY_, the maximum of all elements is calculated.                      |
-| MIN(value, ...)                            | Returns the minimum value of all parameters. If a parameter is of type _ARRAY_, the minimum of all elements is calculated.                      |
-| NOT(value)                                 | Boolean negation, implemented as a function (for compatibility)                                                                                 |
-| RANDOM()                                   | Produces a random value between 0 and 1                                                                                                         |
-| ROUND(value, scale)                        | Rounds the given value to the specified scale, using the current rounding mode                                                                  |
-| SQRT(value)                                | Square root function. Uses the implementation from _The Java Programmers Guide To numerical Computing_ by Ronald Mak, 2002.                     |
-| SUM(value, ...)                            | Returns the sum of all parameters. If a parameter is of type _ARRAY_, the sum of all elements is calculated.                                    |
-| [SWITCH](#switch)                          | Returns the _result_ correponding to the first matching _value_ in the specified _expression_ or an optional _default_ value if no match found. |
+| Name                 | Description                                                                                                                                     |
+|----------------------|-------------------------------------------------------------------------------------------------------------------------------------------------|
+| ABS(value)           | Absolute (non-negative) value                                                                                                                   |
+| AVERAGE(value, ...)  | Returns the average (arithmetic mean) of all parameters. If a parameter is of type _ARRAY_, the average of all elements is calculated.          |
+| CEILING(value)       | Rounds the given value an integer using the rounding mode CEILING                                                                               |
+| COALESCE(value, ...) | Returns the first non-null parameter, or NULL if all parameters are null                                                                        |
+| FACT(base)           | Calculates the factorial of a base value                                                                                                        |
+| FLOOR(value)         | Rounds the given value an integer using the rounding mode FLOOR                                                                                 |
+| [IF](#if)            | Conditional evaluation function. Returns one value or another, depending on a given _condition_.                         |
+| LOG(value)           | The natural logarithm (base e) of a value                                                                                                       |
+| LOG10(value)         | The base 10 logarithm of a value                                                                                                                |
+| MAX(value, ...)      | Returns the maximum value of all parameters. If a parameter is of type _ARRAY_, the maximum of all elements is calculated.                      |
+| MIN(value, ...)      | Returns the minimum value of all parameters. If a parameter is of type _ARRAY_, the minimum of all elements is calculated.                      |
+| NOT(value)           | Boolean negation, implemented as a function (for compatibility)                                                                                 |
+| RANDOM()             | Produces a random value between 0 and 1                                                                                                         |
+| ROUND(value, scale)  | Rounds the given value to the specified scale, using the current rounding mode                                                                  |
+| SQRT(value)          | Square root function. Uses the implementation from _The Java Programmers Guide To numerical Computing_ by Ronald Mak, 2002.                     |
+| SUM(value, ...)      | Returns the sum of all parameters. If a parameter is of type _ARRAY_, the sum of all elements is calculated.                                    |
+| [SWITCH](#switch)    | Returns the _result_ correponding to the first matching _value_ in the specified _expression_ or an optional _default_ value if no match found. |
 
 ### String Functions
 
@@ -106,6 +106,48 @@ Available through the _ExpressionConfiguration.StandardFunctionsDictionary_ cons
 
 ---
 
+
+## IF
+
+The IF function performs a logical test and returns one value if the test is true and another one if it's false.
+
+### Syntax
+
+```
+IF(condition, value_if_true, value_if_false)
+```
+
+### Parameters
+
+| Name           | Description                                      |
+|----------------|--------------------------------------------------|
+| condition      | The logical test you want to evaluate.           |
+| value_if_true  | The value returned if the logical test is true.  |
+| value_if_false | The value returned if the logical test if false. |
+
+
+### Examples
+
+Consider the following variables:
+
+| Name           | Value   |
+|----------------|---------|
+| `myFlag`       | `false` |
+| `numSales`     | `1200`  |
+| `status`       | `"a"`   |
+
+And the following expressions:
+
+| Expression                                 | Result     |
+|--------------------------------------------|------------|
+| `IF(myFlag, "On", "Off")`                  | `"Off"`    |
+| `IF(numSales > 1000, "High", "Low")`       | `"High"`   |
+| `IF(status == "a", "Active", "Suspended")` | `"Active"` |
+
+[Return to top](#top)
+
+
+
 ## SWITCH
 
 *Since: 3.3.0*
@@ -120,11 +162,11 @@ SWITCH(expression, value1, result1, [value2-N, result2-N, ...], [default])
 
 ### Parameters
 
-| Name | Description |
-|------|-------------|
-| expression | The value or expression that the function will compare against the provided list of values. |
+| Name                                  | Description                                                                                        |
+|---------------------------------------|----------------------------------------------------------------------------------------------------|
+| expression                            | The value or expression that the function will compare against the provided list of values.        |
 | value1, result1, value2, result2, ... | Pairs of values, where the function checks if the expression matches the first value in each pair. |
-| default | An optional default value to be returned if no matching value is found. |
+| default                               | An optional default value to be returned if no matching value is found.                            |
 
 
 ### Examples
@@ -143,6 +185,6 @@ And the following expressions:
 |--------------------------------------------------------------|-------------|
 | `SWITCH(weekday, 1, "Sunday", 2, "Monday", 3, "Tuesday")`    | `"Sunday"`  |
 | `SWITCH(country_code, "DEU", "Germany", "BRA", "Brazil")`    | `"Brazil"`  |
-| `SWITCH(status, "a", "active", "s", "suspended", "unknown")` | `"unknown"` |
+| `SWITCH(status, "a", "Active", "s", "Suspended", "Unknown")` | `"Unknown"` |
 
 [Return to top](#top)
