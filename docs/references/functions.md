@@ -185,6 +185,8 @@ And the following expressions:
 
 The CEILING function rounds a given number up to the nearest integer using the rounding mode CEILING.
 
+> See [Rounding Modes](../concepts/rounding.html#rounding-mode) for more information.
+
 ### Syntax
 
 ```
@@ -279,6 +281,8 @@ Consider the following expressions:
 ## FLOOR
 
 The FLOOR function rounds a given number down to the nearest integer using the rounding mode FLOOR.
+
+> See [Rounding Modes](../concepts/rounding.html#rounding-mode) for more information.
 
 ### Syntax
 
@@ -536,6 +540,8 @@ Expressions that use RANDOM will produce varying results:
 
 The ROUND function rounds a given value to the specified scale using the current rounding mode.
 
+> See [Rounding Modes](../concepts/rounding.html#rounding-mode) for more information.
+
 ### Syntax
 
 ```
@@ -762,7 +768,9 @@ And the following expressions:
 
 The `STR_FORMAT` function returns a formatted string using the provided format string and one or more arguments.
 
-The format respects the configured locale for number and date presentation. See the [configuration](../configuration/configuration.html) for more information.
+The format respects the configured locale for number and date presentation.
+
+> Learn how to change the locale in the [Configuration](../configuration/configuration.html) section.
 
 ### Syntax
 
