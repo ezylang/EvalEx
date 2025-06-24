@@ -19,7 +19,7 @@ Available through the _ExpressionConfiguration.StandardFunctionsDictionary_ cons
 | [COALESCE](#coalesce) | Returns the first non-null parameter, or NULL if all parameters are null                                                                |
 | [FACT](#fact)         | Calculates the factorial of a base value                                                                                                |
 | [FLOOR](#floor)       | Rounds the given value to the nearest integer using the rounding mode FLOOR                                                             |
-| [IF](#if)             | Conditional evaluation function. Returns one value or another, depending on a given _condition_.                                        |
+| [IF](#if)             | Conditional evaluation function. Returns one value or another, depending on a given condition.                                          |
 | [LOG](#log)           | The natural logarithm (base e) of a value                                                                                               |
 | [LOG10](#log10)       | The base 10 logarithm of a value                                                                                                        |
 | [MAX](#max)           | Returns the maximum value of all parameters. If a parameter is of type _ARRAY_, the maximum of all elements is calculated.              |
@@ -33,21 +33,21 @@ Available through the _ExpressionConfiguration.StandardFunctionsDictionary_ cons
 
 ### String Functions
 
-| Name                                | Description                                                                                                                           |
-|-------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------|
-| [STR_CONTAINS](#str_contains)       | Returns true if the string contains the substring (case-insensitive)                                                                  |
-| [STR_ENDS_WITH](#str_ends_with)     | Returns true if the string ends with the substring (case-sensitive)                                                                   |
-| [STR_FORMAT](#str_format)           | Returns a formatted string using the specified format string and arguments, using the configured locale                               |
-| [STR_LEFT](#str_left)               | Returns the first n characters from the left of the given string                                                                      |
-| [STR_LENGTH](#str_length)           | Returns the length of the string                                                                                                      |
-| [STR_LOWER](#str_lower)             | Converts the given value to lower case                                                                                                |
-| [STR_MATCHES](#str_matches)         | Returns true if the string matches the RegEx pattern                                                                                  |
-| [STR_RIGHT](#str_right)             | Returns the last n characters from the left of the given string                                                                       |
-| [STR_SPLIT](#str_split)             | Splits the given _string_ into an array, given a _separator_                                                                          |
-| [STR_STARTS_WITH](#str_starts_with) | Returns true if the string starts with the substring (case-sensitive)                                                                 |
-| [STR_SUBSTRING](#str_substring)     | Returns a portion of the string from the specified _start_ index up to the _end_ index (or to the end of the string if not specified) |
-| [STR_TRIM](#str_trim)               | Returns the given string with all leading and trailing spaces removed                                                                 |
-| [STR_UPPER](#str_upper)             | Converts the given value to upper case                                                                                                |
+| Name                                | Description                                                                                                                       |
+|-------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------|
+| [STR_CONTAINS](#str_contains)       | Returns true if the string contains the substring (case-insensitive)                                                              |
+| [STR_ENDS_WITH](#str_ends_with)     | Returns true if the string ends with the substring (case-sensitive)                                                               |
+| [STR_FORMAT](#str_format)           | Returns a formatted string using the specified format string and arguments, using the configured locale                           |
+| [STR_LEFT](#str_left)               | Returns the first n characters from the left of the given string                                                                  |
+| [STR_LENGTH](#str_length)           | Returns the length of the string                                                                                                  |
+| [STR_LOWER](#str_lower)             | Converts the given value to lower case                                                                                            |
+| [STR_MATCHES](#str_matches)         | Returns true if the string matches the RegEx pattern                                                                              |
+| [STR_RIGHT](#str_right)             | Returns the last n characters from the left of the given string                                                                   |
+| [STR_SPLIT](#str_split)             | Splits the given string into an array, given a separator                                                                          |
+| [STR_STARTS_WITH](#str_starts_with) | Returns true if the string starts with the substring (case-sensitive)                                                             |
+| [STR_SUBSTRING](#str_substring)     | Returns a portion of the string from the specified start index up to the end index (or to the end of the string if not specified) |
+| [STR_TRIM](#str_trim)               | Returns the given string with all leading and trailing spaces removed                                                             |
+| [STR_UPPER](#str_upper)             | Converts the given value to upper case                                                                                            |
 
 ### Trigonometric Functions
 
