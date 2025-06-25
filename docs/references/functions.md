@@ -92,9 +92,9 @@ Available through the _ExpressionConfiguration.StandardFunctionsDictionary_ cons
 
 | Name                                                                           | Description                                                                                                                                                                                                                                                                        |
 |--------------------------------------------------------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| DT_DATE_NEW(year, month, day [,hour, minute, second, millis, nanos] [,zoneId]) | Returns a new DATE_TIME value with the given parameters. An optional time zone (string) can be specified, e.g. "Europe/Berlin", or "GMT+02:00". If no zone id is specified, the configured zone id is used.                                                                        |
-| DT_DATE_NEW(millis)                                                            | Returns a new DATE_TIME from the epoch of 1970-01-01T00:00:00Z in milliseconds.                                                                                                                                                                                                    |
-| DT_DATE_PARSE(value [,zoneId] [,format, ...])                                  | Converts the given string value to a date time value by using the optional time zone and formats. All formats are used until the first matching format. Without a format, the configured formats are used. Time zone can be NULL, the the configured time zone and locale is used. |
+| [DT_DATE_NEW](#dt_date_new)                                                    | Returns a new _DATE_TIME_ value with the given parameters (year, month, day, etc.). An optional time zone (string) can be specified, e.g. "Europe/Berlin", or "GMT+02:00". If no zone id is specified, the configured zone id is used.                                                                        |
+| [DT_DATE_NEW(millis)](#dt_date_newmillis)                                      | Returns a new DATE_TIME from the epoch of 1970-01-01T00:00:00Z in milliseconds.                                                                                                                                                                                                    |
+| [DT_DATE_PARSE](#dt_date_parse)                                                | Converts the given string value to a date time value by using the optional time zone and formats. All formats are used until the first matching format. Without a format, the configured formats are used. Time zone can be NULL, the the configured time zone and locale is used. |
 | DT_DATE_FORMAT(value, [,format] [,zoneId])                                     | Formats the given date-time to a string using the given optional format and time zone. Without a format, the first configured format is used. The zone id defaults to the configured zone id.                                                                                      |
 | DT_DATE_TO_EPOCH(value)                                                        | Converts the given value to epoch timestamp in millisecond.                                                                                                                                                                                                                        |
 | DT_DURATION_NEW(days [,hours, minutes, seconds, nanos])                        | Returns a new DURATION value with the given parameters.                                                                                                                                                                                                                            |
@@ -1157,5 +1157,107 @@ Consider the following expressions:
 | `STR_UPPER("abc")`            | `"ABC"`    |
 | `STR_UPPER("EvalEx")`         | `"EVALEX"` |
 
-
 🔝 [Back to String Functions](#string-functions) | 🔝 [Back to top](#top)
+
+---
+
+# Date Time Functions (detailed)
+
+## DT_DATE_NEW
+
+The `DT_DATE_NEW` function creates a new `DATE_TIME` value using the specified date components, with optional time, sub-second precision, and time zone. If no time zone is provided, the configured system default is used.
+
+### Syntax
+
+```
+DT_DATE_NEW(year, month, day [, hour] [, minute] [, second] [, nanos] [, zoneId])
+```
+
+### Parameters
+
+| Name     | Description                                                                               |
+|----------|----------------------------------------------------------------------------------    ---- |
+| year     | The year (e.g. 2025).                                                                     |
+| month    | The month number (1 = January, 12 = December).                                            |
+| day      | The day of the month.                                                                     |
+| hour     | *(Optional)* Hour of the day (0–23).                                                      |
+| minute   | *(Optional)* Minute of the hour (0–59).                                                   |
+| second   | *(Optional)* Second of the minute (0–59).                                                 |
+| nanos    | *(Optional)* Nanoseconds (0–999,999,999).                                                 |
+| zoneId   | *(Optional)* Time zone identifier as a string (e.g. `"Europe/Berlin"`, or `"GMT+02:00"`). |
+
+### Examples
+
+These examples illustrate how different combinations of date, time, and zone components produce distinct `DATE_TIME` results.
+
+| Expression                                                                 | Result (example)                           |
+|----------------------------------------------------------------------------|--------------------------------------------|
+| `DT_DATE_NEW(2025, 6, 15)`                                                 | `2025-06-15T00:00:00Z`*                    |
+| `DT_DATE_NEW(2025, 6, 15, 9, 30)`                                          | `2025-06-15T09:30:00Z`*                    |
+| `DT_DATE_NEW(2025, 6, 15, "Europe/Berlin")`                                | `2025-06-15T00:00:00+02:00[Europe/Berlin]` |
+| `DT_DATE_NEW(2025, 6, 15, 9, 30, 0, 0, "Europe/Berlin")`                   | `2025-06-15T09:30:00+02:00[Europe/Berlin]` |
+
+\* Timezone and precision may vary depending on your system configuration.
+
+🔝 [Back to Date Time Functions](#date-time-functions) | 🔝 [Back to top](#top)
+
+
+## DT_DATE_NEW(millis)
+
+The `DT_DATE_NEW` function can also create a `DATE_TIME` value by specifying a number of milliseconds since the Unix epoch (`1970-01-01T00:00:00Z`).
+
+### Syntax
+
+```
+DT_DATE_NEW(millis)
+```
+
+### Parameters
+
+| Name   | Description                                                                           |
+|--------|---------------------------------------------------------------------------------------|
+| millis | The number of milliseconds since `1970-01-01T00:00:00Z`. Must be a positive `NUMBER`. |
+
+### Examples
+
+Use this form when working with timestamp values or durations that represent time since the epoch.
+
+| Expression                   | Result (example)        |
+|------------------------------|-------------------------|
+| `DT_DATE_NEW(0)`             | `1970-01-01T00:00:00Z`  |
+| `DT_DATE_NEW(1727484000000)` | `2024-11-28T12:00:00Z`* |
+
+\* Example considering GMT as system time zone.
+
+🔝 [Back to Date Time Functions](#date-time-functions) | 🔝 [Back to top](#top)
+
+
+## DT_DATE_PARSE
+
+The `DT_DATE_PARSE` function converts a string into a `DATE_TIME` value by attempting to match it against one or more date-time formats until success. Optionally, a specific time zone may also be provided. If no format is supplied, the system's configured date/time formats will be used. If the zone is omitted or `NULL`, the system’s default zone and locale apply.
+
+### Syntax
+
+```
+DT_DATE_PARSE(value [, zoneId] [, format, ...])
+```
+
+### Parameters
+
+| Name    | Description                                                                                          |
+|---------|------------------------------------------------------------------------------------------------------|
+| value   | The text to be parsed into a date/time. Must be of type `STRING`.                                    |
+| zoneId  | *(Optional)* A time zone identifier string (e.g. `"Europe/Berlin"`, `"UTC"`, or `"GMT-03:00"`).      |
+| format  | *(Optional)* One or more custom date-time format strings (e.g. `"yyyy-MM-dd HH:mm"`, `"dd/MM/yyyy"`).|
+
+### Examples
+
+These examples demonstrate how different formats and zone configurations influence how the date string is interpreted.
+
+| Expression                                                                | Result (example)                           |
+|---------------------------------------------------------------------------|--------------------------------------------|
+| `DT_DATE_PARSE("2025-06-30T12:00:00Z")`                                   | `2025-06-30T12:00:00Z`                     |
+| `DT_DATE_PARSE("30/06/2025 09:00", "Europe/Lisbon", "dd/MM/yyyy HH:mm")`  | `2025-06-30T09:00:00+01:00[Europe/Lisbon]` |
+| `DT_DATE_PARSE("06-30-2025", "MM-dd-yyyy")`                               | `2025-06-30T00:00:00Z` (system zone)       |
+
+🔝 [Back to Date Time Functions](#date-time-functions) | 🔝 [Back to top](#top)
