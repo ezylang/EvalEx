@@ -11,43 +11,43 @@ Available through the _ExpressionConfiguration.StandardFunctionsDictionary_ cons
 
 ### Basic Functions
 
-| Name                  | Description                                                                                                                                     |
-|-----------------------|-------------------------------------------------------------------------------------------------------------------------------------------------|
-| [ABS](#abs)           | Absolute (non-negative) value                                                                                                                   |
-| [AVERAGE](#average)   | Returns the average (arithmetic mean) of all parameters. If a parameter is of type _ARRAY_, the average of all elements is calculated.          |
-| [CEILING](#ceiling)   | Rounds the given value an integer using the rounding mode CEILING                                                                               |
-| [COALESCE](#coalesce) | Returns the first non-null parameter, or NULL if all parameters are null                                                                        |
-| [FACT](#fact)         | Calculates the factorial of a base value                                                                                                        |
-| [FLOOR](#floor)       | Rounds the given value an integer using the rounding mode FLOOR                                                                                 |
-| [IF](#if)             | Conditional evaluation function. Returns one value or another, depending on a given _condition_.                                                |
-| [LOG](#log)           | The natural logarithm (base e) of a value                                                                                                       |
-| [LOG10](#log10)       | The base 10 logarithm of a value                                                                                                                |
-| [MAX](#max)           | Returns the maximum value of all parameters. If a parameter is of type _ARRAY_, the maximum of all elements is calculated.                      |
-| [MIN](#min)           | Returns the minimum value of all parameters. If a parameter is of type _ARRAY_, the minimum of all elements is calculated.                      |
-| [NOT](#not)           | Boolean negation, implemented as a function (for compatibility)                                                                                 |
-| [RANDOM](#random)     | Produces a random value between 0 and 1                                                                                                         |
-| [ROUND](#round)       | Rounds the given value to the specified scale, using the current rounding mode                                                                  |
-| [SQRT](#sqrt)         | Square root function. Uses the implementation from _The Java Programmers Guide To numerical Computing_ by Ronald Mak, 2002.                     |
-| [SUM](#sum)           | Returns the sum of all parameters. If a parameter is of type _ARRAY_, the sum of all elements is calculated.                                    |
-| [SWITCH](#switch)     | Returns the _result_ correponding to the first matching _value_ in the specified _expression_ or an optional _default_ value if no match found. |
+| Name                  | Description                                                                                                                             |
+|-----------------------|-----------------------------------------------------------------------------------------------------------------------------------------|
+| [ABS](#abs)           | Absolute (non-negative) value                                                                                                           |
+| [AVERAGE](#average)   | Returns the average (arithmetic mean) of all parameters. If a parameter is of type _ARRAY_, the average of all elements is calculated.  |
+| [CEILING](#ceiling)   | Rounds the given value to the nearest integer using the rounding mode CEILING                                                           |
+| [COALESCE](#coalesce) | Returns the first non-null parameter, or NULL if all parameters are null                                                                |
+| [FACT](#fact)         | Calculates the factorial of a base value                                                                                                |
+| [FLOOR](#floor)       | Rounds the given value to the nearest integer using the rounding mode FLOOR                                                             |
+| [IF](#if)             | Conditional evaluation function. Returns one value or another, depending on a given condition.                                          |
+| [LOG](#log)           | The natural logarithm (base e) of a value                                                                                               |
+| [LOG10](#log10)       | The base 10 logarithm of a value                                                                                                        |
+| [MAX](#max)           | Returns the maximum value of all parameters. If a parameter is of type _ARRAY_, the maximum of all elements is calculated.              |
+| [MIN](#min)           | Returns the minimum value of all parameters. If a parameter is of type _ARRAY_, the minimum of all elements is calculated.              |
+| [NOT](#not)           | Boolean negation, implemented as a function (for compatibility)                                                                         |
+| [RANDOM](#random)     | Produces a random value between 0 and 1                                                                                                 |
+| [ROUND](#round)       | Rounds the given value to the specified scale, using the current rounding mode                                                          |
+| [SQRT](#sqrt)         | Returns the square root of a given number                                                                                               |
+| [SUM](#sum)           | Returns the sum of all parameters. If a parameter is of type _ARRAY_, the sum of all elements is calculated.                            |
+| [SWITCH](#switch)     | Returns the result correponding to the first matching value in the specified expression or an optional default value if no match found. |
 
 ### String Functions
 
-| Name                                    | Description                                                                                                                                   |
-|-----------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------|
-| STR_CONTAINS(string, substring)         | Returns true if the string contains the substring (case-insensitive)                                                                          |
-| STR_ENDS_WITH(string, substring)        | Returns true if the string ends with the substring (case-sensitive)                                                                           |
-| STR_FORMAT(format [,argument, ...])     | Returns a formatted string using the specified format string and arguments, using the configured locale                                       |
-| STR_LEFT(value, n)                      | Returns the first n characters from the left of the given string                                                                              |  
-| STR_LENGTH(string)                      | Returns the length of the string                                                                                                              |
-| STR_LOWER(value)                        | Converts the given value to lower case                                                                                                        |
-| STR_MATCHES(string, pattern)            | Returns true if the string matches the RegEx pattern                                                                                          |
-| STR_RIGHT(value, n)                     | Returns the last n characters from the left of the given string                                                                               |
-| STR_SPLIT(string, separator)            | Splits the given _string_ into an array, given a _separator_.                                                                                 |
-| STR_STARTS_WITH(string, substring)      | Returns true if the string starts with the substring (case-sensitive)                                                                         |
-| STR_SUBSTRING(string, start[, end])     | Returns a substring of the given string, starting at the _start_ index and ending at the _end_ index (the end of the string if not specified) |
-| STR_TRIM(string)                        | Returns the given string with all leading and trailing space removed.                                                                         |
-| STR_UPPER(value)                        | Converts the given value to upper case                                                                                                        |
+| Name                                | Description                                                                                                                       |
+|-------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------|
+| [STR_CONTAINS](#str_contains)       | Returns true if the string contains the substring (case-insensitive)                                                              |
+| [STR_ENDS_WITH](#str_ends_with)     | Returns true if the string ends with the substring (case-sensitive)                                                               |
+| [STR_FORMAT](#str_format)           | Returns a formatted string using the specified format string and arguments, using the configured locale                           |
+| [STR_LEFT](#str_left)               | Returns the first n characters from the left of the given string                                                                  |
+| [STR_LENGTH](#str_length)           | Returns the length of the string                                                                                                  |
+| [STR_LOWER](#str_lower)             | Converts the given value to lower case                                                                                            |
+| [STR_MATCHES](#str_matches)         | Returns true if the string matches the RegEx pattern                                                                              |
+| [STR_RIGHT](#str_right)             | Returns the last n characters from the left of the given string                                                                   |
+| [STR_SPLIT](#str_split)             | Splits the given string into an array, given a separator                                                                          |
+| [STR_STARTS_WITH](#str_starts_with) | Returns true if the string starts with the substring (case-sensitive)                                                             |
+| [STR_SUBSTRING](#str_substring)     | Returns a portion of the string from the specified start index up to the end index (or to the end of the string if not specified) |
+| [STR_TRIM](#str_trim)               | Returns the given string with all leading and trailing spaces removed                                                             |
+| [STR_UPPER](#str_upper)             | Converts the given value to upper case                                                                                            |
 
 ### Trigonometric Functions
 
@@ -106,6 +106,8 @@ Available through the _ExpressionConfiguration.StandardFunctionsDictionary_ cons
 
 ---
 
+# Basic Functions (detailed)
+
 ## ABS
 
 The ABS function returns the absolute (non-negative) value of a given number.
@@ -138,7 +140,7 @@ And the following expressions:
 | `ABS(x)`   | `5`    |
 | `ABS(y)`   | `10`   |
 
-[Return to top](#top)
+🔝 [Back to Basic Functions](#basic-functions) | 🔝 [Back to top](#top)
 
 
 ## AVERAGE
@@ -176,12 +178,14 @@ And the following expressions:
 | `AVERAGE(scores)`            | `80`   |
 | `AVERAGE(a, b)`              | `90`   |
 
-[Return to top](#top)
+🔝 [Back to Basic Functions](#basic-functions) | 🔝 [Back to top](#top)
 
 
 ## CEILING
 
 The CEILING function rounds a given number up to the nearest integer using the rounding mode CEILING.
+
+> See [Rounding Modes](../concepts/rounding.html#rounding-mode) for more information.
 
 ### Syntax
 
@@ -204,7 +208,7 @@ Consider the following expressions:
 | `CEILING(4.3)` | `5`    |
 | `CEILING(2.7)` | `-2`   |
 
-[Return to top](#top)
+🔝 [Back to Basic Functions](#basic-functions) | 🔝 [Back to top](#top)
 
 
 ## COALESCE
@@ -243,7 +247,7 @@ And the following expressions:
 | `COALESCE(a, null, c)`| `42`      |
 | `COALESCE(a, null)`   | `null`    |
 
-[Return to top](#top)
+🔝 [Back to Basic Functions](#basic-functions) | 🔝 [Back to top](#top)
 
 
 ## FACT
@@ -271,12 +275,14 @@ Consider the following expressions:
 | `FACT(5)`  | `120`  |
 | `FACT(3)`  | `6`    |
 
-[Return to top](#top)
+🔝 [Back to Basic Functions](#basic-functions) | 🔝 [Back to top](#top)
 
 
 ## FLOOR
 
 The FLOOR function rounds a given number down to the nearest integer using the rounding mode FLOOR.
+
+> See [Rounding Modes](../concepts/rounding.html#rounding-mode) for more information.
 
 ### Syntax
 
@@ -299,7 +305,7 @@ Consider the following expressions:
 | `FLOOR(4.7)` | `4`    |
 | `FLOOR(2.4)` | `-3`   |
 
-[Return to top](#top)
+🔝 [Back to Basic Functions](#basic-functions) | 🔝 [Back to top](#top)
 
 
 ## IF
@@ -339,7 +345,7 @@ And the following expressions:
 | `IF(numSales > 1000, "High", "Low")`       | `"High"`   |
 | `IF(status == "a", "Active", "Suspended")` | `"Active"` |
 
-[Return to top](#top)
+🔝 [Back to Basic Functions](#basic-functions) | 🔝 [Back to top](#top)
 
 
 ## LOG
@@ -368,7 +374,7 @@ Consider the following expressions:
 | `LOG(1)`     | `0`                 |
 | `LOG(10)`    | `2.302585092994046` |
 
-[Return to top](#top)
+🔝 [Back to Basic Functions](#basic-functions) | 🔝 [Back to top](#top)
 
 ## LOG10
 
@@ -396,7 +402,7 @@ Consider the following expressions:
 | `LOG10(10)`      | `1`                  |
 | `LOG10(2.12345)` | `0.3270420392943239` |
 
-[Return to top](#top)
+🔝 [Back to Basic Functions](#basic-functions) | 🔝 [Back to top](#top)
 
 
 ## MAX
@@ -433,7 +439,7 @@ And the following expressions:
 | `MAX(x, y)`                | `7`    |
 | `MAX(x, y, numbers)`       | `8`    |
 
-[Return to top](#top)
+🔝 [Back to Basic Functions](#basic-functions) | 🔝 [Back to top](#top)
 
 
 ## MIN
@@ -470,7 +476,7 @@ And the following expressions:
 | `MIN(x, y)`           | `4`    |
 | `MIN(x, y, numbers)`  | `3`    |
 
-[Return to top](#top)
+🔝 [Back to Basic Functions](#basic-functions) | 🔝 [Back to top](#top)
 
 
 ## NOT
@@ -505,7 +511,7 @@ And the following expressions:
 | `NOT(flag)`  | `false` |
 | `NOT(x < 5)` | `true`  |
 
-[Return to top](#top)
+🔝 [Back to Basic Functions](#basic-functions) | 🔝 [Back to top](#top)
 
 
 ## RANDOM
@@ -527,12 +533,14 @@ Expressions that use RANDOM will produce varying results:
 | `RANDOM()`  | `0.372` (example) |
 | `RANDOM()`  | `0.847` (example) |
 
-[Return to top](#top)
+🔝 [Back to Basic Functions](#basic-functions) | 🔝 [Back to top](#top)
 
 
 ## ROUND
 
 The ROUND function rounds a given value to the specified scale using the current rounding mode.
+
+> See [Rounding Modes](../concepts/rounding.html#rounding-mode) for more information.
 
 ### Syntax
 
@@ -562,12 +570,14 @@ And the following expressions:
 | `ROUND(num, 1)` | `5.7`  |
 | `ROUND(num, 2)` | `5.68` |
 
-[Return to top](#top)
+🔝 [Back to Basic Functions](#basic-functions) | 🔝 [Back to top](#top)
 
 
 ## SQRT
 
-The SQRT function calculates the square root of a given value.
+The SQRT function calculates the square root of a given number.
+
+> **Note:** This function uses the implementation from _The Java Programmers Guide To numerical Computing_ by Ronald Mak, 2002.
 
 ### Syntax
 
@@ -590,7 +600,7 @@ Consider the following expressions:
 | `SQRT(16)`  | `4`    |
 | `SQRT(9)`   | `3`    |
 
-[Return to top](#top)
+🔝 [Back to Basic Functions](#basic-functions) | 🔝 [Back to top](#top)
 
 
 ## SUM
@@ -627,7 +637,7 @@ And the following expressions:
 | `SUM(a, b)`               | `25`   |
 | `SUM(a, b, values)`       | `41`   |
 
-[Return to top](#top)
+🔝 [Back to Basic Functions](#basic-functions) | 🔝 [Back to top](#top)
 
 
 ## SWITCH
@@ -669,4 +679,483 @@ And the following expressions:
 | `SWITCH(country_code, "DEU", "Germany", "BRA", "Brazil")`    | `"Brazil"`  |
 | `SWITCH(status, "a", "Active", "s", "Suspended", "Unknown")` | `"Unknown"` |
 
-[Return to top](#top)
+🔝 [Back to Basic Functions](#basic-functions) | 🔝 [Back to top](#top)
+
+
+---
+
+# String Functions (detailed)
+
+## STR_CONTAINS
+
+The `STR_CONTAINS` function checks whether a specified substring is present within a larger string. This comparison is **case-insensitive**, meaning it does not differentiate between uppercase and lowercase letters.
+
+### Syntax
+
+```
+STR_CONTAINS(string, substring)
+```
+
+### Parameters
+
+| Name      | Description                                                               |
+|-----------|---------------------------------------------------------------------------|
+| string    | The text in which you want to search for the presence of a substring.     |
+| substring | The text to search for within the main string.                            |
+
+### Examples
+
+Consider the following variables:
+
+| Name       | Value               |
+|------------|---------------------|
+| `title`    | `"Introduction"`    |
+| `phrase`   | `"quick brown fox"` |
+
+And the following expressions:
+
+| Expression                                  | Result   |
+|---------------------------------------------|----------|
+| `STR_CONTAINS(title, "intro")`              | `true`   |
+| `STR_CONTAINS(phrase, "BROWN")`             | `true`   |
+| `STR_CONTAINS(phrase, "lazy")`              | `false`  |
+
+🔝 [Back to String Functions](#string-functions) | 🔝 [Back to top](#top)
+
+
+## STR_ENDS_WITH
+
+*Since: 3.2.0*
+
+The `STR_ENDS_WITH` function checks if a string ends with the specified substring. This comparison is **case-sensitive**.
+
+### Syntax
+
+```
+STR_ENDS_WITH(string, substring)
+```
+
+### Parameters
+
+| Name      | Description                                                |
+|-----------|------------------------------------------------------------|
+| string    | The text to be evaluated.                                  |
+| substring | The text to check for at the end of the main string.       |
+
+### Examples
+
+Consider the following variables:
+
+| Name     | Value             |
+|----------|-------------------|
+| `file`   | `"Report.pdf"`    |
+| `word`   | `"sunflower"`     |
+
+And the following expressions:
+
+| Expression                                | Result  |
+|-------------------------------------------|---------|
+| `STR_ENDS_WITH(file, ".pdf")`             | `true`  |
+| `STR_ENDS_WITH(word, "flower")`           | `true`  |
+| `STR_ENDS_WITH(word, "Flower")`           | `false` |
+
+🔝 [Back to String Functions](#string-functions) | 🔝 [Back to top](#top)
+
+
+## STR_FORMAT
+
+*Since: 3.3.0*
+
+The `STR_FORMAT` function returns a formatted string using the provided format string and one or more arguments.
+
+The format respects the configured locale for number and date presentation.
+
+> Learn how to change the locale in the [Configuration](../configuration/configuration.html) section.
+
+### Syntax
+
+```
+STR_FORMAT(format[, argument, ...])
+```
+
+### Parameters
+
+| Name      | Description                                                                     |
+|-----------|---------------------------------------------------------------------------------|
+| format    | A string format in the [Java Formatter syntax](https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/Formatter.html#syntax). |
+| arguments | One or more arguments referenced by the format specifiers in the format string. |
+
+### Examples
+
+Consider the following variables:
+
+| Name         | Value     |
+|--------------|-----------|
+| `name`       | `"Maria"` |
+| `count`      | `3`       |
+| `price`      | `25.5`    |
+
+And the following expressions:
+
+| Expression                          | Locale  | Result            |
+|-------------------------------------|---------|-------------------|
+| `STR_FORMAT("Hello, %s!", name)`    | English | `"Hello, Maria!"` |
+| `STR_FORMAT("%03.0f items", count)` | English | `"003 items"`     |
+| `STR_FORMAT("Total: %.2f", price)`  | English | `"Total: 25.50"`  |
+| `STR_FORMAT("Total: %.2f", price)`  | German  | `"Total: 25,50"`  |
+
+🔝 [Back to String Functions](#string-functions) | 🔝 [Back to top](#top)
+
+
+## STR_LEFT
+
+*Since: 3.4.0*
+
+The `STR_LEFT` function extracts the first *n* characters from the start (left side) of a given string.
+
+### Syntax
+
+```
+STR_LEFT(value, n)
+```
+
+### Parameters
+
+| Name  | Description                                       |
+|-------|---------------------------------------------------|
+| value | The original string from which to extract text.   |
+| n     | The number of characters to return from the left. |
+
+### Examples
+
+Consider the following variables:
+
+| Name        | Value         |
+|-------------|---------------|
+| `city`      | `"Barcelona"` |
+| `language`  | `"Spanish"`   |
+
+And the following expressions:
+
+| Expression               | Result      |
+|--------------------------|-------------|
+| `STR_LEFT(city, 3)`      | `"Bar"`     |
+| `STR_LEFT(language, 16)` | `"Spanish"` |
+
+🔝 [Back to String Functions](#string-functions) | 🔝 [Back to top](#top)
+
+
+## STR_LENGTH
+
+*Since: 3.4.0*
+
+The `STR_LENGTH` function returns the total number of characters in a string, including spaces and punctuation.
+
+### Syntax
+
+```
+STR_LENGTH(string)
+```
+
+### Parameters
+
+| Name   | Description                                |
+|--------|--------------------------------------------|
+| string | The text whose length you want to measure. |
+
+### Examples
+
+Consider the following expressions:
+
+| Expression                     | Result |
+|--------------------------------|--------|
+| `STR_LENGTH("abc")`            | `3`    |
+| `STR_LENGTH("Hello, EvalEx!")` | `14`   |
+
+🔝 [Back to String Functions](#string-functions) | 🔝 [Back to top](#top)
+
+
+## STR_LOWER
+
+The `STR_LOWER` function converts all characters in a given string to lowercase.
+
+### Syntax
+
+```
+STR_LOWER(value)
+```
+
+### Parameters
+
+| Name  | Description                      |
+|-------|----------------------------------|
+| value | The text to be converted.        |
+
+### Examples
+
+Consider the following expressions:
+
+| Expression               | Result     |
+|--------------------------|------------|
+| `STR_LOWER("BR")`        | `"br"`     |
+| `STR_LOWER("ABC1-abc2")` | `"abc1-abc2"` |
+
+🔝 [Back to String Functions](#string-functions) | 🔝 [Back to top](#top)
+
+
+## STR_MATCHES
+
+*Since: 3.4.0*
+
+The `STR_MATCHES` function checks whether the given string matches a specific [regular expression pattern](https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/regex/Pattern.html#sum).
+
+### Syntax
+
+```
+STR_MATCHES(string, pattern)
+```
+
+### Parameters
+
+| Name    | Description                                  |
+|---------|----------------------------------------------|
+| string  | The text to test against the regex pattern.  |
+| pattern | A regular expression used for matching.      |
+
+### Examples
+
+| Name      | Value            |
+|-----------|------------------|
+| `message` | `"Hello World`"  |
+| `email`   | `"test@abc.com"` |
+| `zip`     | `"12345-678"`    |
+
+| Expression                                 | Result  |
+|--------------------------------------------|---------|
+| `STR_MATCHES(message, ".*World")`          | `true`  |
+| `STR_MATCHES(email, "\\S+@\\S+\\.\\S+")`   | `true`  |
+| `STR_MATCHES(zip, "^\\d{5}-\\d{3}$")`      | `true`  |
+| `STR_MATCHES(zip, "^\\d{8}$")`             | `false` |
+
+🔝 [Back to String Functions](#string-functions) | 🔝 [Back to top](#top)
+
+
+## STR_RIGHT
+
+*Since: 3.4.0*
+
+The `STR_RIGHT` function extracts the last *n* characters from a string.
+
+### Syntax
+
+```
+STR_RIGHT(value, n)
+```
+
+### Parameters
+
+| Name  | Description                                      |
+|-------|--------------------------------------------------|
+| value | The original string to extract from.             |
+| n     | The number of characters to return from the end. |
+
+### Examples
+
+Consider the following variables:
+
+| Name       | Value           |
+|------------|-----------------|
+| `message`  | `"Hello World"` |
+| `code`     | `"HTTP/404"`    |
+
+And the following expressions:
+
+| Expression                     | Result    |
+|--------------------------------|-----------|
+| `STR_RIGHT(message, 5)`        | `"World"` |
+| `STR_RIGHT(code, 3)`           | `"404"`  |
+
+🔝 [Back to String Functions](#string-functions) | 🔝 [Back to top](#top)
+
+
+## STR_SPLIT
+
+*Since: 3.5.0*
+
+The `STR_SPLIT` function splits a string into an array of substrings based on the provided separator.
+
+### Syntax
+
+```
+STR_SPLIT(string, separator)
+```
+
+### Parameters
+
+| Name      | Description                                           |
+|-----------|-------------------------------------------------------|
+| string    | The original text to split.                           |
+| separator | A delimiter string used to divide the input string.   |
+
+### Examples
+
+Consider the following variables:
+
+| Name      | Value                    |
+|-----------|--------------------------|
+| `colors`  | `"red,green,blue"`       |
+| `path`    | `"home/user/documents"`  |
+
+And the following expressions:
+
+| Expression                         | Result                          |
+|------------------------------------|---------------------------------|
+| `STR_SPLIT(colors, ",")`           | `["red", "green", "blue"]`      |
+| `STR_SPLIT(path, "/")`             | `["home", "user", "documents"]` |
+
+🔝 [Back to String Functions](#string-functions) | 🔝 [Back to top](#top)
+
+
+## STR_STARTS_WITH
+
+*Since: 3.2.0*
+
+The `STR_STARTS_WITH` function checks whether a string begins with the specified substring. This comparison is **case-sensitive**.
+
+### Syntax
+
+```
+STR_STARTS_WITH(string, substring)
+```
+
+### Parameters
+
+| Name      | Description                                               |
+|-----------|-----------------------------------------------------------|
+| string    | The main text you want to examine.                        |
+| substring | The expected prefix to test at the beginning of `string`. |
+
+### Examples
+
+Consider the following variables:
+
+| Name    | Value        |
+|---------|--------------|
+| `title` | `"DataSet"`  |
+| `code`  | `"ERR-2025"` |
+
+And the following expressions:
+
+| Expression                       | Result  |
+|----------------------------------|---------|
+| `STR_STARTS_WITH(title, "Data")` | `true`  |
+| `STR_STARTS_WITH(title, "data")` | `false` |
+| `STR_STARTS_WITH(code, "ERR")`   | `true`  |
+
+🔝 [Back to String Functions](#string-functions) | 🔝 [Back to top](#top)
+
+
+## STR_SUBSTRING
+
+*Since: 3.4.0*
+
+The `STR_SUBSTRING` function extracts a portion of a string starting from a given index and optionally ending at another index. If the end is not specified, it returns the substring until the end of the string.
+
+### Syntax
+
+```
+STR_SUBSTRING(string, start[, end])
+```
+
+### Parameters
+
+| Name   | Description                                                                 |
+|--------|-----------------------------------------------------------------------------|
+| string | The original string from which to extract a section.                        |
+| start  | The starting index (inclusive). Indexing begins at 0.                       |
+| end    | (Optional) The ending index (exclusive). Defaults to the end of the string. |
+
+### Examples
+
+Consider the following variables:
+
+| Name     | Value           |
+|----------|-----------------|
+| `text`   | `"Expression"`  |
+| `id`     | `"AB123456"`    |
+
+And the following expressions:
+
+| Expression                  | Result     |
+|-----------------------------|------------|
+| `STR_SUBSTRING(text, 0, 4)` | `"Expr"`   |
+| `STR_SUBSTRING(text, 5)`    | `"ssion"`  |
+| `STR_SUBSTRING(id, 2, 6)`   | `"1234"`   |
+
+🔝 [Back to String Functions](#string-functions) | 🔝 [Back to top](#top)
+
+
+## STR_TRIM
+
+*Since: 3.3.0*
+
+The `STR_TRIM` function removes all leading and trailing whitespace from a given string.
+
+### Syntax
+
+```
+STR_TRIM(string)
+```
+
+### Parameters
+
+| Name   | Description                             |
+|--------|-----------------------------------------|
+| string | The text to be trimmed of whitespace.   |
+
+### Examples
+
+Consider the following variables:
+
+| Name     | Value                    |
+|----------|--------------------------|
+| `input1` | `"  Hello world  "`      |
+| `input2` | `"\tTabbed text\t"`      |
+
+And the following expressions:
+
+| Expression          | Result          |
+|---------------------|-----------------|
+| `STR_TRIM(input1)`  | `"Hello world"` |
+| `STR_TRIM(input2)`  | `"Tabbed text"` |
+
+🔝 [Back to String Functions](#string-functions) | 🔝 [Back to top](#top)
+
+
+## STR_UPPER
+
+The `STR_UPPER` function converts all characters in a given string to uppercase.
+
+### Syntax
+
+```
+STR_UPPER(value)
+```
+
+### Parameters
+
+| Name  | Description                      |
+|-------|----------------------------------|
+| value | The text to be converted.        |
+
+### Examples
+
+Consider the following expressions:
+
+| Expression                    | Result     |
+|-------------------------------|------------|
+| `STR_UPPER("abc")`            | `"ABC"`    |
+| `STR_UPPER("EvalEx")`         | `"EVALEX"` |
+
+
+🔝 [Back to String Functions](#string-functions) | 🔝 [Back to top](#top)
