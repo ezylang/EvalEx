@@ -115,8 +115,8 @@ The default implementation is the _MapBasedFunctionDictionary_, which stores all
 
 ### Implicit Multiplication
 
-Implicit multiplication automatically adds in expressions like "2x" or "(a+b)(b+c)" the missing
-multiplication operator, so that the expression reads "2*x" or "(a+b) * (b+c)".
+Implicit multiplication automatically adds in expressions like "2x", "2sin(x)", "(a+b)(b+c)" the missing
+multiplication operator, so that the expression reads "2*x", "2*sin(x)", "(a+b) * (b+c)".
 
 Implicit multiplication will not work for expressions like x(a+b), which will not be extended to "2*(a+b)".
 This expression is treated as a call to function "x", which, if not defined, will raise a parse exception.
