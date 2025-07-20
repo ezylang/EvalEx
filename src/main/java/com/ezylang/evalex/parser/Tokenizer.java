@@ -105,6 +105,7 @@ public class Tokenizer {
     return ((previousToken.getType() == BRACE_CLOSE && currentToken.getType() == BRACE_OPEN)
         || (previousToken.getType() == NUMBER_LITERAL
             && currentToken.getType() == VARIABLE_OR_CONSTANT)
+        || (previousToken.getType() == NUMBER_LITERAL && currentToken.getType() == FUNCTION)
         || (previousToken.getType() == NUMBER_LITERAL && currentToken.getType() == BRACE_OPEN));
   }
 

@@ -70,6 +70,18 @@ class TokenizerImplicitMultiplicationTest extends BaseParserTest {
   }
 
   @Test
+  void testImplicitNumberFunction() throws ParseException {
+    assertAllTokensParsedCorrectly(
+        "2F(x)",
+        new Token(1, "2", TokenType.NUMBER_LITERAL),
+        new Token(2, "*", TokenType.INFIX_OPERATOR),
+        new Token(2, "F", TokenType.FUNCTION),
+        new Token(3, "(", TokenType.BRACE_OPEN),
+        new Token(4, "x", TokenType.VARIABLE_OR_CONSTANT),
+        new Token(5, ")", TokenType.BRACE_CLOSE));
+  }
+
+  @Test
   void testImplicitMultiplicationNotAllowed() {
     ExpressionConfiguration config =
         ExpressionConfiguration.builder().implicitMultiplicationAllowed(false).build();

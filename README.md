@@ -27,7 +27,7 @@ EvalEx is a handy expression evaluator for Java, that allows to parse and evalua
 - Custom functions and operators can be added.
 - Functions can be defined with a variable number of arguments (see MIN, MAX and SUM functions).
 - Supports hexadecimal and scientific notations of numbers.
-- Supports implicit multiplication, e.g. 2x or (a+b)(a-b) or 2(x-y) which equals to (a+b)\*(a-b) or 2\*(
+- Supports implicit multiplication, e.g. 2x, 2sin(x), (a+b)(a-b) or 2(x-y) which equals to (a+b)\*(a-b) or 2\*(
   x-y)
 - Lazy evaluation of function parameters (see the IF function) and support of sub-expressions.
 - Requires minimum Java version 11.
