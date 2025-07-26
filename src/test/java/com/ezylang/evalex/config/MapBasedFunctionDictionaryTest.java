@@ -23,6 +23,8 @@ import com.ezylang.evalex.functions.basic.MaxFunction;
 import com.ezylang.evalex.functions.basic.MinFunction;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
+
 import org.junit.jupiter.api.Test;
 
 class MapBasedFunctionDictionaryTest {
@@ -73,7 +75,7 @@ class MapBasedFunctionDictionaryTest {
   }
 
   @Test
-  void testListAvailableFunctionsEmpty() {
+  void testGetAvailableFunctionsEmpty() {
     @SuppressWarnings({"unchecked", "varargs"})
     FunctionDictionaryIfc functionDictionaryIfc = MapBasedFunctionDictionary.ofFunctions();
 
@@ -81,11 +83,11 @@ class MapBasedFunctionDictionaryTest {
   }
 
   @Test
-  void testListAvailableFunctionsReturnsAnImmutableCopy() {
+  void testGetAvailableFunctionsReturnsAnImmutableCopy() {
     @SuppressWarnings({"unchecked", "varargs"})
-    FunctionDictionaryIfc dictionary = MapBasedFunctionDictionary.ofFunctions();
+    Set<String> availableFunctions = MapBasedFunctionDictionary.ofFunctions().getAvailableFunctions();
 
-    assertThatThrownBy(() -> dictionary.getAvailableFunctions().clear())
+    assertThatThrownBy(availableFunctions::clear)
         .isInstanceOf(UnsupportedOperationException.class);
   }
 }
