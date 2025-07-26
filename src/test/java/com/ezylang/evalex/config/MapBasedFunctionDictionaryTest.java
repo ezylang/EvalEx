@@ -16,10 +16,12 @@
 package com.ezylang.evalex.config;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import com.ezylang.evalex.functions.FunctionIfc;
 import com.ezylang.evalex.functions.basic.MaxFunction;
 import com.ezylang.evalex.functions.basic.MinFunction;
+import java.util.HashMap;
 import java.util.Map;
 import org.junit.jupiter.api.Test;
 
@@ -34,13 +36,9 @@ class MapBasedFunctionDictionaryTest {
     FunctionDictionaryIfc dictionary =
         MapBasedFunctionDictionary.ofFunctions(Map.entry("min", min), Map.entry("max", max));
 
-    assertThat(dictionary.hasFunction("min")).isTrue();
-    assertThat(dictionary.hasFunction("max")).isTrue();
-
+    assertThat(dictionary.getAvailableFunctions()).containsExactlyInAnyOrder("min", "max");
     assertThat(dictionary.getFunction("min")).isEqualTo(min);
     assertThat(dictionary.getFunction("max")).isEqualTo(max);
-
-    assertThat(dictionary.hasFunction("medium")).isFalse();
   }
 
   @Test
@@ -58,5 +56,36 @@ class MapBasedFunctionDictionaryTest {
     assertThat(dictionary.hasFunction("max")).isTrue();
     assertThat(dictionary.hasFunction("MAX")).isTrue();
     assertThat(dictionary.hasFunction("Max")).isTrue();
+  }
+
+  @Test
+  void testGetAvailableFunctions() {
+    HashMap<String, FunctionIfc> functionsToRegister = new HashMap<>();
+    functionsToRegister.put("min", new MinFunction());
+    functionsToRegister.put("max", new MaxFunction());
+
+    @SuppressWarnings({"unchecked", "varargs"})
+    FunctionDictionaryIfc dictionary = MapBasedFunctionDictionary.ofFunctions();
+    functionsToRegister.forEach(dictionary::addFunction);
+
+    assertThat(dictionary.getAvailableFunctions())
+        .containsAnyElementsOf(functionsToRegister.keySet());
+  }
+
+  @Test
+  void testListAvailableFunctionsEmpty() {
+    @SuppressWarnings({"unchecked", "varargs"})
+    FunctionDictionaryIfc functionDictionaryIfc = MapBasedFunctionDictionary.ofFunctions();
+
+    assertThat(functionDictionaryIfc.getAvailableFunctions()).isEmpty();
+  }
+
+  @Test
+  void testListAvailableFunctionsReturnsAnImmutableCopy() {
+    @SuppressWarnings({"unchecked", "varargs"})
+    FunctionDictionaryIfc dictionary = MapBasedFunctionDictionary.ofFunctions();
+
+    assertThatThrownBy(() -> dictionary.getAvailableFunctions().clear())
+        .isInstanceOf(UnsupportedOperationException.class);
   }
 }

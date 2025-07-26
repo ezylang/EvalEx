@@ -16,6 +16,7 @@
 package com.ezylang.evalex.config;
 
 import com.ezylang.evalex.functions.FunctionIfc;
+import java.util.Set;
 
 /**
  * A function dictionary holds all the functions, that can be used in an expression. <br>
@@ -49,4 +50,11 @@ public interface FunctionDictionaryIfc {
    * @return The function definition or <code>null</code> if no function was found.
    */
   FunctionIfc getFunction(String functionName);
+
+  /**
+   * Get all available registered functions by their name.
+   *
+   * @return An immutable copy of all available function names.
+   */
+  Set<String> getAvailableFunctions();
 }
