@@ -19,6 +19,7 @@ import static java.util.Arrays.stream;
 
 import com.ezylang.evalex.functions.FunctionIfc;
 import java.util.Map;
+import java.util.Set;
 import java.util.TreeMap;
 
 /**
@@ -46,6 +47,11 @@ public class MapBasedFunctionDictionary implements FunctionDictionaryIfc {
   @Override
   public FunctionIfc getFunction(String functionName) {
     return functions.get(functionName);
+  }
+
+  @Override
+  public Set<String> getAvailableFunctions() {
+    return Set.copyOf(functions.keySet());
   }
 
   @Override
