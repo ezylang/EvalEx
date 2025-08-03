@@ -37,7 +37,7 @@ class MapBasedFunctionDictionaryTest {
     FunctionDictionaryIfc dictionary =
         MapBasedFunctionDictionary.ofFunctions(Map.entry("min", min), Map.entry("max", max));
 
-    assertThat(dictionary.getAvailableFunctions()).containsExactlyInAnyOrder("min", "max");
+    assertThat(dictionary.getAvailableFunctionNames()).containsExactlyInAnyOrder("min", "max");
     assertThat(dictionary.getFunction("min")).isEqualTo(min);
     assertThat(dictionary.getFunction("max")).isEqualTo(max);
   }
@@ -60,6 +60,37 @@ class MapBasedFunctionDictionaryTest {
   }
 
   @Test
+  void testGetAvailableFunctionNames() {
+    HashMap<String, FunctionIfc> functionsToRegister = new HashMap<>();
+    functionsToRegister.put("min", new MinFunction());
+    functionsToRegister.put("max", new MaxFunction());
+
+    @SuppressWarnings({"unchecked", "varargs"})
+    FunctionDictionaryIfc dictionary = MapBasedFunctionDictionary.ofFunctions();
+    functionsToRegister.forEach(dictionary::addFunction);
+
+    assertThat(dictionary.getAvailableFunctionNames())
+        .containsAnyElementsOf(functionsToRegister.keySet());
+  }
+
+  @Test
+  void testGetAvailableFunctionNamesEmpty() {
+    @SuppressWarnings({"unchecked", "varargs"})
+    FunctionDictionaryIfc functionDictionaryIfc = MapBasedFunctionDictionary.ofFunctions();
+
+    assertThat(functionDictionaryIfc.getAvailableFunctionNames()).isEmpty();
+  }
+
+  @Test
+  void testGetAvailableFunctionNamesReturnsAnImmutableCopy() {
+    @SuppressWarnings({"unchecked", "varargs"})
+    Set<String> availableFunctions =
+        MapBasedFunctionDictionary.ofFunctions().getAvailableFunctionNames();
+
+    assertThatThrownBy(availableFunctions::clear).isInstanceOf(UnsupportedOperationException.class);
+  }
+
+  @Test
   void testGetAvailableFunctions() {
     HashMap<String, FunctionIfc> functionsToRegister = new HashMap<>();
     functionsToRegister.put("min", new MinFunction());
@@ -70,7 +101,7 @@ class MapBasedFunctionDictionaryTest {
     functionsToRegister.forEach(dictionary::addFunction);
 
     assertThat(dictionary.getAvailableFunctions())
-        .containsAnyElementsOf(functionsToRegister.keySet());
+        .containsExactlyElementsOf(functionsToRegister.values());
   }
 
   @Test
@@ -84,7 +115,7 @@ class MapBasedFunctionDictionaryTest {
   @Test
   void testGetAvailableFunctionsReturnsAnImmutableCopy() {
     @SuppressWarnings({"unchecked", "varargs"})
-    Set<String> availableFunctions =
+    Set<FunctionIfc> availableFunctions =
         MapBasedFunctionDictionary.ofFunctions().getAvailableFunctions();
 
     assertThatThrownBy(availableFunctions::clear).isInstanceOf(UnsupportedOperationException.class);

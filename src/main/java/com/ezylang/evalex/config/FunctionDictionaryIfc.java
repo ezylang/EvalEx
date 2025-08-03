@@ -52,9 +52,24 @@ public interface FunctionDictionaryIfc {
   FunctionIfc getFunction(String functionName);
 
   /**
-   * Get all available registered functions by their name.
+   * Get all function names in current configuration.
    *
-   * @return An immutable copy of all available function names.
+   * @return A set of all defined function names.
+   * @throws UnsupportedOperationException when this operation is not supported by the
+   *     implementation.
    */
-  Set<String> getAvailableFunctions();
+  default Set<String> getAvailableFunctionNames() {
+    throw new UnsupportedOperationException("Operation not supported");
+  }
+
+  /**
+   * Get all functions in current configuration.
+   *
+   * @return A set of all defined functions.
+   * @throws UnsupportedOperationException when this operation is not supported by the
+   *     implementation.
+   */
+  default Set<FunctionIfc> getAvailableFunctions() {
+    throw new UnsupportedOperationException("Operation not supported");
+  }
 }

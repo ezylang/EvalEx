@@ -50,8 +50,13 @@ public class MapBasedFunctionDictionary implements FunctionDictionaryIfc {
   }
 
   @Override
-  public Set<String> getAvailableFunctions() {
+  public Set<String> getAvailableFunctionNames() {
     return Set.copyOf(functions.keySet());
+  }
+
+  @Override
+  public Set<FunctionIfc> getAvailableFunctions() {
+    return Set.copyOf(functions.values());
   }
 
   @Override
