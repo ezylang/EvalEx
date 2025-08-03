@@ -24,7 +24,6 @@ import com.ezylang.evalex.functions.basic.MinFunction;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
-
 import org.junit.jupiter.api.Test;
 
 class MapBasedFunctionDictionaryTest {
@@ -85,9 +84,9 @@ class MapBasedFunctionDictionaryTest {
   @Test
   void testGetAvailableFunctionsReturnsAnImmutableCopy() {
     @SuppressWarnings({"unchecked", "varargs"})
-    Set<String> availableFunctions = MapBasedFunctionDictionary.ofFunctions().getAvailableFunctions();
+    Set<String> availableFunctions =
+        MapBasedFunctionDictionary.ofFunctions().getAvailableFunctions();
 
-    assertThatThrownBy(availableFunctions::clear)
-        .isInstanceOf(UnsupportedOperationException.class);
+    assertThatThrownBy(availableFunctions::clear).isInstanceOf(UnsupportedOperationException.class);
   }
 }
