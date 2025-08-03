@@ -16,6 +16,7 @@
 package com.ezylang.evalex.config;
 
 import com.ezylang.evalex.operators.OperatorIfc;
+import java.util.Set;
 
 /**
  * An operator dictionary holds all the operators, that can be used in an expression. <br>
@@ -85,4 +86,70 @@ public interface OperatorDictionaryIfc {
    * @return The operator definition or <code>null</code> if no operator was found.
    */
   OperatorIfc getInfixOperator(String operatorString);
+
+  /**
+   * Get all prefix operator names in current configuration.
+   *
+   * @return A set of all defined prefix operator names.
+   * @throws UnsupportedOperationException when this operation is not supported by the
+   *     implementation.
+   */
+  default Set<String> getAvailablePrefixOperatorNames() {
+    throw new UnsupportedOperationException("Operation not supported");
+  }
+
+  /**
+   * Get all postfix operator names in current configuration.
+   *
+   * @return A set of all defined postfix operator names.
+   * @throws UnsupportedOperationException when this operation is not supported by the
+   *     implementation.
+   */
+  default Set<String> getAvailablePostfixOperatorNames() {
+    throw new UnsupportedOperationException("Operation not supported");
+  }
+
+  /**
+   * Get all infix operator names in current configuration.
+   *
+   * @return A set of all defined infix operator names.
+   * @throws UnsupportedOperationException when this operation is not supported by the
+   *     implementation.
+   */
+  default Set<String> getAvailableInfixOperatorNames() {
+    throw new UnsupportedOperationException("Operation not supported");
+  }
+
+  /**
+   * Get all prefix operators in current configuration.
+   *
+   * @return A set of all defined prefix operators.
+   * @throws UnsupportedOperationException when this operation is not supported by the
+   *     implementation.
+   */
+  default Set<OperatorIfc> getAvailablePrefixOperators() {
+    throw new UnsupportedOperationException("Operation not supported");
+  }
+
+  /**
+   * Get all postfix operators in current configuration.
+   *
+   * @return A set of all defined postfix operators.
+   * @throws UnsupportedOperationException when this operation is not supported by the
+   *     implementation.
+   */
+  default Set<OperatorIfc> getAvailablePostfixOperators() {
+    throw new UnsupportedOperationException("Operation not supported");
+  }
+
+  /**
+   * Get all infix operators in current configuration.
+   *
+   * @return A set of all defined infix operators.
+   * @throws UnsupportedOperationException when this operation is not supported by the
+   *     implementation.
+   */
+  default Set<OperatorIfc> getAvailableInfixOperators() {
+    throw new UnsupportedOperationException("Operation not supported");
+  }
 }
