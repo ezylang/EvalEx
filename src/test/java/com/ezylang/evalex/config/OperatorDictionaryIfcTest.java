@@ -22,7 +22,7 @@ import org.junit.jupiter.api.Test;
 
 class OperatorDictionaryIfcTest {
 
-  private OperatorDictionaryIfc operatorDictionaryIfc =
+  private final OperatorDictionaryIfc operatorDictionaryIfc =
       new OperatorDictionaryIfc() {
 
         @Override
@@ -46,37 +46,37 @@ class OperatorDictionaryIfcTest {
 
   @Test
   void testGetAvailablePrefixOperatorsIsUnsupportedByDefault() {
-    assertThatThrownBy(() -> operatorDictionaryIfc.getAvailablePrefixOperators())
+    assertThatThrownBy(operatorDictionaryIfc::getAvailablePrefixOperators)
         .isInstanceOf(UnsupportedOperationException.class);
   }
 
   @Test
   void testGetAvailablePrefixOperatorNamesIsUnsupportedByDefault() {
-    assertThatThrownBy(() -> operatorDictionaryIfc.getAvailablePrefixOperatorNames())
+    assertThatThrownBy(operatorDictionaryIfc::getAvailablePrefixOperatorNames)
         .isInstanceOf(UnsupportedOperationException.class);
   }
 
   @Test
   void testGetAvailableInfixOperatorsIsUnsupportedByDefault() {
-    assertThatThrownBy(() -> operatorDictionaryIfc.getAvailableInfixOperators())
+    assertThatThrownBy(operatorDictionaryIfc::getAvailableInfixOperators)
         .isInstanceOf(UnsupportedOperationException.class);
   }
 
   @Test
   void testGetAvailableInfixOperatorNamesIsUnsupportedByDefault() {
-    assertThatThrownBy(() -> operatorDictionaryIfc.getAvailableInfixOperatorNames())
+    assertThatThrownBy(operatorDictionaryIfc::getAvailableInfixOperatorNames)
         .isInstanceOf(UnsupportedOperationException.class);
   }
 
   @Test
   void testGetAvailablePostfixOperatorsIsUnsupportedByDefault() {
-    assertThatThrownBy(() -> operatorDictionaryIfc.getAvailablePostfixOperators())
+    assertThatThrownBy(operatorDictionaryIfc::getAvailablePostfixOperators)
         .isInstanceOf(UnsupportedOperationException.class);
   }
 
   @Test
   void testGetAvailablePostfixOperatorNamesIsUnsupportedByDefault() {
-    assertThatThrownBy(() -> operatorDictionaryIfc.getAvailablePostfixOperatorNames())
+    assertThatThrownBy(operatorDictionaryIfc::getAvailablePostfixOperatorNames)
         .isInstanceOf(UnsupportedOperationException.class);
   }
 }
