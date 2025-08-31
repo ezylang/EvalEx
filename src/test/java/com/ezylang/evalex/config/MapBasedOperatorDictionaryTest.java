@@ -75,4 +75,70 @@ class MapBasedOperatorDictionaryTest {
     assertThat(dictionary.hasInfixOperator("percent")).isTrue();
     assertThat(dictionary.hasInfixOperator("PERCENT")).isTrue();
   }
+
+  @Test
+  void testGetAvailablePrefixOperatorNames() {
+    OperatorIfc prefix = new PrefixPlusPlusOperator();
+
+    @SuppressWarnings({"unchecked", "varargs"})
+    OperatorDictionaryIfc dictionary =
+        MapBasedOperatorDictionary.ofOperators(Map.entry("++", prefix));
+
+    assertThat(dictionary.getAvailablePrefixOperatorNames()).containsExactly("++");
+  }
+
+  @Test
+  void testGetAvailablePostfixOperatorNames() {
+    OperatorIfc postfix = new PostfixQuestionOperator();
+
+    @SuppressWarnings({"unchecked", "varargs"})
+    OperatorDictionaryIfc dictionary =
+        MapBasedOperatorDictionary.ofOperators(Map.entry("?", postfix));
+
+    assertThat(dictionary.getAvailablePostfixOperatorNames()).containsExactly("?");
+  }
+
+  @Test
+  void testGetAvailableInfixOperatorNames() {
+    OperatorIfc infix = new InfixModuloOperator();
+
+    @SuppressWarnings({"unchecked", "varargs"})
+    OperatorDictionaryIfc dictionary =
+        MapBasedOperatorDictionary.ofOperators(Map.entry("%", infix));
+
+    assertThat(dictionary.getAvailableInfixOperatorNames()).containsExactly("%");
+  }
+
+  @Test
+  void testGetAvailablePrefixOperators() {
+    OperatorIfc prefix = new PrefixPlusPlusOperator();
+
+    @SuppressWarnings({"unchecked", "varargs"})
+    OperatorDictionaryIfc dictionary =
+        MapBasedOperatorDictionary.ofOperators(Map.entry("++", prefix));
+
+    assertThat(dictionary.getAvailablePrefixOperators()).containsExactly(prefix);
+  }
+
+  @Test
+  void testGetAvailablePostfixOperators() {
+    OperatorIfc postfix = new PostfixQuestionOperator();
+
+    @SuppressWarnings({"unchecked", "varargs"})
+    OperatorDictionaryIfc dictionary =
+        MapBasedOperatorDictionary.ofOperators(Map.entry("?", postfix));
+
+    assertThat(dictionary.getAvailablePostfixOperators()).containsExactly(postfix);
+  }
+
+  @Test
+  void testGetAvailableInfixOperators() {
+    OperatorIfc infix = new InfixModuloOperator();
+
+    @SuppressWarnings({"unchecked", "varargs"})
+    OperatorDictionaryIfc dictionary =
+        MapBasedOperatorDictionary.ofOperators(Map.entry("%", infix));
+
+    assertThat(dictionary.getAvailableInfixOperators()).containsExactly(infix);
+  }
 }

@@ -16,6 +16,7 @@
 package com.ezylang.evalex.config;
 
 import com.ezylang.evalex.functions.FunctionIfc;
+import java.util.Set;
 
 /**
  * A function dictionary holds all the functions, that can be used in an expression. <br>
@@ -49,4 +50,26 @@ public interface FunctionDictionaryIfc {
    * @return The function definition or <code>null</code> if no function was found.
    */
   FunctionIfc getFunction(String functionName);
+
+  /**
+   * Get all function names in current configuration.
+   *
+   * @return A set of all defined function names.
+   * @throws UnsupportedOperationException when this operation is not supported by the
+   *     implementation.
+   */
+  default Set<String> getAvailableFunctionNames() {
+    throw new UnsupportedOperationException("Operation not supported");
+  }
+
+  /**
+   * Get all functions in current configuration.
+   *
+   * @return A set of all defined functions.
+   * @throws UnsupportedOperationException when this operation is not supported by the
+   *     implementation.
+   */
+  default Set<FunctionIfc> getAvailableFunctions() {
+    throw new UnsupportedOperationException("Operation not supported");
+  }
 }
