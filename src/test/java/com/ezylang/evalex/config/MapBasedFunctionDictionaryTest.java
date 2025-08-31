@@ -70,7 +70,7 @@ class MapBasedFunctionDictionaryTest {
     functionsToRegister.forEach(dictionary::addFunction);
 
     assertThat(dictionary.getAvailableFunctionNames())
-        .containsAnyElementsOf(functionsToRegister.keySet());
+        .containsExactlyInAnyOrderElementsOf(functionsToRegister.keySet());
   }
 
   @Test
@@ -101,7 +101,7 @@ class MapBasedFunctionDictionaryTest {
     functionsToRegister.forEach(dictionary::addFunction);
 
     assertThat(dictionary.getAvailableFunctions())
-        .containsExactlyElementsOf(functionsToRegister.values());
+        .containsExactlyInAnyOrderElementsOf(functionsToRegister.values());
   }
 
   @Test
