@@ -240,4 +240,21 @@ class ExpressionTest {
     }
     return sb.toString();
   }
+
+  @Test
+  void testEvaluateWithUndeclaredVariablesAndDefaultMode() {
+    Expression expression = new Expression("a || b").with("a", false);
+    assertThatThrownBy(() -> expression.evaluate())
+        .isInstanceOf(EvaluationException.class)
+        .hasMessage("Variable or constant value for 'b' not found");
+  }
+
+  @Test
+  void testEvaluateWithUndeclaredVariablesAndLenientMode()
+      throws EvaluationException, ParseException {
+    Expression expression =
+        new Expression("a || b", ExpressionConfiguration.builder().lenientMode(true).build())
+            .with("a", false);
+    assertThat(expression.evaluate().getBooleanValue()).isFalse();
+  }
 }

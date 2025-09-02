@@ -338,6 +338,13 @@ public class ExpressionConfiguration {
   @Builder.Default private final boolean singleQuoteStringLiteralsAllowed = false;
 
   /**
+   * Allow for expressions to evaluate without errors when variables are not defined.
+   *
+   * @since 3.6.0
+   */
+  @Builder.Default private final boolean lenientMode = false;
+
+  /**
    * The power of operator precedence, can be set higher {@link
    * OperatorIfc#OPERATOR_PRECEDENCE_POWER_HIGHER} or to a custom value.
    */

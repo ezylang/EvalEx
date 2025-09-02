@@ -39,6 +39,13 @@ public class EvaluationValue implements Comparable<EvaluationValue> {
   /** A pre-built, immutable, null value. */
   public static final EvaluationValue NULL_VALUE = new EvaluationValue(null, DataType.NULL);
 
+  /**
+   * A pre-built, immutable value for an undefined variable, when the lenient mode is enabled.
+   *
+   * @since 3.6.0
+   */
+  public static final EvaluationValue UNDEFINED = new EvaluationValue(null, DataType.UNDEFINED);
+
   /** A pre-built, immutable, <code>false</code> boolean value. */
   public static final EvaluationValue FALSE = new EvaluationValue(false, DataType.BOOLEAN);
 
@@ -81,7 +88,13 @@ public class EvaluationValue implements Comparable<EvaluationValue> {
     /** A null value */
     NULL,
     /** Raw (undefined) type, stored as an {@link Object}. */
-    BINARY
+    BINARY,
+    /**
+     * Applicable for undeclared variables when lenient mode is enabled.
+     *
+     * @since 3.6.0
+     */
+    UNDEFINED;
   }
 
   Object value;
@@ -404,7 +417,7 @@ public class EvaluationValue implements Comparable<EvaluationValue> {
       case NULL:
         return NULL_BOOLEAN;
       default:
-        return false;
+        return Boolean.FALSE;
     }
   }
 
