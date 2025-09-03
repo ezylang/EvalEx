@@ -155,3 +155,12 @@ If possible, both exceptions report the following details:
 - The Token string, usually the operator, function, variable or literal causing the error.
 - The error message.
 
+### Lenient mode
+
+As of version 3.6.0, EvalEx introduces **Lenient Mode**, a flexible setting that allows
+expressions to execute without throwing an exception when encountering undeclared variables
+or constants. Instead of halting execution, such cases gracefully return logical null values,
+enabling smoother handling of dynamic or incomplete input.
+
+Lenient Mode is **disabled** by default. To enable it, set the corresponding property in the
+[Configuration](../configuration/configuration.html).
