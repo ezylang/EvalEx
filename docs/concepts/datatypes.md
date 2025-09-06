@@ -253,7 +253,7 @@ System.out.println(result); // prints unknown
 A representation for undeclared variables or constants, when the lenient mode is enabled.
 
 Differently from _NULL_, the _UNDEFINED_ data type provides some **logical nulls** (e.g.: `false` for _boolean_)
-allowing for graceful evaluzation of variables without an exception, like in the example below (where `b` is
+allowing for graceful evaluation of variables without an exception, like in the example below (where `b` is
 not defined):
 
 ```java
