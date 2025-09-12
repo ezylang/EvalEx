@@ -63,6 +63,8 @@ class StringFunctionsTest extends BaseEvaluationTest {
   @CsvSource(
       delimiter = ':',
       value = {
+        "STR_CONTAINS(null, \"a\") : false",
+        "STR_CONTAINS(\"abc\", null) : false",
         "STR_CONTAINS(\"\", \"\") : true",
         "STR_CONTAINS(\"a\", \"a\") : true",
         "STR_CONTAINS(\"Hello World\", \"Wor\") : true",

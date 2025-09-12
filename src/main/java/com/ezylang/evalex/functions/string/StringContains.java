@@ -30,6 +30,10 @@ public class StringContains extends AbstractFunction {
       Expression expression, Token functionToken, EvaluationValue... parameterValues) {
     String string = parameterValues[0].getStringValue();
     String substring = parameterValues[1].getStringValue();
-    return expression.convertValue(string.toUpperCase().contains(substring.toUpperCase()));
+    boolean result =
+        string != null
+            && substring != null
+            && string.toUpperCase().contains(substring.toUpperCase());
+    return expression.convertValue(result);
   }
 }
