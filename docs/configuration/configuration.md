@@ -21,6 +21,7 @@ ExpressionConfiguration configuration=ExpressionConfiguration.builder()
         .defaultConstants(ExpressionConfiguration.StandardConstants)
         .functionDictionary(ExpressionConfiguration.StandardFunctionsDictionary)
         .implicitMultiplicationAllowed(true)
+        .lenientMode(false)
         .locale(Locale.getDefault())
         .mathContext(ExpressionConfiguration.DEFAULT_MATH_CONTEXT)
         .operatorDictionary(ExpressionConfiguration.StandardOperatorsDictionary)
@@ -125,6 +126,14 @@ An expression like "2(a+b)" will be expanded to "2*(a+b)".
 
 By default, implicit multiplication is enabled. It can be disabled with this configuration
 parameter.
+
+### Lenient Mode[^2]
+
+Enables graceful evaluation of expressions containing undeclared variables or constants. Instead of throwing an
+exception, the engine returns a special type representing **logical nulls** —- such as `false`
+where a boolean is expected —- allowing for more permissive and lazy evaluation.
+
+[^2]: Since 3.6.0
 
 ### Locale
 

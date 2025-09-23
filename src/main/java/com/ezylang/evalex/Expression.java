@@ -184,6 +184,9 @@ public class Expression {
       result = getDataAccessor().getData(token.getValue());
     }
     if (result == null) {
+      if (configuration.isLenientMode()) {
+        return EvaluationValue.UNDEFINED;
+      }
       throw new EvaluationException(
           token, String.format("Variable or constant value for '%s' not found", token.getValue()));
     }

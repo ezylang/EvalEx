@@ -9,20 +9,22 @@ nav_order: 2
 
 EvalEx supports the following data types:
 
-| Data Type       | Internal Representation           |
-|-----------------|-----------------------------------|
-| NUMBER          | java.math.BigDecimal              |
-| BOOLEAN         | java.lang.Boolean                 |
-| STRING          | java.lang.String                  |
-| DATE_TIME       | java.time.Instant                 |
-| DURATION        | java.time.Duration                |
-| ARRAY           | java.util.List                    |
-| STRUCTURE       | java.util.Map                     |
-| EXPRESSION_NODE | com.ezylang.evalex.parser.ASTNode |
-| BINARY[^1]      | java.lang.Object                  |
-| NULL            | null                              |
+| Data Type       | Internal Representation                    |
+|-----------------|--------------------------------------------|
+| NUMBER          | java.math.BigDecimal                       |
+| BOOLEAN         | java.lang.Boolean                          |
+| STRING          | java.lang.String                           |
+| DATE_TIME       | java.time.Instant                          |
+| DURATION        | java.time.Duration                         |
+| ARRAY           | java.util.List                             |
+| STRUCTURE       | java.util.Map                              |
+| EXPRESSION_NODE | com.ezylang.evalex.parser.ASTNode          |
+| BINARY[^1]      | java.lang.Object                           |
+| NULL            | null                                       |
+| UNDEFINED[^2]   | null, but returned as "logical null" value |
 
 [^1]: Since 3.3.0
+[^2]: Since 3.6.0
 
 Data is stored in an _EvaluationValue_, which holds the value and the data type.
 
@@ -245,3 +247,24 @@ EvaluationValue result = expression
 
 System.out.println(result); // prints unknown
 ```
+
+### UNDEFINED
+
+A representation for undeclared variables or constants, when the lenient mode is enabled.
+
+Differently from _NULL_, the _UNDEFINED_ data type provides some **logical nulls** (e.g.: `false` for _boolean_)
+allowing for graceful evaluation of variables without an exception, like in the example below (where `b` is
+not defined):
+
+```java
+Expression expression = new Expression("a || b");
+
+EvaluationValue result = expression
+    .with("a", false)
+    .evaluate();
+
+System.out.println(result); // returns false
+```
+
+The lenient mode is **disabled** by default and can be enabled by setting a dedicated property
+in the [Configuration](../configuration/configuration.html).
