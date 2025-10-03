@@ -11,25 +11,25 @@ Available through the _ExpressionConfiguration.StandardFunctionsDictionary_ cons
 
 ### Basic Functions
 
-| Name                  | Description                                                                                                                             |
-|-----------------------|-----------------------------------------------------------------------------------------------------------------------------------------|
-| [ABS](#abs)           | Absolute (non-negative) value                                                                                                           |
-| [AVERAGE](#average)   | Returns the average (arithmetic mean) of all parameters. If a parameter is of type _ARRAY_, the average of all elements is calculated.  |
-| [CEILING](#ceiling)   | Rounds the given value to the nearest integer using the rounding mode CEILING                                                           |
-| [COALESCE](#coalesce) | Returns the first non-null parameter, or NULL if all parameters are null                                                                |
-| [FACT](#fact)         | Calculates the factorial of a base value                                                                                                |
-| [FLOOR](#floor)       | Rounds the given value to the nearest integer using the rounding mode FLOOR                                                             |
-| [IF](#if)             | Conditional evaluation function. Returns one value or another, depending on a given condition.                                          |
-| [LOG](#log)           | The natural logarithm (base e) of a value                                                                                               |
-| [LOG10](#log10)       | The base 10 logarithm of a value                                                                                                        |
-| [MAX](#max)           | Returns the maximum value of all parameters. If a parameter is of type _ARRAY_, the maximum of all elements is calculated.              |
-| [MIN](#min)           | Returns the minimum value of all parameters. If a parameter is of type _ARRAY_, the minimum of all elements is calculated.              |
-| [NOT](#not)           | Boolean negation, implemented as a function (for compatibility)                                                                         |
-| [RANDOM](#random)     | Produces a random value between 0 and 1                                                                                                 |
-| [ROUND](#round)       | Rounds the given value to the specified scale, using the current rounding mode                                                          |
-| [SQRT](#sqrt)         | Returns the square root of a given number                                                                                               |
-| [SUM](#sum)           | Returns the sum of all parameters. If a parameter is of type _ARRAY_, the sum of all elements is calculated.                            |
-| [SWITCH](#switch)     | Returns the result correponding to the first matching value in the specified expression or an optional default value if no match found. |
+| Name                  | Description                                                                                                                                     |
+|-----------------------|-------------------------------------------------------------------------------------------------------------------------------------------------|
+| [ABS](#abs)           | Absolute (non-negative) value                                                                                                                   |
+| [AVERAGE](#average)   | Returns the average (arithmetic mean) of all parameters. If a parameter is of type _ARRAY_, the average of all elements is calculated.          |
+| [CEILING](#ceiling)   | Rounds the given value to the nearest integer using the rounding mode CEILING                                                                   |
+| [COALESCE](#coalesce) | Returns the first non-null parameter, or NULL if all parameters are null. If a parameter is of type ARRAY, returns the first non-null element.  |
+| [FACT](#fact)         | Calculates the factorial of a base value                                                                                                        |
+| [FLOOR](#floor)       | Rounds the given value to the nearest integer using the rounding mode FLOOR                                                                     |
+| [IF](#if)             | Conditional evaluation function. Returns one value or another, depending on a given condition.                                                  |
+| [LOG](#log)           | The natural logarithm (base e) of a value                                                                                                       |
+| [LOG10](#log10)       | The base 10 logarithm of a value                                                                                                                |
+| [MAX](#max)           | Returns the maximum value of all parameters. If a parameter is of type _ARRAY_, the maximum of all elements is calculated.                      |
+| [MIN](#min)           | Returns the minimum value of all parameters. If a parameter is of type _ARRAY_, the minimum of all elements is calculated.                      |
+| [NOT](#not)           | Boolean negation, implemented as a function (for compatibility)                                                                                 |
+| [RANDOM](#random)     | Produces a random value between 0 and 1                                                                                                         |
+| [ROUND](#round)       | Rounds the given value to the specified scale, using the current rounding mode                                                                  |
+| [SQRT](#sqrt)         | Returns the square root of a given number                                                                                                       |
+| [SUM](#sum)           | Returns the sum of all parameters. If a parameter is of type _ARRAY_, the sum of all elements is calculated.                                    |
+| [SWITCH](#switch)     | Returns the result correponding to the first matching value in the specified expression or an optional default value if no match found.         |
 
 ### String Functions
 
@@ -225,27 +225,30 @@ COALESCE(value, [...])
 
 ### Parameters
 
-| Name       | Description                         |
-|------------|-------------------------------------|
-| value, ... | One or more values to be evaluated. |
+| Name       | Description                                              |
+|------------|----------------------------------------------------------|
+| value, ... | One or more values or arrays from which to be evaluated. |
 
 ### Examples
 
 Consider the following variables:
 
-| Name     | Value     |
-|----------|-----------|
-| `a`      | `null`    |
-| `b`      | `"hello"` |
-| `c`      | `42`      |
+| Name       | Value         |
+|------------|---------------|
+| `a`        | `null`        |
+| `b`        | `"hello"`     |
+| `c`        | `42`          |
+| `numbers`  | `[null, 8, 5]`|
 
 And the following expressions:
 
-| Expression            | Result    |
-|-----------------------|-----------|
-| `COALESCE(a, b, c)`   | `"hello"` |
-| `COALESCE(a, null, c)`| `42`      |
-| `COALESCE(a, null)`   | `null`    |
+| Expression                | Result    |
+|---------------------------|-----------|
+| `COALESCE(a, b, c)`       | `"hello"` |
+| `COALESCE(a, null, c)`    | `42`      |
+| `COALESCE(a, null)`       | `null`    |
+| `COALESCE(numbers)`       | `8`       |
+| `COALESCE(a, numbers, b)` | `8`       |
 
 🔝 [Back to Basic Functions](#basic-functions) | 🔝 [Back to top](#top)
 
