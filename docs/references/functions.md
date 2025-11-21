@@ -1182,12 +1182,12 @@ ACOS(value)
 
 ### Examples
 
-| Expression     | Result  |
-|----------------|---------|
-| `ACOS(-1)`     | `180`   |
-| `ACOS(0)`      | `90`    |
-| `ACOS(0.5)`    | `60`    |
-| `ACOS(1)`      | `0`     |
+| Expression  | Result  |
+|-------------|---------|
+| `ACOS(-1)`  | `180`   |
+| `ACOS(0)`   | `90`    |
+| `ACOS(0.5)` | `60`    |
+| `ACOS(1)`   | `0`     |
 
 
 🔝 [Back to Trigonometric Functions](#trigonometric-functions) | 🔝 [Back to top](#top)
@@ -1213,11 +1213,11 @@ ACOSH(value)
 
 ### Examples
 
-| Expression     | Result                |
-|----------------|-----------------------|
-| `ACOSH(1)`     | `0`                   |
-| `ACOSH(2)`     | `1.3169578969248166`  |
-| `ACOSH(3)`     | `1.762747174039086`   |
+| Expression | Result               |
+|------------|----------------------|
+| `ACOSH(1)` | `0`                  |
+| `ACOSH(2)` | `1.3169578969248166` |
+| `ACOSH(3)` | `1.762747174039086`  |
 
 🔝 [Back to Trigonometric Functions](#trigonometric-functions) | 🔝 [Back to top](#top)
 
@@ -1241,11 +1241,11 @@ ACOSR(value)
 
 ### Examples
 
-| Expression     | Result                |
-|----------------|-----------------------|
-| `ACOSR(-1)`    | `3.141592653589793`   |
-| `ACOSR(0)`     | `1.5707963267948966`  |
-| `ACOSR(1)`     | `0`                   |
+| Expression  | Result                |
+|-------------|-----------------------|
+| `ACOSR(-1)` | `3.141592653589793`   |
+| `ACOSR(0)`  | `1.5707963267948966`  |
+| `ACOSR(1)`  | `0`                   |
 
 
 🔝 [Back to Trigonometric Functions](#trigonometric-functions) | 🔝 [Back to top](#top)
@@ -1264,9 +1264,9 @@ ACOT(value)
 
 ### Parameters
 
-| Name   | Description                      |
-|--------|----------------------------------|
-| value  | A numeric value.                 |
+| Name   | Description      |
+|--------|------------------|
+| value  | A numeric value. |
 
 ### Examples
 
@@ -1291,9 +1291,9 @@ ACOTH(value)
 
 ### Parameters
 
-| Name   | Description                      |
-|--------|----------------------------------|
-| value  | A numeric value > 1 or < -1.     |
+| Name   | Description                   |
+|--------|-------------------------------|
+| value  | A numeric value > 1 or < -1.  |
 
 ### Examples
 
@@ -1318,16 +1318,16 @@ ACOTR(value)
 
 ### Parameters
 
-| Name   | Description                      |
-|--------|----------------------------------|
-| value  | A numeric value.                 |
+| Name   | Description                |
+|--------|----------------------------|
+| value  | A numeric value.           |
 
 ### Examples
 
-| Expression     | Result               |
-|----------------|----------------------|
-| `ACOTR(1)`     | `0.7853981633974483` |
-| `ACOTR(-1)`    | `2.356194490192345`  |
+| Expression   | Result               |
+|--------------|----------------------|
+| `ACOTR(1)`   | `0.7853981633974483` |
+| `ACOTR(-1)`  | `2.356194490192345`  |
 
 🔝 [Back to Trigonometric Functions](#trigonometric-functions) | 🔝 [Back to top](#top)
 
@@ -1345,9 +1345,9 @@ ASIN(value)
 
 ### Parameters
 
-| Name   | Description                      |
-|--------|----------------------------------|
-| value  | A numeric value between -1 and 1.|
+| Name   | Description                       |
+|--------|-----------------------------------|
+| value  | A numeric value between -1 and 1. |
 
 ### Examples
 
@@ -1374,17 +1374,17 @@ ASINH(value)
 
 ### Parameters
 
-| Name   | Description                      |
-|--------|----------------------------------|
-| value  | A numeric value.                 |
+| Name   | Description                |
+|--------|----------------------------|
+| value  | A numeric value.           |
 
 ### Examples
 
-| Expression     | Result                |
-|----------------|-----------------------|
-| `ASINH(0)`     | `0`                   |
-| `ASINH(1)`     | `0.8813735870195429`  |
-| `ASINH(-1)`    | `-0.8813735870195428` |
+| Expression  | Result                |
+|-------------|-----------------------|
+| `ASINH(0)`  | `0`                   |
+| `ASINH(1)`  | `0.8813735870195429`  |
+| `ASINH(-1)` | `-0.8813735870195428` |
 
 🔝 [Back to Trigonometric Functions](#trigonometric-functions) | 🔝 [Back to top](#top)
 
@@ -1402,17 +1402,17 @@ ASINR(value)
 
 ### Parameters
 
-| Name   | Description                      |
-|--------|----------------------------------|
-| value  | A numeric value between -1 and 1.|
+| Name   | Description                       |
+|--------|-----------------------------------|
+| value  | A numeric value between -1 and 1. |
 
 ### Examples
 
-| Expression   | Result                 |
-|--------------|------------------------|
-| `ASINR(0)`   | `0`                    |
-| `ASINR(1)`   | `1.5707963267948966`   |
-| `ASINR(-1)`  | `-1.5707963267948966`  |
+| Expression  | Result                |
+|-------------|-----------------------|
+| `ASINR(0)`  | `0`                   |
+| `ASINR(1)`  | `1.5707963267948966`  |
+| `ASINR(-1)` | `-1.5707963267948966` |
 
 🔝 [Back to Trigonometric Functions](#trigonometric-functions) | 🔝 [Back to top](#top)
 
@@ -1437,16 +1437,16 @@ ATAN2(y, x)
 
 ### Examples
 
-| Expression         | Result |
-|--------------------|--------|
-| `ATAN2(0, 0)`      | `0`    |
-| `ATAN2(0, 1)`      | `0`    |
-| `ATAN2(0, -1)`     | `180`  |
-| `ATAN2(1, 0)`      | `90`   |
-| `ATAN2(1, -1)`     | `135`  |
-| `ATAN2(-1, 0)`     | `-90`  |
-| `ATAN2(-1, 1)`     | `-45`  |
-| `ATAN2(-1, -1)`    | `-135` |
+| Expression       | Result |
+|------------------|--------|
+| `ATAN2(0, 0)`    | `0`    |
+| `ATAN2(0, 1)`    | `0`    |
+| `ATAN2(0, -1)`   | `180`  |
+| `ATAN2(1, 0)`    | `90`   |
+| `ATAN2(1, -1)`   | `135`  |
+| `ATAN2(-1, 0)`   | `-90`  |
+| `ATAN2(-1, 1)`   | `-45`  |
+| `ATAN2(-1, -1)`  | `-135` |
 
 🔝 [Back to Trigonometric Functions](#trigonometric-functions) | 🔝 [Back to top](#top)
 
@@ -1498,9 +1498,9 @@ ATAN(value)
 
 ### Parameters
 
-| Name   | Description                      |
-|--------|----------------------------------|
-| value  | A numeric value.                 |
+| Name   | Description      |
+|--------|------------------|
+| value  | A numeric value. |
 
 ### Examples
 
@@ -1554,17 +1554,17 @@ ATANR(value)
 
 ### Parameters
 
-| Name   | Description                      |
-|--------|----------------------------------|
-| value  | A numeric value.                 |
+| Name   | Description                  |
+|--------|------------------------------|
+| value  | A numeric value.             |
 
 ### Examples
 
-| Expression     | Result                 |
-|----------------|------------------------|
-| `ATANR(0)`     | `0`                    |
-| `ATANR(1)`     | `0.7853981633974483`   |
-| `ATANR(-1)`    | `-0.7853981633974483`  |
+| Expression   | Result                 |
+|--------------|------------------------|
+| `ATANR(0)`   | `0`                    |
+| `ATANR(1)`   | `0.7853981633974483`   |
+| `ATANR(-1)`  | `-0.7853981633974483`  |
 
 🔝 [Back to Trigonometric Functions](#trigonometric-functions) | 🔝 [Back to top](#top)
 
@@ -1582,16 +1582,16 @@ COS(value)
 
 ### Parameters
 
-| Name   | Description                      |
-|--------|----------------------------------|
-| value  | Angle in degrees.                |
+| Name   | Description       |
+|--------|-------------------|
+| value  | Angle in degrees. |
 
 ### Examples
 
-| Expression     | Result |
-|----------------|--------|
-| `COS(0)`       | `1`    |
-| `COS(60)`      | `0.5`  |
+| Expression  | Result |
+|-------------|--------|
+| `COS(0)`    | `1`    |
+| `COS(60)`   | `0.5`  |
 
 🔝 [Back to Trigonometric Functions](#trigonometric-functions) | 🔝 [Back to top](#top)
 
@@ -1609,9 +1609,9 @@ COSH(value)
 
 ### Parameters
 
-| Name   | Description                      |
-|--------|----------------------------------|
-| value  | A numeric value.                 |
+| Name   | Description                 |
+|--------|-----------------------------|
+| value  | A numeric value.            |
 
 ### Examples
 
@@ -1637,9 +1637,9 @@ COSR(value)
 
 ### Parameters
 
-| Name   | Description                      |
-|--------|----------------------------------|
-| value  | Angle in radians.                |
+| Name   | Description                  |
+|--------|------------------------------|
+| value  | Angle in radians.            |
 
 ### Examples
 
@@ -1665,16 +1665,16 @@ COT(value)
 
 ### Parameters
 
-| Name   | Description                      |
-|--------|----------------------------------|
-| value  | Angle in degrees.                |
+| Name   | Description                  |
+|--------|------------------------------|
+| value  | Angle in degrees.            |
 
 ### Examples
 
-| Expression     | Result                 |
-|----------------|------------------------|
-| `COT(45)`      | `1`                    |
-| `COT(30)`      | `1.7320508075688774`   |
+| Expression   | Result                 |
+|--------------|------------------------|
+| `COT(45)`    | `1`                    |
+| `COT(30)`    | `1.7320508075688774`   |
 
 🔝 [Back to Trigonometric Functions](#trigonometric-functions) | 🔝 [Back to top](#top)
 
@@ -1692,17 +1692,17 @@ COTH(value)
 
 ### Parameters
 
-| Name   | Description                      |
-|--------|----------------------------------|
-| value  | A numeric value not equal to 0.  |
+| Name   | Description                     |
+|--------|---------------------------------|
+| value  | A numeric value not equal to 0. |
 
 ### Examples
 
-| Expression     | Result                |
-|----------------|-----------------------|
-| `COTH(1)`      | `1.3130352854993315`  |
-| `COTH(5)`      | `1.0000908039820193`  |
-| `COTH(-5)`     | `-1.0000908039820193` |
+| Expression   | Result                |
+|--------------|-----------------------|
+| `COTH(1)`    | `1.3130352854993315`  |
+| `COTH(5)`    | `1.0000908039820193`  |
+| `COTH(-5)`   | `-1.0000908039820193` |
 
 🔝 [Back to Trigonometric Functions](#trigonometric-functions) | 🔝 [Back to top](#top)
 
@@ -1720,16 +1720,16 @@ COTR(value)
 
 ### Parameters
 
-| Name   | Description                      |
-|--------|----------------------------------|
-| value  | Angle in radians (not zero).     |
+| Name   | Description                   |
+|--------|-------------------------------|
+| value  | Angle in radians (not zero).  |
 
 ### Examples
 
-| Expression     | Result                 |
-|----------------|------------------------|
-| `COTR(0.7854)` | `1`                    |
-| `COTR(1)`      | `0.6420926159343306`   |
+| Expression     | Result                |
+|----------------|-----------------------|
+| `COTR(0.7854)` | `1`                   |
+| `COTR(1)`      | `0.6420926159343306`  |
 
 🔝 [Back to Trigonometric Functions](#trigonometric-functions) | 🔝 [Back to top](#top)
 
@@ -1747,9 +1747,9 @@ CSC(value)
 
 ### Parameters
 
-| Name   | Description                      |
-|--------|----------------------------------|
-| value  | Angle in degrees (not zero).     |
+| Name   | Description                  |
+|--------|------------------------------|
+| value  | Angle in degrees (not zero). |
 
 ### Examples
 
@@ -1774,9 +1774,9 @@ CSCH(value)
 
 ### Parameters
 
-| Name   | Description                      |
-|--------|----------------------------------|
-| value  | A numeric value not equal to 0.  |
+| Name   | Description                     |
+|--------|---------------------------------|
+| value  | A numeric value not equal to 0. |
 
 ### Examples
 
@@ -1801,9 +1801,9 @@ CSCR(value)
 
 ### Parameters
 
-| Name   | Description                      |
-|--------|----------------------------------|
-| value  | Angle in radians (not zero).     |
+| Name   | Description                  |
+|--------|------------------------------|
+| value  | Angle in radians (not zero). |
 
 ### Examples
 
@@ -1828,9 +1828,9 @@ DEG(rad)
 
 ### Parameters
 
-| Name | Description           |
-|------|-----------------------|
-| rad  | Angle in radians.     |
+| Name | Description       |
+|------|-------------------|
+| rad  | Angle in radians. |
 
 ### Examples
 
@@ -1856,9 +1856,9 @@ RAD(degrees)
 
 ### Parameters
 
-| Name     | Description           |
-|----------|-----------------------|
-| degrees  | Angle in degrees.     |
+| Name     | Description       |
+|----------|-------------------|
+| degrees  | Angle in degrees. |
 
 ### Examples
 
@@ -1884,9 +1884,9 @@ SEC(value)
 
 ### Parameters
 
-| Name   | Description                      |
-|--------|----------------------------------|
-| value  | Angle in degrees (not zero).     |
+| Name   | Description                  |
+|--------|------------------------------|
+| value  | Angle in degrees (not zero). |
 
 ### Examples
 
@@ -1911,16 +1911,16 @@ SECH(value)
 
 ### Parameters
 
-| Name   | Description                      |
-|--------|----------------------------------|
-| value  | A numeric value (not zero).      |
+| Name   | Description                  |
+|--------|------------------------------|
+| value  | A numeric value (not zero).  |
 
 ### Examples
 
-| Expression     | Result                |
-|----------------|-----------------------|
-| `SECH(1)`      | `0.6480542736638853`  |
-| `SECH(0)`      | `1`                   |
+| Expression    | Result                |
+|---------------|-----------------------|
+| `SECH(1)`     | `0.6480542736638853`  |
+| `SECH(0)`     | `1`                   |
 
 🔝 [Back to Trigonometric Functions](#trigonometric-functions) | 🔝 [Back to top](#top)
 
@@ -1938,9 +1938,9 @@ SECR(value)
 
 ### Parameters
 
-| Name   | Description                      |
-|--------|----------------------------------|
-| value  | Angle in radians (not zero).     |
+| Name   | Description                  |
+|--------|------------------------------|
+| value  | Angle in radians (not zero). |
 
 ### Examples
 
@@ -1965,9 +1965,9 @@ SIN(value)
 
 ### Parameters
 
-| Name   | Description                      |
-|--------|----------------------------------|
-| value  | Angle in degrees.                |
+| Name   | Description       |
+|--------|-------------------|
+| value  | Angle in degrees. |
 
 ### Examples
 
@@ -1993,17 +1993,17 @@ SINH(value)
 
 ### Parameters
 
-| Name   | Description                      |
-|--------|----------------------------------|
-| value  | A numeric value.                 |
+| Name   | Description                 |
+|--------|-----------------------------|
+| value  | A numeric value.            |
 
 ### Examples
 
-| Expression     | Result                  |
-|----------------|-------------------------|
-| `SINH(0)`      | `0`                     |
-| `SINH(1)`      | `1.1752011936438014`    |
-| `SINH(-1)`     | `-1.1752011936438014`   |
+| Expression   | Result                |
+|--------------|-----------------------|
+| `SINH(0)`    | `0`                   |
+| `SINH(1)`    | `1.1752011936438014`  |
+| `SINH(-1)`   | `-1.1752011936438014` |
 
 🔝 [Back to Trigonometric Functions](#trigonometric-functions) | 🔝 [Back to top](#top)
 
@@ -2021,9 +2021,9 @@ SINR(value)
 
 ### Parameters
 
-| Name   | Description                      |
-|--------|----------------------------------|
-| value  | Angle in radians.                |
+| Name   | Description       |
+|--------|-------------------|
+| value  | Angle in radians. |
 
 ### Examples
 
@@ -2049,9 +2049,9 @@ TAN(value)
 
 ### Parameters
 
-| Name   | Description                      |
-|--------|----------------------------------|
-| value  | Angle in degrees.                |
+| Name   | Description                  |
+|--------|------------------------------|
+| value  | Angle in degrees.            |
 
 ### Examples
 
@@ -2077,17 +2077,17 @@ TANH(value)
 
 ### Parameters
 
-| Name   | Description                      |
-|--------|----------------------------------|
-| value  | A numeric value.                 |
+| Name   | Description                  |
+|--------|------------------------------|
+| value  | A numeric value.             |
 
 ### Examples
 
-| Expression     | Result                  |
-|----------------|-------------------------|
-| `TANH(0)`      | `0`                     |
-| `TANH(1)`      | `0.7615941559557649`    |
-| `TANH(-1)`     | `-0.7615941559557649`   |
+| Expression  | Result                  |
+|-------------|-------------------------|
+| `TANH(0)`   | `0`                     |
+| `TANH(1)`   | `0.7615941559557649`    |
+| `TANH(-1)`  | `-0.7615941559557649`   |
 
 🔝 [Back to Trigonometric Functions](#trigonometric-functions) | 🔝 [Back to top](#top)
 
@@ -2105,9 +2105,9 @@ TANR(value)
 
 ### Parameters
 
-| Name   | Description                      |
-|--------|----------------------------------|
-| value  | Angle in radians.                |
+| Name   | Description                  |
+|--------|------------------------------|
+| value  | Angle in radians.            |
 
 ### Examples
 
