@@ -31,8 +31,16 @@ public class CoalesceFunction extends AbstractFunction {
   public EvaluationValue evaluate(
       Expression expression, Token functionToken, EvaluationValue... parameterValues) {
     for (EvaluationValue parameter : parameterValues) {
-      if (!parameter.isNullValue()) {
-        return parameter;
+      if (parameter.isArrayValue()) {
+        for (EvaluationValue element : parameter.getArrayValue()) {
+          if (!element.isNullValue()) {
+            return element;
+          }
+        }
+      } else {
+        if (!parameter.isNullValue()) {
+          return parameter;
+        }
       }
     }
     return EvaluationValue.NULL_VALUE;

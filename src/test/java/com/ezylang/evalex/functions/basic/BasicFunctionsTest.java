@@ -29,6 +29,7 @@ import com.ezylang.evalex.parser.Token;
 import com.ezylang.evalex.parser.Token.TokenType;
 import java.math.MathContext;
 import java.math.RoundingMode;
+import java.util.Arrays;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
@@ -386,6 +387,20 @@ class BasicFunctionsTest extends BaseEvaluationTest {
       assertThat(evaluationValue.isNullValue()).isFalse();
       assertThat(evaluationValue.getStringValue()).isEqualTo(expectedResult);
     }
+  }
+
+  @Test
+  void testCoalesceWithArray()
+      throws EvaluationException, ParseException {
+    EvaluationValue evaluationValue = new Expression("COALESCE(A, B, C)",
+        TestConfigurationProvider.StandardConfigurationWithAdditionalTestOperators)
+        .with("A", null)
+        .with("B", Arrays.asList(null, "8", null, null))
+        .with("C", "7")
+        .evaluate();
+
+      assertThat(evaluationValue.isNullValue()).isFalse();
+      assertThat(evaluationValue.getStringValue()).isEqualTo("8");
   }
 
   @ParameterizedTest
