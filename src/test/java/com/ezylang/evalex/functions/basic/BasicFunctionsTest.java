@@ -390,17 +390,18 @@ class BasicFunctionsTest extends BaseEvaluationTest {
   }
 
   @Test
-  void testCoalesceWithArray()
-      throws EvaluationException, ParseException {
-    EvaluationValue evaluationValue = new Expression("COALESCE(A, B, C)",
-        TestConfigurationProvider.StandardConfigurationWithAdditionalTestOperators)
-        .with("A", null)
-        .with("B", Arrays.asList(null, "8", null, null))
-        .with("C", "7")
-        .evaluate();
+  void testCoalesceWithArray() throws EvaluationException, ParseException {
+    EvaluationValue evaluationValue =
+        new Expression(
+                "COALESCE(A, B, C)",
+                TestConfigurationProvider.StandardConfigurationWithAdditionalTestOperators)
+            .with("A", null)
+            .with("B", Arrays.asList(null, "8", null, null))
+            .with("C", "7")
+            .evaluate();
 
-      assertThat(evaluationValue.isNullValue()).isFalse();
-      assertThat(evaluationValue.getStringValue()).isEqualTo("8");
+    assertThat(evaluationValue.isNullValue()).isFalse();
+    assertThat(evaluationValue.getStringValue()).isEqualTo("8");
   }
 
   @ParameterizedTest

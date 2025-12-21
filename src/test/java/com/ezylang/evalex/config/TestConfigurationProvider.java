@@ -39,7 +39,8 @@ public class TestConfigurationProvider {
               Map.entry("++", new PrefixPlusPlusOperator()),
               Map.entry("++", new PostfixPlusPlusOperator()),
               Map.entry("?", new PostfixQuestionOperator()))
-          .withAdditionalFunctions(Map.entry("TEST", new DummyFunction()));
+          .withAdditionalFunctions(
+              Map.entry("TEST", new DummyFunction()), Map.entry("F", new DummyFunction()));
 
   public static final ExpressionConfiguration GermanConfiguration =
       ExpressionConfiguration.builder()
