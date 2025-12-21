@@ -51,42 +51,42 @@ Available through the _ExpressionConfiguration.StandardFunctionsDictionary_ cons
 
 ### Trigonometric Functions
 
-| Name         | Description                                                                                    |
-|--------------|------------------------------------------------------------------------------------------------|
-| ACOS(value)  | Returns the arc-cosine (in degrees)                                                            |
-| ACOSH(value) | Returns the hyperbolic arc-cosine                                                              |
-| ACOSR(value) | Returns the arc-cosine (in radians)                                                            |
-| ACOT(value)  | Returns the arc-co-tangent (in degrees)                                                        |
-| ACOTH(value) | Returns the hyperbolic arc-co-tangent (in degrees)                                             |
-| ACOTR(value) | Returns the arc-co-tangent (in radians)                                                        |
-| ASIN(value)  | Returns the arc-sine (in degrees)                                                              |
-| ASINH(value) | Returns the hyperbolic arc-sine                                                                |
-| ASINR(value) | Returns the arc-sine (in radians)                                                              |
-| ATAN2(y, x)  | Returns the angle of atan2 (in degrees)                                                        |
-| ATAN2R(y, x) | Returns the angle of atan2 (in radians)                                                        |
-| ATAN(value)  | Returns the arc-tangent (in degrees)                                                           |
-| ATANH(value) | Returns the hyperbolic arc-tangent                                                             |
-| ATANR(value) | Returns the arc-tangent (in radians)                                                           |
-| COS(value)   | Returns the cosine of an angle (in degrees)                                                    |
-| COSH(value)  | Returns the hyperbolic cosine of a value                                                       |
-| COSR(value)  | Returns the cosine of an angle (in radians)                                                    |
-| COT(value)   | Returns the co-tangent of an angle (in degrees)                                                |
-| COTH(value)  | Returns the hyperbolic co-tangent of a value                                                   |
-| COTR(value)  | Returns the co-tangent of an angle (in radians)                                                |
-| CSC(value)   | Returns the co-secant of an angle (in degrees)                                                 |
-| CSCH(value)  | Returns the hyperbolic co-secant of a value                                                    |
-| CSCR(value)  | Returns the co-secant of an angle (in radians)                                                 |
-| DEG(rad)     | Converts an angle measured in radians to an approximately equivalent angle measured in degrees |
-| RAD(degrees) | Converts an angle measured in degrees to an approximately equivalent angle measured in radians |
-| SEC(value)   | Returns the secant of an angle (in degrees)                                                    |
-| SECH(value)  | Returns the hyperbolic secant of an angle                                                      |
-| SECR(value)  | Returns the secant of an angle (in radians)                                                    |
-| SIN(value)   | Returns the sine of an angle (in degrees)                                                      |
-| SINH(value)  | Returns the hyperbolic sine of a value                                                         |
-| SINR(value)  | Returns the sine of an angle (in radians)                                                      |
-| TAN(value)   | Returns the tangent of an angle (in degrees)                                                   |
-| TANH(value)  | Returns the hyperbolic tangent of a value                                                      |
-| TANR(value)  | Returns the tangent of an angle (in radians)                                                   |
+| Name                    | Description                                                                                    |
+|-------------------------|------------------------------------------------------------------------------------------------|
+| [ACOS(value)](#acos)    | Returns the arc-cosine (in degrees)                                                            |
+| [ACOSH(value)](#acosh)  | Returns the hyperbolic arc-cosine                                                              |
+| [ACOSR(value)](#acosr)  | Returns the arc-cosine (in radians)                                                            |
+| [ACOT(value)](#acot)    | Returns the arc-co-tangent (in degrees)                                                        |
+| [ACOTH(value)](#acoth)  | Returns the hyperbolic arc-co-tangent (in degrees)                                             |
+| [ACOTR(value)](#acotr)  | Returns the arc-co-tangent (in radians)                                                        |
+| [ASIN(value)](#asin)    | Returns the arc-sine (in degrees)                                                              |
+| [ASINH(value)](#asinh)  | Returns the hyperbolic arc-sine                                                                |
+| [ASINR(value)](#asinr)  | Returns the arc-sine (in radians)                                                              |
+| [ATAN2(y, x)](#atan2)   | Returns the angle of atan2 (in degrees)                                                        |
+| [ATAN2R(y, x)](#atan2r) | Returns the angle of atan2 (in radians)                                                        |
+| [ATAN(value)](#atan)    | Returns the arc-tangent (in degrees)                                                           |
+| [ATANH(value)](#atanh)  | Returns the hyperbolic arc-tangent                                                             |
+| [ATANR(value)](#atanr)  | Returns the arc-tangent (in radians)                                                           |
+| [COS(value)](#cos)      | Returns the cosine of an angle (in degrees)                                                    |
+| [COSH(value)](#cosh)    | Returns the hyperbolic cosine of a value                                                       |
+| [COSR(value)](#cosr)    | Returns the cosine of an angle (in radians)                                                    |
+| [COT(value)](#cot)      | Returns the co-tangent of an angle (in degrees)                                                |
+| [COTH(value)](#coth)    | Returns the hyperbolic co-tangent of a value                                                   |
+| [COTR(value)](#cotr)    | Returns the co-tangent of an angle (in radians)                                                |
+| [CSC(value)](#csc)      | Returns the co-secant of an angle (in degrees)                                                 |
+| [CSCH(value)](#csch)    | Returns the hyperbolic co-secant of a value                                                    |
+| [CSCR(value)](#cscr)    | Returns the co-secant of an angle (in radians)                                                 |
+| [DEG(rad)](#deg)        | Converts an angle measured in radians to an approximately equivalent angle measured in degrees |
+| [RAD(degrees)](#rad)    | Converts an angle measured in degrees to an approximately equivalent angle measured in radians |
+| [SEC(value)](#sec)      | Returns the secant of an angle (in degrees)                                                    |
+| [SECH(value)](#sech)    | Returns the hyperbolic secant of an angle                                                      |
+| [SECR(value)](#secr)    | Returns the secant of an angle (in radians)                                                    |
+| [SIN(value)](#sin)      | Returns the sine of an angle (in degrees)                                                      |
+| [SINH(value)](#sinh)    | Returns the hyperbolic sine of a value                                                         |
+| [SINR(value)](#sinr)    | Returns the sine of an angle (in radians)                                                      |
+| [TAN(value)](#tan)      | Returns the tangent of an angle (in degrees)                                                   |
+| [TANH(value)](#tanh)    | Returns the hyperbolic tangent of a value                                                      |
+| [TANR(value)](#tanr)    | Returns the tangent of an angle (in radians)                                                   |
 
 ### Date Time Functions
 
@@ -1161,6 +1161,966 @@ Consider the following expressions:
 | `STR_UPPER("EvalEx")`         | `"EVALEX"` |
 
 🔝 [Back to String Functions](#string-functions) | 🔝 [Back to top](#top)
+
+---
+
+# Trigonometric Functions (detailed)
+
+## ACOS
+
+Returns the arc-cosine of a value, in degrees.
+
+### Syntax
+
+```
+ACOS(value)
+```
+
+
+### Parameters
+
+| Name   | Description                      |
+|--------|----------------------------------|
+| value  | A numeric value between -1 and 1.|
+
+### Examples
+
+| Expression  | Result  |
+|-------------|---------|
+| `ACOS(-1)`  | `180`   |
+| `ACOS(0)`   | `90`    |
+| `ACOS(0.5)` | `60`    |
+| `ACOS(1)`   | `0`     |
+
+
+🔝 [Back to Trigonometric Functions](#trigonometric-functions) | 🔝 [Back to top](#top)
+
+---
+
+## ACOSH
+
+Returns the hyperbolic arc-cosine of a value.
+
+### Syntax
+
+```
+ACOSH(value)
+```
+
+
+### Parameters
+
+| Name   | Description                                   |
+|--------|-----------------------------------------------|
+| value  | A numeric value, greather than or equal to 1. |
+
+### Examples
+
+| Expression | Result               |
+|------------|----------------------|
+| `ACOSH(1)` | `0`                  |
+| `ACOSH(2)` | `1.3169578969248166` |
+| `ACOSH(3)` | `1.762747174039086`  |
+
+🔝 [Back to Trigonometric Functions](#trigonometric-functions) | 🔝 [Back to top](#top)
+
+---
+
+## ACOSR
+
+Returns the arc-cosine of a value, in radians.
+
+### Syntax
+
+```
+ACOSR(value)
+```
+
+### Parameters
+
+| Name   | Description                      |
+|--------|----------------------------------|
+| value  | A numeric value between -1 and 1.|
+
+### Examples
+
+| Expression  | Result                |
+|-------------|-----------------------|
+| `ACOSR(-1)` | `3.141592653589793`   |
+| `ACOSR(0)`  | `1.5707963267948966`  |
+| `ACOSR(1)`  | `0`                   |
+
+
+🔝 [Back to Trigonometric Functions](#trigonometric-functions) | 🔝 [Back to top](#top)
+
+---
+
+## ACOT
+
+Returns the arc-co-tangent of a value, in degrees.
+
+### Syntax
+
+```
+ACOT(value)
+```
+
+### Parameters
+
+| Name   | Description      |
+|--------|------------------|
+| value  | A numeric value. |
+
+### Examples
+
+| Expression     | Result  |
+|----------------|---------|
+| `ACOT(-1)`     | `135`   |
+| `ACOT(1)`      | `45`    |
+
+🔝 [Back to Trigonometric Functions](#trigonometric-functions) | 🔝 [Back to top](#top)
+
+---
+
+## ACOTH
+
+Returns the hyperbolic arc-co-tangent of a value, in degrees.
+
+### Syntax
+
+```
+ACOTH(value)
+```
+
+### Parameters
+
+| Name   | Description                   |
+|--------|-------------------------------|
+| value  | A numeric value > 1 or < -1.  |
+
+### Examples
+
+| Expression     | Result                |
+|----------------|-----------------------|
+| `ACOTH(-1.5)`  | `-0.8047189562170501` |
+| `ACOTH(1.5)`   | `0.8047189562170501`  |
+
+🔝 [Back to Trigonometric Functions](#trigonometric-functions) | 🔝 [Back to top](#top)
+
+---
+
+## ACOTR
+
+Returns the arc-co-tangent of a value, in radians.
+
+### Syntax
+
+```
+ACOTR(value)
+```
+
+### Parameters
+
+| Name   | Description                |
+|--------|----------------------------|
+| value  | A numeric value.           |
+
+### Examples
+
+| Expression   | Result               |
+|--------------|----------------------|
+| `ACOTR(1)`   | `0.7853981633974483` |
+| `ACOTR(-1)`  | `2.356194490192345`  |
+
+🔝 [Back to Trigonometric Functions](#trigonometric-functions) | 🔝 [Back to top](#top)
+
+---
+
+## ASIN
+
+Returns the arc-sine of a value, in degrees.
+
+### Syntax
+
+```
+ASIN(value)
+```
+
+### Parameters
+
+| Name   | Description                       |
+|--------|-----------------------------------|
+| value  | A numeric value between -1 and 1. |
+
+### Examples
+
+| Expression   | Result |
+|--------------|--------|
+| `ASIN(0)`    | `0`    |
+| `ASIN(0.5)`  | `30`   |
+| `ASIN(1)`    | `90`   |
+| `ASIN(-1)`   | `-90`  |
+
+🔝 [Back to Trigonometric Functions](#trigonometric-functions) | 🔝 [Back to top](#top)
+
+---
+
+## ASINH
+
+Returns the hyperbolic arc-sine of a value.
+
+### Syntax
+
+```
+ASINH(value)
+```
+
+### Parameters
+
+| Name   | Description                |
+|--------|----------------------------|
+| value  | A numeric value.           |
+
+### Examples
+
+| Expression  | Result                |
+|-------------|-----------------------|
+| `ASINH(0)`  | `0`                   |
+| `ASINH(1)`  | `0.8813735870195429`  |
+| `ASINH(-1)` | `-0.8813735870195428` |
+
+🔝 [Back to Trigonometric Functions](#trigonometric-functions) | 🔝 [Back to top](#top)
+
+---
+
+## ASINR
+
+Returns the arc-sine of a value, in radians.
+
+### Syntax
+
+```
+ASINR(value)
+```
+
+### Parameters
+
+| Name   | Description                       |
+|--------|-----------------------------------|
+| value  | A numeric value between -1 and 1. |
+
+### Examples
+
+| Expression  | Result                |
+|-------------|-----------------------|
+| `ASINR(0)`  | `0`                   |
+| `ASINR(1)`  | `1.5707963267948966`  |
+| `ASINR(-1)` | `-1.5707963267948966` |
+
+🔝 [Back to Trigonometric Functions](#trigonometric-functions) | 🔝 [Back to top](#top)
+
+---
+
+## ATAN2
+
+Returns the angle of atan2, in degrees.
+
+### Syntax
+
+```
+ATAN2(y, x)
+```
+
+### Parameters
+
+| Name | Description                      |
+|------|----------------------------------|
+| y    | The ordinate (vertical) value.   |
+| x    | The abscissa (horizontal) value. |
+
+### Examples
+
+| Expression       | Result |
+|------------------|--------|
+| `ATAN2(0, 0)`    | `0`    |
+| `ATAN2(0, 1)`    | `0`    |
+| `ATAN2(0, -1)`   | `180`  |
+| `ATAN2(1, 0)`    | `90`   |
+| `ATAN2(1, -1)`   | `135`  |
+| `ATAN2(-1, 0)`   | `-90`  |
+| `ATAN2(-1, 1)`   | `-45`  |
+| `ATAN2(-1, -1)`  | `-135` |
+
+🔝 [Back to Trigonometric Functions](#trigonometric-functions) | 🔝 [Back to top](#top)
+
+---
+
+## ATAN2R
+
+Returns the angle of atan2, in radians.
+
+### Syntax
+
+```
+ATAN2R(y, x)
+```
+
+### Parameters
+
+| Name | Description                      |
+|------|----------------------------------|
+| y    | The ordinate (vertical) value.   |
+| x    | The abscissa (horizontal) value. |
+
+### Examples
+
+| Expression         | Result               |
+|--------------------|----------------------|
+| `ATAN2R(0, 0)`     | `0`                  |
+| `ATAN2R(0, 1)`     | `0`                  |
+| `ATAN2R(0, -1)`    | `3.141592653589793`  |
+| `ATAN2R(1, 0)`     | `1.5707963267948966` |
+| `ATAN2R(1, 1)`     | `0.7853981633974483` |
+| `ATAN2R(1, -1)`    | `2.356194490192345`  |
+| `ATAN2R(-1, 0)`    | `-1.5707963267948966`|
+| `ATAN2R(-1, -1)`   | `-2.356194490192345` |
+
+🔝 [Back to Trigonometric Functions](#trigonometric-functions) | 🔝 [Back to top](#top)
+
+---
+
+## ATAN
+
+Returns the arc-tangent of a value, in degrees.
+
+### Syntax
+
+```
+ATAN(value)
+```
+
+### Parameters
+
+| Name   | Description      |
+|--------|------------------|
+| value  | A numeric value. |
+
+### Examples
+
+| Expression     | Result |
+|----------------|--------|
+| `ATAN(0)`      | `0`    |
+| `ATAN(1)`      | `45`   |
+| `ATAN(-1)`     | `-45`  |
+
+🔝 [Back to Trigonometric Functions](#trigonometric-functions) | 🔝 [Back to top](#top)
+
+---
+
+## ATANH
+
+Returns the hyperbolic arc-tangent of a value.
+
+### Syntax
+
+```
+ATANH(value)
+```
+
+### Parameters
+
+| Name   | Description                      |
+|--------|----------------------------------|
+| value  | A numeric value between -1 and 1.|
+
+### Examples
+
+| Expression    | Result                |
+|---------------|-----------------------|
+| `ATANH(0)`    | `0`                   |
+| `ATANH(0.9)`  | `1.4722194895832204`  |
+| `ATANH(-0.9)` | `-1.4722194895832204` |
+
+🔝 [Back to Trigonometric Functions](#trigonometric-functions) | 🔝 [Back to top](#top)
+
+---
+
+## ATANR
+
+Returns the arc-tangent of a value, in radians.
+
+### Syntax
+
+```
+ATANR(value)
+```
+
+### Parameters
+
+| Name   | Description                  |
+|--------|------------------------------|
+| value  | A numeric value.             |
+
+### Examples
+
+| Expression   | Result                 |
+|--------------|------------------------|
+| `ATANR(0)`   | `0`                    |
+| `ATANR(1)`   | `0.7853981633974483`   |
+| `ATANR(-1)`  | `-0.7853981633974483`  |
+
+🔝 [Back to Trigonometric Functions](#trigonometric-functions) | 🔝 [Back to top](#top)
+
+---
+
+## COS
+
+Returns the cosine of an angle, in degrees.
+
+### Syntax
+
+```
+COS(value)
+```
+
+### Parameters
+
+| Name   | Description       |
+|--------|-------------------|
+| value  | Angle in degrees. |
+
+### Examples
+
+| Expression  | Result |
+|-------------|--------|
+| `COS(0)`    | `1`    |
+| `COS(60)`   | `0.5`  |
+
+🔝 [Back to Trigonometric Functions](#trigonometric-functions) | 🔝 [Back to top](#top)
+
+---
+
+## COSH
+
+Returns the hyperbolic cosine of a value.
+
+### Syntax
+
+```
+COSH(value)
+```
+
+### Parameters
+
+| Name   | Description                 |
+|--------|-----------------------------|
+| value  | A numeric value.            |
+
+### Examples
+
+| Expression     | Result              |
+|----------------|---------------------|
+| `COSH(0)`      | `1`                 |
+| `COSH(1)`      | `1.543080634815244` |
+| `COSH(-1)`     | `1.543080634815244` |
+
+🔝 [Back to Trigonometric Functions](#trigonometric-functions) | 🔝 [Back to top](#top)
+
+---
+
+## COSR
+
+Returns the cosine of an angle, in radians.
+
+### Syntax
+
+```
+COSR(value)
+```
+
+### Parameters
+
+| Name   | Description                  |
+|--------|------------------------------|
+| value  | Angle in radians.            |
+
+### Examples
+
+| Expression     | Result               |
+|----------------|----------------------|
+| `COSR(0)`      | `1`                  |
+| `COSR(1)`      | `0.5403023058681398` |
+| `COSR(1.5708)` | `0`                  |
+
+🔝 [Back to Trigonometric Functions](#trigonometric-functions) | 🔝 [Back to top](#top)
+
+---
+
+## COT
+
+Returns the co-tangent of an angle, in degrees.
+
+### Syntax
+
+```
+COT(value)
+```
+
+### Parameters
+
+| Name   | Description                  |
+|--------|------------------------------|
+| value  | Angle in degrees.            |
+
+### Examples
+
+| Expression   | Result                 |
+|--------------|------------------------|
+| `COT(45)`    | `1`                    |
+| `COT(30)`    | `1.7320508075688774`   |
+
+🔝 [Back to Trigonometric Functions](#trigonometric-functions) | 🔝 [Back to top](#top)
+
+---
+
+## COTH
+
+Returns the hyperbolic co-tangent of a value.
+
+### Syntax
+
+```
+COTH(value)
+```
+
+### Parameters
+
+| Name   | Description                     |
+|--------|---------------------------------|
+| value  | A numeric value not equal to 0. |
+
+### Examples
+
+| Expression   | Result                |
+|--------------|-----------------------|
+| `COTH(1)`    | `1.3130352854993315`  |
+| `COTH(5)`    | `1.0000908039820193`  |
+| `COTH(-5)`   | `-1.0000908039820193` |
+
+🔝 [Back to Trigonometric Functions](#trigonometric-functions) | 🔝 [Back to top](#top)
+
+---
+
+## COTR
+
+Returns the co-tangent of an angle, in radians.
+
+### Syntax
+
+```
+COTR(value)
+```
+
+### Parameters
+
+| Name   | Description                   |
+|--------|-------------------------------|
+| value  | Angle in radians (not zero).  |
+
+### Examples
+
+| Expression     | Result                |
+|----------------|-----------------------|
+| `COTR(0.7854)` | `1`                   |
+| `COTR(1)`      | `0.6420926159343306`  |
+
+🔝 [Back to Trigonometric Functions](#trigonometric-functions) | 🔝 [Back to top](#top)
+
+---
+
+## CSC
+
+Returns the co-secant of an angle, in degrees.
+
+### Syntax
+
+```
+CSC(value)
+```
+
+### Parameters
+
+| Name   | Description                  |
+|--------|------------------------------|
+| value  | Angle in degrees (not zero). |
+
+### Examples
+
+| Expression     | Result |
+|----------------|--------|
+| `CSC(30)`      | `2`    |
+| `CSC(90)`      | `1`    |
+
+🔝 [Back to Trigonometric Functions](#trigonometric-functions) | 🔝 [Back to top](#top)
+
+---
+
+## CSCH
+
+Returns the hyperbolic co-secant of a value.
+
+### Syntax
+
+```
+CSCH(value)
+```
+
+### Parameters
+
+| Name   | Description                     |
+|--------|---------------------------------|
+| value  | A numeric value not equal to 0. |
+
+### Examples
+
+| Expression     | Result                 |
+|----------------|------------------------|
+| `CSCH(1)`      | `0.8509181282393216`   |
+| `CSCH(-1)`     | `-0.8509181282393216`  |
+
+🔝 [Back to Trigonometric Functions](#trigonometric-functions) | 🔝 [Back to top](#top)
+
+---
+
+## CSCR
+
+Returns the co-secant of an angle, in radians.
+
+### Syntax
+
+```
+CSCR(value)
+```
+
+### Parameters
+
+| Name   | Description                  |
+|--------|------------------------------|
+| value  | Angle in radians (not zero). |
+
+### Examples
+
+| Expression     | Result  |
+|----------------|---------|
+| `CSCR(0.5236)` | `2`     |
+| `CSCR(1.5708)` | `1`     |
+
+🔝 [Back to Trigonometric Functions](#trigonometric-functions) | 🔝 [Back to top](#top)
+
+---
+
+## DEG
+
+Converts an angle measured in radians to an approximately equivalent angle measured in degrees.
+
+### Syntax
+
+```
+DEG(rad)
+```
+
+### Parameters
+
+| Name | Description       |
+|------|-------------------|
+| rad  | Angle in radians. |
+
+### Examples
+
+| Expression     | Result |
+|----------------|--------|
+| `DEG(0)`       | `0`    |
+| `DEG(1.5708)`  | `90`   |
+| `DEG(3.1416)`  | `180`  |
+
+🔝 [Back to Trigonometric Functions](#trigonometric-functions) | 🔝 [Back to top](#top)
+
+---
+
+## RAD
+
+Converts an angle measured in degrees to an approximately equivalent angle measured in radians.
+
+### Syntax
+
+```
+RAD(degrees)
+```
+
+### Parameters
+
+| Name     | Description       |
+|----------|-------------------|
+| degrees  | Angle in degrees. |
+
+### Examples
+
+| Expression     | Result    |
+|----------------|-----------|
+| `RAD(0)`       | `0`       |
+| `RAD(90)`      | `1.5708`  |
+| `RAD(180)`     | `3.1416`  |
+
+🔝 [Back to Trigonometric Functions](#trigonometric-functions) | 🔝 [Back to top](#top)
+
+---
+
+## SEC
+
+Returns the secant of an angle, in degrees.
+
+### Syntax
+
+```
+SEC(value)
+```
+
+### Parameters
+
+| Name   | Description                  |
+|--------|------------------------------|
+| value  | Angle in degrees (not zero). |
+
+### Examples
+
+| Expression     | Result |
+|----------------|--------|
+| `SEC(60)`      | `2`    |
+| `SEC(0)`       | `1`    |
+
+🔝 [Back to Trigonometric Functions](#trigonometric-functions) | 🔝 [Back to top](#top)
+
+---
+
+## SECH
+
+Returns the hyperbolic secant of a value.
+
+### Syntax
+
+```
+SECH(value)
+```
+
+### Parameters
+
+| Name   | Description                  |
+|--------|------------------------------|
+| value  | A numeric value (not zero).  |
+
+### Examples
+
+| Expression    | Result                |
+|---------------|-----------------------|
+| `SECH(1)`     | `0.6480542736638853`  |
+| `SECH(0)`     | `1`                   |
+
+🔝 [Back to Trigonometric Functions](#trigonometric-functions) | 🔝 [Back to top](#top)
+
+---
+
+## SECR
+
+Returns the secant of an angle, in radians.
+
+### Syntax
+
+```
+SECR(value)
+```
+
+### Parameters
+
+| Name   | Description                  |
+|--------|------------------------------|
+| value  | Angle in radians (not zero). |
+
+### Examples
+
+| Expression     | Result |
+|----------------|--------|
+| `SECR(1.0472)` | `2`    |
+| `SECR(0)`      | `1`    |
+
+🔝 [Back to Trigonometric Functions](#trigonometric-functions) | 🔝 [Back to top](#top)
+
+---
+
+## SIN
+
+Returns the sine of an angle, in degrees.
+
+### Syntax
+
+```
+SIN(value)
+```
+
+### Parameters
+
+| Name   | Description       |
+|--------|-------------------|
+| value  | Angle in degrees. |
+
+### Examples
+
+| Expression     | Result |
+|----------------|--------|
+| `SIN(0)`       | `0`    |
+| `SIN(30)`      | `0.5`  |
+| `SIN(90)`      | `1`    |
+
+🔝 [Back to Trigonometric Functions](#trigonometric-functions) | 🔝 [Back to top](#top)
+
+---
+
+## SINH
+
+Returns the hyperbolic sine of a value.
+
+### Syntax
+
+```
+SINH(value)
+```
+
+### Parameters
+
+| Name   | Description                 |
+|--------|-----------------------------|
+| value  | A numeric value.            |
+
+### Examples
+
+| Expression   | Result                |
+|--------------|-----------------------|
+| `SINH(0)`    | `0`                   |
+| `SINH(1)`    | `1.1752011936438014`  |
+| `SINH(-1)`   | `-1.1752011936438014` |
+
+🔝 [Back to Trigonometric Functions](#trigonometric-functions) | 🔝 [Back to top](#top)
+
+---
+
+## SINR
+
+Returns the sine of an angle, in radians.
+
+### Syntax
+
+```
+SINR(value)
+```
+
+### Parameters
+
+| Name   | Description       |
+|--------|-------------------|
+| value  | Angle in radians. |
+
+### Examples
+
+| Expression     | Result |
+|----------------|--------|
+| `SINR(0)`      | `0`    |
+| `SINR(0.5236)` | `0.5`  |
+| `SINR(1.5708)` | `1`    |
+
+🔝 [Back to Trigonometric Functions](#trigonometric-functions) | 🔝 [Back to top](#top)
+
+---
+
+## TAN
+
+Returns the tangent of an angle, in degrees.
+
+### Syntax
+
+```
+TAN(value)
+```
+
+### Parameters
+
+| Name   | Description                  |
+|--------|------------------------------|
+| value  | Angle in degrees.            |
+
+### Examples
+
+| Expression     | Result               |
+|----------------|----------------------|
+| `TAN(0)`       | `0`                  |
+| `TAN(45)`      | `1`                  |
+| `TAN(30)`      | `0.5773502691896257` |
+
+🔝 [Back to Trigonometric Functions](#trigonometric-functions) | 🔝 [Back to top](#top)
+
+---
+
+## TANH
+
+Returns the hyperbolic tangent of a value.
+
+### Syntax
+
+```
+TANH(value)
+```
+
+### Parameters
+
+| Name   | Description                  |
+|--------|------------------------------|
+| value  | A numeric value.             |
+
+### Examples
+
+| Expression  | Result                  |
+|-------------|-------------------------|
+| `TANH(0)`   | `0`                     |
+| `TANH(1)`   | `0.7615941559557649`    |
+| `TANH(-1)`  | `-0.7615941559557649`   |
+
+🔝 [Back to Trigonometric Functions](#trigonometric-functions) | 🔝 [Back to top](#top)
+
+---
+
+## TANR
+
+Returns the tangent of an angle, in radians.
+
+### Syntax
+
+```
+TANR(value)
+```
+
+### Parameters
+
+| Name   | Description                  |
+|--------|------------------------------|
+| value  | Angle in radians.            |
+
+### Examples
+
+| Expression     | Result               |
+|----------------|----------------------|
+| `TANR(0)`      | `0`                  |
+| `TANR(0.7854)` | `1`                  |
+| `TANR(1)`      | `1.5574077246549023` |
+
+🔝 [Back to Trigonometric Functions](#trigonometric-functions) | 🔝 [Back to top](#top)
 
 ---
 
