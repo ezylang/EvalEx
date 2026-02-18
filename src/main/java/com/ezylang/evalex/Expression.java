@@ -241,10 +241,17 @@ public class Expression {
 
     if (structure.isStructureValue()) {
       if (!structure.getStructureValue().containsKey(name)) {
+        // Check lenient mode before throwing exception for missing field
+        if (configuration.isLenientMode()) {
+          return EvaluationValue.UNDEFINED;
+        }
         throw new EvaluationException(
             nameToken, String.format("Field '%s' not found in structure", name));
       }
       return structure.getStructureValue().get(name);
+    } else if (structure.isNullValue() && configuration.isLenientMode()) {
+      // In lenient mode, allow property access on NULL (returns UNDEFINED)
+      return EvaluationValue.UNDEFINED;
     } else {
       throw EvaluationException.ofUnsupportedDataTypeInOperation(startNode.getToken());
     }

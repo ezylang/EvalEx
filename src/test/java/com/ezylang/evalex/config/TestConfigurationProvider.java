@@ -42,6 +42,20 @@ public class TestConfigurationProvider {
           .withAdditionalFunctions(
               Map.entry("TEST", new DummyFunction()), Map.entry("F", new DummyFunction()));
 
+  public static final ExpressionConfiguration
+      StandardConfigurationWithAdditionalTestOperatorsLenient =
+          ExpressionConfiguration.builder()
+              .zoneId(ZoneId.of("Europe/Berlin"))
+              .locale(Locale.US)
+              .lenientMode(true)
+              .build()
+              .withAdditionalOperators(
+                  Map.entry("++", new PrefixPlusPlusOperator()),
+                  Map.entry("++", new PostfixPlusPlusOperator()),
+                  Map.entry("?", new PostfixQuestionOperator()))
+              .withAdditionalFunctions(
+                  Map.entry("TEST", new DummyFunction()), Map.entry("F", new DummyFunction()));
+
   public static final ExpressionConfiguration GermanConfiguration =
       ExpressionConfiguration.builder()
           .zoneId(ZoneId.of("Europe/Berlin"))
