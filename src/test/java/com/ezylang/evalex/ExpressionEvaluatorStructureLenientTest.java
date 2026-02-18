@@ -23,6 +23,7 @@ import com.ezylang.evalex.config.TestConfigurationProvider;
 import com.ezylang.evalex.data.EvaluationValue;
 import com.ezylang.evalex.data.EvaluationValue.DataType;
 import com.ezylang.evalex.parser.ParseException;
+import java.util.Map;
 import org.junit.jupiter.api.Test;
 
 /**
@@ -45,6 +46,13 @@ class ExpressionEvaluatorStructureLenientTest {
   }
 
   @Test
+  void testStructureTwoLevelsWithAllVariablesDefined() throws EvaluationException, ParseException {
+    Expression expression = createExpression("root.child").with("root", Map.of("child", "text"));
+    EvaluationValue evaluationValue = expression.evaluate();
+    assertThat(evaluationValue.getStringValue()).isEqualTo("text");
+  }
+
+  @Test
   void testStructureTwoLevelsWithRootVariableNotDefined()
       throws EvaluationException, ParseException {
     Expression expression = createExpression("root.child");
@@ -53,9 +61,25 @@ class ExpressionEvaluatorStructureLenientTest {
   }
 
   @Test
+  void testStructureTwoLevelsWithRootVariableNull() throws EvaluationException, ParseException {
+    Expression expression = createExpression("root.child").with("root", null);
+    EvaluationValue evaluationValue = expression.evaluate();
+    assertThat(evaluationValue.getDataType()).isEqualTo(DataType.UNDEFINED);
+  }
+
+  @Test
   void testStructureTwoLevelsWithChildVariableNotDefined()
       throws EvaluationException, ParseException {
     Expression expression = createExpression("root.child").with("root", emptyMap());
+    EvaluationValue evaluationValue = expression.evaluate();
+    assertThat(evaluationValue.getDataType()).isEqualTo(DataType.UNDEFINED);
+  }
+
+  @Test
+  void testStructureThreoLevelsWithBrachVariableNotDefined()
+      throws EvaluationException, ParseException {
+    Expression expression =
+        createExpression("root.branch.child").with("root", Map.of("branch", emptyMap()));
     EvaluationValue evaluationValue = expression.evaluate();
     assertThat(evaluationValue.getDataType()).isEqualTo(DataType.UNDEFINED);
   }

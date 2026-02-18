@@ -95,6 +95,15 @@ class ExpressionEvaluatorStructureTest extends BaseExpressionEvaluatorTest {
   }
 
   @Test
+  void testThrowsRootNull() {
+    assertThatThrownBy(() -> createExpression("a.field1").with("a", null).evaluate())
+        .isInstanceOf(EvaluationException.class)
+        .hasMessage("Unsupported data types in operation")
+        .extracting("tokenString")
+        .isEqualTo(".");
+  }
+
+  @Test
   void testStructureWithSpaceInName() throws EvaluationException, ParseException {
     Map<String, BigDecimal> testStructure = new HashMap<>();
     testStructure.put("field 1", new BigDecimal(88));
