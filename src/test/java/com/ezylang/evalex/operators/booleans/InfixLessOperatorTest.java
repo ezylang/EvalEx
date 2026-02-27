@@ -15,9 +15,18 @@
 */
 package com.ezylang.evalex.operators.booleans;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+
 import com.ezylang.evalex.BaseEvaluationTest;
 import com.ezylang.evalex.EvaluationException;
+import com.ezylang.evalex.Expression;
+import com.ezylang.evalex.config.TestConfigurationProvider;
 import com.ezylang.evalex.parser.ParseException;
+import java.math.BigDecimal;
+import java.time.Duration;
+import java.time.Instant;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 
@@ -47,5 +56,47 @@ class InfixLessOperatorTest extends BaseEvaluationTest {
   void testInfixLessLiterals(String expression, String expectedResult)
       throws EvaluationException, ParseException {
     assertExpressionHasExpectedResult(expression, expectedResult);
+  }
+
+  @Test
+  void testInfixLessVariablesLenient() throws EvaluationException, ParseException {
+    Expression expression =
+        new Expression("a<b", TestConfigurationProvider.StandardConfigurationLenient);
+
+    assertThatThrownBy(() -> expression.evaluate())
+        .isInstanceOf(NullPointerException.class)
+        .hasMessage("Can not compare an undefined value");
+
+    assertThat(expression.with("a", "").evaluate().getBooleanValue()).isFalse();
+
+    assertThat(expression.with("a", "Hello").evaluate().getBooleanValue()).isFalse();
+
+    assertThat(expression.with("a", new BigDecimal(-1)).evaluate().getBooleanValue()).isTrue();
+
+    assertThat(expression.with("a", new BigDecimal(0)).evaluate().getBooleanValue()).isFalse();
+
+    assertThat(expression.with("a", new BigDecimal(1)).evaluate().getBooleanValue()).isFalse();
+
+    assertThat(expression.with("a", false).evaluate().getBooleanValue()).isFalse();
+
+    assertThat(expression.with("a", true).evaluate().getBooleanValue()).isFalse();
+
+    assertThat(
+            expression
+                .with("a", Instant.parse("2026-02-25T00:00:00Z"))
+                .evaluate()
+                .getBooleanValue())
+        .isFalse();
+
+    assertThat(
+            expression
+                .with("b", Instant.parse("2026-02-25T00:00:00Z"))
+                .evaluate()
+                .getBooleanValue())
+        .isFalse();
+
+    assertThat(expression.with("a", Duration.parse("PT1H")).evaluate().getBooleanValue()).isFalse();
+
+    assertThat(expression.with("a", Duration.parse("PT-1H")).evaluate().getBooleanValue()).isTrue();
   }
 }
