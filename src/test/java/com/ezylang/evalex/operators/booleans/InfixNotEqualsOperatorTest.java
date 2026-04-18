@@ -20,6 +20,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import com.ezylang.evalex.BaseEvaluationTest;
 import com.ezylang.evalex.EvaluationException;
 import com.ezylang.evalex.Expression;
+import com.ezylang.evalex.config.TestConfigurationProvider;
 import com.ezylang.evalex.parser.ParseException;
 import java.math.BigDecimal;
 import java.util.Arrays;
@@ -94,6 +95,28 @@ class InfixNotEqualsOperatorTest extends BaseEvaluationTest {
     assertThat(expression.with("a", true).and("b", true).evaluate().getBooleanValue()).isFalse();
 
     assertThat(expression.with("a", false).and("b", true).evaluate().getBooleanValue()).isTrue();
+  }
+
+  @Test
+  void testInfixNotEqualsVariablesLenient() throws EvaluationException, ParseException {
+    Expression expression =
+        new Expression("a!=b", TestConfigurationProvider.StandardConfigurationLenient);
+
+    assertThat(expression.evaluate().getBooleanValue()).isFalse();
+
+    assertThat(expression.with("a", null).evaluate().getBooleanValue()).isFalse();
+
+    assertThat(expression.with("a", "").evaluate().getBooleanValue()).isTrue();
+
+    assertThat(expression.with("a", "Hello").evaluate().getBooleanValue()).isTrue();
+
+    assertThat(expression.with("a", new BigDecimal(0)).evaluate().getBooleanValue()).isTrue();
+
+    assertThat(expression.with("a", new BigDecimal(1)).evaluate().getBooleanValue()).isTrue();
+
+    assertThat(expression.with("a", false).evaluate().getBooleanValue()).isTrue();
+
+    assertThat(expression.with("a", true).evaluate().getBooleanValue()).isTrue();
   }
 
   @Test

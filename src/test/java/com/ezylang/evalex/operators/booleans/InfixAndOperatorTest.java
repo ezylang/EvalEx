@@ -15,9 +15,14 @@
 */
 package com.ezylang.evalex.operators.booleans;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 import com.ezylang.evalex.BaseEvaluationTest;
 import com.ezylang.evalex.EvaluationException;
+import com.ezylang.evalex.Expression;
+import com.ezylang.evalex.config.TestConfigurationProvider;
 import com.ezylang.evalex.parser.ParseException;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 
@@ -42,5 +47,22 @@ class InfixAndOperatorTest extends BaseEvaluationTest {
   void testInfixLessLiterals(String expression, String expectedResult)
       throws EvaluationException, ParseException {
     assertExpressionHasExpectedResult(expression, expectedResult);
+  }
+
+  @Test
+  void testInfixAndVariablesLenient() throws EvaluationException, ParseException {
+    Expression expression =
+        new Expression("a&&true", TestConfigurationProvider.StandardConfigurationLenient);
+
+    assertThat(expression.evaluate().getBooleanValue()).isFalse();
+
+    assertThat(expression.with("a", "").evaluate().getBooleanValue()).isFalse();
+
+    Expression expression2 =
+        new Expression("a&&false", TestConfigurationProvider.StandardConfigurationLenient);
+
+    assertThat(expression2.evaluate().getBooleanValue()).isFalse();
+
+    assertThat(expression2.with("a", "").evaluate().getBooleanValue()).isFalse();
   }
 }

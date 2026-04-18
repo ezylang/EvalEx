@@ -390,6 +390,8 @@ public class EvaluationValue implements Comparable<EvaluationValue> {
         return ((BigDecimal) value).toPlainString();
       case NULL:
         return null;
+      case UNDEFINED:
+        return "";
       default:
         return value.toString();
     }
@@ -538,6 +540,8 @@ public class EvaluationValue implements Comparable<EvaluationValue> {
         return getDateTimeValue().compareTo(toCompare.getDateTimeValue());
       case DURATION:
         return getDurationValue().compareTo(toCompare.getDurationValue());
+      case UNDEFINED:
+        throw new NullPointerException("Can not compare an undefined value");
       default:
         return getStringValue().compareTo(toCompare.getStringValue());
     }

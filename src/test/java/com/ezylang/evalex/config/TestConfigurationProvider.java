@@ -30,6 +30,13 @@ import java.util.Map;
 
 public class TestConfigurationProvider {
 
+  public static final ExpressionConfiguration StandardConfigurationLenient =
+      ExpressionConfiguration.builder()
+          .zoneId(ZoneId.of("Europe/Berlin"))
+          .locale(Locale.US)
+          .lenientMode(true)
+          .build();
+
   public static final ExpressionConfiguration StandardConfigurationWithAdditionalTestOperators =
       ExpressionConfiguration.builder()
           .zoneId(ZoneId.of("Europe/Berlin"))
