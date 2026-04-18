@@ -318,7 +318,7 @@ public class EvaluationValue implements Comparable<EvaluationValue> {
   }
 
   public boolean isNullValue() {
-    return getDataType() == DataType.NULL;
+    return getDataType() == DataType.NULL || getDataType() == DataType.UNDEFINED;
   }
 
   /**
