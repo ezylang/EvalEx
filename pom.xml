@@ -90,6 +90,23 @@
 
     <build>
         <plugins>
+            <!-- compile with Java 11 and use Lombok annotation processor to generate code for Lombok annotations -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.13.0</version>
+                <configuration>
+                    <release>11</release>
+                    <annotationProcessorPaths>
+                        <path>
+                            <groupId>org.projectlombok</groupId>
+                            <artifactId>lombok</artifactId>
+                            <version>1.18.24</version>
+                        </path>
+                    </annotationProcessorPaths>
+                </configuration>
+            </plugin>
+
             <!-- check proper code formatting using spotless -->
             <plugin>
                 <groupId>com.diffplug.spotless</groupId>
@@ -110,7 +127,7 @@
                             <include>src/test/java/**/*.java</include>
                         </includes>
                         <googleJavaFormat>
-                            <version>1.15.0</version>
+                            <version>1.24.0</version>
                             <style>GOOGLE</style>
                             <reflowLongStrings>true</reflowLongStrings>
                         </googleJavaFormat>
