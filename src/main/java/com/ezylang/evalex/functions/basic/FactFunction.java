@@ -42,11 +42,6 @@ public class FactFunction extends AbstractFunction {
       throws EvaluationException {
     int number = parameterValues[0].getNumberValue().intValue();
 
-    // Validate input to prevent uncontrolled resource consumption
-    if (number < 0) {
-      throw new EvaluationException(functionToken, "Factorial is not defined for negative numbers");
-    }
-
     if (number > MAX_FACTORIAL_INPUT) {
       throw new EvaluationException(
           functionToken,
