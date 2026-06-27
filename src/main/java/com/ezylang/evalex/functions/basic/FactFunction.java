@@ -15,6 +15,7 @@
 */
 package com.ezylang.evalex.functions.basic;
 
+import com.ezylang.evalex.EvaluationException;
 import com.ezylang.evalex.Expression;
 import com.ezylang.evalex.data.EvaluationValue;
 import com.ezylang.evalex.functions.AbstractFunction;
@@ -26,10 +27,36 @@ import java.math.BigDecimal;
 @FunctionParameter(name = "base")
 public class FactFunction extends AbstractFunction {
 
+  /**
+   * Maximum allowed input value for factorial calculation.
+   * Set to 170 to align with industry-standard limits in Windows Calculator, macOS Calculator,
+   * Microsoft Excel, Google Sheets, and LibreOffice Calc.
+   * This prevents uncontrolled resource consumption (CWE-400) while maintaining compatibility
+   * with user expectations from widely-used tools.
+   * See: https://github.com/ezylang/EvalEx/issues/570
+   */
+  private static final int MAX_FACTORIAL_INPUT = 170;
+
   @Override
   public EvaluationValue evaluate(
-      Expression expression, Token functionToken, EvaluationValue... parameterValues) {
+      Expression expression, Token functionToken, EvaluationValue... parameterValues)
+      throws EvaluationException {
     int number = parameterValues[0].getNumberValue().intValue();
+
+    // Validate input to prevent uncontrolled resource consumption
+    if (number < 0) {
+      throw new EvaluationException(
+          functionToken, "Factorial is not defined for negative numbers");
+    }
+
+    if (number > MAX_FACTORIAL_INPUT) {
+      throw new EvaluationException(
+          functionToken,
+          String.format(
+              "Factorial input exceeds maximum allowed value: %d > %d",
+              number, MAX_FACTORIAL_INPUT));
+    }
+
     BigDecimal factorial = BigDecimal.ONE;
     for (int i = 1; i <= number; i++) {
       factorial =
