@@ -33,6 +33,7 @@ import java.util.Arrays;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.mockito.Mockito;
 
 class BasicFunctionsTest extends BaseEvaluationTest {
@@ -52,6 +53,23 @@ class BasicFunctionsTest extends BaseEvaluationTest {
   void testFactorial(String expression, String expectedResult)
       throws EvaluationException, ParseException {
     assertExpressionHasExpectedResult(expression, expectedResult);
+  }
+
+  @Test
+  void testFactorialAtMaximumLimit() throws EvaluationException, ParseException {
+    // Test boundary condition: FACT(170) should work
+    new Expression("FACT(170)").evaluate();
+  }
+
+  @ParameterizedTest
+  @ValueSource(ints = {171, 1000, 999999})
+  void testFactorialExceedsLimit(int value) {
+    String expression = String.format("FACT(%d)", value);
+    // Test that values > 170 are rejected to prevent DoS (issue #570)
+    assertThatThrownBy(() -> new Expression(expression).evaluate())
+        .isInstanceOf(EvaluationException.class)
+        .hasMessageContaining("exceeds maximum allowed value")
+        .hasMessageContaining("170");
   }
 
   @ParameterizedTest

@@ -28,12 +28,11 @@ import java.math.BigDecimal;
 public class FactFunction extends AbstractFunction {
 
   /**
-   * Maximum allowed input value for factorial calculation.
-   * Set to 170 to align with industry-standard limits in Windows Calculator, macOS Calculator,
-   * Microsoft Excel, Google Sheets, and LibreOffice Calc.
-   * This prevents uncontrolled resource consumption (CWE-400) while maintaining compatibility
-   * with user expectations from widely-used tools.
-   * See: https://github.com/ezylang/EvalEx/issues/570
+   * Maximum allowed input value for factorial calculation, aligned with industry-standard upper
+   * limits. This prevents uncontrolled resource consumption (CWE-400) while maintaining
+   * compatibility with user expectations from widely-used tools.
+   *
+   * @see https://github.com/ezylang/EvalEx/issues/570
    */
   private static final int MAX_FACTORIAL_INPUT = 170;
 
@@ -45,8 +44,7 @@ public class FactFunction extends AbstractFunction {
 
     // Validate input to prevent uncontrolled resource consumption
     if (number < 0) {
-      throw new EvaluationException(
-          functionToken, "Factorial is not defined for negative numbers");
+      throw new EvaluationException(functionToken, "Factorial is not defined for negative numbers");
     }
 
     if (number > MAX_FACTORIAL_INPUT) {
