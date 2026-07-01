@@ -57,19 +57,19 @@ class BasicFunctionsTest extends BaseEvaluationTest {
 
   @Test
   void testFactorialAtMaximumLimit() throws EvaluationException, ParseException {
-    // Test boundary condition: FACT(170) should work
-    new Expression("FACT(170)").evaluate();
+    // Test boundary condition: FACT(2000) should work
+    new Expression("FACT(2000)").evaluate();
   }
 
   @ParameterizedTest
-  @ValueSource(ints = {171, 1000, 999999})
+  @ValueSource(ints = {2001, 999999})
   void testFactorialExceedsLimit(int value) {
     String expression = String.format("FACT(%d)", value);
-    // Test that values > 170 are rejected to prevent DoS (issue #570)
+    // Test that values > 2000 (initial value for maxRecursionDepth) are rejected to prevent DoS
     assertThatThrownBy(() -> new Expression(expression).evaluate())
         .isInstanceOf(EvaluationException.class)
-        .hasMessageContaining("exceeds maximum allowed value")
-        .hasMessageContaining("170");
+        .hasMessageContaining(
+            "The required number exceeds the configured 'maxRecursionDepth' (value: 2000)");
   }
 
   @ParameterizedTest

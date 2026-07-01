@@ -24,6 +24,7 @@ ExpressionConfiguration configuration=ExpressionConfiguration.builder()
         .lenientMode(false)
         .locale(Locale.getDefault())
         .mathContext(ExpressionConfiguration.DEFAULT_MATH_CONTEXT)
+        .maxRecursionDepth(2000)
         .operatorDictionary(ExpressionConfiguration.StandardOperatorsDictionary)
         .powerOfPrecedence(OperatorIfc.OPERATOR_PRECEDENCE_POWER)
         .stripTrailingZeros(true)
@@ -145,6 +146,12 @@ The math context is used throughout all operations and functions. The default ha
 and a rounding mode of _HALF_EVEN_.
 
 See chapter [Precision, Scale and Rounding](../concepts/rounding.html) for details.
+
+### Maximum Recursion Depth[^2]
+
+Specifies the maximum number of nested call frames allowed during recursive operations (such as resolving
+nested expressions or calculating factorials). This parameter protects the system against stack overflow
+errors, CPU exhaustion, and Denial of Service (DoS) attacks. The default value is 2000.
 
 ### Operator Dictionary
 

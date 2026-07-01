@@ -27,27 +27,19 @@ import java.math.BigDecimal;
 @FunctionParameter(name = "base")
 public class FactFunction extends AbstractFunction {
 
-  /**
-   * Maximum allowed input value for factorial calculation, aligned with industry-standard upper
-   * limits. This prevents uncontrolled resource consumption (CWE-400) while maintaining
-   * compatibility with user expectations from widely-used tools.
-   *
-   * @see https://github.com/ezylang/EvalEx/issues/570
-   */
-  private static final int MAX_FACTORIAL_INPUT = 170;
-
   @Override
   public EvaluationValue evaluate(
       Expression expression, Token functionToken, EvaluationValue... parameterValues)
       throws EvaluationException {
     int number = parameterValues[0].getNumberValue().intValue();
 
-    if (number > MAX_FACTORIAL_INPUT) {
+    int maxRecursionDepth = expression.getConfiguration().getMaxRecursionDepth();
+    if (number > maxRecursionDepth) {
       throw new EvaluationException(
           functionToken,
           String.format(
-              "Factorial input exceeds maximum allowed value: %d > %d",
-              number, MAX_FACTORIAL_INPUT));
+              "The required number exceeds the configured 'maxRecursionDepth' (value: %s)",
+              maxRecursionDepth));
     }
 
     BigDecimal factorial = BigDecimal.ONE;
