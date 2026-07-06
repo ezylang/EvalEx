@@ -101,6 +101,7 @@ public class RegularExpressionUtils {
      *     timeoutMillis}
      * @throws IndexOutOfBoundsException if the index is negative or not less than the length
      */
+    @Override
     public char charAt(int index) {
       if (System.currentTimeMillis() > timeoutTime) {
         throw new IllegalStateException("RegEx matching timed out");
@@ -113,6 +114,7 @@ public class RegularExpressionUtils {
      *
      * @return the number of characters in the underlying sequence
      */
+    @Override
     public int length() {
       return inner.length();
     }
@@ -125,6 +127,7 @@ public class RegularExpressionUtils {
      * @return the specified subsequence wrapped in a new timeout-monitored sequence
      * @throws IndexOutOfBoundsException if start or end are invalid relative to the length
      */
+    @Override
     public CharSequence subSequence(int start, int end) {
       return new TimeoutRegexCharSequence(inner.subSequence(start, end), timeoutMillis);
     }
