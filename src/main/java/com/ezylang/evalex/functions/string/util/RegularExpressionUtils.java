@@ -15,12 +15,22 @@
 */
 package com.ezylang.evalex.functions.string.util;
 
+import com.ezylang.evalex.EvaluationException;
+import com.ezylang.evalex.Expression;
+import com.ezylang.evalex.parser.Token;
+import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.regex.PatternSyntaxException;
 import lombok.experimental.UtilityClass;
 
 /**
- * Utilities for working safely with Regular Expressions.
+ * Utility class providing timeout-based protection for regular expression evaluations.
+ *
+ * <p><strong>Note:</strong> This utility does not modify the underlying Java regex engine. It
+ * forces a strict runtime boundary by intercepting character sequence access. If a regex evaluation
+ * runs without bounds due to complex backtracking or malicious inputs, execution is aborted once
+ * the timeout threshold is passed.
  *
  * <p>Inspired by https://stackoverflow.com/a/11348374 (posted by Andreas, modified by the
  * community)
@@ -32,78 +42,120 @@ import lombok.experimental.UtilityClass;
 public class RegularExpressionUtils {
 
   /**
-   * Creates a {@link Matcher} with a specific execution timeout using a regular expression string.
+   * Creates a {@link Matcher} bounded by a specific execution timeout.
    *
-   * <p>This method compiles the provided regular expression and delegates the creation to {@link
-   * #createMatcherWithTimeout(String, Pattern, int)}.
+   * <p>This method calculates an absolute deadline using {@link System#nanoTime()} and wraps the
+   * input sequence. The underlying regex engine will still backtrack normally, but the wrapper will
+   * abort the operation if evaluation exceeds the allowed duration.
    *
+   * @param expression the expression, where this utility is executed, to access the expression
+   *     configuration.
+   * @param token The current token from the parsed expression, for reporting purposes
    * @param string the character sequence to be searched
    * @param regex the regular expression string to be compiled
-   * @param timeoutMillis the maximum time allowed for the matching operation in milliseconds
-   * @return a {@link Matcher} configured to interrupt execution if the timeout is reached
-   * @throws java.util.regex.PatternSyntaxException if the regular expression's syntax is invalid
+   * @return a {@link Matcher} configured to throw an exception if the evaluation timeout is reached
+   * @throws EvaluationException if the regular expression's syntax is invalid
    */
-  public static Matcher createMatcherWithTimeout(String string, String regex, int timeoutMillis) {
-    Pattern pattern = Pattern.compile(regex);
-    return createMatcherWithTimeout(string, pattern, timeoutMillis);
+  private static Matcher createMatcher(
+      Expression expression, Token token, String string, String regex) throws EvaluationException {
+
+    try {
+      Pattern pattern = Pattern.compile(regex);
+      int timeoutMillis = expression.getConfiguration().getRegexTimeoutMillis();
+
+      CharSequence charSequence =
+          timeoutMillis > 0
+              ? TimeoutRegexCharSequence.withTimeoutDelta(string, timeoutMillis)
+              : string;
+
+      return pattern.matcher(charSequence);
+    } catch (PatternSyntaxException e) {
+      throw new EvaluationException(token, e.getClass().getCanonicalName() + ": " + e.getMessage());
+    }
   }
 
   /**
-   * Creates a {@link Matcher} with a specific execution timeout using a pre-compiled {@link
-   * Pattern}.
+   * Evaluates whether a given string matches a regular expression, bounding the total execution
+   * time. *
    *
-   * <p>The timeout mechanism is enforced by wrapping the target string inside a {@code
-   * TimeoutRegexCharSequence}, which monitors elapsed time during evaluation.
+   * <p>If the matching engine enters an unacceptably long evaluation path (e.g., due to
+   * catastrophic backtracking), the process is aborted via an exception rather than running
+   * indefinitely.
    *
+   * @param expression the expression, where this utility is executed, to access the expression
+   *     configuration.
+   * @param token The current token from the parsed expression, for reporting purposes
    * @param string the character sequence to be searched
-   * @param pattern the pre-compiled {@link Pattern} object
-   * @param timeoutMillis the maximum time allowed for the matching operation in milliseconds
-   * @return a {@link Matcher} configured to interrupt execution if the timeout is reached
+   * @param regex the regular expression pattern to be compiled
+   * @return true if the string matches the specified regular expression
+   * @throws EvaluationException if the regex is invalid or the evaluation runtime exceeds the
+   *     maximum configured timeout
    */
-  public static Matcher createMatcherWithTimeout(
-      String string, Pattern pattern, int timeoutMillis) {
-    CharSequence charSequence = new TimeoutRegexCharSequence(string, timeoutMillis);
-    return pattern.matcher(charSequence);
+  public static boolean matches(Expression expression, Token token, String string, String regex)
+      throws EvaluationException {
+    Matcher matcher = createMatcher(expression, token, string, regex);
+    try {
+      return matcher.matches();
+    } catch (IllegalStateException e) {
+      throw new EvaluationException(token, "RegEx matching timed out");
+    }
   }
 
   /**
-   * A wrapper for {@link CharSequence} that enforces a processing time limit during regex matching.
+   * A wrapper for {@link CharSequence} that enforces a runtime boundary during regex evaluation.
    *
-   * <p>This class intercepts character access via {@link #charAt(int)} to check if the elapsed time
-   * exceeds the configured timeout threshold. If the limit is exceeded, it aborts execution.
+   * <p>This class intercepts character access via {@link #charAt(int)} to check elapsed monotonic
+   * time. It serves as a passive circuit breaker: it does not optimize or change the backtracking
+   * behavior of the regex engine, but stops it from running indefinitely if it gets stuck in a
+   * runaway loop.
    */
   static class TimeoutRegexCharSequence implements CharSequence {
 
     private final CharSequence inner;
-
-    private final int timeoutMillis;
-
-    private final long timeoutTime;
+    private final long timeoutNano;
 
     /**
-     * Constructs a new {@code TimeoutRegexCharSequence} wrapper.
+     * Constructs a new {@code TimeoutRegexCharSequence} wrapper with an absolute nanosecond
+     * deadline.
      *
      * @param inner the underlying character sequence to delegate to
-     * @param timeoutMillis the maximum allowed execution duration in milliseconds
+     * @param timeoutNano the absolute System.nanoTime() marker when execution must abort
      */
-    public TimeoutRegexCharSequence(CharSequence inner, int timeoutMillis) {
+    TimeoutRegexCharSequence(CharSequence inner, long timeoutNano) {
       this.inner = inner;
-      this.timeoutMillis = timeoutMillis;
-      timeoutTime = System.currentTimeMillis() + timeoutMillis;
+      this.timeoutNano = timeoutNano;
     }
 
     /**
-     * Returns the character at the specified index, checking for execution timeout first.
+     * Static factory method to create a wrapper using a relative duration (delta) in milliseconds.
+     * *
+     *
+     * <p>This method computes the absolute nanosecond deadline starting from the moment it is
+     * called, making it ideal for the initial instantiation entry point.
+     *
+     * @param inner the underlying character sequence to delegate to
+     * @param timeoutMillisDelta the maximum allowed duration for evaluation in milliseconds
+     * @return a new {@code TimeoutRegexCharSequence} instance initialized with the calculated
+     *     deadline
+     */
+    public static TimeoutRegexCharSequence withTimeoutDelta(
+        CharSequence inner, int timeoutMillisDelta) {
+      long absoluteTimeoutNano =
+          System.nanoTime() + TimeUnit.MILLISECONDS.toNanos(timeoutMillisDelta);
+      return new TimeoutRegexCharSequence(inner, absoluteTimeoutNano);
+    }
+
+    /**
+     * Returns the character at the specified index, checking if the evaluation has timed out.
      *
      * @param index the index of the character to return
      * @return the character at the specified index
-     * @throws IllegalStateException if the elapsed time exceeds the configured {@code
-     *     timeoutMillis}
+     * @throws IllegalStateException if the evaluation runtime has exceeded the allowed deadline
      * @throws IndexOutOfBoundsException if the index is negative or not less than the length
      */
     @Override
     public char charAt(int index) {
-      if (System.currentTimeMillis() > timeoutTime) {
+      if (System.nanoTime() > timeoutNano) {
         throw new IllegalStateException("RegEx matching timed out");
       }
       return inner.charAt(index);
@@ -120,16 +172,16 @@ public class RegularExpressionUtils {
     }
 
     /**
-     * Returns a new {@code TimeoutRegexCharSequence} that is a subsequence of this sequence.
+     * Returns a new {@code TimeoutRegexCharSequence} sharing the exact same expiration deadline.
      *
      * @param start the start index, inclusive
      * @param end the end index, exclusive
-     * @return the specified subsequence wrapped in a new timeout-monitored sequence
+     * @return the specified subsequence wrapped in a timeout-monitored sequence
      * @throws IndexOutOfBoundsException if start or end are invalid relative to the length
      */
     @Override
     public CharSequence subSequence(int start, int end) {
-      return new TimeoutRegexCharSequence(inner.subSequence(start, end), timeoutMillis);
+      return new TimeoutRegexCharSequence(inner.subSequence(start, end), this.timeoutNano);
     }
 
     @Override

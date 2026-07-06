@@ -204,6 +204,25 @@ class StringFunctionsTest extends BaseEvaluationTest {
     assertExpressionHasExpectedResult(expression, expectedResult);
   }
 
+  @ParameterizedTest
+  @CsvSource(
+      delimiter = ':',
+      value = {
+        "STR_MATCHES(\"\", \"\") : true",
+        "STR_MATCHES(\"a\", \"a\") : true",
+        "STR_MATCHES(\"Hello World\", \"Hello\") : false",
+        "STR_MATCHES(\"Hello World\", \"hello\") : false",
+        "STR_MATCHES(\"Hello world\", \"text\") : false",
+        "STR_MATCHES(\"\", \"text\") : false",
+        "STR_MATCHES(\"Hello World\", \".*World\") : true",
+        "STR_MATCHES(\"Hello World\", \".*world\") : false",
+      })
+  void testMatchesWithoutTimeout(String expression, String expectedResult)
+      throws EvaluationException, ParseException {
+    assertExpressionHasExpectedResult(
+        expression, expectedResult, TestConfigurationProvider.StandardConfigurationWithoutTimeout);
+  }
+
   @Test
   void testMatchesTimeoutOnCatastrophicBacktracing() throws EvaluationException, ParseException {
 
@@ -213,12 +232,17 @@ class StringFunctionsTest extends BaseEvaluationTest {
     String badString = "x".repeat(5000);
     String evilExpression = String.format("STR_MATCHES(\"%s\", \"%s\")", badString, badPattern);
 
-    assertThatThrownBy(
-            () -> {
-              evaluate(evilExpression);
-            })
+    assertThatThrownBy(() -> evaluate(evilExpression))
         .isInstanceOf(EvaluationException.class)
         .hasMessage("RegEx matching timed out");
+  }
+
+  @Test
+  void testMatchesInvalidRegex() throws EvaluationException, ParseException {
+
+    assertThatThrownBy(() -> evaluate("STR_MATCHES(\"testString\", \"(invalid\")"))
+        .isInstanceOf(EvaluationException.class)
+        .hasMessageContaining("PatternSyntaxException: Unclosed group near index 8");
   }
 
   @ParameterizedTest

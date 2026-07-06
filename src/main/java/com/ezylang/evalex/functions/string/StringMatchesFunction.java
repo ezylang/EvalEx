@@ -23,7 +23,6 @@ import com.ezylang.evalex.functions.AbstractFunction;
 import com.ezylang.evalex.functions.FunctionParameter;
 import com.ezylang.evalex.functions.string.util.RegularExpressionUtils;
 import com.ezylang.evalex.parser.Token;
-import java.util.regex.Matcher;
 
 /**
  * Returns true if the string matches the pattern.
@@ -45,13 +44,7 @@ public class StringMatchesFunction extends AbstractFunction {
     String string = parameterValues[0].getStringValue();
     String pattern = parameterValues[1].getStringValue();
 
-    int timeout = expression.getConfiguration().getRegexTimeoutMillis();
-    Matcher safeMatcher = RegularExpressionUtils.createMatcherWithTimeout(string, pattern, timeout);
-
-    try {
-      return expression.convertValue(safeMatcher.matches());
-    } catch (IllegalStateException e) {
-      throw new EvaluationException(functionToken, e.getMessage());
-    }
+    return expression.convertValue(
+        RegularExpressionUtils.matches(expression, functionToken, string, pattern));
   }
 }

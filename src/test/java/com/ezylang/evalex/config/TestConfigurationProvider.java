@@ -37,6 +37,13 @@ public class TestConfigurationProvider {
           .lenientMode(true)
           .build();
 
+  public static final ExpressionConfiguration StandardConfigurationWithoutTimeout =
+      ExpressionConfiguration.builder()
+          .zoneId(ZoneId.of("Europe/Berlin"))
+          .locale(Locale.US)
+          .regexTimeoutMillis(0)
+          .build();
+
   public static final ExpressionConfiguration StandardConfigurationWithAdditionalTestOperators =
       ExpressionConfiguration.builder()
           .zoneId(ZoneId.of("Europe/Berlin"))

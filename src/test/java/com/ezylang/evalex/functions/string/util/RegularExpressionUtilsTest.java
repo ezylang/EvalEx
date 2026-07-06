@@ -19,8 +19,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import com.ezylang.evalex.functions.string.util.RegularExpressionUtils.TimeoutRegexCharSequence;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
@@ -31,46 +29,6 @@ import org.junit.jupiter.api.Test;
  * @author oswaldo.bapvic.jr
  */
 class RegularExpressionUtilsTest {
-
-  @Test
-  void createMatcherWithTimeout_StringRegex_ShouldMatchSuccessfully() {
-    String input = "Hello, world!";
-    String regex = "Hello.*";
-    int timeout = 1000;
-
-    Matcher matcher = RegularExpressionUtils.createMatcherWithTimeout(input, regex, timeout);
-
-    assertThat(matcher.matches()).isTrue();
-  }
-
-  @Test
-  void createMatcherWithTimeout_PatternObject_ShouldMatchSuccessfully() {
-    String input = "JUnit5 test";
-    Pattern pattern = Pattern.compile("\\d+");
-    int timeout = 1000;
-
-    Matcher matcher = RegularExpressionUtils.createMatcherWithTimeout(input, pattern, timeout);
-
-    assertThat(matcher.find()).isTrue();
-    assertThat(matcher.group()).isEqualTo("5");
-  }
-
-  @Test
-  void createMatcherWithTimeout_CatastrophicBacktracking_ShouldTimeoutAndThrowException() {
-    // This regex pattern combined with the input creates a classic "catastrophic backtracking"
-    // scenario
-    String regex = "(a+a+)+y";
-    String input = "a".repeat(5000);
-    int timeoutMillis = 50;
-
-    // Act
-    Matcher matcher = RegularExpressionUtils.createMatcherWithTimeout(input, regex, timeoutMillis);
-
-    // Assert
-    assertThatThrownBy(matcher::matches)
-        .isInstanceOf(IllegalStateException.class)
-        .hasMessageContaining("RegEx matching timed out");
-  }
 
   @Nested
   class TimeoutRegexCharSequenceTest {
@@ -95,7 +53,7 @@ class RegularExpressionUtilsTest {
     void charSequence_SubSequence_ShouldReturnValidWrappedSubSequence() {
       // Arrange
       String input = "Beautiful Day";
-      var originalSequence = new TimeoutRegexCharSequence(input, 1000);
+      var originalSequence = TimeoutRegexCharSequence.withTimeoutDelta(input, 1000);
 
       // Act
       CharSequence subSeg = originalSequence.subSequence(0, 9);

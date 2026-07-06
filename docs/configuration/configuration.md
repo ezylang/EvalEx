@@ -187,8 +187,12 @@ ExpressionConfiguration configuration=ExpressionConfiguration.builder()
 ### RegEx Timeout in Milliseconds[^4]
 
 Defines the maximum execution time allowed for a single regular expression matching operation.
-This parameter serves as a critical security boundary to stop Catastrophic Backtracking, which can
-freeze the CPU and lead to Denial of Service (DoS) attacks. The default value is 100 milliseconds.
+
+This parameter serves as a critical operational security breaker to bound Catastrophic Backtracking,
+which can otherwise consume excessive CPU resources and lead to Denial of Service (DoS) attacks.
+
+Setting this value to 0 or any negative number disables the timeout enforcement completely, allowing
+regular expression evaluations to run without any time constraints. The default value is 100 milliseconds.
 
 [^4]: Since 3.6.3
 
