@@ -15,6 +15,7 @@
 */
 package com.ezylang.evalex.functions.basic;
 
+import com.ezylang.evalex.EvaluationException;
 import com.ezylang.evalex.Expression;
 import com.ezylang.evalex.data.EvaluationValue;
 import com.ezylang.evalex.functions.AbstractFunction;
@@ -28,8 +29,19 @@ public class FactFunction extends AbstractFunction {
 
   @Override
   public EvaluationValue evaluate(
-      Expression expression, Token functionToken, EvaluationValue... parameterValues) {
+      Expression expression, Token functionToken, EvaluationValue... parameterValues)
+      throws EvaluationException {
     int number = parameterValues[0].getNumberValue().intValue();
+
+    int maxRecursionDepth = expression.getConfiguration().getMaxRecursionDepth();
+    if (number > maxRecursionDepth) {
+      throw new EvaluationException(
+          functionToken,
+          String.format(
+              "The required number exceeds the configured 'maxRecursionDepth' (value: %s)",
+              maxRecursionDepth));
+    }
+
     BigDecimal factorial = BigDecimal.ONE;
     for (int i = 1; i <= number; i++) {
       factorial =
