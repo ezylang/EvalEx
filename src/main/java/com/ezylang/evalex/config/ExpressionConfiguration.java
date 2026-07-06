@@ -393,8 +393,16 @@ public class ExpressionConfiguration {
   @Builder.Default private final int maxRecursionDepth = DEFAULT_MAX_RECURSION_DEPTH;
 
   /**
-   * Timeout in milliseconds for RegEx matching execution. Prevents catastrophic backtracking in
-   * RegEx patterns from consuming excessive CPU resources.
+   * The maximum execution time allowed for a single regular expression matching operation.
+   *
+   * <p>This parameter serves as a critical operational security breaker to bound Catastrophic
+   * Backtracking, which can otherwise consume excessive CPU resources and lead to Denial of Service
+   * (DoS) attacks.
+   *
+   * <p>Setting this value to 0 or any negative number disables the timeout enforcement completely,
+   * allowing regular expression evaluations to run without any time constraints.
+   *
+   * @since 3.6.3
    */
   @Builder.Default private final int regexTimeoutMillis = DEFAULT_REGEX_TIMEOUT_MILLIS;
 

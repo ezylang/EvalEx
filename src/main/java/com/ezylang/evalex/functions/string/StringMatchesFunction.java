@@ -43,8 +43,6 @@ public class StringMatchesFunction extends AbstractFunction {
       throws EvaluationException {
     String string = parameterValues[0].getStringValue();
     String pattern = parameterValues[1].getStringValue();
-
-    return expression.convertValue(
-        RegularExpressionUtils.matches(expression, functionToken, string, pattern));
+    return RegularExpressionUtils.matches(expression, functionToken, string, pattern);
   }
 }

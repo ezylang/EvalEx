@@ -17,6 +17,7 @@ package com.ezylang.evalex.functions.string.util;
 
 import com.ezylang.evalex.EvaluationException;
 import com.ezylang.evalex.Expression;
+import com.ezylang.evalex.data.EvaluationValue;
 import com.ezylang.evalex.parser.Token;
 import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
@@ -87,15 +88,16 @@ public class RegularExpressionUtils {
    * @param token The current token from the parsed expression, for reporting purposes
    * @param string the character sequence to be searched
    * @param regex the regular expression pattern to be compiled
-   * @return true if the string matches the specified regular expression
+   * @return {@link EvaluationValue#TRUE} if the string matches the specified regular expression;
+   *     {@link EvaluationValue#FALSE}, otherwise
    * @throws EvaluationException if the regex is invalid or the evaluation runtime exceeds the
    *     maximum configured timeout
    */
-  public static boolean matches(Expression expression, Token token, String string, String regex)
-      throws EvaluationException {
+  public static EvaluationValue matches(
+      Expression expression, Token token, String string, String regex) throws EvaluationException {
     Matcher matcher = createMatcher(expression, token, string, regex);
     try {
-      return matcher.matches();
+      return expression.convertValue(matcher.matches());
     } catch (IllegalStateException e) {
       throw new EvaluationException(token, "RegEx matching timed out");
     }
