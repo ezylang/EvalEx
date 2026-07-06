@@ -205,10 +205,20 @@ class StringFunctionsTest extends BaseEvaluationTest {
   }
 
   @Test
-  void testMatchesInvalidPattern() throws EvaluationException, ParseException {
-    assertThatThrownBy(() -> evaluate("STR_MATCHES(\"Hello World\",\"[A-ZMatching(\")"))
+  void testMatchesTimeoutOnCatastrophicBacktracing() throws EvaluationException, ParseException {
+
+    // This regex pattern combined with the input creates a classic "catastrophic backtracking"
+    // scenario
+    String badPattern = "(x+x+)+y";
+    String badString = "x".repeat(5000);
+    String evilExpression = String.format("STR_MATCHES(\"%s\", \"%s\")", badString, badPattern);
+
+    assertThatThrownBy(
+            () -> {
+              evaluate(evilExpression);
+            })
         .isInstanceOf(EvaluationException.class)
-        .hasMessageContaining("Invalid regex pattern");
+        .hasMessage("RegEx matching timed out");
   }
 
   @ParameterizedTest

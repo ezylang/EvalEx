@@ -17,16 +17,13 @@ package com.ezylang.evalex.functions.string;
 
 import com.ezylang.evalex.EvaluationException;
 import com.ezylang.evalex.Expression;
+import com.ezylang.evalex.config.ExpressionConfiguration;
 import com.ezylang.evalex.data.EvaluationValue;
 import com.ezylang.evalex.functions.AbstractFunction;
 import com.ezylang.evalex.functions.FunctionParameter;
+import com.ezylang.evalex.functions.string.util.RegularExpressionUtils;
 import com.ezylang.evalex.parser.Token;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.TimeoutException;
+import java.util.regex.Matcher;
 
 /**
  * Returns true if the string matches the pattern.
@@ -35,20 +32,12 @@ import java.util.concurrent.TimeoutException;
  * configuration property 'regexTimeoutMillis' to prevent ReDoS (Regular Expression Denial of
  * Service).
  *
+ * @see ExpressionConfiguration#getRegexTimeoutMillis()
  * @author HSGamer
- * @see <a href="https://github.com/ezylang/EvalEx/issues/570">Issue #570 - CWE-1333 ReDoS
- *     Vulnerability</a>
  */
 @FunctionParameter(name = "string")
 @FunctionParameter(name = "pattern")
 public class StringMatchesFunction extends AbstractFunction {
-
-  /**
-   * Thread pool executor for executing regex matching with timeout. Shared across all invocations
-   * to avoid excessive thread creation.
-   */
-  private static final ExecutorService EXECUTOR = Executors.newFixedThreadPool(10);
-
   @Override
   public EvaluationValue evaluate(
       Expression expression, Token functionToken, EvaluationValue... parameterValues)
@@ -56,19 +45,13 @@ public class StringMatchesFunction extends AbstractFunction {
     String string = parameterValues[0].getStringValue();
     String pattern = parameterValues[1].getStringValue();
 
-    // Execute regex matching with timeout to catch unexpected ReDoS patterns
-    long regexTimeoutMillis = expression.getConfiguration().getRegexTimeoutMillis();
+    int timeout = expression.getConfiguration().getRegexTimeoutMillis();
+    Matcher safeMatcher = RegularExpressionUtils.createMatcherWithTimeout(string, pattern, timeout);
+
     try {
-      Future<Boolean> future = EXECUTOR.submit(() -> string.matches(pattern));
-      return expression.convertValue(future.get(regexTimeoutMillis, TimeUnit.MILLISECONDS));
-    } catch (TimeoutException e) {
-      throw new EvaluationException(functionToken, "Regex matching timed out");
-    } catch (ExecutionException e) {
-      throw new EvaluationException(
-          functionToken, "Invalid regex pattern: " + e.getCause().getMessage());
-    } catch (InterruptedException e) {
-      Thread.currentThread().interrupt();
-      throw new EvaluationException(functionToken, "Interrupted while matching");
+      return expression.convertValue(safeMatcher.matches());
+    } catch (IllegalStateException e) {
+      throw new EvaluationException(functionToken, e.getMessage());
     }
   }
 }

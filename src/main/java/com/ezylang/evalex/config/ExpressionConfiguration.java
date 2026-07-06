@@ -169,7 +169,7 @@ public class ExpressionConfiguration {
   public static final int DEFAULT_MAX_RECURSION_DEPTH = 2_000;
 
   /** The default RegEx timeout is 100 milliseconds. */
-  public static final long DEFAULT_REGEX_TIMEOUT_MILLIS = 100L;
+  public static final int DEFAULT_REGEX_TIMEOUT_MILLIS = 100;
 
   /**
    * The default date time formatters used when parsing a date string. Each format will be tried and
@@ -396,7 +396,7 @@ public class ExpressionConfiguration {
    * Timeout in milliseconds for RegEx matching execution. Prevents catastrophic backtracking in
    * RegEx patterns from consuming excessive CPU resources.
    */
-  @Builder.Default private final long regexTimeoutMillis = DEFAULT_REGEX_TIMEOUT_MILLIS;
+  @Builder.Default private final int regexTimeoutMillis = DEFAULT_REGEX_TIMEOUT_MILLIS;
 
   /**
    * The date-time formatters. When parsing, each format will be tried and the first matching will
