@@ -66,7 +66,7 @@ class RegularExpressionUtilsTest {
     }
 
     @Test
-    void charSequence_SubSequence_ShouldInheritTimeoutBehavior() throws InterruptedException {
+    void charSequence_SubSequence_ShouldInheritTimeoutBehavior() {
       // Arrange
       String input = "Short-lived sequence";
       // Force a near immediate timeout without sleeping

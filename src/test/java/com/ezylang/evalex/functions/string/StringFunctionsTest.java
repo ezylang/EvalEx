@@ -224,7 +224,7 @@ class StringFunctionsTest extends BaseEvaluationTest {
   }
 
   @Test
-  void testMatchesTimeoutOnCatastrophicBacktracing() throws EvaluationException, ParseException {
+  void testMatchesTimeoutOnCatastrophicBacktracing() {
 
     // This regex pattern combined with the input creates a classic "catastrophic backtracking"
     // scenario
@@ -238,7 +238,7 @@ class StringFunctionsTest extends BaseEvaluationTest {
   }
 
   @Test
-  void testMatchesInvalidRegex() throws EvaluationException, ParseException {
+  void testMatchesInvalidRegex() {
 
     assertThatThrownBy(() -> evaluate("STR_MATCHES(\"testString\", \"(invalid\")"))
         .isInstanceOf(EvaluationException.class)
