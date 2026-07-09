@@ -393,11 +393,8 @@ public class ExpressionConfiguration {
   @Builder.Default private final int maxRecursionDepth = DEFAULT_MAX_RECURSION_DEPTH;
 
   /**
-   * The maximum execution time allowed for a single regular expression matching operation.
-   *
-   * <p>This parameter serves as a critical operational security breaker to bound Catastrophic
-   * Backtracking, which can otherwise consume excessive CPU resources and lead to Denial of Service
-   * (DoS) attacks.
+   * This parameter limits the maximum runtime of a single regular expression matching operation,
+   * helping to mitigate ReDoS risks caused by catastrophic backtracking.
    *
    * <p>Setting this value to 0 or any negative number disables the timeout enforcement completely,
    * allowing regular expression evaluations to run without any time constraints.

@@ -46,7 +46,7 @@ class RegularExpressionUtilsTest {
       String input = "Test String";
       var sequence = new TimeoutRegexCharSequence(input, 1000);
 
-      assertThat(sequence.toString()).isEqualTo("Test String");
+      assertThat(sequence).hasToString("Test String");
     }
 
     @Test
@@ -59,7 +59,7 @@ class RegularExpressionUtilsTest {
       CharSequence subSeg = originalSequence.subSequence(0, 9);
 
       // Assert
-      assertThat(subSeg.toString()).isEqualTo("Beautiful");
+      assertThat(subSeg).hasToString("Beautiful");
       assertThat(subSeg.length()).isEqualTo(9);
       assertThat(subSeg.charAt(0)).isEqualTo('B');
       assertThat(subSeg).isInstanceOf(TimeoutRegexCharSequence.class);
@@ -69,14 +69,12 @@ class RegularExpressionUtilsTest {
     void charSequence_SubSequence_ShouldInheritTimeoutBehavior() throws InterruptedException {
       // Arrange
       String input = "Short-lived sequence";
-      int tightTimeout = 50; // 50 milliseconds
-      var originalSequence = new TimeoutRegexCharSequence(input, tightTimeout);
+      // Force a near immediate timeout without sleeping
+      int immediateTimeout = 1; // 1 milliseconds
+      var originalSequence = new TimeoutRegexCharSequence(input, immediateTimeout);
 
       // Act
       CharSequence subSeg = originalSequence.subSequence(0, 5);
-
-      // Wait out the timeout duration
-      Thread.sleep(60);
 
       // Assert
       // The subsequence should also throw the exception because its deadline has passed
