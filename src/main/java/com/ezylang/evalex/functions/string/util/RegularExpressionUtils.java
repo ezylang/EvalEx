@@ -37,13 +37,13 @@ import lombok.experimental.UtilityClass;
  * community)
  *
  * @author oswaldo.bapvic.jr
- * @since 3.6.3
+ * @since 3.7.0
  */
 @UtilityClass
 public class RegularExpressionUtils {
 
   /**
-   * Creates a {@link Matcher} bounded by a specific execution timeout.
+   * Creates a {@link Matcher} using a timeout-monitored input sequence.
    *
    * <p>This method calculates an absolute deadline using {@link System#nanoTime()} and wraps the
    * input sequence. The underlying regex engine will still backtrack normally, but the wrapper will
@@ -77,7 +77,7 @@ public class RegularExpressionUtils {
 
   /**
    * Evaluates whether a given string matches a regular expression, bounding the total execution
-   * time. *
+   * time.
    *
    * <p>If the matching engine enters an unacceptably long evaluation path (e.g., due to
    * catastrophic backtracking), the process is aborted via an exception rather than running
@@ -130,7 +130,7 @@ public class RegularExpressionUtils {
 
     /**
      * Static factory method to create a wrapper using a relative duration (delta) in milliseconds.
-     * *
+     *
      *
      * <p>This method computes the absolute nanosecond deadline starting from the moment it is
      * called, making it ideal for the initial instantiation entry point.

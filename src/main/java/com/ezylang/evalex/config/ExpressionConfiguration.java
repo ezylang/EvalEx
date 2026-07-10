@@ -399,7 +399,7 @@ public class ExpressionConfiguration {
    * <p>Setting this value to 0 or any negative number disables the timeout enforcement completely,
    * allowing regular expression evaluations to run without any time constraints.
    *
-   * @since 3.6.3
+   * @since 3.7.0
    */
   @Builder.Default private final int regexTimeoutMillis = DEFAULT_REGEX_TIMEOUT_MILLIS;
 

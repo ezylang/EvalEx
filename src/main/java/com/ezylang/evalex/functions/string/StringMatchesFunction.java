@@ -27,7 +27,7 @@ import com.ezylang.evalex.parser.Token;
 /**
  * Returns true if the string matches the pattern.
  *
- * <p><strong>Security:</strong> Since 3.6.3, this function applies a execution timeout defined by
+ * <p><strong>Security:</strong> Since 3.7.0, this function applies a execution timeout defined by
  * configuration property 'regexTimeoutMillis' to prevent ReDoS (Regular Expression Denial of
  * Service).
  *

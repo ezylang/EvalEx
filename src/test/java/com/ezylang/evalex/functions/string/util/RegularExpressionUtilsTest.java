@@ -25,7 +25,7 @@ import org.junit.jupiter.api.Test;
 /**
  * Unit tests for {@link RegularExpressionUtils}.
  *
- * @since 3.6.3
+ * @since 3.7.0
  * @author oswaldo.bapvic.jr
  */
 class RegularExpressionUtilsTest {

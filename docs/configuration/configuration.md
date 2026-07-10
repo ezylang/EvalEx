@@ -192,7 +192,7 @@ mitigate ReDoS risks caused by catastrophic backtracking.
 Setting this value to 0 or any negative number disables the timeout enforcement completely, allowing
 regular expression evaluations to run without any time constraints. The default value is 100 milliseconds.
 
-[^4]: Since 3.6.3
+[^4]: Since 3.7.0
 
 ### Single Quote String Literals
 
