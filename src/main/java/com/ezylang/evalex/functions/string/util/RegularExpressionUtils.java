@@ -131,7 +131,6 @@ public class RegularExpressionUtils {
     /**
      * Static factory method to create a wrapper using a relative duration (delta) in milliseconds.
      *
-     *
      * <p>This method computes the absolute nanosecond deadline starting from the moment it is
      * called, making it ideal for the initial instantiation entry point.
      *
