@@ -9,13 +9,16 @@ module com.ezylang.evalex {
   exports com.ezylang.evalex.functions.basic;
   exports com.ezylang.evalex.functions.datetime;
   exports com.ezylang.evalex.functions.string;
+  exports com.ezylang.evalex.functions.string.util;
   exports com.ezylang.evalex.functions.trigonometric;
   exports com.ezylang.evalex.operators;
   exports com.ezylang.evalex.operators.arithmetic;
   exports com.ezylang.evalex.operators.booleans;
   exports com.ezylang.evalex.parser;
 
-  // Tests + Frameworks
+  // Temporary compatibility measure:
+  // keep packages open for reflective frameworks and tests.
+  // Can be restricted in a follow-up once reflective use is narrowed down.
   opens com.ezylang.evalex;
   opens com.ezylang.evalex.config;
   opens com.ezylang.evalex.data;
@@ -24,6 +27,7 @@ module com.ezylang.evalex {
   opens com.ezylang.evalex.functions.basic;
   opens com.ezylang.evalex.functions.datetime;
   opens com.ezylang.evalex.functions.string;
+  opens com.ezylang.evalex.functions.string.util;
   opens com.ezylang.evalex.functions.trigonometric;
   opens com.ezylang.evalex.operators;
   opens com.ezylang.evalex.operators.arithmetic;
