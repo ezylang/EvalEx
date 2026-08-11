@@ -21,6 +21,8 @@ import com.ezylang.evalex.config.ExpressionConfiguration;
 import com.ezylang.evalex.config.TestConfigurationProvider;
 import com.ezylang.evalex.data.EvaluationValue;
 import com.ezylang.evalex.parser.ParseException;
+import java.time.Instant;
+import java.time.ZonedDateTime;
 
 public abstract class BaseEvaluationTest {
 
@@ -39,6 +41,15 @@ public abstract class BaseEvaluationTest {
       throws EvaluationException, ParseException {
     assertThat(evaluate(expression, expressionConfiguration).getStringValue())
         .isEqualTo(expectedResult);
+  }
+
+  protected void assertExpressionHasExpectedInstant(
+      String expression,
+      ZonedDateTime expectedResult,
+      ExpressionConfiguration expressionConfiguration)
+      throws EvaluationException, ParseException {
+    assertThat(evaluate(expression, expressionConfiguration).getDateTimeValue())
+        .isEqualTo(Instant.from(expectedResult));
   }
 
   protected EvaluationValue evaluate(String expression) throws EvaluationException, ParseException {

@@ -103,6 +103,7 @@ Available through the _ExpressionConfiguration.StandardFunctionsDictionary_ cons
 | [DT_DURATION_TO_MILLIS](#dt_duration_to_millis)     | Converts the given _DURATION_ to a milliseconds value.                                                                                                                                                                                                                      | 
 | [DT_NOW](#dt_now)                                   | Produces a new _DATE_TIME_ that represents the current moment in time.                                                                                                                                                                                                      |
 | [DT_TODAY](#dt_today)                               | Produces a new _DATE_TIME_ that represents the current date, at midnight (00:00). An optional time zone can be specified, e.g. "America/Sao_Paulo", or "GMT-03:00". If no zone ID is specified, the configured zone ID is used.                                             |
+| [DT_TRUNCATE](#dt_truncate)                         | Truncates the given _DATE_TIME_ value to a specific time unit. |
 
 ---
 
@@ -2479,3 +2480,46 @@ Use this when you need a reference to today’s date without the current time co
 \* Example considering UTC as system time zone
 
 🔝 [Back to Date Time Functions](#date-time-functions) | 🔝 [Back to top](#top)
+
+
+## DT_TRUNCATE
+
+*Since: 3.8.0*
+
+The `DT_TRUNCATE` function truncates a date-time value to a specific time unit, resetting smaller units to their start value, allowing developers to normalize timestamps for groupings, reports, or interval calculations. You can optionally supply a specific time unit and a target time zone. If omitted, the day ("d") unit and the system’s configured default time zone are used.
+
+### Syntax
+
+```
+DT_TRUNCATE(value [, timeUnit [, zoneId]]
+```
+
+### Parameters
+
+| Name     | Description                                                                                                                                                                 |
+|----------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| value    | The `DATE_TIME` value to truncate.                                                                                                                                          |
+| timeUnit | *(Optional)* Case-sensitive formatting character. Default is `"d"`. Supported units: `"y"` (Year), `"M"` (Month), `"d"` (Day), `"H"` (Hour), `"m"` (Minute), `"s" (Second). |
+| zoneId   | *(Optional)* Time zone identifier string to use (e.g. `"UTC"`, `"America/Sao_Paulo"`). To skip `timeUnit` and pass a zone, use `NULL` for `timeUnit`.                       |
+
+
+### Examples
+
+These examples show how various combinations of units and zones affect the resulting date-time value.
+
+>**Note:** The function [DT_DATE_PARSE](#dt_date_parse) is being used to produce `DATE_TIME` values for the truncation operations.
+
+| Expression                                                                   | Result                 |
+|------------------------------------------------------------------------------|------------------------|
+| `DT_TRUNCATE(DT_DATE_PARSE("2026-08-08T14:30:45Z"))`                         | `2026-08-08T00:00:00Z` |
+| `DT_TRUNCATE(DT_DATE_PARSE("2026-08-08T14:30:45Z"), "m")`                    | `2026-08-08T14:30:00Z` |
+| `DT_TRUNCATE(DT_DATE_PARSE("2026-08-08T14:30:45Z"), "H")`                    | `2026-08-08T14:00:00Z` |
+| `DT_TRUNCATE(DT_DATE_PARSE("2026-08-08T14:30:45Z"), "d")`                    | `2026-08-08T00:00:00Z` |
+| `DT_TRUNCATE(DT_DATE_PARSE("2026-08-08T14:30:45Z"), "M")`                    | `2026-08-01T00:00:00Z` |
+| `DT_TRUNCATE(DT_DATE_PARSE("2026-08-08T14:30:45Z"), "y")`                    | `2026-01-01T00:00:00Z` |
+| `DT_TRUNCATE(DT_DATE_PARSE("2026-08-08T14:30:45Z"), "d", "America/Chicago")` | `2026-08-08T05:00:00Z` |
+
+\* Examples considering UTC as system time zone
+
+🔝 [Back to Date Time Functions](#date-time-functions) | 🔝 [Back to top](#top)
+

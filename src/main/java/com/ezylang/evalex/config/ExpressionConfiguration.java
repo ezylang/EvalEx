@@ -44,6 +44,7 @@ import com.ezylang.evalex.functions.datetime.DateTimeNowFunction;
 import com.ezylang.evalex.functions.datetime.DateTimeParseFunction;
 import com.ezylang.evalex.functions.datetime.DateTimeToEpochFunction;
 import com.ezylang.evalex.functions.datetime.DateTimeTodayFunction;
+import com.ezylang.evalex.functions.datetime.DateTimeTruncateFunction;
 import com.ezylang.evalex.functions.datetime.DurationFromMillisFunction;
 import com.ezylang.evalex.functions.datetime.DurationNewFunction;
 import com.ezylang.evalex.functions.datetime.DurationParseFunction;
@@ -300,7 +301,8 @@ public class ExpressionConfiguration {
           Map.entry("DT_DURATION_TO_MILLIS", new DurationToMillisFunction()),
           Map.entry("DT_DURATION_PARSE", new DurationParseFunction()),
           Map.entry("DT_NOW", new DateTimeNowFunction()),
-          Map.entry("DT_TODAY", new DateTimeTodayFunction()));
+          Map.entry("DT_TODAY", new DateTimeTodayFunction()),
+          Map.entry("DT_TRUNCATE", new DateTimeTruncateFunction()));
 
   /** The math context to use. */
   @Builder.Default private final MathContext mathContext = DEFAULT_MATH_CONTEXT;
