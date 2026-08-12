@@ -2491,16 +2491,16 @@ The `DT_TRUNCATE` function truncates a date-time value to a specific time unit, 
 ### Syntax
 
 ```
-DT_TRUNCATE(value [, timeUnit [, zoneId]]
+DT_TRUNCATE(value [, timeUnit [, zoneId]])
 ```
 
 ### Parameters
 
-| Name     | Description                                                                                                                                                                 |
-|----------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| value    | The `DATE_TIME` value to truncate.                                                                                                                                          |
-| timeUnit | *(Optional)* Case-sensitive formatting character. Default is `"d"`. Supported units: `"y"` (Year), `"M"` (Month), `"d"` (Day), `"H"` (Hour), `"m"` (Minute), `"s" (Second). |
-| zoneId   | *(Optional)* Time zone identifier string to use (e.g. `"UTC"`, `"America/Sao_Paulo"`). To skip `timeUnit` and pass a zone, use `NULL` for `timeUnit`.                       |
+| Name     | Description                                                                                                                                                                  |
+|----------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| value    | The `DATE_TIME` value to truncate.                                                                                                                                           |
+| timeUnit | *(Optional)* Case-sensitive formatting character. Default is `"d"`. Supported units: `"y"` (Year), `"M"` (Month), `"d"` (Day), `"H"` (Hour), `"m"` (Minute), `"s"` (Second). |
+| zoneId   | *(Optional)* Time zone identifier string to use (e.g. `"UTC"`, `"America/Sao_Paulo"`). To skip `timeUnit` and pass a zone, use `NULL` for `timeUnit`.                        |
 
 
 ### Examples
@@ -2509,15 +2509,16 @@ These examples show how various combinations of units and zones affect the resul
 
 >**Note:** The function [DT_DATE_PARSE](#dt_date_parse) is being used to produce `DATE_TIME` values for the truncation operations.
 
-| Expression                                                                   | Result                 |
-|------------------------------------------------------------------------------|------------------------|
-| `DT_TRUNCATE(DT_DATE_PARSE("2026-08-08T14:30:45Z"))`                         | `2026-08-08T00:00:00Z` |
-| `DT_TRUNCATE(DT_DATE_PARSE("2026-08-08T14:30:45Z"), "m")`                    | `2026-08-08T14:30:00Z` |
-| `DT_TRUNCATE(DT_DATE_PARSE("2026-08-08T14:30:45Z"), "H")`                    | `2026-08-08T14:00:00Z` |
-| `DT_TRUNCATE(DT_DATE_PARSE("2026-08-08T14:30:45Z"), "d")`                    | `2026-08-08T00:00:00Z` |
-| `DT_TRUNCATE(DT_DATE_PARSE("2026-08-08T14:30:45Z"), "M")`                    | `2026-08-01T00:00:00Z` |
-| `DT_TRUNCATE(DT_DATE_PARSE("2026-08-08T14:30:45Z"), "y")`                    | `2026-01-01T00:00:00Z` |
-| `DT_TRUNCATE(DT_DATE_PARSE("2026-08-08T14:30:45Z"), "d", "America/Chicago")` | `2026-08-08T05:00:00Z` |
+| Expression                                                                       | Result                     |
+|----------------------------------------------------------------------------------|----------------------------|
+| `DT_TRUNCATE(DT_DATE_PARSE("2026-08-08T14:30:45.789Z"))`                         | `2026-08-08T00:00:00.000Z` |
+| `DT_TRUNCATE(DT_DATE_PARSE("2026-08-08T14:30:45.789Z"), "s")`                    | `2026-08-08T14:30:45.000Z` |
+| `DT_TRUNCATE(DT_DATE_PARSE("2026-08-08T14:30:45.789Z"), "m")`                    | `2026-08-08T14:30:00.000Z` |
+| `DT_TRUNCATE(DT_DATE_PARSE("2026-08-08T14:30:45.789Z"), "H")`                    | `2026-08-08T14:00:00.000Z` |
+| `DT_TRUNCATE(DT_DATE_PARSE("2026-08-08T14:30:45.789Z"), "d")`                    | `2026-08-08T00:00:00.000Z` |
+| `DT_TRUNCATE(DT_DATE_PARSE("2026-08-08T14:30:45.789Z"), "M")`                    | `2026-08-01T00:00:00.000Z` |
+| `DT_TRUNCATE(DT_DATE_PARSE("2026-08-08T14:30:45.789Z"), "y")`                    | `2026-01-01T00:00:00.000Z` |
+| `DT_TRUNCATE(DT_DATE_PARSE("2026-08-08T14:30:45.789Z"), "d", "America/Chicago")` | `2026-08-08T05:00:00.000Z` |
 
 \* Examples considering UTC as system time zone
 

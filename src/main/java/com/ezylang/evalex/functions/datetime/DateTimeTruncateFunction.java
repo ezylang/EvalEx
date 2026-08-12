@@ -22,8 +22,8 @@ import com.ezylang.evalex.functions.AbstractFunction;
 import com.ezylang.evalex.functions.FunctionParameter;
 import com.ezylang.evalex.parser.Token;
 import java.time.Instant;
-import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.time.temporal.ChronoUnit;
 import java.time.temporal.TemporalAdjusters;
 import java.util.Map;
@@ -49,7 +49,7 @@ import java.util.Map;
  *   <li><b>timeUnit</b> - <i>(Optional)</i> a string containing a valid case-sensitive formatting
  *       character. Defaults to {@code 'd'} (Day) if omitted or set to {@code NULL}:
  *       <ul>
- *         <li>{@code 'y'} or {@code 'u'} - Truncates to the start of the <b>Year</b>.
+ *         <li>{@code 'y'} - Truncates to the start of the <b>Year</b>.
  *         <li>{@code 'M'} - Truncates to the start of the <b>Month</b> (Uppercase)
  *         <li>{@code 'd'} - Truncates to the start of the <b>Day</b>
  *         <li>{@code 'H'} - Truncates to the start of the <b>Hour</b> (Uppercase)
@@ -134,8 +134,8 @@ public class DateTimeTruncateFunction extends AbstractFunction {
     }
 
     // Apply truncation
-    LocalDateTime localDateTime = LocalDateTime.ofInstant(instant, zoneId);
-    LocalDateTime truncatedDateTime;
+    ZonedDateTime localDateTime = ZonedDateTime.ofInstant(instant, zoneId);
+    ZonedDateTime truncatedDateTime;
     switch (unit) {
       case YEARS:
         truncatedDateTime =
@@ -150,7 +150,23 @@ public class DateTimeTruncateFunction extends AbstractFunction {
         break;
     }
 
-    Instant resultInstant = truncatedDateTime.atZone(zoneId).toInstant();
+    Instant resultInstant = truncatedDateTime.toInstant();
     return EvaluationValue.dateTimeValue(resultInstant);
+  }
+
+  @Override
+  public void validatePreEvaluation(Token token, EvaluationValue... parameterValues)
+      throws EvaluationException {
+    super.validatePreEvaluation(token, parameterValues);
+    if (parameterValues.length > 3) {
+      throw new EvaluationException(token, "Too many parameters");
+    }
+    if (!parameterValues[0].isDateTimeValue()) {
+      throw new EvaluationException(
+          token,
+          String.format(
+              "Unable to format a '%s' type as a date-time",
+              parameterValues[0].getDataType().name()));
+    }
   }
 }
