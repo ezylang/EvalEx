@@ -26,7 +26,9 @@ class OperatorDictionaryIfcTest {
       new OperatorDictionaryIfc() {
 
         @Override
-        public void addOperator(String operatorString, OperatorIfc operator) {}
+        public void addOperator(String operatorString, OperatorIfc operator) {
+          // No-op: this stub only exercises the interface's default methods.
+        }
 
         @Override
         public OperatorIfc getPrefixOperator(String operatorString) {

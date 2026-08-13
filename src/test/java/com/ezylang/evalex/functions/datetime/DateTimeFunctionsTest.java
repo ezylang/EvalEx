@@ -256,14 +256,15 @@ class DateTimeFunctionsTest extends BaseEvaluationTest {
 
   @Test
   void testDateTimeTodayDefaultTimeZone() throws EvaluationException, ParseException {
-    Instant expectedTime = LocalDate.now().atStartOfDay(DEFAULT_ZONE_ID).toInstant();
+    Instant expectedTime = LocalDate.now(DEFAULT_ZONE_ID).atStartOfDay(DEFAULT_ZONE_ID).toInstant();
     Instant actualTime = evaluate("DT_TODAY()").getDateTimeValue();
     assertThat(actualTime).isEqualTo(expectedTime);
   }
 
   @Test
   void testDateTimeTodayDifferentTimeZone() throws EvaluationException, ParseException {
-    Instant expectedTime = LocalDate.now().atStartOfDay(ZoneId.of("America/Sao_Paulo")).toInstant();
+    ZoneId zoneId = ZoneId.of("America/Sao_Paulo");
+    Instant expectedTime = LocalDate.now(zoneId).atStartOfDay(zoneId).toInstant();
     Instant actualTime = evaluate("DT_TODAY(\"America/Sao_Paulo\")").getDateTimeValue();
     assertThat(actualTime).isEqualTo(expectedTime);
   }

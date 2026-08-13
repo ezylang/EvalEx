@@ -25,7 +25,9 @@ class FunctionDictionaryIfcTest {
   private final FunctionDictionaryIfc functionDictionaryIfc =
       new FunctionDictionaryIfc() {
         @Override
-        public void addFunction(String functionName, FunctionIfc function) {}
+        public void addFunction(String functionName, FunctionIfc function) {
+          // No-op: this stub only exercises the interface's default methods.
+        }
 
         @Override
         public FunctionIfc getFunction(String functionName) {

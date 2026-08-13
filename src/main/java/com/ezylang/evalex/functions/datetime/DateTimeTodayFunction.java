@@ -50,7 +50,7 @@ public class DateTimeTodayFunction extends AbstractFunction {
       Expression expression, Token functionToken, EvaluationValue... parameterValues)
       throws EvaluationException {
     ZoneId zoneId = parseZoneId(expression, functionToken, parameterValues);
-    Instant today = LocalDate.now().atStartOfDay(zoneId).toInstant();
+    Instant today = LocalDate.now(zoneId).atStartOfDay(zoneId).toInstant();
     return expression.convertValue(today);
   }
 

@@ -24,12 +24,11 @@ import java.security.SecureRandom;
 /** Random function produces a random value between 0 and 1. */
 public class RandomFunction extends AbstractFunction {
 
+  private static final SecureRandom SECURE_RANDOM = new SecureRandom();
+
   @Override
   public EvaluationValue evaluate(
       Expression expression, Token functionToken, EvaluationValue... parameterValues) {
-
-    SecureRandom secureRandom = new SecureRandom();
-
-    return expression.convertDoubleValue(secureRandom.nextDouble());
+    return expression.convertDoubleValue(SECURE_RANDOM.nextDouble());
   }
 }

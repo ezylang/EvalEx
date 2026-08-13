@@ -19,7 +19,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import com.ezylang.evalex.functions.string.util.RegularExpressionUtils.TimeoutRegexCharSequence;
-import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 /**
@@ -30,57 +29,53 @@ import org.junit.jupiter.api.Test;
  */
 class RegularExpressionUtilsTest {
 
-  @Nested
-  class TimeoutRegexCharSequenceTest {
+  @Test
+  void charSequence_Length_ShouldReturnCorrectLength() {
+    String input = "OpenAI";
+    var sequence = new TimeoutRegexCharSequence(input, 1000);
 
-    @Test
-    void charSequence_Length_ShouldReturnCorrectLength() {
-      String input = "OpenAI";
-      var sequence = new TimeoutRegexCharSequence(input, 1000);
+    assertThat(sequence.length()).isEqualTo(6);
+  }
 
-      assertThat(sequence.length()).isEqualTo(6);
-    }
+  @Test
+  void charSequence_ToString_ShouldReturnOriginalStringContent() {
+    String input = "Test String";
+    var sequence = new TimeoutRegexCharSequence(input, 1000);
 
-    @Test
-    void charSequence_ToString_ShouldReturnOriginalStringContent() {
-      String input = "Test String";
-      var sequence = new TimeoutRegexCharSequence(input, 1000);
+    assertThat(sequence).hasToString("Test String");
+  }
 
-      assertThat(sequence).hasToString("Test String");
-    }
+  @Test
+  void charSequence_SubSequence_ShouldReturnValidWrappedSubSequence() {
+    // Arrange
+    String input = "Beautiful Day";
+    var originalSequence = TimeoutRegexCharSequence.withTimeoutDelta(input, 1000);
 
-    @Test
-    void charSequence_SubSequence_ShouldReturnValidWrappedSubSequence() {
-      // Arrange
-      String input = "Beautiful Day";
-      var originalSequence = TimeoutRegexCharSequence.withTimeoutDelta(input, 1000);
+    // Act
+    CharSequence subSeg = originalSequence.subSequence(0, 9);
 
-      // Act
-      CharSequence subSeg = originalSequence.subSequence(0, 9);
+    // Assert
+    assertThat(subSeg).hasToString("Beautiful");
+    assertThat(subSeg.length()).isEqualTo(9);
+    assertThat(subSeg.charAt(0)).isEqualTo('B');
+    assertThat(subSeg).isInstanceOf(TimeoutRegexCharSequence.class);
+  }
 
-      // Assert
-      assertThat(subSeg).hasToString("Beautiful");
-      assertThat(subSeg.length()).isEqualTo(9);
-      assertThat(subSeg.charAt(0)).isEqualTo('B');
-      assertThat(subSeg).isInstanceOf(TimeoutRegexCharSequence.class);
-    }
+  @Test
+  void charSequence_SubSequence_ShouldInheritTimeoutBehavior() {
+    // Arrange
+    String input = "Short-lived sequence";
+    // Force a near immediate timeout without sleeping
+    int immediateTimeout = 1; // 1 milliseconds
+    var originalSequence = new TimeoutRegexCharSequence(input, immediateTimeout);
 
-    @Test
-    void charSequence_SubSequence_ShouldInheritTimeoutBehavior() {
-      // Arrange
-      String input = "Short-lived sequence";
-      // Force a near immediate timeout without sleeping
-      int immediateTimeout = 1; // 1 milliseconds
-      var originalSequence = new TimeoutRegexCharSequence(input, immediateTimeout);
+    // Act
+    CharSequence subSeg = originalSequence.subSequence(0, 5);
 
-      // Act
-      CharSequence subSeg = originalSequence.subSequence(0, 5);
-
-      // Assert
-      // The subsequence should also throw the exception because its deadline has passed
-      assertThatThrownBy(() -> subSeg.charAt(0))
-          .isInstanceOf(IllegalStateException.class)
-          .hasMessageContaining("RegEx matching timed out");
-    }
+    // Assert
+    // The subsequence should also throw the exception because its deadline has passed
+    assertThatThrownBy(() -> subSeg.charAt(0))
+        .isInstanceOf(IllegalStateException.class)
+        .hasMessageContaining("RegEx matching timed out");
   }
 }
