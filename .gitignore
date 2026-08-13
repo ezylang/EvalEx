@@ -14,6 +14,7 @@
 # Maven
 log/
 target/
+.flattened-pom.xml
 
 # Compiled class file
 *.class

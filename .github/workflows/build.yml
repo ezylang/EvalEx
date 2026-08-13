@@ -24,10 +24,14 @@ jobs:
           java-version: '11'
           distribution: 'corretto'
           cache: maven
-      - name: Verify and analyze with SonarCloud
+      - name: Verify build and consumer POM
         ## automatic analysis is enabled in SonarCloud, so it is disabled here
         ## run: mvn --batch-mode verify sonar:sonar -Dsonar.projectKey=ezylang_EvalEx -Dsonar.organization=ezylang -Dsonar.host.url=https://sonarcloud.io -Dsonar.coverage.jacoco.xmlReportPaths=/home/runner/work/EvalEx/EvalEx/target/site/jacoco/jacoco.xml
-        run: mvn --batch-mode clean verify
+        run: |
+          mvn --batch-mode clean verify
+          test -f .flattened-pom.xml
+          ! grep -Eq '<(build|profiles|properties)>' .flattened-pom.xml
+          ! grep -q '<scope>test</scope>' .flattened-pom.xml
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}

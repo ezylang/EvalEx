@@ -21,8 +21,13 @@ jobs:
           server-password: MAVEN_PASSWORD
           gpg-private-key: ${{ secrets.OSSRH_GPG_SECRET_KEY }}
           gpg-passphrase: MAVEN_GPG_PASSPHRASE
-      - name: build artifact
+      - name: Build artifact
         run: mvn --batch-mode clean package -Ppublish
+      - name: Verify consumer POM
+        run: |
+          test -f .flattened-pom.xml
+          ! grep -Eq '<(build|profiles|properties)>' .flattened-pom.xml
+          ! grep -q '<scope>test</scope>' .flattened-pom.xml
       - name: Create release
         uses: ncipollo/release-action@v1
         with:
