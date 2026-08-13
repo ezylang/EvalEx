@@ -244,15 +244,9 @@ public class Tokenizer {
       }
     }
     String tokenString = tokenValue.toString();
-    if (prefixOperatorAllowed() && operatorDictionary.hasPrefixOperator(tokenString)) {
-      OperatorIfc operator = operatorDictionary.getPrefixOperator(tokenString);
-      return new Token(tokenStartIndex, tokenString, TokenType.PREFIX_OPERATOR, operator);
-    } else if (postfixOperatorAllowed() && operatorDictionary.hasPostfixOperator(tokenString)) {
-      OperatorIfc operator = operatorDictionary.getPostfixOperator(tokenString);
-      return new Token(tokenStartIndex, tokenString, TokenType.POSTFIX_OPERATOR, operator);
-    } else if (operatorDictionary.hasInfixOperator(tokenString)) {
-      OperatorIfc operator = operatorDictionary.getInfixOperator(tokenString);
-      return new Token(tokenStartIndex, tokenString, TokenType.INFIX_OPERATOR, operator);
+    Token operatorToken = createOperatorToken(tokenStartIndex, tokenString);
+    if (operatorToken != null) {
+      return operatorToken;
     } else if (tokenString.equals(".") && configuration.isStructuresAllowed()) {
       return new Token(tokenStartIndex, tokenString, STRUCTURE_SEPARATOR);
     }
@@ -261,6 +255,52 @@ public class Tokenizer {
         tokenStartIndex + tokenString.length() - 1,
         tokenString,
         "Undefined operator '" + tokenString + "'");
+  }
+
+  private Token createOperatorToken(int tokenStartIndex, String tokenString) {
+    if (prefixOperatorAllowed() && operatorDictionary.hasPrefixOperator(tokenString)) {
+      OperatorIfc operator = operatorDictionary.getPrefixOperator(tokenString);
+      return new Token(tokenStartIndex, tokenString, TokenType.PREFIX_OPERATOR, operator);
+    }
+
+    if (postfixOperatorAllowed() && operatorDictionary.hasPostfixOperator(tokenString)) {
+      if (infixOperatorAllowed()
+          && operatorDictionary.hasInfixOperator(tokenString)
+          && nextTokenCanStartInfixOperand()) {
+        OperatorIfc operator = operatorDictionary.getInfixOperator(tokenString);
+        return new Token(tokenStartIndex, tokenString, TokenType.INFIX_OPERATOR, operator);
+      }
+      OperatorIfc operator = operatorDictionary.getPostfixOperator(tokenString);
+      return new Token(tokenStartIndex, tokenString, TokenType.POSTFIX_OPERATOR, operator);
+    }
+
+    if (operatorDictionary.hasInfixOperator(tokenString)) {
+      OperatorIfc operator = operatorDictionary.getInfixOperator(tokenString);
+      return new Token(tokenStartIndex, tokenString, TokenType.INFIX_OPERATOR, operator);
+    }
+
+    return null;
+  }
+
+  /**
+   * Checks an ambiguous postfix/infix operator by parsing the following token in the context of an
+   * expected right operand. The lookahead tokenizer uses the same lexical rules as the actual
+   * tokenizer and does not modify the current tokenizer state.
+   */
+  private boolean nextTokenCanStartInfixOperand() {
+    Tokenizer lookaheadTokenizer = new Tokenizer(expressionString, configuration);
+    lookaheadTokenizer.currentColumnIndex = currentColumnIndex;
+    lookaheadTokenizer.currentChar = currentChar;
+    lookaheadTokenizer.braceBalance = braceBalance;
+    lookaheadTokenizer.arrayBalance = arrayBalance;
+    lookaheadTokenizer.tokens.add(new Token(0, "", INFIX_OPERATOR));
+
+    try {
+      Token nextToken = lookaheadTokenizer.getNextToken();
+      return nextToken != null && !invalidTokenAfterInfixOperator(nextToken);
+    } catch (ParseException exception) {
+      return false;
+    }
   }
 
   private boolean arrayOpenOrStructureSeparatorNotAllowed() {
@@ -428,24 +468,9 @@ public class Tokenizer {
     }
     String tokenName = tokenValue.toString();
 
-    if (prefixOperatorAllowed() && operatorDictionary.hasPrefixOperator(tokenName)) {
-      return new Token(
-          tokenStartIndex,
-          tokenName,
-          TokenType.PREFIX_OPERATOR,
-          operatorDictionary.getPrefixOperator(tokenName));
-    } else if (postfixOperatorAllowed() && operatorDictionary.hasPostfixOperator(tokenName)) {
-      return new Token(
-          tokenStartIndex,
-          tokenName,
-          TokenType.POSTFIX_OPERATOR,
-          operatorDictionary.getPostfixOperator(tokenName));
-    } else if (operatorDictionary.hasInfixOperator(tokenName)) {
-      return new Token(
-          tokenStartIndex,
-          tokenName,
-          TokenType.INFIX_OPERATOR,
-          operatorDictionary.getInfixOperator(tokenName));
+    Token operatorToken = createOperatorToken(tokenStartIndex, tokenName);
+    if (operatorToken != null) {
+      return operatorToken;
     }
 
     skipBlanks();
