@@ -15,6 +15,8 @@
 */
 package com.ezylang.evalex.functions.trigonometric;
 
+import static java.util.Objects.requireNonNull;
+
 import com.ezylang.evalex.Expression;
 import com.ezylang.evalex.data.EvaluationValue;
 import com.ezylang.evalex.functions.AbstractFunction;
@@ -29,7 +31,7 @@ public class AsinHFunction extends AbstractFunction {
       Expression expression, Token functionToken, EvaluationValue... parameterValues) {
 
     /* Formula: asinh(x) = ln(x + sqrt(x^2 + 1)) */
-    double value = parameterValues[0].getNumberValue().doubleValue();
+    double value = requireNonNull(parameterValues[0].getNumberValue()).doubleValue();
     return expression.convertDoubleValue(Math.log(value + (Math.sqrt(Math.pow(value, 2) + 1))));
   }
 }

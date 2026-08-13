@@ -15,6 +15,8 @@
 */
 package com.ezylang.evalex.functions.trigonometric;
 
+import static java.util.Objects.requireNonNull;
+
 import com.ezylang.evalex.EvaluationException;
 import com.ezylang.evalex.Expression;
 import com.ezylang.evalex.data.EvaluationValue;
@@ -31,7 +33,7 @@ public class AcosHFunction extends AbstractFunction {
       throws EvaluationException {
 
     /* Formula: acosh(x) = ln(x + sqrt(x^2 - 1)) */
-    double value = parameterValues[0].getNumberValue().doubleValue();
+    double value = requireNonNull(parameterValues[0].getNumberValue()).doubleValue();
     if (Double.compare(value, 1) < 0) {
       throw new EvaluationException(functionToken, "Value must be greater or equal to one");
     }

@@ -15,6 +15,8 @@
 */
 package com.ezylang.evalex.functions.basic;
 
+import static java.util.Objects.requireNonNull;
+
 import com.ezylang.evalex.EvaluationException;
 import com.ezylang.evalex.Expression;
 import com.ezylang.evalex.data.EvaluationValue;
@@ -31,7 +33,7 @@ public class FactFunction extends AbstractFunction {
   public EvaluationValue evaluate(
       Expression expression, Token functionToken, EvaluationValue... parameterValues)
       throws EvaluationException {
-    int number = parameterValues[0].getNumberValue().intValue();
+    int number = requireNonNull(parameterValues[0].getNumberValue()).intValue();
 
     int maxRecursionDepth = expression.getConfiguration().getMaxRecursionDepth();
     if (number > maxRecursionDepth) {

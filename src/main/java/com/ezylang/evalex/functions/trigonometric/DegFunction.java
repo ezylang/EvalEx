@@ -15,6 +15,8 @@
 */
 package com.ezylang.evalex.functions.trigonometric;
 
+import static java.util.Objects.requireNonNull;
+
 import com.ezylang.evalex.Expression;
 import com.ezylang.evalex.data.EvaluationValue;
 import com.ezylang.evalex.functions.AbstractFunction;
@@ -30,7 +32,7 @@ public class DegFunction extends AbstractFunction {
   public EvaluationValue evaluate(
       Expression expression, Token functionToken, EvaluationValue... parameterValues) {
 
-    double rad = Math.toDegrees(parameterValues[0].getNumberValue().doubleValue());
+    double rad = Math.toDegrees(requireNonNull(parameterValues[0].getNumberValue()).doubleValue());
 
     return expression.convertDoubleValue(rad);
   }

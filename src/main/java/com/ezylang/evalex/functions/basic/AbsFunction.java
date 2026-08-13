@@ -15,6 +15,8 @@
 */
 package com.ezylang.evalex.functions.basic;
 
+import static java.util.Objects.requireNonNull;
+
 import com.ezylang.evalex.Expression;
 import com.ezylang.evalex.data.EvaluationValue;
 import com.ezylang.evalex.functions.AbstractFunction;
@@ -30,6 +32,7 @@ public class AbsFunction extends AbstractFunction {
       Expression expression, Token functionToken, EvaluationValue... parameterValues) {
 
     return expression.convertValue(
-        parameterValues[0].getNumberValue().abs(expression.getConfiguration().getMathContext()));
+        requireNonNull(parameterValues[0].getNumberValue())
+            .abs(expression.getConfiguration().getMathContext()));
   }
 }

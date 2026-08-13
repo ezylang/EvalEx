@@ -17,6 +17,7 @@ package com.ezylang.evalex.functions.trigonometric;
 
 import static java.math.BigDecimal.ONE;
 import static java.math.BigDecimal.valueOf;
+import static java.util.Objects.requireNonNull;
 
 import com.ezylang.evalex.EvaluationException;
 import com.ezylang.evalex.Expression;
@@ -37,7 +38,7 @@ public class AsinRFunction extends AbstractFunction {
       Expression expression, Token functionToken, EvaluationValue... parameterValues)
       throws EvaluationException {
 
-    BigDecimal parameterValue = parameterValues[0].getNumberValue();
+    BigDecimal parameterValue = requireNonNull(parameterValues[0].getNumberValue());
 
     if (parameterValue.compareTo(ONE) > 0) {
       throw new EvaluationException(
@@ -47,7 +48,6 @@ public class AsinRFunction extends AbstractFunction {
       throw new EvaluationException(
           functionToken, "Illegal asinr(x) for x < -1: x = " + parameterValue);
     }
-    return expression.convertDoubleValue(
-        Math.asin(parameterValues[0].getNumberValue().doubleValue()));
+    return expression.convertDoubleValue(Math.asin(parameterValue.doubleValue()));
   }
 }

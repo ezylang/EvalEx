@@ -15,6 +15,8 @@
 */
 package com.ezylang.evalex.functions.trigonometric;
 
+import static java.util.Objects.requireNonNull;
+
 import com.ezylang.evalex.Expression;
 import com.ezylang.evalex.data.EvaluationValue;
 import com.ezylang.evalex.functions.AbstractFunction;
@@ -30,6 +32,8 @@ public class CscFunction extends AbstractFunction {
 
     /* Formula: csc(x) = 1 / sin(x) */
     return expression.convertDoubleValue(
-        1 / Math.sin(Math.toRadians(parameterValues[0].getNumberValue().doubleValue())));
+        1
+            / Math.sin(
+                Math.toRadians(requireNonNull(parameterValues[0].getNumberValue()).doubleValue())));
   }
 }

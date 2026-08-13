@@ -15,6 +15,8 @@
 */
 package com.ezylang.evalex.functions.string;
 
+import static java.util.Objects.requireNonNull;
+
 import com.ezylang.evalex.Expression;
 import com.ezylang.evalex.data.EvaluationValue;
 import com.ezylang.evalex.functions.AbstractFunction;
@@ -27,6 +29,7 @@ public class StringUpperFunction extends AbstractFunction {
   @Override
   public EvaluationValue evaluate(
       Expression expression, Token functionToken, EvaluationValue... parameterValues) {
-    return expression.convertValue(parameterValues[0].getStringValue().toUpperCase());
+    return expression.convertValue(
+        requireNonNull(parameterValues[0].getStringValue()).toUpperCase());
   }
 }

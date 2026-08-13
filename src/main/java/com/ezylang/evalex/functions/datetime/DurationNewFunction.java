@@ -15,6 +15,8 @@
 */
 package com.ezylang.evalex.functions.datetime;
 
+import static java.util.Objects.requireNonNull;
+
 import com.ezylang.evalex.Expression;
 import com.ezylang.evalex.data.EvaluationValue;
 import com.ezylang.evalex.functions.AbstractFunction;
@@ -36,12 +38,17 @@ public class DurationNewFunction extends AbstractFunction {
 
     int parameterLength = parameterValues.length;
 
-    int days = parameterValues[0].getNumberValue().intValue();
-    int hours = parameterLength >= 2 ? parameterValues[1].getNumberValue().intValue() : 0;
-    int minutes = parameterLength >= 3 ? parameterValues[2].getNumberValue().intValue() : 0;
-    int seconds = parameterLength >= 4 ? parameterValues[3].getNumberValue().intValue() : 0;
-    int millis = parameterLength >= 5 ? parameterValues[4].getNumberValue().intValue() : 0;
-    int nanos = parameterLength == 6 ? parameterValues[5].getNumberValue().intValue() : 0;
+    int days = requireNonNull(parameterValues[0].getNumberValue()).intValue();
+    int hours =
+        parameterLength >= 2 ? requireNonNull(parameterValues[1].getNumberValue()).intValue() : 0;
+    int minutes =
+        parameterLength >= 3 ? requireNonNull(parameterValues[2].getNumberValue()).intValue() : 0;
+    int seconds =
+        parameterLength >= 4 ? requireNonNull(parameterValues[3].getNumberValue()).intValue() : 0;
+    int millis =
+        parameterLength >= 5 ? requireNonNull(parameterValues[4].getNumberValue()).intValue() : 0;
+    int nanos =
+        parameterLength == 6 ? requireNonNull(parameterValues[5].getNumberValue()).intValue() : 0;
 
     Duration duration =
         Duration.ofDays(days)

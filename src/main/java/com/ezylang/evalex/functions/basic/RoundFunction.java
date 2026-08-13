@@ -15,6 +15,8 @@
 */
 package com.ezylang.evalex.functions.basic;
 
+import static java.util.Objects.requireNonNull;
+
 import com.ezylang.evalex.Expression;
 import com.ezylang.evalex.data.EvaluationValue;
 import com.ezylang.evalex.functions.AbstractFunction;
@@ -36,10 +38,9 @@ public class RoundFunction extends AbstractFunction {
     EvaluationValue precision = parameterValues[1];
 
     return expression.convertValue(
-        value
-            .getNumberValue()
+        requireNonNull(value.getNumberValue())
             .setScale(
-                precision.getNumberValue().intValue(),
+                requireNonNull(precision.getNumberValue()).intValue(),
                 expression.getConfiguration().getMathContext().getRoundingMode()));
   }
 }

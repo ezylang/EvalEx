@@ -15,6 +15,8 @@
 */
 package com.ezylang.evalex.functions.basic;
 
+import static java.util.Objects.requireNonNull;
+
 import com.ezylang.evalex.Expression;
 import com.ezylang.evalex.data.EvaluationValue;
 import com.ezylang.evalex.functions.AbstractFunction;
@@ -40,7 +42,7 @@ public class SqrtFunction extends AbstractFunction {
      * (Ronald Mak, 2002)
      */
 
-    BigDecimal x = parameterValues[0].getNumberValue();
+    BigDecimal x = requireNonNull(parameterValues[0].getNumberValue());
     MathContext mathContext = expression.getConfiguration().getMathContext();
 
     if (x.compareTo(BigDecimal.ZERO) == 0) {

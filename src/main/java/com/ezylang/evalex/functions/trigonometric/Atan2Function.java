@@ -15,6 +15,8 @@
 */
 package com.ezylang.evalex.functions.trigonometric;
 
+import static java.util.Objects.requireNonNull;
+
 import com.ezylang.evalex.Expression;
 import com.ezylang.evalex.data.EvaluationValue;
 import com.ezylang.evalex.functions.AbstractFunction;
@@ -32,7 +34,7 @@ public class Atan2Function extends AbstractFunction {
     return expression.convertDoubleValue(
         Math.toDegrees(
             Math.atan2(
-                parameterValues[0].getNumberValue().doubleValue(),
-                parameterValues[1].getNumberValue().doubleValue())));
+                requireNonNull(parameterValues[0].getNumberValue()).doubleValue(),
+                requireNonNull(parameterValues[1].getNumberValue()).doubleValue())));
   }
 }

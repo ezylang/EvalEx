@@ -15,6 +15,8 @@
 */
 package com.ezylang.evalex.functions.string;
 
+import static java.util.Objects.requireNonNull;
+
 import com.ezylang.evalex.Expression;
 import com.ezylang.evalex.data.EvaluationValue;
 import com.ezylang.evalex.functions.AbstractFunction;
@@ -32,8 +34,8 @@ public class StringStartsWithFunction extends AbstractFunction {
   @Override
   public EvaluationValue evaluate(
       Expression expression, Token functionToken, EvaluationValue... parameterValues) {
-    String string = parameterValues[0].getStringValue();
-    String substring = parameterValues[1].getStringValue();
+    String string = requireNonNull(parameterValues[0].getStringValue());
+    String substring = requireNonNull(parameterValues[1].getStringValue());
     return expression.convertValue(string.startsWith(substring));
   }
 }

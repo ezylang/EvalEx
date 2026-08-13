@@ -16,6 +16,7 @@
 package com.ezylang.evalex.functions.trigonometric;
 
 import static java.math.BigDecimal.ONE;
+import static java.util.Objects.requireNonNull;
 
 import com.ezylang.evalex.EvaluationException;
 import com.ezylang.evalex.Expression;
@@ -33,7 +34,7 @@ public class AcosRFunction extends AbstractFunction {
       Expression expression, Token functionToken, EvaluationValue... parameterValues)
       throws EvaluationException {
 
-    BigDecimal parameterValue = parameterValues[0].getNumberValue();
+    BigDecimal parameterValue = requireNonNull(parameterValues[0].getNumberValue());
 
     if (parameterValue.compareTo(ONE) > 0) {
       throw new EvaluationException(

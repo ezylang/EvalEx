@@ -15,6 +15,8 @@
 */
 package com.ezylang.evalex.functions.datetime;
 
+import static java.util.Objects.requireNonNull;
+
 import com.ezylang.evalex.EvaluationException;
 import com.ezylang.evalex.Expression;
 import com.ezylang.evalex.data.EvaluationValue;
@@ -46,7 +48,7 @@ public class DateTimeNewFunction extends AbstractFunction {
     int parameterLength = parameterValues.length;
 
     if (parameterLength == 1) {
-      BigDecimal millis = parameterValues[0].getNumberValue();
+      BigDecimal millis = requireNonNull(parameterValues[0].getNumberValue());
       return expression.convertValue(Instant.ofEpochMilli(millis.longValue()));
     }
 
@@ -58,13 +60,17 @@ public class DateTimeNewFunction extends AbstractFunction {
       parameterLength--;
     }
 
-    int year = parameterValues[0].getNumberValue().intValue();
-    int month = parameterValues[1].getNumberValue().intValue();
-    int day = parameterValues[2].getNumberValue().intValue();
-    int hour = parameterLength >= 4 ? parameterValues[3].getNumberValue().intValue() : 0;
-    int minute = parameterLength >= 5 ? parameterValues[4].getNumberValue().intValue() : 0;
-    int second = parameterLength >= 6 ? parameterValues[5].getNumberValue().intValue() : 0;
-    int nanoOfs = parameterLength == 7 ? parameterValues[6].getNumberValue().intValue() : 0;
+    int year = requireNonNull(parameterValues[0].getNumberValue()).intValue();
+    int month = requireNonNull(parameterValues[1].getNumberValue()).intValue();
+    int day = requireNonNull(parameterValues[2].getNumberValue()).intValue();
+    int hour =
+        parameterLength >= 4 ? requireNonNull(parameterValues[3].getNumberValue()).intValue() : 0;
+    int minute =
+        parameterLength >= 5 ? requireNonNull(parameterValues[4].getNumberValue()).intValue() : 0;
+    int second =
+        parameterLength >= 6 ? requireNonNull(parameterValues[5].getNumberValue()).intValue() : 0;
+    int nanoOfs =
+        parameterLength == 7 ? requireNonNull(parameterValues[6].getNumberValue()).intValue() : 0;
 
     return expression.convertValue(
         LocalDateTime.of(year, month, day, hour, minute, second, nanoOfs)

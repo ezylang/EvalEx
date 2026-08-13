@@ -15,6 +15,8 @@
 */
 package com.ezylang.evalex.functions.basic;
 
+import static java.util.Objects.requireNonNull;
+
 import com.ezylang.evalex.Expression;
 import com.ezylang.evalex.data.EvaluationValue;
 import com.ezylang.evalex.functions.AbstractFunction;
@@ -31,6 +33,7 @@ public class FloorFunction extends AbstractFunction {
 
     EvaluationValue value = parameterValues[0];
 
-    return expression.convertValue(value.getNumberValue().setScale(0, RoundingMode.FLOOR));
+    return expression.convertValue(
+        requireNonNull(value.getNumberValue()).setScale(0, RoundingMode.FLOOR));
   }
 }

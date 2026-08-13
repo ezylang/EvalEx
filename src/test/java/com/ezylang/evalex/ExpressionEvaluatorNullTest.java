@@ -22,6 +22,8 @@ import com.ezylang.evalex.parser.ParseException;
 import java.util.HashMap;
 import java.util.Map;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 
 class ExpressionEvaluatorNullTest extends BaseExpressionEvaluatorTest {
 
@@ -83,6 +85,14 @@ class ExpressionEvaluatorNullTest extends BaseExpressionEvaluatorTest {
 
     Expression expression3 = createExpression("a > 5").with("a", null);
     assertThatThrownBy(expression3::evaluate).isInstanceOf(NullPointerException.class);
+  }
+
+  @ParameterizedTest
+  @ValueSource(
+      strings = {"ABS(null)", "STR_LENGTH(null)", "DT_DURATION_FROM_MILLIS(null)", "SIN(null)"})
+  void testFunctionsRejectNullValues(String expressionString) {
+    assertThatThrownBy(() -> createExpression(expressionString).evaluate())
+        .isInstanceOf(NullPointerException.class);
   }
 
   private void assertExpressionHasExpectedResult(Expression expression, String expectedResult)

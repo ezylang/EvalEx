@@ -15,6 +15,8 @@
 */
 package com.ezylang.evalex.data;
 
+import static java.util.Objects.requireNonNull;
+
 import com.ezylang.evalex.config.ExpressionConfiguration;
 import com.ezylang.evalex.parser.ASTNode;
 import java.math.BigDecimal;
@@ -411,7 +413,7 @@ public class EvaluationValue implements Comparable<EvaluationValue> {
   public Boolean getBooleanValue() {
     switch (getDataType()) {
       case NUMBER:
-        return getNumberValue().compareTo(BigDecimal.ZERO) != 0;
+        return requireNonNull(getNumberValue()).compareTo(BigDecimal.ZERO) != 0;
       case BOOLEAN:
         return (Boolean) value;
       case STRING:
@@ -531,7 +533,8 @@ public class EvaluationValue implements Comparable<EvaluationValue> {
   public int compareTo(EvaluationValue toCompare) {
     switch (getDataType()) {
       case NUMBER:
-        return getNumberValue().compareTo(toCompare.getNumberValue());
+        return requireNonNull(getNumberValue())
+            .compareTo(requireNonNull(toCompare.getNumberValue()));
       case BOOLEAN:
         return getBooleanValue().compareTo(toCompare.getBooleanValue());
       case NULL:
@@ -543,7 +546,8 @@ public class EvaluationValue implements Comparable<EvaluationValue> {
       case UNDEFINED:
         throw new NullPointerException("Can not compare an undefined value");
       default:
-        return getStringValue().compareTo(toCompare.getStringValue());
+        return requireNonNull(getStringValue())
+            .compareTo(requireNonNull(toCompare.getStringValue()));
     }
   }
 }

@@ -15,6 +15,8 @@
 */
 package com.ezylang.evalex.functions.string;
 
+import static java.util.Objects.requireNonNull;
+
 import com.ezylang.evalex.EvaluationException;
 import com.ezylang.evalex.Expression;
 import com.ezylang.evalex.data.EvaluationValue;
@@ -45,8 +47,8 @@ public class StringSplitFunction extends AbstractFunction {
   public EvaluationValue evaluate(
       Expression expression, Token functionToken, EvaluationValue... parameterValues)
       throws EvaluationException {
-    String string = parameterValues[0].getStringValue();
-    String separator = parameterValues[1].getStringValue();
+    String string = requireNonNull(parameterValues[0].getStringValue());
+    String separator = requireNonNull(parameterValues[1].getStringValue());
     return expression.convertValue(string.split(Pattern.quote(separator)));
   }
 }

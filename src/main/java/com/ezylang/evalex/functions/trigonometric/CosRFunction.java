@@ -15,6 +15,8 @@
 */
 package com.ezylang.evalex.functions.trigonometric;
 
+import static java.util.Objects.requireNonNull;
+
 import com.ezylang.evalex.Expression;
 import com.ezylang.evalex.data.EvaluationValue;
 import com.ezylang.evalex.functions.AbstractFunction;
@@ -29,6 +31,6 @@ public class CosRFunction extends AbstractFunction {
       Expression expression, Token functionToken, EvaluationValue... parameterValues) {
 
     return expression.convertDoubleValue(
-        Math.cos(parameterValues[0].getNumberValue().doubleValue()));
+        Math.cos(requireNonNull(parameterValues[0].getNumberValue()).doubleValue()));
   }
 }

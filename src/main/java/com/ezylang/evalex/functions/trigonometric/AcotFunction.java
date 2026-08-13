@@ -15,6 +15,8 @@
 */
 package com.ezylang.evalex.functions.trigonometric;
 
+import static java.util.Objects.requireNonNull;
+
 import com.ezylang.evalex.Expression;
 import com.ezylang.evalex.data.EvaluationValue;
 import com.ezylang.evalex.functions.AbstractFunction;
@@ -31,6 +33,7 @@ public class AcotFunction extends AbstractFunction {
     /* Formula: acot(x) = (pi / 2) - atan(x) */
     return expression.convertDoubleValue(
         Math.toDegrees(
-            (Math.PI / 2) - Math.atan(parameterValues[0].getNumberValue().doubleValue())));
+            (Math.PI / 2)
+                - Math.atan(requireNonNull(parameterValues[0].getNumberValue()).doubleValue())));
   }
 }

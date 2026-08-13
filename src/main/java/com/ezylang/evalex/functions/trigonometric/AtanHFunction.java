@@ -15,6 +15,8 @@
 */
 package com.ezylang.evalex.functions.trigonometric;
 
+import static java.util.Objects.requireNonNull;
+
 import com.ezylang.evalex.EvaluationException;
 import com.ezylang.evalex.Expression;
 import com.ezylang.evalex.data.EvaluationValue;
@@ -31,7 +33,7 @@ public class AtanHFunction extends AbstractFunction {
       throws EvaluationException {
 
     /* Formula: atanh(x) = 0.5*ln((1 + x)/(1 - x)) */
-    double value = parameterValues[0].getNumberValue().doubleValue();
+    double value = requireNonNull(parameterValues[0].getNumberValue()).doubleValue();
     if (Math.abs(value) >= 1) {
       throw new EvaluationException(functionToken, "Absolute value must be less than 1");
     }

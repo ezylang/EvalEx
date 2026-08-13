@@ -15,6 +15,8 @@
 */
 package com.ezylang.evalex.functions.trigonometric;
 
+import static java.util.Objects.requireNonNull;
+
 import com.ezylang.evalex.Expression;
 import com.ezylang.evalex.data.EvaluationValue;
 import com.ezylang.evalex.functions.AbstractFunction;
@@ -30,6 +32,6 @@ public class SecHFunction extends AbstractFunction {
 
     /* Formula: sech(x) = 1 / cosh(x) */
     return expression.convertDoubleValue(
-        1 / Math.cosh(parameterValues[0].getNumberValue().doubleValue()));
+        1 / Math.cosh(requireNonNull(parameterValues[0].getNumberValue()).doubleValue()));
   }
 }

@@ -15,6 +15,8 @@
 */
 package com.ezylang.evalex.functions.string;
 
+import static java.util.Objects.requireNonNull;
+
 import com.ezylang.evalex.EvaluationException;
 import com.ezylang.evalex.Expression;
 import com.ezylang.evalex.data.EvaluationValue;
@@ -36,8 +38,8 @@ public class StringSubstringFunction extends AbstractFunction {
       throws EvaluationException {
     super.validatePreEvaluation(token, parameterValues);
     if (parameterValues.length > 2
-        && parameterValues[2].getNumberValue().intValue()
-            < parameterValues[1].getNumberValue().intValue()) {
+        && requireNonNull(parameterValues[2].getNumberValue()).intValue()
+            < requireNonNull(parameterValues[1].getNumberValue()).intValue()) {
       throw new EvaluationException(
           token, "End index must be greater than or equal to start index");
     }
@@ -47,11 +49,11 @@ public class StringSubstringFunction extends AbstractFunction {
   public EvaluationValue evaluate(
       Expression expression, Token functionToken, EvaluationValue... parameterValues)
       throws EvaluationException {
-    String string = parameterValues[0].getStringValue();
-    int start = parameterValues[1].getNumberValue().intValue();
+    String string = requireNonNull(parameterValues[0].getStringValue());
+    int start = requireNonNull(parameterValues[1].getNumberValue()).intValue();
     String result;
     if (parameterValues.length > 2) {
-      int end = parameterValues[2].getNumberValue().intValue();
+      int end = requireNonNull(parameterValues[2].getNumberValue()).intValue();
       int length = string.length();
       int finalEnd = Math.min(end, length);
       result = string.substring(start, finalEnd);
