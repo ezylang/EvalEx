@@ -80,6 +80,28 @@ public class Expression {
   }
 
   /**
+   * Creates an Expression from a pre-parsed AST. Package-private — used by {@link
+   * PreparedExpression} to create bound expressions without re-parsing.
+   *
+   * @param expressionString the original expression string
+   * @param configuration the expression configuration
+   * @param abstractSyntaxTree the pre-parsed AST root node (must not be null)
+   * @param dataAccessor the data accessor for variable resolution during evaluation
+   * @since 3.8.0
+   */
+  Expression(
+      String expressionString,
+      ExpressionConfiguration configuration,
+      ASTNode abstractSyntaxTree,
+      DataAccessorIfc dataAccessor) {
+    this.expressionString = expressionString;
+    this.configuration = configuration;
+    this.abstractSyntaxTree = abstractSyntaxTree;
+    this.dataAccessor = dataAccessor;
+    this.constants.putAll(configuration.getDefaultConstants());
+  }
+
+  /**
    * Evaluates the expression by parsing it (if not done before) and the evaluating it.
    *
    * @return The evaluation result value.
