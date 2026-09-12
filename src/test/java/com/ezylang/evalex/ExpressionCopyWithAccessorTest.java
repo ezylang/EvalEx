@@ -108,15 +108,19 @@ class ExpressionCopyWithAccessorTest {
 
   @Test
   void testConstantsMapIsolationBetweenCopies() throws BaseException {
-    Expression source = new Expression("x + y");
+    ExpressionConfiguration config =
+        ExpressionConfiguration.defaultConfiguration().toBuilder()
+            .allowOverwriteConstants(true)
+            .build();
+    Expression source = new Expression("PI", config);
 
-    Expression copy1 = source.copy(accessor("x", 1, "y", 1));
-    Expression copy2 = source.copy(accessor("x", 100, "y", 100));
+    Expression copy1 = source.copy(new MapBasedDataAccessor());
+    Expression copy2 = source.copy(new MapBasedDataAccessor());
 
-    // Mutating constants on one copy (as with()/withValues() do) must not affect the other
-    copy1.with("x", new BigDecimal("999"));
+    copy1.with("PI", new BigDecimal("999"));
 
-    assertThat(copy2.evaluate().getNumberValue()).isEqualByComparingTo("200");
+    assertThat(copy1.evaluate().getNumberValue()).isEqualByComparingTo("999");
+    assertThat(copy2.evaluate()).isEqualTo(config.getDefaultConstants().get("PI"));
   }
 
   @Test

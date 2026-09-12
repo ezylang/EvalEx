@@ -88,7 +88,7 @@ public class Expression {
    * @param dataAccessor the data accessor for variable resolution during evaluation
    * @since 3.8.0
    */
-  Expression(
+  private Expression(
       String expressionString,
       ExpressionConfiguration configuration,
       ASTNode abstractSyntaxTree,
@@ -400,9 +400,10 @@ public class Expression {
    * <p>This enables the parse-once, evaluate-many pattern where the same AST can be evaluated
    * repeatedly against different variable sources without re-parsing.
    *
-   * <p>Each returned copy will receive a new, dedicated constants map, so calls to {@link
-   * #with(String, Object)} or {@link #withValues(java.util.Map)} on one {@code Expression} do not
-   * affect any other.
+   * <p>Each returned copy receives a new constants map. Changes to constants in one copy do not
+   * affect another copy. The supplied data accessor is used directly. If the same accessor is
+   * supplied to multiple copies, changes made through {@link #with(String, Object)} or {@link
+   * #withValues(java.util.Map)} are visible to all of them.
    *
    * <p>Note: This operation triggers expression validation, if not already done, to guarantee the
    * AST is parsed at the original instance.
