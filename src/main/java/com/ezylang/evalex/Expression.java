@@ -80,11 +80,10 @@ public class Expression {
   }
 
   /**
-   * Creates an Expression from a pre-parsed AST. Package-private — used by {@link
-   * PreparedExpression} to create bound expressions without re-parsing.
+   * Creates an Expression from a pre-parsed AST for use with a different data accessor.
    *
    * @param expressionString the original expression string
-   * @param configuration the expression configuration
+   * @param configuration the original expression configuration
    * @param abstractSyntaxTree the pre-parsed AST root node (must not be null)
    * @param dataAccessor the data accessor for variable resolution during evaluation
    * @since 3.8.0
@@ -392,6 +391,30 @@ public class Expression {
    */
   public Expression copy() throws ParseException {
     return new Expression(this);
+  }
+
+  /**
+   * Creates a copy of this expression that reuses the abstract syntax tree and binds the given data
+   * accessor for variable resolution.
+   *
+   * <p>This enables the parse-once, evaluate-many pattern where the same AST can be evaluated
+   * repeatedly against different variable sources without re-parsing.
+   *
+   * <p>Each returned copy will receive a new, dedicated constants map, so calls to {@link
+   * #with(String, Object)} or {@link #withValues(java.util.Map)} on one {@code Expression} do not
+   * affect any other.
+   *
+   * <p>Note: This operation triggers expression validation, if not already done, to guarantee the
+   * AST is parsed at the original instance.
+   *
+   * @param dataAccessor the data accessor to be used by the new {@link Expression}
+   * @return a new {@link Expression} sharing this expression's AST, bound to {@code dataAccessor}
+   * @throws ParseException if the source expression had not been parsed yet and parsing fails
+   * @since 3.8.0
+   */
+  public Expression copy(DataAccessorIfc dataAccessor) throws ParseException {
+    return new Expression(
+        this.expressionString, this.configuration, getAbstractSyntaxTree(), dataAccessor);
   }
 
   /**
