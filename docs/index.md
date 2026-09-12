@@ -110,6 +110,15 @@ System.out.println(result.getNumberValue()); // prints 3
 System.out.println(copiedResult.getNumberValue()); // prints 7
 ```
 
+An expression can also be copied with a specific data accessor:
+
+```java
+Expression expression = new Expression("price * quantity", configuration);
+expression.validate();
+
+EvaluationValue result = expression.copy(orderDataAccessor).evaluate();
+```
+
 ### Values can be passed in a map
 
 Instead of specifying the variable values one  by one, they can be set by defining a map with names and values and then
