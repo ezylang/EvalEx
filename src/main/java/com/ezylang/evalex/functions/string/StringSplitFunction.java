@@ -17,7 +17,6 @@ package com.ezylang.evalex.functions.string;
 
 import static java.util.Objects.requireNonNull;
 
-import com.ezylang.evalex.EvaluationException;
 import com.ezylang.evalex.Expression;
 import com.ezylang.evalex.data.EvaluationValue;
 import com.ezylang.evalex.functions.AbstractFunction;
@@ -26,14 +25,12 @@ import com.ezylang.evalex.parser.Token;
 import java.util.regex.Pattern;
 
 /**
- * A function that splits a string into an array, separators specified.
+ * A function that splits a string into an array using the specified separator.
  *
  * <p>For example:
  *
- * <p>
- *
  * <pre>
- * STR_SPLIT("2024/07/15", "/")  = ["2024", "07", "15"]
+ * STR_SPLIT("2024/07/15", "/") = ["2024", "07", "15"]
  * STR_SPLIT("myFile.json", ".") = ["myFile", "json"]
  * </pre>
  *
@@ -45,10 +42,10 @@ public class StringSplitFunction extends AbstractFunction {
 
   @Override
   public EvaluationValue evaluate(
-      Expression expression, Token functionToken, EvaluationValue... parameterValues)
-      throws EvaluationException {
+          Expression expression, Token functionToken, EvaluationValue... parameterValues) {
     String string = requireNonNull(parameterValues[0].getStringValue());
     String separator = requireNonNull(parameterValues[1].getStringValue());
+
     return expression.convertValue(string.split(Pattern.quote(separator)));
   }
 }
