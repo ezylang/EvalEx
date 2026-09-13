@@ -146,17 +146,6 @@ public class EvaluationValue implements Comparable<EvaluationValue> {
   }
 
   /**
-   * Returns an immutable null value.
-   *
-   * @return A null value.
-   * @deprecated Use {@link EvaluationValue#NULL_VALUE} instead
-   */
-  @Deprecated(since = "3.3.0", forRemoval = true)
-  public static EvaluationValue nullValue() {
-    return NULL_VALUE;
-  }
-
-  /**
    * Creates a new number value.
    *
    * @param value The BigDecimal value to use.
