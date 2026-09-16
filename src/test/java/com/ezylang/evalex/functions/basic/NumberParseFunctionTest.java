@@ -114,7 +114,9 @@ class NumberParseFunctionTest extends BaseEvaluationTest {
   @Test
   void testToNumberThrowsExceptionOnTooManyParams() {
     Expression expression =
-        new Expression("NUMBER_PARSE(\"1\", null, \"pt-BR\", true)", TestConfigurationProvider.ChicagoConfiguration);
+        new Expression(
+            "NUMBER_PARSE(\"1\", null, \"pt-BR\", true)",
+            TestConfigurationProvider.ChicagoConfiguration);
 
     assertThatThrownBy(expression::evaluate)
         .isInstanceOf(EvaluationException.class)

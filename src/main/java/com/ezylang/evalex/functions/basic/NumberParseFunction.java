@@ -96,7 +96,12 @@ public class NumberParseFunction extends AbstractFunction {
       Expression expression, Token functionToken, EvaluationValue... parameterValues)
       throws EvaluationException {
 
-    String string = parameterValues[0].getStringValue().trim();
+    EvaluationValue string = parameterValues[0];
+    if (string.isNullValue()) {
+      throw new EvaluationException(functionToken, "The input string cannot be null");
+    }
+
+    String sanitized = string.getStringValue().trim();
 
     // Retrieve the official MathContext from the EvalEx expression configuration
     MathContext mathContext = expression.getConfiguration().getMathContext();
@@ -111,13 +116,13 @@ public class NumberParseFunction extends AbstractFunction {
       if (parameterValues.length > 1 && !parameterValues[1].isNullValue()) {
         String pattern = parameterValues[1].getStringValue().trim();
         DecimalFormat decimalFormat = getDecimalFormat(locale, pattern);
-        BigDecimal rawNumber = (BigDecimal) decimalFormat.parse(string);
+        BigDecimal rawNumber = (BigDecimal) decimalFormat.parse(sanitized);
 
         // Align the newly parsed number with the global MathContext rules
         parsedNumber = rawNumber.round(mathContext);
       } else {
         // Direct fallback: parse raw unformatted text utilizing the MathContext on creation
-        parsedNumber = new BigDecimal(string, mathContext);
+        parsedNumber = new BigDecimal(sanitized, mathContext);
       }
 
       return EvaluationValue.numberValue(parsedNumber);
@@ -125,11 +130,11 @@ public class NumberParseFunction extends AbstractFunction {
     } catch (ParseException e) {
       throw new EvaluationException(
           functionToken,
-          String.format("Value '%s' does not match the specified format pattern.", string));
+          String.format("Value '%s' does not match the specified format pattern.", sanitized));
     } catch (NumberFormatException e) {
       throw new EvaluationException(
           functionToken,
-          String.format("Value '%s' cannot be safely parsed into a valid number.", string));
+          String.format("Value '%s' cannot be safely parsed into a valid number.", sanitized));
     }
   }
 
@@ -149,17 +154,13 @@ public class NumberParseFunction extends AbstractFunction {
     decimalFormat.setParseBigDecimal(true);
     return decimalFormat;
   }
-  
+
   @Override
   public void validatePreEvaluation(Token token, EvaluationValue... parameterValues)
       throws EvaluationException {
     super.validatePreEvaluation(token, parameterValues);
     if (parameterValues.length > 3) {
       throw new EvaluationException(token, "Too many parameters");
-    }
-    if (parameterValues[0].isNullValue()) {
-      throw new EvaluationException(
-          token, "The input string cannot be null");
     }
   }
 }
