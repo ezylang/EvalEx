@@ -65,7 +65,7 @@ class InfixLessEqualsOperatorTest extends BaseEvaluationTest {
     Expression expression =
         new Expression("a<=b", TestConfigurationProvider.StandardConfigurationLenient);
 
-    assertThatThrownBy(() -> expression.evaluate())
+    assertThatThrownBy(expression::evaluate)
         .isInstanceOf(NullPointerException.class)
         .hasMessage("Can not compare an undefined value");
 
