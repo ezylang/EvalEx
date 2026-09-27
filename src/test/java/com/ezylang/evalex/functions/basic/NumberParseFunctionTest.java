@@ -62,8 +62,13 @@ class NumberParseFunctionTest extends BaseEvaluationTest {
         // --- Bypassing Format Position Using NULL ---
         "NUMBER_PARSE(\"456.78\", null, \"fr-FR\") | 456.78",
 
-        // --- The pattern itself does not round the parsed value
-        " NUMBER_PARSE(\"1.234567\", \"###.000\") | 1.234567"
+        // --- The pattern itself does not round the parsed value ---
+        " NUMBER_PARSE(\"1.234567\", \"###.000\") | 1.234567",
+
+        // --- Partial matching scenarios---
+        "NUMBER_PARSE(\"42 items\", \"0\") | 42",
+        "NUMBER_PARSE(\"$1,234.56 extra\", \"$#,##0.00\", \"en-US\") | 1234.56",
+        "NUMBER_PARSE(\"-99.9% loss\", \"0.0%\", \"en-US\") | -0.999",
       })
   void testToNumberSuccessScenarios(String expression, String expectedResult)
       throws EvaluationException, ParseException {
@@ -98,25 +103,6 @@ class NumberParseFunctionTest extends BaseEvaluationTest {
     assertThatThrownBy(() -> new Expression(expression).evaluate())
         .isInstanceOf(EvaluationException.class)
         .hasMessageContaining(expectedExceptionSubstring);
-  }
-
-  @ParameterizedTest
-  @CsvSource(
-      delimiter = '|',
-      value = {
-        "NUMBER_PARSE(\"42 items\", \"0\") | 42",
-        "NUMBER_PARSE(\"$1,234.56 extra\", \"$#,##0.00\", \"en-US\") | 1234.56",
-        "NUMBER_PARSE(\"-99.9% loss\", \"0.0%\", \"en-US\") | -0.999",
-      })
-  void testToNumberPartialMatchParsingScenarios(String expression, String expectedResult)
-      throws EvaluationException, ParseException {
-
-    BigDecimal result =
-        new Expression(expression, TestConfigurationProvider.ChicagoConfiguration)
-            .evaluate()
-            .getNumberValue();
-
-    assertThat(result).isEqualByComparingTo(new BigDecimal(expectedResult));
   }
 
   @Test
