@@ -68,7 +68,7 @@ import java.util.Locale;
  *   NUMBER_PARSE("1.234,56", "###,##0.00", "de")    -&gt; 1234.56 (Parses German dot-thousands and comma-decimals)
  *   NUMBER_PARSE("1,234.56", "###,##0.00", "en-US") -&gt; 1234.56 (Parses US comma-thousands and dot-decimals)
  *   NUMBER_PARSE("1234,56", "###,##0.00", "pt-BR")  -&gt; 1234.56 (Parses Brazilian comma-decimals)
- *   NUMBER_PARSE("1.234567", "###.000")             -&gt; 1.235 (Enforces pattern with default locale)
+ *   NUMBER_PARSE("1.234567", "###.000")             -&gt; 1.234567 (Enforces pattern with default locale)
  * </pre>
  *
  * <h3>Advanced Examples</h3>
@@ -115,11 +115,19 @@ public class NumberParseFunction extends AbstractFunction {
       // Branching execution based on whether a formatting pattern was passed
       if (parameterValues.length > 1 && !parameterValues[1].isNullValue()) {
         String pattern = parameterValues[1].getStringValue().trim();
-        DecimalFormat decimalFormat = getDecimalFormat(locale, pattern);
-        BigDecimal rawNumber = (BigDecimal) decimalFormat.parse(sanitized);
+        DecimalFormat decimalFormat = getDecimalFormat(functionToken, locale, pattern);
+        Number rawNumber = decimalFormat.parse(sanitized);
 
-        // Align the newly parsed number with the global MathContext rules
-        parsedNumber = rawNumber.round(mathContext);
+        if (rawNumber instanceof BigDecimal) {
+          // Align the newly parsed number with the global MathContext rules
+          parsedNumber = ((BigDecimal) rawNumber).round(mathContext);
+        } else {
+          // E.g. infinite and NaN
+          throw new EvaluationException(
+              functionToken,
+              "Value '" + sanitized + "' cannot be safely parsed into a valid number");
+        }
+
       } else {
         // Direct fallback: parse raw unformatted text utilizing the MathContext on creation
         parsedNumber = new BigDecimal(sanitized, mathContext);
@@ -147,12 +155,17 @@ public class NumberParseFunction extends AbstractFunction {
     return expression.getConfiguration().getLocale();
   }
 
-  private DecimalFormat getDecimalFormat(Locale locale, String pattern) {
+  private DecimalFormat getDecimalFormat(Token token, Locale locale, String pattern)
+      throws EvaluationException {
     DecimalFormatSymbols symbols = DecimalFormatSymbols.getInstance(locale);
-    DecimalFormat decimalFormat = new DecimalFormat(pattern, symbols);
-    // Direct Java to produce a raw BigDecimal instance from the text format
-    decimalFormat.setParseBigDecimal(true);
-    return decimalFormat;
+    try {
+      DecimalFormat decimalFormat = new DecimalFormat(pattern, symbols);
+      // Direct Java to produce a raw BigDecimal instance from the text format
+      decimalFormat.setParseBigDecimal(true);
+      return decimalFormat;
+    } catch (IllegalArgumentException e) {
+      throw new EvaluationException(token, "Invalid number format in pattern '" + pattern + "'");
+    }
   }
 
   @Override

@@ -539,18 +539,27 @@ NUMBER_PARSE(string [, format] [, locale])
 | format  | *(Optional)* A `DecimalFormat` structure matching pattern mask (e.g. `"###,##0.00"`). If omitted or `NULL`, default numerical layouts are applied.                      |
 | locale  | *(Optional)* An IETF BCP 47 language environment tag string (e.g. `"en-US"`, `"pt-BR"`, `"de"`). To use it while bypassing pattern strings, supply `NULL` for `format`. |
 
+### Parsing Behavior & Partial Matching
+
+The behavior regarding trailing non-numeric characters depends on whether an explicit `format` parameter is supplied:
+
+* **When `format` is supplied:** The function attempts to parse the leading numeric portion that matches the pattern (prefix parsing). Trailing unparseable characters (such as text or extra units) are ignored. Parsing fails only if the string does not begin with a valid numeric sequence.
+* **When `format` is omitted or `NULL`:** Strict parsing is enforced. The input string must consist entirely of a valid numeric representation. Any trailing non-numeric characters (e.g., `"123abc"`) will cause the input to be rejected.
+
 ### Examples
 
 These examples illustrate conversions handling localized decimal separators, percentages, and explicit parameter skips.
 
-| Expression                                                          | Result (example)* |
-|---------------------------------------------------------------------|-------------------|
-| `NUMBER_PARSE("123.45")`                                            | `123.45`          |
-| `NUMBER_PARSE("1.234,56", "###,##0.00", "de-DE")`                   | `1234.56`         |
-| `NUMBER_PARSE("(1,250.50)", "###,##0.00;(###,##0.00)", "en-US")`    | `-1250.50`        |
-| `NUMBER_PARSE("85.5%", "###.0%", "en-US")`                          | `0.855`           |
-| `NUMBER_PARSE("456.78", NULL, "fr-FR")`                             | `456.78`          |
-| `NUMBER_PARSE("1.23E4")`                                            | `12300`           |
+| Expression                                                       | Result (example)*  | Description                                                                          |
+|:-----------------------------------------------------------------|:-------------------|:-------------------------------------------------------------------------------------|
+| `NUMBER_PARSE("123.45")`                                         | `123.45`           | Standard decimal parsing                                                             |
+| `NUMBER_PARSE("1.234,56", "###,##0.00", "de-DE")`                | `1234.56`          | German locale formatting                                                             |
+| `NUMBER_PARSE("(1,250.50)", "###,##0.00;(###,##0.00)", "en-US")` | `-1250.50`         | Negative number in parentheses                                                       |
+| `NUMBER_PARSE("85.5%", "###.0%", "en-US")`                       | `0.855`            | Percentage parsing                                                                   |
+| `NUMBER_PARSE("456.78", NULL, "fr-FR")`                          | `456.78`           | Explicit `NULL` format with locale                                                   |
+| `NUMBER_PARSE("1.23E4")`                                         | `12300`            | Scientific notation                                                                  |
+| `NUMBER_PARSE("42 items", "0", "en-US")`                         | `42`               | Partial parse: Trailing non-numeric characters are ignored when `format` is supplied |
+| `NUMBER_PARSE("-99.9% loss", "-0.0%", "en-US")`                  | `-0.999`           | Partial parse: Percentage suffix parsed; trailing text "loss" is ignored             |
 
 \* All output instances are natively rounded and scale-governed in accordance with the expression's configured `MathContext`.
 

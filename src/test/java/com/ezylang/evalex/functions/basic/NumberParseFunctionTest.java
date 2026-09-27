@@ -60,9 +60,55 @@ class NumberParseFunctionTest extends BaseEvaluationTest {
         "NUMBER_PARSE(\"85.5%\", \"###.0%\", \"en-US\") | 0.855",
 
         // --- Bypassing Format Position Using NULL ---
-        "NUMBER_PARSE(\"456.78\", null, \"fr-FR\") | 456.78"
+        "NUMBER_PARSE(\"456.78\", null, \"fr-FR\") | 456.78",
+
+        // --- The pattern itself does not round the parsed value
+        " NUMBER_PARSE(\"1.234567\", \"###.000\") | 1.234567"
       })
   void testToNumberSuccessScenarios(String expression, String expectedResult)
+      throws EvaluationException, ParseException {
+
+    BigDecimal result =
+        new Expression(expression, TestConfigurationProvider.ChicagoConfiguration)
+            .evaluate()
+            .getNumberValue();
+
+    assertThat(result).isEqualByComparingTo(new BigDecimal(expectedResult));
+  }
+
+  @ParameterizedTest
+  @CsvSource(
+      delimiter = '|',
+      value = {
+        // --- Infinity and NaN ---
+        "NUMBER_PARSE(\"∞\")                     | Value '∞' cannot be safely parsed",
+        "NUMBER_PARSE(\"∞\", \"0\", \"en-US\")   | Value '∞' cannot be safely parsed",
+        "NUMBER_PARSE(\"-∞\")                    | Value '-∞' cannot be safely parsed",
+        "NUMBER_PARSE(\"-∞\", \"0\", \"en-US\")  | Value '-∞' cannot be safely parsed",
+        "NUMBER_PARSE(\"NaN\")                   | Value 'NaN' cannot be safely parsed",
+        "NUMBER_PARSE(\"NaN\", \"0\", \"en-US\") | Value 'NaN' cannot be safely parsed",
+
+        // --- Invalid format pattern ---
+        "NUMBER_PARSE(\"12\", \"0.0.0\", \"en-US\") | Invalid number format in pattern '0.0.0'"
+      })
+  void testToNumberThrowsEvaluationExceptionScenarios(
+      String expression, String expectedExceptionSubstring)
+      throws EvaluationException, ParseException {
+
+    assertThatThrownBy(() -> new Expression(expression).evaluate())
+        .isInstanceOf(EvaluationException.class)
+        .hasMessageContaining(expectedExceptionSubstring);
+  }
+
+  @ParameterizedTest
+  @CsvSource(
+      delimiter = '|',
+      value = {
+        "NUMBER_PARSE(\"42 items\", \"0\") | 42",
+        "NUMBER_PARSE(\"$1,234.56 extra\", \"$#,##0.00\", \"en-US\") | 1234.56",
+        "NUMBER_PARSE(\"-99.9% loss\", \"0.0%\", \"en-US\") | -0.999",
+      })
+  void testToNumberPartialMatchParsingScenarios(String expression, String expectedResult)
       throws EvaluationException, ParseException {
 
     BigDecimal result =
@@ -88,16 +134,23 @@ class NumberParseFunctionTest extends BaseEvaluationTest {
     assertThat(result).isEqualByComparingTo(new BigDecimal("1.235"));
   }
 
-  @Test
-  void testToNumberThrowsExceptionOnPatternMismatch() {
+  @ParameterizedTest
+  @CsvSource(
+      delimiter = '|',
+      value = {
+        "NUMBER_PARSE(\"invalid-digits\" ) | Value 'invalid-digits' cannot be safely parsed into a"
+            + " valid number",
+        "NUMBER_PARSE(\"invalid-digits\", \"###,##0.00\") | Value 'invalid-digits' does not match"
+            + " the specified format pattern",
+      })
+  void testToNumberThrowsExceptionOnPatternMismatch(
+      String expressionString, String expectedExceptionSubstring) {
     Expression expression =
-        new Expression(
-            "NUMBER_PARSE(\"invalid-digits\", \"###,##0.00\")",
-            TestConfigurationProvider.ChicagoConfiguration);
+        new Expression(expressionString, TestConfigurationProvider.ChicagoConfiguration);
 
     assertThatThrownBy(expression::evaluate)
         .isInstanceOf(EvaluationException.class)
-        .hasMessageContaining("does not match the specified format pattern.");
+        .hasMessageContaining(expectedExceptionSubstring);
   }
 
   @Test
