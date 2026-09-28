@@ -150,6 +150,17 @@ class NumberParseFunctionTest extends BaseEvaluationTest {
         .hasMessageContaining("cannot be safely parsed into a valid number.");
   }
 
+  @ParameterizedTest
+  @CsvSource({"NUMBER_PARSE(\"123abc\")", "'NUMBER_PARSE(\"123abc\", NULL, \"en-US\")'"})
+  void testToNumberRejectsTrailingCharactersWithoutFormat(String expressionString) {
+    Expression expression =
+        new Expression(expressionString, TestConfigurationProvider.ChicagoConfiguration);
+
+    assertThatThrownBy(expression::evaluate)
+        .isInstanceOf(EvaluationException.class)
+        .hasMessageContaining("Value '123abc' cannot be safely parsed into a valid number.");
+  }
+
   @Test
   void testToNumberThrowsExceptionOnTooManyParams() {
     Expression expression =
