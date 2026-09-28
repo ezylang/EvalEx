@@ -33,6 +33,7 @@ import com.ezylang.evalex.functions.basic.LogFunction;
 import com.ezylang.evalex.functions.basic.MaxFunction;
 import com.ezylang.evalex.functions.basic.MinFunction;
 import com.ezylang.evalex.functions.basic.NotFunction;
+import com.ezylang.evalex.functions.basic.NumberParseFunction;
 import com.ezylang.evalex.functions.basic.RandomFunction;
 import com.ezylang.evalex.functions.basic.RoundFunction;
 import com.ezylang.evalex.functions.basic.SqrtFunction;
@@ -237,6 +238,7 @@ public class ExpressionConfiguration {
           Map.entry("MAX", new MaxFunction()),
           Map.entry("MIN", new MinFunction()),
           Map.entry("NOT", new NotFunction()),
+          Map.entry("NUMBER_PARSE", new NumberParseFunction()),
           Map.entry("RANDOM", new RandomFunction()),
           Map.entry("ROUND", new RoundFunction()),
           Map.entry("SQRT", new SqrtFunction()),

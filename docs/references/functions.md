@@ -11,25 +11,26 @@ Available through the _ExpressionConfiguration.StandardFunctionsDictionary_ cons
 
 ### Basic Functions
 
-| Name                  | Description                                                                                                                                     |
-|-----------------------|-------------------------------------------------------------------------------------------------------------------------------------------------|
-| [ABS](#abs)           | Absolute (non-negative) value                                                                                                                   |
-| [AVERAGE](#average)   | Returns the average (arithmetic mean) of all parameters. If a parameter is of type _ARRAY_, the average of all elements is calculated.          |
-| [CEILING](#ceiling)   | Rounds the given value to the nearest integer using the rounding mode CEILING                                                                   |
-| [COALESCE](#coalesce) | Returns the first non-null parameter, or NULL if all parameters are null. If a parameter is of type ARRAY, returns the first non-null element.  |
-| [FACT](#fact)         | Calculates the factorial of a base value                                                                                                        |
-| [FLOOR](#floor)       | Rounds the given value to the nearest integer using the rounding mode FLOOR                                                                     |
-| [IF](#if)             | Conditional evaluation function. Returns one value or another, depending on a given condition.                                                  |
-| [LOG](#log)           | The natural logarithm (base e) of a value                                                                                                       |
-| [LOG10](#log10)       | The base 10 logarithm of a value                                                                                                                |
-| [MAX](#max)           | Returns the maximum value of all parameters. If a parameter is of type _ARRAY_, the maximum of all elements is calculated.                      |
-| [MIN](#min)           | Returns the minimum value of all parameters. If a parameter is of type _ARRAY_, the minimum of all elements is calculated.                      |
-| [NOT](#not)           | Boolean negation, implemented as a function (for compatibility)                                                                                 |
-| [RANDOM](#random)     | Produces a random value between 0 and 1                                                                                                         |
-| [ROUND](#round)       | Rounds the given value to the specified scale, using the current rounding mode                                                                  |
-| [SQRT](#sqrt)         | Returns the square root of a given number                                                                                                       |
-| [SUM](#sum)           | Returns the sum of all parameters. If a parameter is of type _ARRAY_, the sum of all elements is calculated.                                    |
-| [SWITCH](#switch)     | Returns the result correponding to the first matching value in the specified expression or an optional default value if no match found.         |
+| Name                          | Description                                                                                                                                     |
+|-------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------|
+| [ABS](#abs)                   | Absolute (non-negative) value                                                                                                                   |
+| [AVERAGE](#average)           | Returns the average (arithmetic mean) of all parameters. If a parameter is of type _ARRAY_, the average of all elements is calculated.          |
+| [CEILING](#ceiling)           | Rounds the given value to the nearest integer using the rounding mode CEILING                                                                   |
+| [COALESCE](#coalesce)         | Returns the first non-null parameter, or NULL if all parameters are null. If a parameter is of type ARRAY, returns the first non-null element.  |
+| [FACT](#fact)                 | Calculates the factorial of a base value                                                                                                        |
+| [FLOOR](#floor)               | Rounds the given value to the nearest integer using the rounding mode FLOOR                                                                     |
+| [IF](#if)                     | Conditional evaluation function. Returns one value or another, depending on a given condition.                                                  |
+| [LOG](#log)                   | The natural logarithm (base e) of a value                                                                                                       |
+| [LOG10](#log10)               | The base 10 logarithm of a value                                                                                                                |
+| [MAX](#max)                   | Returns the maximum value of all parameters. If a parameter is of type _ARRAY_, the maximum of all elements is calculated.                      |
+| [MIN](#min)                   | Returns the minimum value of all parameters. If a parameter is of type _ARRAY_, the minimum of all elements is calculated.                      |
+| [NOT](#not)                   | Boolean negation, implemented as a function (for compatibility)                                                                                 |
+| [NUMBER_PARSE](#number_parse) | Transforms a __STRING__ value into a __NUMBER__ using an optional pattern and locale.                                                           |
+| [RANDOM](#random)             | Produces a random value between 0 and 1                                                                                                         |
+| [ROUND](#round)               | Rounds the given value to the specified scale, using the current rounding mode                                                                  |
+| [SQRT](#sqrt)                 | Returns the square root of a given number                                                                                                       |
+| [SUM](#sum)                   | Returns the sum of all parameters. If a parameter is of type _ARRAY_, the sum of all elements is calculated.                                    |
+| [SWITCH](#switch)             | Returns the result correponding to the first matching value in the specified expression or an optional default value if no match found.         |
 
 ### String Functions
 
@@ -514,6 +515,53 @@ And the following expressions:
 |--------------|---------|
 | `NOT(flag)`  | `false` |
 | `NOT(x < 5)` | `true`  |
+
+🔝 [Back to Basic Functions](#basic-functions) | 🔝 [Back to top](#top)
+
+
+## NUMBER_PARSE
+
+*Since: 3.8.0*
+
+The `NUMBER_PARSE` function parses a localized or formatted string and transforms it into a numeric value. You can optionally pass a format pattern mask and an explicit locale country identifier.
+
+### Syntax
+
+```
+NUMBER_PARSE(string [, format] [, locale])
+```
+
+### Parameters
+
+| Name    | Description                                                                                                                                                             |
+|---------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| string  | The plain text string sequence representing digits to transform.                                                                                                        |
+| format  | *(Optional)* A `DecimalFormat` structure matching pattern mask (e.g. `"###,##0.00"`). If omitted or `NULL`, default numerical layouts are applied.                      |
+| locale  | *(Optional)* An IETF BCP 47 language environment tag string (e.g. `"en-US"`, `"pt-BR"`, `"de"`). To use it while bypassing pattern strings, supply `NULL` for `format`. |
+
+### Parsing Behavior & Partial Matching
+
+The behavior regarding trailing non-numeric characters depends on whether an explicit `format` parameter is supplied:
+
+* **When `format` is supplied:** The function attempts to parse the leading numeric portion that matches the pattern (prefix parsing). Trailing unparseable characters (such as text or extra units) are ignored. Parsing fails only if the string does not begin with a valid numeric sequence.
+* **When `format` is omitted or `NULL`:** Strict parsing is enforced. The input string must consist entirely of a valid numeric representation. Any trailing non-numeric characters (e.g., `"123abc"`) will cause the input to be rejected.
+
+### Examples
+
+These examples illustrate conversions handling localized decimal separators, percentages, and explicit parameter skips.
+
+| Expression                                                       | Result (example)*  | Description                                                                          |
+|:-----------------------------------------------------------------|:-------------------|:-------------------------------------------------------------------------------------|
+| `NUMBER_PARSE("123.45")`                                         | `123.45`           | Standard decimal parsing                                                             |
+| `NUMBER_PARSE("1.234,56", "###,##0.00", "de-DE")`                | `1234.56`          | German locale formatting                                                             |
+| `NUMBER_PARSE("(1,250.50)", "###,##0.00;(###,##0.00)", "en-US")` | `-1250.50`         | Negative number in parentheses                                                       |
+| `NUMBER_PARSE("85.5%", "###.0%", "en-US")`                       | `0.855`            | Percentage parsing                                                                   |
+| `NUMBER_PARSE("456.78", NULL, "fr-FR")`                          | `456.78`           | Explicit `NULL` format with locale                                                   |
+| `NUMBER_PARSE("1.23E4")`                                         | `12300`            | Scientific notation                                                                  |
+| `NUMBER_PARSE("42 items", "0", "en-US")`                         | `42`               | Partial parse: Trailing non-numeric characters are ignored when `format` is supplied |
+| `NUMBER_PARSE("-99.9% loss", "-0.0%", "en-US")`                  | `-0.999`           | Partial parse: Percentage suffix parsed; trailing text "loss" is ignored             |
+
+\* All output instances are natively rounded and scale-governed in accordance with the expression's configured `MathContext`.
 
 🔝 [Back to Basic Functions](#basic-functions) | 🔝 [Back to top](#top)
 
