@@ -139,15 +139,23 @@ class NumberParseFunctionTest extends BaseEvaluationTest {
         .hasMessageContaining(expectedExceptionSubstring);
   }
 
-  @Test
-  void testToNumberThrowsExceptionOnInvalidUnformattedString() {
+  @ParameterizedTest
+  @CsvSource(
+      delimiter = '|',
+      value = {
+        "NUMBER_PARSE(\"not_a_number\") | not_a_number",
+        "NUMBER_PARSE(\"123abc\") | 123abc",
+        "NUMBER_PARSE(\"123abc\", NULL, \"en-US\") | 123abc"
+      })
+  void testToNumberThrowsExceptionOnInvalidUnformattedString(
+      String expressionString, String invalidValue) {
     Expression expression =
-        new Expression(
-            "NUMBER_PARSE(\"not_a_number\")", TestConfigurationProvider.ChicagoConfiguration);
+        new Expression(expressionString, TestConfigurationProvider.ChicagoConfiguration);
 
     assertThatThrownBy(expression::evaluate)
         .isInstanceOf(EvaluationException.class)
-        .hasMessageContaining("cannot be safely parsed into a valid number.");
+        .hasMessageContaining(
+            "Value '" + invalidValue + "' cannot be safely parsed into a valid number.");
   }
 
   @Test

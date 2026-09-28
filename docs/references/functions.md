@@ -559,7 +559,7 @@ These examples illustrate conversions handling localized decimal separators, per
 | `NUMBER_PARSE("456.78", NULL, "fr-FR")`                          | `456.78`           | Explicit `NULL` format with locale                                                   |
 | `NUMBER_PARSE("1.23E4")`                                         | `12300`            | Scientific notation                                                                  |
 | `NUMBER_PARSE("42 items", "0", "en-US")`                         | `42`               | Partial parse: Trailing non-numeric characters are ignored when `format` is supplied |
-| `NUMBER_PARSE("-99.9% loss", "-0.0%", "en-US")`                  | `-0.999`           | Partial parse: Percentage suffix parsed; trailing text "loss" is ignored             |
+| `NUMBER_PARSE("-99.9% loss", "0.0%", "en-US")`                  | `-0.999`           | Partial parse: Percentage suffix parsed; trailing text "loss" is ignored             |
 
 \* All output instances are natively rounded and scale-governed in accordance with the expression's configured `MathContext`.
 
