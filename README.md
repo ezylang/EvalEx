@@ -37,6 +37,17 @@ EvalEx is a handy expression evaluator for Java, that allows to parse and evalua
 The full documentation for EvalEx can be found
 on [GitHub Pages](https://ezylang.github.io/EvalEx/)
 
+## Building from source
+
+Use JDK 11 and Maven, with `JAVA_HOME` pointing to the JDK installation:
+
+```sh
+mvn --batch-mode clean verify
+```
+
+This checks formatting, runs tests and coverage checks, and generates Javadoc. The Javadoc JAR is
+created in `target/` during normal builds so documentation failures are caught before release.
+
 ## Discussion
 
 For announcements, questions and ideas visit

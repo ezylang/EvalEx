@@ -93,6 +93,9 @@ Spotless runs during Maven validation, and JaCoCo checks coverage during the bui
 JaCoCo gate requires 100 percent instruction coverage and no uncovered production class. Do not
 lower, exclude, suppress, or bypass a quality gate to make a change pass.
 
+Javadoc generation runs during packaging in normal builds and releases. Set `JAVA_HOME` to the
+JDK installation so Maven can locate the Javadoc executable.
+
 When `pom.xml` affects the published POM, also perform the consumer POM checks from
 `.github/workflows/build.yml`. Do not run `deploy`, create tags or releases, use the `publish`
 profile, or handle signing credentials unless a maintainer explicitly requests a release action.
