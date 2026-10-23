@@ -33,33 +33,35 @@ import com.ezylang.evalex.parser.Token;
 @FunctionParameter(name = "start", nonNegative = true)
 @FunctionParameter(name = "end", isVarArg = true, nonNegative = true)
 public class StringSubstringFunction extends AbstractFunction {
+
   @Override
   public void validatePreEvaluation(Token token, EvaluationValue... parameterValues)
-      throws EvaluationException {
+          throws EvaluationException {
     super.validatePreEvaluation(token, parameterValues);
+
     if (parameterValues.length > 2
-        && requireNonNull(parameterValues[2].getNumberValue()).intValue()
+            && requireNonNull(parameterValues[2].getNumberValue()).intValue()
             < requireNonNull(parameterValues[1].getNumberValue()).intValue()) {
       throw new EvaluationException(
-          token, "End index must be greater than or equal to start index");
+              token, "End index must be greater than or equal to start index");
     }
   }
 
   @Override
   public EvaluationValue evaluate(
-      Expression expression, Token functionToken, EvaluationValue... parameterValues)
-      throws EvaluationException {
+          Expression expression, Token functionToken, EvaluationValue... parameterValues) {
     String string = requireNonNull(parameterValues[0].getStringValue());
     int start = requireNonNull(parameterValues[1].getNumberValue()).intValue();
+
     String result;
     if (parameterValues.length > 2) {
       int end = requireNonNull(parameterValues[2].getNumberValue()).intValue();
-      int length = string.length();
-      int finalEnd = Math.min(end, length);
+      int finalEnd = Math.min(end, string.length());
       result = string.substring(start, finalEnd);
     } else {
       result = string.substring(start);
     }
+
     return expression.convertValue(result);
   }
 }

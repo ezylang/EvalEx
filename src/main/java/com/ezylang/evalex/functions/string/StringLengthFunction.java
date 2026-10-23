@@ -17,7 +17,6 @@ package com.ezylang.evalex.functions.string;
 
 import static java.util.Objects.requireNonNull;
 
-import com.ezylang.evalex.EvaluationException;
 import com.ezylang.evalex.Expression;
 import com.ezylang.evalex.data.EvaluationValue;
 import com.ezylang.evalex.functions.AbstractFunction;
@@ -31,10 +30,11 @@ import com.ezylang.evalex.parser.Token;
  */
 @FunctionParameter(name = "string")
 public class StringLengthFunction extends AbstractFunction {
+
   @Override
   public EvaluationValue evaluate(
-      Expression expression, Token functionToken, EvaluationValue... parameterValues)
-      throws EvaluationException {
-    return expression.convertValue(requireNonNull(parameterValues[0].getStringValue()).length());
+          Expression expression, Token functionToken, EvaluationValue... parameterValues) {
+    return expression.convertValue(
+            requireNonNull(parameterValues[0].getStringValue()).length());
   }
 }

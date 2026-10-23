@@ -575,11 +575,12 @@ class EvaluationValueTest {
   }
 
   @Test
-  @SuppressWarnings("removal")
   void testNullValueSameInstance() {
-    EvaluationValue nullValue1 = EvaluationValue.nullValue(); // NOSONAR - deprecated
-    EvaluationValue nullValue2 = EvaluationValue.nullValue(); // NOSONAR - deprecated
-    assertThat(nullValue1).isSameAs(nullValue2);
+    EvaluationValue nullValue1 = EvaluationValue.of(null, defaultConfiguration());
+    EvaluationValue nullValue2 = EvaluationValue.of(null, defaultConfiguration());
+
+    assertThat(nullValue1).isSameAs(EvaluationValue.NULL_VALUE);
+    assertThat(nullValue2).isSameAs(EvaluationValue.NULL_VALUE);
   }
 
   @Test
